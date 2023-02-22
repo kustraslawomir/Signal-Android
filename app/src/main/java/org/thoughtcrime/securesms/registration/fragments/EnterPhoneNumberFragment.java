@@ -194,6 +194,11 @@ public final class EnterPhoneNumberFragment extends LoggingFragment implements R
 
     PlayServicesUtil.PlayServicesStatus fcmStatus = PlayServicesUtil.getPlayServicesStatus(context);
 
+    if (!isSignalVersion()) {
+      confirmNumberPrompt(context, e164number, () -> handleRequestVerification(context, true));
+      return;
+    }
+
     if (fcmStatus == PlayServicesUtil.PlayServicesStatus.SUCCESS) {
       confirmNumberPrompt(context, e164number, () -> handleRequestVerification(context, true));
     } else if (fcmStatus == PlayServicesUtil.PlayServicesStatus.MISSING) {
