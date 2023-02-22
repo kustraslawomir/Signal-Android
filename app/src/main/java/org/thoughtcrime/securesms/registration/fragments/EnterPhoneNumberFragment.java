@@ -61,6 +61,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 
 import static org.thoughtcrime.securesms.registration.fragments.RegistrationViewDelegate.setDebugLogSubmitMultiTapView;
 import static org.thoughtcrime.securesms.registration.fragments.RegistrationViewDelegate.showConfirmNumberDialogIfTranslated;
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
 
 public final class EnterPhoneNumberFragment extends LoggingFragment implements RegistrationNumberInputController.Callbacks {
 
