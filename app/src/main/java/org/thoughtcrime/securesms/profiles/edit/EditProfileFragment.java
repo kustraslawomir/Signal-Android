@@ -3,7 +3,6 @@ package org.thoughtcrime.securesms.profiles.edit;
 import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.InputType;
@@ -16,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -49,12 +47,15 @@ import org.thoughtcrime.securesms.util.text.AfterTextChanged;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 import static org.thoughtcrime.securesms.profiles.edit.EditProfileActivity.EXCLUDE_SYSTEM;
 import static org.thoughtcrime.securesms.profiles.edit.EditProfileActivity.GROUP_ID;
 import static org.thoughtcrime.securesms.profiles.edit.EditProfileActivity.NEXT_BUTTON_TEXT;
 import static org.thoughtcrime.securesms.profiles.edit.EditProfileActivity.NEXT_INTENT;
 import static org.thoughtcrime.securesms.profiles.edit.EditProfileActivity.SHOW_TOOLBAR;
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
+import static pigeon.extensions.KotilinExtensionsKt.animateGroup;
 
 /**
  * Used for profile creation during registration.
@@ -98,6 +99,12 @@ public class EditProfileFragment extends LoggingFragment {
     initializeProfileAvatar();
     initializeProfileName();
 
+    if (!isSignalVersion()) {
+      animateGroup(binding.pigeonGivenName, binding.pigeonGivenNameWrapper);
+      animateGroup(binding.pigeonFamilyName, binding.pigeonFamilyNameWrapper);
+      binding.finishButton.setupAnimation(false);
+    }
+
     getParentFragmentManager().setFragmentResultListener(AvatarPickerFragment.REQUEST_KEY_SELECT_AVATAR, getViewLifecycleOwner(), (key, bundle) -> {
       if (bundle.getBoolean(AvatarPickerFragment.SELECT_AVATAR_CLEAR)) {
         viewModel.setAvatarMedia(null);
@@ -118,29 +125,29 @@ public class EditProfileFragment extends LoggingFragment {
 
   private void handleMediaFromResult(@NonNull Media media) {
     SimpleTask.run(() -> {
-      try {
-        InputStream stream = BlobProvider.getInstance().getStream(requireContext(), media.getUri());
+                     try {
+                       InputStream stream = BlobProvider.getInstance().getStream(requireContext(), media.getUri());
 
-        return StreamUtil.readFully(stream);
-      } catch (IOException ioException) {
-        Log.w(TAG, ioException);
-        return null;
-      }
-    },
-    (avatarBytes) -> {
-      if (avatarBytes != null) {
-        viewModel.setAvatarMedia(media);
-        viewModel.setAvatar(avatarBytes);
-        GlideApp.with(EditProfileFragment.this)
-                .load(avatarBytes)
-                .skipMemoryCache(true)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .circleCrop()
-                .into(binding.avatar);
-      } else {
-        Toast.makeText(requireActivity(), R.string.CreateProfileActivity_error_setting_profile_photo, Toast.LENGTH_LONG).show();
-      }
-    });
+                       return StreamUtil.readFully(stream);
+                     } catch (IOException ioException) {
+                       Log.w(TAG, ioException);
+                       return null;
+                     }
+                   },
+                   (avatarBytes) -> {
+                     if (avatarBytes != null) {
+                       viewModel.setAvatarMedia(media);
+                       viewModel.setAvatar(avatarBytes);
+                       GlideApp.with(EditProfileFragment.this)
+                               .load(avatarBytes)
+                               .skipMemoryCache(true)
+                               .diskCacheStrategy(DiskCacheStrategy.NONE)
+                               .circleCrop()
+                               .into(binding.avatar);
+                     } else {
+                       Toast.makeText(requireActivity(), R.string.CreateProfileActivity_error_setting_profile_photo, Toast.LENGTH_LONG).show();
+                     }
+                   });
   }
 
   private void initializeViewModel(boolean excludeSystem, @Nullable GroupId groupId, boolean hasSavedInstanceState) {
@@ -170,7 +177,11 @@ public class EditProfileFragment extends LoggingFragment {
       EditTextUtil.addGraphemeClusterLimitFilter(binding.givenName, FeatureFlags.getMaxGroupNameGraphemeLength());
       binding.profileDescriptionText.setVisibility(View.GONE);
       binding.whoCanFindMeContainer.setVisibility(View.GONE);
-      binding.givenName.addTextChangedListener(new AfterTextChanged(s -> viewModel.setGivenName(s.toString())));
+      if (isSignalVersion()) {
+        binding.givenName.addTextChangedListener(new AfterTextChanged(s -> viewModel.setGivenName(s.toString())));
+      } else {
+        binding.pigeonGivenName.addTextChangedListener(new AfterTextChanged(s -> viewModel.setGivenName(s.toString())));
+      }
       binding.givenNameWrapper.setHint(R.string.EditProfileFragment__group_name);
       binding.givenName.requestFocus();
       binding.toolbar.setTitle(R.string.EditProfileFragment__edit_group);
@@ -197,14 +208,31 @@ public class EditProfileFragment extends LoggingFragment {
     } else {
       EditTextUtil.addGraphemeClusterLimitFilter(binding.givenName, EditProfileNameFragment.NAME_MAX_GLYPHS);
       EditTextUtil.addGraphemeClusterLimitFilter(binding.familyName, EditProfileNameFragment.NAME_MAX_GLYPHS);
-      binding.givenName.addTextChangedListener(new AfterTextChanged(s -> {
-                                                                        EditProfileNameFragment.trimFieldToMaxByteLength(s);
-                                                                        viewModel.setGivenName(s.toString());
-                                                                      }));
-      binding.familyName.addTextChangedListener(new AfterTextChanged(s -> {
-                                                                         EditProfileNameFragment.trimFieldToMaxByteLength(s);
-                                                                         viewModel.setFamilyName(s.toString());
-                                                                       }));
+      if (isSignalVersion()) {
+        binding.givenName.addTextChangedListener(new AfterTextChanged(s -> {
+          EditProfileNameFragment.trimFieldToMaxByteLength(s);
+          viewModel.setGivenName(s.toString());
+        }));
+        binding.familyName.addTextChangedListener(new AfterTextChanged(s -> {
+          EditProfileNameFragment.trimFieldToMaxByteLength(s);
+          viewModel.setFamilyName(s.toString());
+        }));
+
+        binding.familyName.addTextChangedListener(new AfterTextChanged(s -> {
+          EditProfileNameFragment.trimFieldToMaxByteLength(s);
+          viewModel.setFamilyName(s.toString());
+        }));
+      } else {
+        Objects.requireNonNull(binding.pigeonGivenName).addTextChangedListener(new AfterTextChanged(s -> {
+          EditProfileNameFragment.trimFieldToMaxByteLength(s);
+          viewModel.setGivenName(s.toString());
+        }));
+        Objects.requireNonNull(binding.pigeonFamilyName).addTextChangedListener(new AfterTextChanged(s -> {
+          EditProfileNameFragment.trimFieldToMaxByteLength(s);
+          viewModel.setFamilyName(s.toString());
+        }));
+      }
+
       binding.groupDescriptionText.setVisibility(View.GONE);
       binding.profileDescriptionText.setLearnMoreVisible(true);
       binding.profileDescriptionText.setLinkColor(ContextCompat.getColor(requireContext(), R.color.signal_colorPrimary));
@@ -243,9 +271,13 @@ public class EditProfileFragment extends LoggingFragment {
       binding.finishButton.setAlpha(isValid ? 1f : 0.5f);
     });
 
-    viewModel.givenName().observe(getViewLifecycleOwner(), givenName -> updateFieldIfNeeded(binding.givenName, givenName));
-
-    viewModel.familyName().observe(getViewLifecycleOwner(), familyName -> updateFieldIfNeeded(binding.familyName, familyName));
+    if (isSignalVersion()) {
+      viewModel.givenName().observe(getViewLifecycleOwner(), givenName -> updateFieldIfNeeded(binding.givenName, givenName));
+      viewModel.familyName().observe(getViewLifecycleOwner(), familyName -> updateFieldIfNeeded(binding.familyName, familyName));
+    } else {
+      viewModel.givenName().observe(getViewLifecycleOwner(), givenName -> updateFieldIfNeeded(binding.pigeonGivenName, givenName));
+      viewModel.familyName().observe(getViewLifecycleOwner(), familyName -> updateFieldIfNeeded(binding.pigeonFamilyName, familyName));
+    }
 
     viewModel.profileName().observe(getViewLifecycleOwner(), profileName -> binding.namePreview.setText(profileName.toString()));
   }
@@ -311,8 +343,7 @@ public class EditProfileFragment extends LoggingFragment {
       if (uploadResult == EditProfileRepository.UploadResult.SUCCESS) {
         if (!viewModel.isGroup()) {
           handleFinishedLollipop();
-        }
-        else {
+        } else {
           handleFinishedLegacy();
         }
       } else {
@@ -331,43 +362,45 @@ public class EditProfileFragment extends LoggingFragment {
   }
 
   private void handleFinishedLollipop() {
-    int[] finishButtonLocation = new int[2];
-    int[] revealLocation       = new int[2];
+    if (isSignalVersion()) {
+      int[] finishButtonLocation = new int[2];
+      int[] revealLocation       = new int[2];
 
-    binding.finishButton.getLocationInWindow(finishButtonLocation);
-    binding.reveal.getLocationInWindow(revealLocation);
+      binding.finishButton.getLocationInWindow(finishButtonLocation);
+      binding.reveal.getLocationInWindow(revealLocation);
 
-    int finishX = finishButtonLocation[0] - revealLocation[0];
-    int finishY = finishButtonLocation[1] - revealLocation[1];
+      int finishX = finishButtonLocation[0] - revealLocation[0];
+      int finishY = finishButtonLocation[1] - revealLocation[1];
 
-    finishX += binding.finishButton.getWidth() / 2;
-    finishY += binding.finishButton.getHeight() / 2;
+      finishX += binding.finishButton.getWidth() / 2;
+      finishY += binding.finishButton.getHeight() / 2;
 
-    Animator animation = ViewAnimationUtils.createCircularReveal(binding.reveal, finishX, finishY, 0f, (float) Math.max(binding.reveal.getWidth(), binding.reveal.getHeight()));
-    animation.setDuration(500);
-    animation.addListener(new Animator.AnimatorListener() {
-      @Override
-      public void onAnimationStart(Animator animation) {}
+      Animator animation = ViewAnimationUtils.createCircularReveal(binding.reveal, finishX, finishY, 0f, (float) Math.max(binding.reveal.getWidth(), binding.reveal.getHeight()));
+      animation.setDuration(500);
+      animation.addListener(new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animation) {}
 
-      @Override
-      public void onAnimationEnd(Animator animation) {
-        binding.finishButton.cancelSpinning();
-        if (nextIntent != null && getActivity() != null) {
-          startActivity(nextIntent);
+        @Override
+        public void onAnimationEnd(Animator animation) {
+          binding.finishButton.cancelSpinning();
+          if (nextIntent != null && getActivity() != null) {
+            startActivity(nextIntent);
+          }
+
+          controller.onProfileNameUploadCompleted();
         }
 
-        controller.onProfileNameUploadCompleted();
-      }
+        @Override
+        public void onAnimationCancel(Animator animation) {}
 
-      @Override
-      public void onAnimationCancel(Animator animation) {}
+        @Override
+        public void onAnimationRepeat(Animator animation) {}
+      });
 
-      @Override
-      public void onAnimationRepeat(Animator animation) {}
-    });
-
-    binding.reveal.setVisibility(View.VISIBLE);
-    animation.start();
+      binding.reveal.setVisibility(View.VISIBLE);
+      animation.start();
+    }
   }
 
   public interface Controller {

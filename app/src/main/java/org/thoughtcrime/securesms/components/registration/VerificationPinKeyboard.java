@@ -96,13 +96,13 @@ public class VerificationPinKeyboard extends FrameLayout {
 
   public void displayProgress() {
     if (isSignalVersion()) {
-      this.pigeonProgressBar.setVisibility(View.VISIBLE);
-    } else {
       this.keyboardView.setVisibility(View.INVISIBLE);
       this.progressBar.setVisibility(View.VISIBLE);
       this.successView.setVisibility(View.GONE);
       this.failureView.setVisibility(View.GONE);
       this.lockedView.setVisibility(View.GONE);
+    } else {
+      this.pigeonProgressBar.setVisibility(View.VISIBLE);
     }
   }
 
@@ -146,7 +146,7 @@ public class VerificationPinKeyboard extends FrameLayout {
     SettableFuture<Boolean> result = new SettableFuture<>();
 
     this.pigeonProgressBar.setVisibility(View.GONE);
-    if (!isSignalVersion()) {
+    if (isSignalVersion()) {
       this.keyboardView.setVisibility(View.INVISIBLE);
       this.progressBar.setVisibility(View.GONE);
       this.failureView.setVisibility(View.GONE);

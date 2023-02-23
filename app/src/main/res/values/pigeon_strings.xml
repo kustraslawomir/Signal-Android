@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="Pigeon.Save">Save</string>
     <string name="RegistrationActivity_pigeon_captcha_mouse_cursor">➤</string>
     <string name="Pigeon_RegistrationActivity_enter_your_phone_number">Mobile</string>
     <string name="Pigeon_RegistrationActivity_take_privacy_with_you_be_yourself_in_every_message">Pigeon disclaimer</string>
