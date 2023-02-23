@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:viewBindingIgnore="true">
+
+    <FrameLayout
+        android:id="@+id/pigeonProgress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/sim_background"
+        android:visibility="visible">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLargeInverse"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/white"
+            android:padding="10dp" />
+    </FrameLayout>
+
+
+</merge>

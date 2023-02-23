@@ -137,13 +137,13 @@
             <org.thoughtcrime.securesms.components.registration.VerificationPinKeyboard
                 android:id="@+id/keyboard"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 app:layout_constraintTop_toBottomOf="@id/verification_code"
                 tools:visibility="gone" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/verification_nav"
-                style="@style/Mp02.Signal.Text.CommonTextButton"
+                style="@style/Mp02.Signal.Text.MaterialTextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/pigeon_start_margin"
