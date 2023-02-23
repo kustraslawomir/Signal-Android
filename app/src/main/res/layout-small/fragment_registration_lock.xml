@@ -65,7 +65,7 @@
             app:layout_constraintTop_toBottomOf="@id/kbs_lock_pin_input"
             tools:text="@string/RegistrationLockFragment__incorrect_pin_try_again" />
 
-        <org.thoughtcrime.securesms.util.views.CircularProgressMaterialButton
+        <TextView
             android:id="@+id/kbs_lock_forgot_pin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/kbs_lock_pin_input_label" />
 
-        <org.thoughtcrime.securesms.util.views.CircularProgressMaterialButton
+        <TextView
             android:id="@+id/kbs_lock_keyboard_toggle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
