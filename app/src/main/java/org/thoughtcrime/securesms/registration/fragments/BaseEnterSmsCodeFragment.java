@@ -58,22 +58,22 @@ import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
  */
 public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistrationViewModel> extends LoggingFragment implements SignalStrengthPhoneStateListener.Callback {
 
-  private static final String TAG = Log.tag(BaseEnterSmsCodeFragment.class);
-
-  private ScrollView              scrollView;
-  private TextView                subheader;
-  private VerificationCodeView    verificationCodeView;
-  private VerificationPinKeyboard keyboard;
-  private ActionCountDownButton   callMeCountDown;
-  private ActionCountDownButton   resendSmsCountDown;
-  private MaterialButton          wrongNumber;
-  private MaterialButton          bottomSheetButton;
-  private boolean                 autoCompleting;
-
-  private EditText  pigeonCodeView;
-  private ViewModel viewModel;
-
-  protected final LifecycleDisposable disposables = new LifecycleDisposable();
+  private static final String                  TAG                      = Log.tag(BaseEnterSmsCodeFragment.class);
+  protected final      LifecycleDisposable     disposables              = new LifecycleDisposable();
+  private              ScrollView              scrollView;
+  private              TextView                subheader;
+  private              VerificationCodeView    verificationCodeView;
+  private              VerificationPinKeyboard keyboard;
+  private              ActionCountDownButton   callMeCountDown;
+  private              ActionCountDownButton   resendSmsCountDown;
+  private              MaterialButton          wrongNumber;
+  private              MaterialButton          bottomSheetButton;
+  private              EditText                pigeonCodeView;
+  private              boolean                 autoCompleting;
+  private              ViewModel               viewModel;
+  private              Boolean                 pigeonWrongButtonShowed  = false;
+  private              Boolean                 pigeonCallMeButtonShowed = false;
+  private              Boolean                 pigeonResendButtonShowed = false;
 
   public BaseEnterSmsCodeFragment(@LayoutRes int contentLayoutId) {
     super(contentLayoutId);
@@ -93,19 +93,22 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
     callMeCountDown      = view.findViewById(R.id.call_me_count_down);
     resendSmsCountDown   = view.findViewById(R.id.resend_sms_count_down);
     wrongNumber          = view.findViewById(R.id.wrong_number);
-    pigeonCodeView       = view.findViewById(R.id.verification_code);
     bottomSheetButton    = view.findViewById(R.id.having_trouble_button);
+    pigeonCodeView       = view.findViewById(R.id.verification_code);
 
     new SignalStrengthPhoneStateListener(this, this);
 
     connectKeyboard(verificationCodeView, keyboard);
     ViewUtil.hideKeyboard(requireContext(), view);
 
-    setOnCodeFullyEnteredListener(verificationCodeView);
-    setPigeonOnCodeFullyEnteredListener();
+    if (isSignalVersion()) {
+      setOnCodeFullyEnteredListener(verificationCodeView);
+    } else {
+      setPigeonOnCodeFullyEnteredListener();
+    }
 
     wrongNumber.setOnClickListener(v -> returnToPhoneEntryScreen());
-    bottomSheetButton.setOnClickListener( v -> showBottomSheet());
+    bottomSheetButton.setOnClickListener(v -> showBottomSheet());
 
     callMeCountDown.setTextResources(R.string.RegistrationActivity_call, R.string.RegistrationActivity_call_me_instead_available_in);
     resendSmsCountDown.setTextResources(R.string.RegistrationActivity_resend_code, R.string.RegistrationActivity_resend_sms_available_in);
@@ -131,7 +134,7 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
     disposables.bindTo(getViewLifecycleOwner().getLifecycle());
     viewModel = getViewModel();
     viewModel.getIncorrectCodeAttempts().observe(getViewLifecycleOwner(), (attempts) -> {
-      if (attempts >= 3) {
+      if (attempts >= 3 && isSignalVersion()) {
         bottomSheetButton.setVisibility(View.VISIBLE);
       }
     });
@@ -146,6 +149,117 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
     });
   }
 
+  @Override
+  public void onResume() {
+    super.onResume();
+    String sessionE164 = viewModel.getSessionE164();
+    if (sessionE164 == null) {
+      returnToPhoneEntryScreen();
+      return;
+    }
+
+    subheader.setText(requireContext().getString(R.string.RegistrationActivity_enter_the_code_we_sent_to_s, viewModel.getNumber().getFullFormattedNumber()));
+
+    MccMncProducer mccMncProducer = new MccMncProducer(requireContext());
+    Disposable request = viewModel.validateSession(sessionE164, mccMncProducer.getMcc(), mccMncProducer.getMnc())
+                                  .observeOn(AndroidSchedulers.mainThread())
+                                  .subscribe(processor -> {
+                                    if (!processor.hasResult()) {
+                                      returnToPhoneEntryScreen();
+                                    } else if (processor.isInvalidSession()) {
+                                      returnToPhoneEntryScreen();
+                                    } else if (processor.cannotSubmitVerificationAttempt()) {
+                                      returnToPhoneEntryScreen();
+                                    } else if (!processor.canSubmitProofImmediately()) {
+                                      handleRateLimited();
+                                    }
+                                    // else session state is valid and server is ready to accept code
+                                  });
+
+    disposables.add(request);
+    if (isSignalVersion()) {
+      viewModel.getCanCallAtTime().observe(getViewLifecycleOwner(), callAtTime -> {
+        if (callAtTime > 0) {
+          callMeCountDown.setVisibility(View.VISIBLE);
+          callMeCountDown.startCountDownTo(callAtTime);
+        } else {
+          callMeCountDown.setVisibility(View.INVISIBLE);
+        }
+      });
+      viewModel.getCanSmsAtTime().observe(getViewLifecycleOwner(), smsAtTime -> {
+        if (smsAtTime > 0) {
+          resendSmsCountDown.setVisibility(View.VISIBLE);
+          resendSmsCountDown.startCountDownTo(smsAtTime);
+        } else {
+          resendSmsCountDown.setVisibility(View.INVISIBLE);
+        }
+      });
+    } else {
+      viewModel.getCanCallAtTime().observe(getViewLifecycleOwner(), callAtTime -> {
+        if (callAtTime > 0) {
+          pigeonCallMeButtonShowed = true;
+          callMeCountDown.startCountDownTo(callAtTime);
+        } else {
+          pigeonCallMeButtonShowed = false;
+        }
+      });
+      viewModel.getCanSmsAtTime().observe(getViewLifecycleOwner(), smsAtTime -> {
+        if (smsAtTime > 0) {
+          pigeonResendButtonShowed = true;
+          resendSmsCountDown.startCountDownTo(smsAtTime);
+        } else {
+          pigeonResendButtonShowed = false;
+        }
+      });
+    }
+  }
+
+  private void returnToPhoneEntryScreen() {
+    viewModel.resetSession();
+    Navigation.findNavController(requireView()).navigateUp();
+  }
+
+  protected void handleRateLimited() {
+    keyboard.displayFailure().addListener(new AssertedSuccessListener<Boolean>() {
+      @Override
+      public void onSuccess(Boolean r) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+
+        builder.setTitle(R.string.RegistrationActivity_too_many_attempts)
+               .setMessage(R.string.RegistrationActivity_you_have_made_too_many_attempts_please_try_again_later)
+               .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                 if (isSignalVersion()) {
+                   callMeCountDown.setVisibility(View.VISIBLE);
+                   resendSmsCountDown.setVisibility(View.VISIBLE);
+                   wrongNumber.setVisibility(View.VISIBLE);
+                 } else {
+                   pigeonWrongButtonShowed  = false;
+                   pigeonCallMeButtonShowed = true;
+                   pigeonResendButtonShowed = true;
+                 }
+                 verificationCodeView.clear();
+                 keyboard.displayKeyboard();
+               })
+               .show();
+      }
+    });
+  }
+
+  private void showBottomSheet() {
+    ContactSupportBottomSheetFragment bottomSheet = new ContactSupportBottomSheetFragment();
+    bottomSheet.show(getChildFragmentManager(), "support_bottom_sheet");
+  }
+
+  @Override
+  public void onNoCellSignalPresent() {
+    // TODO animate in bottom sheet
+  }
+
+  @Override
+  public void onCellSignalPresent() {
+    // TODO animate away bottom sheet
+  }
+
   protected abstract ViewModel getViewModel();
 
   protected abstract void handleSuccessfulVerify();
@@ -156,11 +270,6 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
 
   protected abstract void navigateToKbsAccountLocked();
 
-  private void returnToPhoneEntryScreen() {
-    viewModel.resetSession();
-    Navigation.findNavController(requireView()).navigateUp();
-  }
-
   private void setPigeonOnCodeFullyEnteredListener() {
     pigeonCodeView.addTextChangedListener(new TextWatcher() {
       @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -168,24 +277,38 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
       }
 
       @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        if(s.length()==6){
-          verificationCodeView.clear();
+        if (s.length() == 6) {
+          pigeonCallMeButtonShowed = false;
+          pigeonWrongButtonShowed  = false;
           keyboard.displayProgress();
-          List<Integer> parsedCode = convertVerificationCodeToDigits(s.toString());
-          final int size = parsedCode.size();
 
-          for (int i = 0; i < size; i++) {
-            final int index = i;
-            verificationCodeView.postDelayed(() -> {
-              verificationCodeView.append(parsedCode.get(index));
-              if (index == size - 1) {
-                autoCompleting = false;
-              }
-            }, i * 200L);
-          }
+          Disposable verify = viewModel.verifyCodeWithoutRegistrationLock(s.toString())
+                                       .observeOn(AndroidSchedulers.mainThread())
+                                       .subscribe(processor -> {
+                                         if (!processor.hasResult()) {
+                                           Log.w(TAG, "post verify: ", processor.getError());
+                                         }
+                                         if (processor.hasResult()) {
+                                           handleSuccessfulVerify();
+                                         } else if (processor.rateLimit()) {
+                                           handleRateLimited();
+                                         } else if (processor.registrationLock() && !processor.isKbsLocked()) {
+                                           LockedException lockedException = processor.getLockedException();
+                                           handleRegistrationLock(lockedException.getTimeRemaining());
+                                         } else if (processor.isKbsLocked()) {
+                                           handleKbsAccountLocked();
+                                         } else if (processor.authorizationFailed()) {
+                                           handleIncorrectCodeError();
+                                         } else {
+                                           Log.w(TAG, "Unable to verify code", processor.getError());
+                                           handleGeneralError();
+                                         }
+                                       });
+
+          disposables.add(verify);
         }
-        }
+      }
+
       @Override public void afterTextChanged(Editable s) {
 
       }
@@ -237,26 +360,6 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
     });
   }
 
-  protected void handleRateLimited() {
-    keyboard.displayFailure().addListener(new AssertedSuccessListener<Boolean>() {
-      @Override
-      public void onSuccess(Boolean r) {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-
-        builder.setTitle(R.string.RegistrationActivity_too_many_attempts)
-               .setMessage(R.string.RegistrationActivity_you_have_made_too_many_attempts_please_try_again_later)
-               .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                 callMeCountDown.setVisibility(View.VISIBLE);
-                 resendSmsCountDown.setVisibility(View.VISIBLE);
-                 wrongNumber.setVisibility(View.VISIBLE);
-                 verificationCodeView.clear();
-                 keyboard.displayKeyboard();
-               })
-               .show();
-      }
-    });
-  }
-
   protected void handleRegistrationLock(long timeRemaining) {
     keyboard.displayLocked().addListener(new AssertedSuccessListener<Boolean>() {
       @Override
@@ -277,9 +380,15 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
     keyboard.displayFailure().addListener(new AssertedSuccessListener<Boolean>() {
       @Override
       public void onSuccess(Boolean result) {
-        callMeCountDown.setVisibility(View.VISIBLE);
-        resendSmsCountDown.setVisibility(View.VISIBLE);
-        wrongNumber.setVisibility(View.VISIBLE);
+        if (isSignalVersion()) {
+          callMeCountDown.setVisibility(View.VISIBLE);
+          resendSmsCountDown.setVisibility(View.VISIBLE);
+          wrongNumber.setVisibility(View.VISIBLE);
+        } else {
+          pigeonWrongButtonShowed  = false;
+          pigeonCallMeButtonShowed = true;
+          pigeonResendButtonShowed = true;
+        }
         verificationCodeView.clear();
         keyboard.displayKeyboard();
       }
@@ -310,6 +419,11 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
   public void onStop() {
     super.onStop();
     EventBus.getDefault().unregister(this);
+  }
+
+  @Override public void onDestroy() {
+    EnterCodeAdapter.Companion.resetTimer();
+    super.onDestroy();
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN)
@@ -411,68 +525,5 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
         }
       }
     });
-  }
-
-  @Override
-  public void onResume() {
-    super.onResume();
-    String sessionE164 = viewModel.getSessionE164();
-    if (sessionE164 == null) {
-      returnToPhoneEntryScreen();
-      return;
-    }
-
-    subheader.setText(requireContext().getString(R.string.RegistrationActivity_enter_the_code_we_sent_to_s, viewModel.getNumber().getFullFormattedNumber()));
-
-    MccMncProducer mccMncProducer = new MccMncProducer(requireContext());
-    Disposable request = viewModel.validateSession(sessionE164, mccMncProducer.getMcc(), mccMncProducer.getMnc())
-                                  .observeOn(AndroidSchedulers.mainThread())
-                                  .subscribe(processor -> {
-                                    if (!processor.hasResult()) {
-                                      returnToPhoneEntryScreen();
-                                    } else if (processor.isInvalidSession()) {
-                                      returnToPhoneEntryScreen();
-                                    } else if (processor.cannotSubmitVerificationAttempt()) {
-                                      returnToPhoneEntryScreen();
-                                    } else if (!processor.canSubmitProofImmediately()) {
-                                      handleRateLimited();
-                                    }
-                                    // else session state is valid and server is ready to accept code
-                                  });
-
-    disposables.add(request);
-
-    viewModel.getCanCallAtTime().observe(getViewLifecycleOwner(), callAtTime -> {
-      if (callAtTime > 0) {
-        callMeCountDown.setVisibility(View.VISIBLE);
-        callMeCountDown.startCountDownTo(callAtTime);
-      } else {
-        callMeCountDown.setVisibility(View.INVISIBLE);
-      }
-    });
-    viewModel.getCanSmsAtTime().observe(getViewLifecycleOwner(), smsAtTime -> {
-      if (smsAtTime > 0) {
-        resendSmsCountDown.setVisibility(View.VISIBLE);
-        resendSmsCountDown.startCountDownTo(smsAtTime);
-      } else {
-        resendSmsCountDown.setVisibility(View.INVISIBLE);
-      }
-    });
-  }
-
-
-  private void showBottomSheet() {
-    ContactSupportBottomSheetFragment bottomSheet = new ContactSupportBottomSheetFragment();
-    bottomSheet.show(getChildFragmentManager(), "support_bottom_sheet");
-  }
-
-  @Override
-  public void onNoCellSignalPresent() {
-    // TODO animate in bottom sheet
-  }
-
-  @Override
-  public void onCellSignalPresent() {
-    // TODO animate away bottom sheet
   }
 }
