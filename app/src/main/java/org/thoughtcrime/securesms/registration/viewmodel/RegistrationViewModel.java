@@ -179,7 +179,8 @@ public final class RegistrationViewModel extends BaseRegistrationViewModel {
                                     } else {
                                       return Single.just(verifyAccountWithoutKbsResponse);
                                     }
-                                  });
+                                  })
+                                  .onErrorReturn(ServiceResponse::forUnknownError);
   }
 
   @Override
@@ -196,13 +197,14 @@ public final class RegistrationViewModel extends BaseRegistrationViewModel {
                                       setCanCallAtTime(processor.getNextCodeViaCallAttempt());
                                     }
                                   })
-                                  .flatMap(processor -> {
+                                  .<ServiceResponse<VerifyResponse>>flatMap(processor -> {
                                     if (processor.isAlreadyVerified() || (processor.hasResult() && processor.isVerified())) {
                                       return verifyAccountRepository.registerAccount(sessionId, getRegistrationData(), pin, () -> Objects.requireNonNull(KbsRepository.restoreMasterKey(pin, kbsTokenData.getEnclave(), kbsTokenData.getBasicAuth(), kbsTokenData.getTokenResponse())));
                                     } else {
                                       return Single.just(ServiceResponse.coerceError(processor.getResponse()));
                                     }
-                                  });
+                                  })
+                                  .onErrorReturn(ServiceResponse::forUnknownError);
   }
 
   @Override
@@ -225,7 +227,7 @@ public final class RegistrationViewModel extends BaseRegistrationViewModel {
                                 registrationRepository.getProfileKey(getNumber().getE164Number()),
                                 getFcmToken(),
                                 registrationRepository.getPniRegistrationId(),
-                                getRecoveryPassword());
+                                getSessionId() != null ? null : getRecoveryPassword());
   }
 
   public @NonNull Single<VerifyResponseProcessor> verifyReRegisterWithPin(@NonNull String pin) {
