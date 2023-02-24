@@ -92,14 +92,16 @@ class RegistrationNumberInputController(
   fun setNumberAndCountryCode(numberViewState: NumberViewState) {
     isUpdating = true
     phoneNumberInputLayout.setText(numberViewState.nationalNumber)
+    val countryCode = numberViewState.countryCode
 
     if (isSignalVersion()) {
-      if (numberViewState.countryCode != 0) {
+      if (countryCode != 0) {
         spinnerView.setText(supportedCountryPrefixes.first { it.digits == numberViewState.countryCode }.toString())
+        val regionCode = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(countryCode)
+        setCountryFormatter(regionCode)
       }
     } else {
       if (numberViewState.countryCode != 0) {
-        val countryCode = numberViewState.countryCode
         val fullCountry = "+$countryCode"
         spinnerView.setText(fullCountry)
         val regionCode = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(countryCode)
