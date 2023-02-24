@@ -125,29 +125,20 @@ public class EditProfileFragment extends LoggingFragment {
 
   private void handleMediaFromResult(@NonNull Media media) {
     SimpleTask.run(() -> {
-                     try {
-                       InputStream stream = BlobProvider.getInstance().getStream(requireContext(), media.getUri());
+      try {
+        InputStream stream = BlobProvider.getInstance().getStream(requireContext(), media.getUri());
 
-                       return StreamUtil.readFully(stream);
-                     } catch (IOException ioException) {
-                       Log.w(TAG, ioException);
-                       return null;
-                     }
-                   },
-                   (avatarBytes) -> {
-                     if (avatarBytes != null) {
-                       viewModel.setAvatarMedia(media);
-                       viewModel.setAvatar(avatarBytes);
-                       GlideApp.with(EditProfileFragment.this)
-                               .load(avatarBytes)
-                               .skipMemoryCache(true)
-                               .diskCacheStrategy(DiskCacheStrategy.NONE)
-                               .circleCrop()
-                               .into(binding.avatar);
-                     } else {
-                       Toast.makeText(requireActivity(), R.string.CreateProfileActivity_error_setting_profile_photo, Toast.LENGTH_LONG).show();
-                     }
-                   });
+        return StreamUtil.readFully(stream);
+      } catch (IOException ioException) {
+        Log.w(TAG, ioException); return null;
+      }
+    }, (avatarBytes) -> {
+      if (avatarBytes != null) {
+        viewModel.setAvatarMedia(media); viewModel.setAvatar(avatarBytes); GlideApp.with(EditProfileFragment.this).load(avatarBytes).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).circleCrop().into(binding.avatar);
+      } else {
+        Toast.makeText(requireActivity(), R.string.CreateProfileActivity_error_setting_profile_photo, Toast.LENGTH_LONG).show();
+      }
+    });
   }
 
   private void initializeViewModel(boolean excludeSystem, @Nullable GroupId groupId, boolean hasSavedInstanceState) {
@@ -362,45 +353,44 @@ public class EditProfileFragment extends LoggingFragment {
   }
 
   private void handleFinishedLollipop() {
-    if (isSignalVersion()) {
-      int[] finishButtonLocation = new int[2];
-      int[] revealLocation       = new int[2];
+    if (!isSignalVersion()) return;
+    int[] finishButtonLocation = new int[2];
+    int[] revealLocation       = new int[2];
 
-      binding.finishButton.getLocationInWindow(finishButtonLocation);
-      binding.reveal.getLocationInWindow(revealLocation);
+    binding.finishButton.getLocationInWindow(finishButtonLocation);
+    binding.reveal.getLocationInWindow(revealLocation);
 
-      int finishX = finishButtonLocation[0] - revealLocation[0];
-      int finishY = finishButtonLocation[1] - revealLocation[1];
+    int finishX = finishButtonLocation[0] - revealLocation[0];
+    int finishY = finishButtonLocation[1] - revealLocation[1];
 
-      finishX += binding.finishButton.getWidth() / 2;
-      finishY += binding.finishButton.getHeight() / 2;
+    finishX += binding.finishButton.getWidth() / 2;
+    finishY += binding.finishButton.getHeight() / 2;
 
-      Animator animation = ViewAnimationUtils.createCircularReveal(binding.reveal, finishX, finishY, 0f, (float) Math.max(binding.reveal.getWidth(), binding.reveal.getHeight()));
-      animation.setDuration(500);
-      animation.addListener(new Animator.AnimatorListener() {
-        @Override
-        public void onAnimationStart(Animator animation) {}
+    Animator animation = ViewAnimationUtils.createCircularReveal(binding.reveal, finishX, finishY, 0f, (float) Math.max(binding.reveal.getWidth(), binding.reveal.getHeight()));
+    animation.setDuration(500);
+    animation.addListener(new Animator.AnimatorListener() {
+      @Override
+      public void onAnimationStart(Animator animation) {}
 
-        @Override
-        public void onAnimationEnd(Animator animation) {
-          binding.finishButton.cancelSpinning();
-          if (nextIntent != null && getActivity() != null) {
-            startActivity(nextIntent);
-          }
-
-          controller.onProfileNameUploadCompleted();
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        binding.finishButton.cancelSpinning();
+        if (nextIntent != null && getActivity() != null) {
+          startActivity(nextIntent);
         }
 
-        @Override
-        public void onAnimationCancel(Animator animation) {}
+        controller.onProfileNameUploadCompleted();
+      }
 
-        @Override
-        public void onAnimationRepeat(Animator animation) {}
-      });
+      @Override
+      public void onAnimationCancel(Animator animation) {}
 
-      binding.reveal.setVisibility(View.VISIBLE);
-      animation.start();
-    }
+      @Override
+      public void onAnimationRepeat(Animator animation) {}
+    });
+
+    binding.reveal.setVisibility(View.VISIBLE);
+    animation.start();
   }
 
   public interface Controller {
