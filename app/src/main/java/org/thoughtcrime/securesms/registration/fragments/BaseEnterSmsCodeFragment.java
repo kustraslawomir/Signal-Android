@@ -138,7 +138,7 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
     disposables.bindTo(getViewLifecycleOwner().getLifecycle());
     viewModel = getViewModel();
     viewModel.getIncorrectCodeAttempts().observe(getViewLifecycleOwner(), (attempts) -> {
-      if (attempts >= 3) {
+      if (attempts >= 3 && isSignalVersion()) {
         bottomSheetButton.setVisibility(View.VISIBLE);
       }
     });
