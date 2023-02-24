@@ -169,7 +169,7 @@ class RegistrationNumberInputController(
         return
       }
 
-      if (s[0] != '+') {
+      if (s[0] != '+' && isSignalVersion()) {
         s.insert(0, "+")
       }
 
