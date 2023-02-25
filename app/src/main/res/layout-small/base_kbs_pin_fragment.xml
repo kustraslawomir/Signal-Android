@@ -52,6 +52,7 @@
             android:layout_marginTop="12dp"
             android:gravity="center_horizontal"
             android:inputType="numberPassword"
+            tools:text="@tools:sample/us_phones"
             android:minWidth="210dp"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
