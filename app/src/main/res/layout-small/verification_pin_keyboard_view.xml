@@ -3,6 +3,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:viewBindingIgnore="true">
 
+    <org.thoughtcrime.securesms.components.NumericKeyboardView
+        android:id="@+id/keyboard_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/signal_colorSurface1"
+        android:elevation="3dp"
+        android:keyBackground="@color/signal_colorSurface1"
+        android:keyTextColor="@color/signal_colorOnSurface"
+        android:keyTextSize="30sp"
+        android:shadowColor="@color/transparent" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:indeterminate="true" />
+
+    <org.thoughtcrime.securesms.components.SquareImageView
+        android:id="@+id/success"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:background="@drawable/circle_tintable"
+        android:backgroundTint="@color/green_400"
+        android:gravity="center_vertical"
+        android:src="@drawable/ic_check_white_48dp" />
+
+    <org.thoughtcrime.securesms.components.SquareImageView
+        android:id="@+id/failure"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:background="@drawable/circle_tintable"
+        android:backgroundTint="@color/green_400"
+        android:gravity="center_vertical"
+        android:src="@drawable/ic_close_white_48dp" />
+
+    <org.thoughtcrime.securesms.components.SquareImageView
+        android:id="@+id/locked"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:background="@drawable/circle_tintable"
+        android:backgroundTint="@color/green_400"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:src="@drawable/ic_lock_white_48dp"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+
     <FrameLayout
         android:id="@+id/pigeonProgress"
         android:layout_width="match_parent"

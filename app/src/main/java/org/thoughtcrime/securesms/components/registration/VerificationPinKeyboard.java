@@ -83,61 +83,53 @@ public class VerificationPinKeyboard extends FrameLayout {
   }
 
   public void displayKeyboard() {
-    if (isSignalVersion()) {
-      this.keyboardView.setVisibility(View.VISIBLE);
-      this.progressBar.setVisibility(View.GONE);
-      this.successView.setVisibility(View.GONE);
-      this.failureView.setVisibility(View.GONE);
-      this.lockedView.setVisibility(View.GONE);
-    } else {
-      this.pigeonProgressBar.setVisibility(View.GONE);
-    }
+    this.keyboardView.setVisibility(View.VISIBLE);
+    this.progressBar.setVisibility(View.GONE);
+    this.successView.setVisibility(View.GONE);
+    this.failureView.setVisibility(View.GONE);
+    this.lockedView.setVisibility(View.GONE);
+    this.pigeonProgressBar.setVisibility(View.GONE);
   }
 
   public void displayProgress() {
-    if (isSignalVersion()) {
-      this.keyboardView.setVisibility(View.INVISIBLE);
-      this.progressBar.setVisibility(View.VISIBLE);
-      this.successView.setVisibility(View.GONE);
-      this.failureView.setVisibility(View.GONE);
-      this.lockedView.setVisibility(View.GONE);
-    } else {
-      this.pigeonProgressBar.setVisibility(View.VISIBLE);
-    }
+    this.keyboardView.setVisibility(View.INVISIBLE);
+    this.progressBar.setVisibility(View.VISIBLE);
+    this.successView.setVisibility(View.GONE);
+    this.failureView.setVisibility(View.GONE);
+    this.lockedView.setVisibility(View.GONE);
+    this.pigeonProgressBar.setVisibility(View.VISIBLE);
   }
 
   public ListenableFuture<Boolean> displaySuccess() {
     SettableFuture<Boolean> result = new SettableFuture<>();
 
     this.pigeonProgressBar.setVisibility(View.GONE);
-    if (isSignalVersion()) {
-      this.keyboardView.setVisibility(View.INVISIBLE);
-      this.progressBar.setVisibility(View.GONE);
-      this.failureView.setVisibility(View.GONE);
-      this.lockedView.setVisibility(View.GONE);
+    this.keyboardView.setVisibility(View.INVISIBLE);
+    this.progressBar.setVisibility(View.GONE);
+    this.failureView.setVisibility(View.GONE);
+    this.lockedView.setVisibility(View.GONE);
 
-      this.successView.getBackground().setColorFilter(getResources().getColor(R.color.green_500), PorterDuff.Mode.SRC_IN);
+    this.successView.getBackground().setColorFilter(getResources().getColor(R.color.green_500), PorterDuff.Mode.SRC_IN);
 
-      ScaleAnimation scaleAnimation = new ScaleAnimation(0, 1, 0, 1,
-                                                         ScaleAnimation.RELATIVE_TO_SELF, 0.5f,
-                                                         ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
-      scaleAnimation.setInterpolator(new OvershootInterpolator());
-      scaleAnimation.setDuration(800);
-      scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
-        @Override
-        public void onAnimationStart(Animation animation) {}
+    ScaleAnimation scaleAnimation = new ScaleAnimation(0, 1, 0, 1,
+                                                       ScaleAnimation.RELATIVE_TO_SELF, 0.5f,
+                                                       ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
+    scaleAnimation.setInterpolator(new OvershootInterpolator());
+    scaleAnimation.setDuration(800);
+    scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
+      @Override
+      public void onAnimationStart(Animation animation) {}
 
-        @Override
-        public void onAnimationEnd(Animation animation) {
-          result.set(true);
-        }
+      @Override
+      public void onAnimationEnd(Animation animation) {
+        result.set(true);
+      }
 
-        @Override
-        public void onAnimationRepeat(Animation animation) {}
-      });
+      @Override
+      public void onAnimationRepeat(Animation animation) {}
+    });
 
-      ViewUtil.animateIn(this.successView, scaleAnimation);
-    }
+    ViewUtil.animateIn(this.successView, scaleAnimation);
     return result;
 
   }
@@ -146,33 +138,31 @@ public class VerificationPinKeyboard extends FrameLayout {
     SettableFuture<Boolean> result = new SettableFuture<>();
 
     this.pigeonProgressBar.setVisibility(View.GONE);
-    if (isSignalVersion()) {
-      this.keyboardView.setVisibility(View.INVISIBLE);
-      this.progressBar.setVisibility(View.GONE);
-      this.failureView.setVisibility(View.GONE);
-      this.lockedView.setVisibility(View.GONE);
+    this.keyboardView.setVisibility(View.INVISIBLE);
+    this.progressBar.setVisibility(View.GONE);
+    this.failureView.setVisibility(View.GONE);
+    this.lockedView.setVisibility(View.GONE);
 
-      this.failureView.getBackground().setColorFilter(getResources().getColor(R.color.red_500), PorterDuff.Mode.SRC_IN);
-      this.failureView.setVisibility(View.VISIBLE);
+    this.failureView.getBackground().setColorFilter(getResources().getColor(R.color.red_500), PorterDuff.Mode.SRC_IN);
+    this.failureView.setVisibility(View.VISIBLE);
 
-      TranslateAnimation shake = new TranslateAnimation(0, 30, 0, 0);
-      shake.setDuration(50);
-      shake.setRepeatCount(7);
-      shake.setAnimationListener(new Animation.AnimationListener() {
-        @Override
-        public void onAnimationStart(Animation animation) {}
+    TranslateAnimation shake = new TranslateAnimation(0, 30, 0, 0);
+    shake.setDuration(50);
+    shake.setRepeatCount(7);
+    shake.setAnimationListener(new Animation.AnimationListener() {
+      @Override
+      public void onAnimationStart(Animation animation) {}
 
-        @Override
-        public void onAnimationEnd(Animation animation) {
-          result.set(true);
-        }
+      @Override
+      public void onAnimationEnd(Animation animation) {
+        result.set(true);
+      }
 
-        @Override
-        public void onAnimationRepeat(Animation animation) {}
-      });
+      @Override
+      public void onAnimationRepeat(Animation animation) {}
+    });
 
-      this.failureView.startAnimation(shake);
-    }
+    this.failureView.startAnimation(shake);
 
     return result;
   }
@@ -181,34 +171,32 @@ public class VerificationPinKeyboard extends FrameLayout {
     SettableFuture<Boolean> result = new SettableFuture<>();
 
     this.pigeonProgressBar.setVisibility(View.GONE);
-    if (isSignalVersion()) {
-      this.keyboardView.setVisibility(View.INVISIBLE);
-      this.progressBar.setVisibility(View.GONE);
-      this.failureView.setVisibility(View.GONE);
-      this.lockedView.setVisibility(View.GONE);
+    this.keyboardView.setVisibility(View.INVISIBLE);
+    this.progressBar.setVisibility(View.GONE);
+    this.failureView.setVisibility(View.GONE);
+    this.lockedView.setVisibility(View.GONE);
 
-      this.lockedView.getBackground().setColorFilter(getResources().getColor(R.color.green_500), PorterDuff.Mode.SRC_IN);
+    this.lockedView.getBackground().setColorFilter(getResources().getColor(R.color.green_500), PorterDuff.Mode.SRC_IN);
 
-      ScaleAnimation scaleAnimation = new ScaleAnimation(0, 1, 0, 1,
-                                                         ScaleAnimation.RELATIVE_TO_SELF, 0.5f,
-                                                         ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
-      scaleAnimation.setInterpolator(new OvershootInterpolator());
-      scaleAnimation.setDuration(800);
-      scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
-        @Override
-        public void onAnimationStart(Animation animation) {}
+    ScaleAnimation scaleAnimation = new ScaleAnimation(0, 1, 0, 1,
+                                                       ScaleAnimation.RELATIVE_TO_SELF, 0.5f,
+                                                       ScaleAnimation.RELATIVE_TO_SELF, 0.5f);
+    scaleAnimation.setInterpolator(new OvershootInterpolator());
+    scaleAnimation.setDuration(800);
+    scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
+      @Override
+      public void onAnimationStart(Animation animation) {}
 
-        @Override
-        public void onAnimationEnd(Animation animation) {
-          result.set(true);
-        }
+      @Override
+      public void onAnimationEnd(Animation animation) {
+        result.set(true);
+      }
 
-        @Override
-        public void onAnimationRepeat(Animation animation) {}
-      });
+      @Override
+      public void onAnimationRepeat(Animation animation) {}
+    });
 
-      ViewUtil.animateIn(this.lockedView, scaleAnimation);
-    }
+    ViewUtil.animateIn(this.lockedView, scaleAnimation);
     return result;
   }
 
