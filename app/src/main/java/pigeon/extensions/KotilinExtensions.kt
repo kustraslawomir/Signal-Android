@@ -83,7 +83,7 @@ fun EditText.animateGroup(parent:TextView) {
     val BUTTON_SCALE_NON_FOCUS = 1.0f
     val BUTTON_TRANSLATION_X_FOCUS = 12.0f
     val BUTTON_TRANSLATION_X_NON_FOCUS = 1.0f
-    val BUTTON_TRANSLATION_X_FOCUS_PARENT = -12.0f
+    val BUTTON_TRANSLATION_X_FOCUS_PARENT = -30.0f
     val BUTTON_TRANSLATION_X_NON_FOCUS_PARENT = 1.0f
 
     val focus = View.OnFocusChangeListener { _, hasFocus ->
@@ -122,6 +122,7 @@ fun EditText.animateGroup(parent:TextView) {
       }
 
       parent.setTextColor(ContextCompat.getColor(this.context, parentColor))
+      this.setTextColor(ContextCompat.getColor(this.context, parentColor))
     }
     this.onFocusChangeListener = focus
   }

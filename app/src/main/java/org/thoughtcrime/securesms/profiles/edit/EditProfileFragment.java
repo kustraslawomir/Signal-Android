@@ -247,7 +247,9 @@ public class EditProfileFragment extends LoggingFragment {
       handleUpload();
     });
 
-    binding.finishButton.setText(arguments.getInt(NEXT_BUTTON_TEXT, R.string.CreateProfileActivity_next));
+    if (isSignalVersion()) {
+      binding.finishButton.setText(arguments.getInt(NEXT_BUTTON_TEXT, R.string.CreateProfileActivity_next));
+    }
 
     if (arguments.getBoolean(SHOW_TOOLBAR, true)) {
       binding.toolbar.setVisibility(View.VISIBLE);
@@ -353,7 +355,6 @@ public class EditProfileFragment extends LoggingFragment {
   }
 
   private void handleFinishedLollipop() {
-    if (!isSignalVersion()) return;
     int[] finishButtonLocation = new int[2];
     int[] revealLocation       = new int[2];
 
