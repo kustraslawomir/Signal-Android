@@ -10,8 +10,8 @@
     tools:viewBindingIgnore="true">
 
     <TextView
-         style="@style/Mp02.Signal.Text.FocusableMediumCommonTextButton"
         android:id="@+id/new_message_button"
+        style="@style/Mp02.Signal.Text.FocusableMediumCommonTextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
@@ -19,18 +19,17 @@
         android:text="@string/Pigeon_HomePage_new_message" />
 
     <TextView
-         style="@style/Mp02.Signal.Text.FocusableMediumCommonTextButton"
         android:id="@+id/new_group_button"
+        style="@style/Mp02.Signal.Text.FocusableMediumCommonTextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
         android:layout_marginTop="@dimen/pigeon_small_margin"
         android:text="@string/Pigeon_HomePage_new_group" />
 
-
     <TextView
-         style="@style/Mp02.Signal.Text.FocusableMediumCommonTextButton"
         android:id="@+id/mark_all_read_button"
+        style="@style/Mp02.Signal.Text.FocusableMediumCommonTextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
@@ -38,8 +37,8 @@
         android:text="@string/Pigeon_HomePage_mark_all_read" />
 
     <TextView
-         style="@style/Mp02.Signal.Text.FocusableMediumCommonTextButton"
         android:id="@+id/settings_button"
+        style="@style/Mp02.Signal.Text.FocusableMediumCommonTextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
@@ -47,8 +46,8 @@
         android:text="@string/Pigeon_HomePage_settings" />
 
     <TextView
-         style="@style/Mp02.Signal.Text.FocusableMediumCommonTextButton"
         android:id="@+id/search_button"
+        style="@style/Mp02.Signal.Text.FocusableMediumCommonTextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"

@@ -38,6 +38,7 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <FrameLayout
+        android:id="@+id/fast_scroller_container"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:visibility="gone"
@@ -57,8 +58,8 @@
 
     <LinearLayout
         android:id="@+id/show_contacts_container"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical"
         android:visibility="gone"
@@ -121,6 +122,7 @@
     </LinearLayout>
 
     <FrameLayout
+        android:id="@+id/header_container"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:visibility="gone"

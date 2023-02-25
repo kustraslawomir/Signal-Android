@@ -2,6 +2,7 @@ package org.thoughtcrime.securesms
 
 import android.content.Context
 import android.view.View
+import android.widget.TextView
 import org.thoughtcrime.securesms.contacts.paged.ContactSearchAdapter
 import org.thoughtcrime.securesms.contacts.paged.ContactSearchConfiguration
 import org.thoughtcrime.securesms.contacts.paged.ContactSearchData
@@ -9,6 +10,7 @@ import org.thoughtcrime.securesms.contacts.paged.ContactSearchKey
 import org.thoughtcrime.securesms.util.adapter.mapping.LayoutFactory
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingModel
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingViewHolder
+import pigeon.extensions.focusOnLeft
 
 class ContactSelectionListAdapter(
   context: Context,
@@ -41,7 +43,9 @@ class ContactSelectionListAdapter(
       itemView.setOnClickListener { onClickListener() }
     }
 
-    override fun bind(model: InviteToSignalModel) = Unit
+    override fun bind(model: InviteToSignalModel) {
+      itemView.findViewById<TextView>(R.id.invite_text).focusOnLeft()
+    }
   }
 
   private class NewGroupViewHolder(itemView: View, onClickListener: () -> Unit) : MappingViewHolder<NewGroupModel>(itemView) {
@@ -49,7 +53,9 @@ class ContactSelectionListAdapter(
       itemView.setOnClickListener { onClickListener() }
     }
 
-    override fun bind(model: NewGroupModel) = Unit
+    override fun bind(model: NewGroupModel) {
+      itemView.findViewById<TextView>(R.id.invite_text).focusOnLeft()
+    }
   }
 
   class ArbitraryRepository : org.thoughtcrime.securesms.contacts.paged.ArbitraryRepository {

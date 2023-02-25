@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center"
@@ -10,8 +9,8 @@
 
     <org.thoughtcrime.securesms.util.views.DarkOverflowToolbar
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_width="0px"
+        android:layout_height="0px"
         android:theme="?attr/settingsToolbarStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,7 +29,7 @@
         android:layout_marginRight="@dimen/dsl_settings_gutter"
         android:layout_marginBottom="12dp"
         android:minHeight="44dp"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
     <fragment
         android:id="@+id/contact_selection_list_fragment"

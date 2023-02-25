@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/dsl_settings_gutter"
+    android:paddingTop="12dp"
+    android:paddingEnd="@dimen/dsl_settings_gutter"
+    tools:background="@color/black"
+    tools:viewBindingIgnore="true">
+
+    <TextView
+        android:id="@+id/section_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Mp02.Signal.Text.FocusableSmallCommonTextButton"
+        tools:text="Section Header" />
+</FrameLayout>

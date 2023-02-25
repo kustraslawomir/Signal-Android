@@ -29,6 +29,7 @@ import org.thoughtcrime.securesms.util.adapter.mapping.MappingModelList
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingViewHolder
 import org.thoughtcrime.securesms.util.adapter.mapping.PagingMappingAdapter
 import org.thoughtcrime.securesms.util.visible
+import pigeon.extensions.focusOnLeft
 
 /**
  * Default contact search adapter, using the models defined in `ContactSearchItems`
@@ -557,6 +558,7 @@ open class ContactSearchAdapter(
     private val headerActionView: MaterialButton = itemView.findViewById(R.id.section_header_action)
 
     override fun bind(model: HeaderModel) {
+      headerTextView.focusOnLeft()
       headerTextView.setText(
         when (model.header.sectionKey) {
           ContactSearchConfiguration.SectionKey.STORIES -> R.string.ContactsCursorLoader_my_stories

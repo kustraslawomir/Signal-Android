@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="24dp"
+    android:orientation="horizontal"
+    tools:background="@color/black"
+    tools:viewBindingIgnore="true">
+
+    <TextView
+        android:paddingStart="@dimen/dsl_settings_gutter"
+        android:paddingTop="16dp"
+        android:paddingEnd="@dimen/dsl_settings_gutter"
+        android:id="@+id/section_header"
+        style="@style/Mp02.Signal.Text.FocusableSmallCommonTextButton"
+        android:layout_width="match_parent"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content"
+        tools:text="Section Header" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/section_header_action"
+        style="@style/Signal.Widget.Button.Large.Tonal"
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/dsl_settings_gutter"
+        android:layout_marginEnd="@dimen/dsl_settings_gutter"
+        android:visibility="gone"
+        app:icon="@drawable/ic_plus_12"
+        app:iconSize="12dp"
+        app:materialThemeOverlay="@style/ThemeOverlay.Signal.Button.Surface2"
+        tools:text="New Story"
+        tools:visibility="visible" />
+</LinearLayout>
