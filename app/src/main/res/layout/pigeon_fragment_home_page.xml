@@ -16,7 +16,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
         android:layout_marginTop="@dimen/pigeon_small_margin"
-        android:textColor="@color/white"
         android:text="@string/Pigeon_HomePage_new_message" />
 
     <TextView
@@ -26,7 +25,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
         android:layout_marginTop="@dimen/pigeon_small_margin"
-        android:textColor="@color/white"
         android:text="@string/Pigeon_HomePage_new_group" />
 
 
@@ -37,7 +35,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
         android:layout_marginTop="@dimen/pigeon_small_margin"
-        android:textColor="@color/white"
         android:text="@string/Pigeon_HomePage_mark_all_read" />
 
     <TextView
@@ -47,7 +44,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
         android:layout_marginTop="@dimen/pigeon_small_margin"
-        android:textColor="@color/white"
         android:text="@string/Pigeon_HomePage_settings" />
 
     <TextView
@@ -57,7 +53,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
         android:layout_marginTop="@dimen/pigeon_small_margin"
-        android:textColor="@color/white"
         android:text="@string/Pigeon_HomePage_search" />
 
     <View

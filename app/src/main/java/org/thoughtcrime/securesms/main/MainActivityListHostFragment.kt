@@ -141,7 +141,6 @@ class MainActivityListHostFragment : Fragment(R.layout.main_activity_list_host_f
   override fun onResume() {
     super.onResume()
     SimpleTask.run(viewLifecycleOwner.lifecycle, { Recipient.self() }, ::initializeProfileIcon)
-
     requireView()
       .findViewById<View>(R.id.fragment_container)
       .findNavController()
