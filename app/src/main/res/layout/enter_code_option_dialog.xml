@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:viewBindingIgnore="true"
     android:orientation="vertical"
     style="@style/Mp02.Signal.Background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.button.MaterialButton
+    <TextView
         android:id="@+id/option_button1"
-        style="@style/Mp02.Signal.Text.MaterialTextButton"
+        style="@style/Mp02.Signal.Text.CommonTextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
@@ -18,13 +17,22 @@
         tools:text="@string/Pigeon.Options" />
 
 
-    <com.google.android.material.button.MaterialButton
+    <TextView
         android:id="@+id/option_button2"
-        style="@style/Mp02.Signal.Text.MaterialTextButton"
-        android:layout_width="wrap_content"
+        style="@style/Mp02.Signal.Text.CommonTextButton"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
-        android:layout_marginBottom="@dimen/pigeon_start_margin"
+        android:layout_marginBottom="@dimen/pigeon_bottom_margin"
         tools:text="@string/Pigeon.Options" />
+
+    <TextView
+        android:id="@+id/closeButton"
+        style="@style/Mp02.Signal.Text.CommonTextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/pigeon_start_margin"
+        android:layout_marginBottom="@dimen/pigeon_bottom_margin"
+        tools:text="@string/Pigeon.Close" />
 
 </LinearLayout>

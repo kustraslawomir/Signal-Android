@@ -111,8 +111,10 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
       setPigeonOnCodeFullyEnteredListener();
       pigeonOptionButton.setOnClickListener(
           v -> {
-            dialog.show(getParentFragmentManager(), "dialog");
-            dialog.setupButtons(callMeCountDown, resendSmsCountDown);
+            ArrayList<ActionCountDownButton> list = new ArrayList<>();
+            list.add(callMeCountDown);
+            list.add(resendSmsCountDown);
+            dialog.showWithButtons(getParentFragmentManager(),list);
           }
       );
     }
