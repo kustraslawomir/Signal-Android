@@ -25,6 +25,7 @@ import org.thoughtcrime.securesms.util.ServiceUtil
 import org.thoughtcrime.securesms.util.SupportEmailUtil
 import org.thoughtcrime.securesms.util.ViewUtil
 import org.thoughtcrime.securesms.util.navigation.safeNavigate
+import pigeon.extensions.isSignalVersion
 
 /**
  * Using a recovery password or restored KBS token attempt to register in the skip flow.
@@ -94,7 +95,11 @@ class ReRegisterWithPinFragment : LoggingFragment(R.layout.pin_restore_entry_fra
   }
 
   private fun handlePinEntry() {
-    val pin: String? = binding.pinRestorePinInput.text?.toString()
+    val pin: String? = if (isSignalVersion()) {
+      binding.pinRestorePinInput.text?.toString()
+    } else {
+      binding.pigeonPinRestorePinInput?.text?.toString()
+    }
 
     val trimmedLength = pin?.replace(" ", "")?.length ?: 0
     if (trimmedLength == 0) {
@@ -113,10 +118,12 @@ class ReRegisterWithPinFragment : LoggingFragment(R.layout.pin_restore_entry_fra
       .doOnSubscribe {
         ViewUtil.hideKeyboard(requireContext(), binding.pinRestorePinInput)
         binding.pinRestorePinInput.isEnabled = false
+        binding.pigeonPinRestorePinInput?.isEnabled = false
         binding.pinRestorePinConfirm.setSpinning()
       }
       .doAfterTerminate {
         binding.pinRestorePinInput.isEnabled = true
+        binding.pigeonPinRestorePinInput?.isEnabled = true
         binding.pinRestorePinConfirm.cancelSpinning()
       }
       .subscribe { processor ->
