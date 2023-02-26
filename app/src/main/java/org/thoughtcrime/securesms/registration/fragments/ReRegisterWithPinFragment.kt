@@ -58,6 +58,7 @@ class ReRegisterWithPinFragment : LoggingFragment(R.layout.pin_restore_entry_fra
     binding.pinRestoreForgotPin.setOnClickListener { onNeedHelpClicked() }
 
     binding.pinRestoreSkipButton.setOnClickListener { onSkipClicked() }
+    binding.pinRestoreSkipButton.requestFocus()
 
     binding.pinRestorePinInput.imeOptions = EditorInfo.IME_ACTION_DONE
     binding.pinRestorePinInput.setOnEditorActionListener { v, actionId, _ ->

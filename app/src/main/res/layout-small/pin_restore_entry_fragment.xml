@@ -95,23 +95,23 @@
             android:text="@string/PinRestoreEntryFragment_skip"
             android:focusable="true"
             android:clickable="true"
+            android:enabled="true"
+            android:visibility="visible"
             android:focusableInTouchMode="true"
-            android:nextFocusUp="@id/pin_restore_pin_input"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/pin_restore_pin_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/pigeon_top_margin"
             android:gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:enabled="false"
             android:text="@string/RegistrationLockFragment__enter_your_pin"
             android:textAppearance="@style/TextAppearance.Signal.Title1"
             android:textColor="@color/white"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.20" />
+            app:layout_constraintTop_toBottomOf="@+id/pin_restore_skip_button" />
 
         <EditText
             android:id="@+id/pigeon_pin_restore_pin_input"
@@ -120,7 +120,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="12dp"
             android:backgroundTint="@color/transparent"
-            android:gravity="center_horizontal"
+            android:textAlignment="center"
             android:inputType="numberPassword"
             android:minWidth="210dp"
             android:imeOptions="actionDone"
@@ -150,8 +150,9 @@
             android:layout_marginBottom="16dp"
             app:circularProgressMaterialButton__label="@string/RegistrationActivity_continue"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pin_restore_pin_input_label"
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
