@@ -110,13 +110,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/wrong_number" />
 
-        <org.thoughtcrime.securesms.components.registration.VerificationPinKeyboard
-            android:id="@+id/keyboard"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintTop_toBottomOf="@id/verification_code"
-            tools:visibility="gone" />
-
     </LinearLayout>
 
     <ScrollView
@@ -163,6 +156,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/verify_header"
                 tools:layout_editor_absoluteX="0dp"
                 tools:text="@tools:sample/us_zipcodes" />
+
+            <org.thoughtcrime.securesms.components.registration.VerificationPinKeyboard
+                android:id="@+id/keyboard"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/pigeon_option_button"
+                app:layout_constraintTop_toBottomOf="@id/verification_code"
+                tools:visibility="visible" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/pigeon_option_button"

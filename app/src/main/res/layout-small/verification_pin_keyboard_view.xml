@@ -54,7 +54,6 @@
         android:visibility="gone"
         tools:visibility="visible" />
 
-
     <FrameLayout
         android:id="@+id/pigeonProgress"
         android:layout_width="match_parent"

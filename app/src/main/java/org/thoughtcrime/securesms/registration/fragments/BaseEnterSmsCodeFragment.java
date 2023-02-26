@@ -36,6 +36,7 @@ import org.thoughtcrime.securesms.util.LifecycleDisposable;
 import org.thoughtcrime.securesms.util.ViewUtil;
 import org.thoughtcrime.securesms.util.concurrent.AssertedSuccessListener;
 import org.thoughtcrime.securesms.util.dualsim.MccMncProducer;
+import org.thoughtcrime.securesms.util.navigation.SafeNavigation;
 import org.whispersystems.signalservice.internal.push.LockedException;
 
 import java.util.ArrayList;
@@ -74,7 +75,7 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
   private              boolean                 autoCompleting;
   private              ViewModel               viewModel;
 
-  private EnterCodeOption dialog = new EnterCodeOption();
+  private final EnterCodeOption dialog = new EnterCodeOption();
 
 
   public BaseEnterSmsCodeFragment(@LayoutRes int contentLayoutId) {
@@ -346,6 +347,10 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
         runAfterAnimation.run();
       }
     });
+  }
+
+  protected void displayPigeonSuccess() {
+    SafeNavigation.safeNavigate(Navigation.findNavController(requireView()), EnterSmsCodeFragmentDirections.actionSuccessfulRegistration());
   }
 
   protected void handleRegistrationLock(long timeRemaining) {
