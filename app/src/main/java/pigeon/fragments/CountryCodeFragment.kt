@@ -1,135 +1,96 @@
-package pigeon.fragments;
+package pigeon.fragments
 
-import android.content.Context;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.os.Bundle
+import android.text.TextUtils
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.EditText
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.thoughtcrime.securesms.LoggingFragment
+import org.thoughtcrime.securesms.R
+import org.thoughtcrime.securesms.databinding.PigeonFragmentRegistrationCountryCodeBinding
+import org.thoughtcrime.securesms.registration.fragments.CountryPickerFragment
+import org.thoughtcrime.securesms.registration.fragments.CountryPickerFragmentArgs
+import org.thoughtcrime.securesms.registration.fragments.RegistrationViewDelegate.setDebugLogSubmitMultiTapView
+import org.thoughtcrime.securesms.registration.util.RegistrationNumberInputController
+import org.thoughtcrime.securesms.registration.viewmodel.RegistrationViewModel
+import org.thoughtcrime.securesms.util.LifecycleDisposable
+import org.thoughtcrime.securesms.util.navigation.safeNavigate
+import pigeon.extensions.focusOnRight
+import pigeon.extensions.isSignalVersion
+import java.util.Objects
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
+class CountryCodeFragment : LoggingFragment(), RegistrationNumberInputController.Callbacks {
+  private var viewModel: RegistrationViewModel? = null
+  private val disposables = LifecycleDisposable()
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.textfield.TextInputLayout;
+  private var _binding: PigeonFragmentRegistrationCountryCodeBinding? = null
+  private val binding get() = _binding
 
-import org.thoughtcrime.securesms.LoggingFragment;
-import org.thoughtcrime.securesms.R;
-import org.thoughtcrime.securesms.registration.fragments.CountryPickerFragment;
-import org.thoughtcrime.securesms.registration.fragments.CountryPickerFragmentArgs;
-import org.thoughtcrime.securesms.registration.util.RegistrationNumberInputController;
-import org.thoughtcrime.securesms.registration.viewmodel.RegistrationViewModel;
-import org.thoughtcrime.securesms.util.LifecycleDisposable;
-import org.thoughtcrime.securesms.util.navigation.SafeNavigation;
-import org.thoughtcrime.securesms.util.views.CircularProgressMaterialButton;
-
-import java.util.Objects;
-
-import static org.thoughtcrime.securesms.registration.fragments.RegistrationViewDelegate.setDebugLogSubmitMultiTapView;
-import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
-import static pigeon.extensions.KotilinExtensionsKt.focusOnRight;
-
-public final class CountryCodeFragment extends LoggingFragment implements RegistrationNumberInputController.Callbacks {
-
-  private static final String NUMBER_COUNTRY_SELECT = "number_country";
-
-  private TextInputLayout                countryCode;
-  private CircularProgressMaterialButton next;
-  private RegistrationViewModel viewModel;
-  private TextView              verifyHeader;
-
-  private final LifecycleDisposable disposables = new LifecycleDisposable();
-
-  @Override
-  public void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+  private fun createBinding(inflater: LayoutInflater, container: ViewGroup?): PigeonFragmentRegistrationCountryCodeBinding {
+    return PigeonFragmentRegistrationCountryCodeBinding.inflate(inflater, container, false)
   }
 
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    return inflater.inflate(R.layout.fragment_pigeon_registration_country_code, container, false);
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    _binding = createBinding(inflater, container)
+    return binding!!.root
   }
 
-  @Override
-  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
+  override fun onDestroyView() {
+    _binding = null
+    super.onDestroyView()
+  }
 
-    verifyHeader = view.findViewById(R.id.verify_header);
-    countryCode = view.findViewById(R.id.country_code);
-    next       = view.findViewById(R.id.next_button);
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
 
-    setDebugLogSubmitMultiTapView(verifyHeader);
+    binding?.run {
+      setDebugLogSubmitMultiTapView(verifyHeader)
+      val controller = RegistrationNumberInputController(requireContext(), this@CountryCodeFragment, EditText(context), countryCode)
 
-    RegistrationNumberInputController controller = new RegistrationNumberInputController(requireContext(),
-                                                                                         this,
-                                                                                         new EditText(getContext()),
-                                                                                         countryCode);
-    next.setOnClickListener(v -> handleRegister(requireContext(), v));
-
-    if (!isSignalVersion()) {
-      focusOnRight(verifyHeader);
-      focusOnRight(Objects.requireNonNull(countryCode));
-      verifyHeader.requestFocus();
-
-      org.thoughtcrime.securesms.registration.fragments.CountryPickerFragmentArgs arguments = new CountryPickerFragmentArgs.Builder().setResultKey(NUMBER_COUNTRY_SELECT).build();
-
-      countryCode.setOnClickListener(v -> SafeNavigation.safeNavigate(
-          Navigation.findNavController(v), R.id.action_pickCountry, arguments.toBundle()
-      ));
-
-      verifyHeader.setOnClickListener(v -> SafeNavigation.safeNavigate(
-          Navigation.findNavController(v), R.id.action_pickCountry, arguments.toBundle()
-      ));
-
-      getParentFragmentManager().setFragmentResultListener(
-          NUMBER_COUNTRY_SELECT, this, (requestKey, result) -> {
-            int resultCode = result.getInt(CountryPickerFragment.KEY_COUNTRY_CODE);
-            String resultCountryName = result.getString(CountryPickerFragment.KEY_COUNTRY);
-
-            viewModel.onCountrySelected(resultCountryName, resultCode);
-            controller.setPigeonNumberAndCountryCode(viewModel.getNumber());
-          }
-      );
+      nextButton.setOnClickListener { v: View -> handleRegister(v) }
+      if (!isSignalVersion()) {
+        verifyHeader.focusOnRight()
+        Objects.requireNonNull(countryCode).focusOnRight()
+        verifyHeader.requestFocus()
+        val arguments = CountryPickerFragmentArgs.Builder().setResultKey(NUMBER_COUNTRY_SELECT).build()
+        countryCode.setOnClickListener { v: View? -> findNavController(v!!).safeNavigate(R.id.action_pickCountry, arguments.toBundle()) }
+        verifyHeader.setOnClickListener { v: View? -> findNavController(v!!).safeNavigate(R.id.action_pickCountry, arguments.toBundle()) }
+        parentFragmentManager.setFragmentResultListener(NUMBER_COUNTRY_SELECT, this@CountryCodeFragment) { requestKey: String?, result: Bundle ->
+          val resultCode = result.getInt(CountryPickerFragment.KEY_COUNTRY_CODE)
+          val resultCountryName = result.getString(CountryPickerFragment.KEY_COUNTRY)
+          viewModel!!.onCountrySelected(resultCountryName, resultCode)
+          controller.setPigeonNumberAndCountryCode(viewModel!!.number)
+        }
+      }
+      disposables.bindTo(viewLifecycleOwner.lifecycle)
+      viewModel = ViewModelProvider(requireActivity())[RegistrationViewModel::class.java]
+      controller.prepopulateCountryCode()
+      controller.setPigeonNumberAndCountryCode(viewModel!!.number)
     }
-
-    disposables.bindTo(getViewLifecycleOwner().getLifecycle());
-    viewModel = new ViewModelProvider(requireActivity()).get(RegistrationViewModel.class);
-
-    controller.prepopulateCountryCode();
-    controller.setPigeonNumberAndCountryCode(viewModel.getNumber());
   }
-  private void handleRegister(@NonNull Context context, @NonNull View view) {
-    if (TextUtils.isEmpty(countryCode.getEditText().getText())) {
-      showErrorDialog(context, getString(R.string.RegistrationActivity_you_must_specify_your_country_code));
-      return;
+
+  private fun handleRegister(view: View) {
+    if (TextUtils.isEmpty(binding?.countryCode!!.editText!!.text)) {
+      showErrorDialog(getString(R.string.RegistrationActivity_you_must_specify_your_country_code))
+      return
     }
-    SafeNavigation.safeNavigate(Navigation.findNavController(view), CountryCodeFragmentDirections.actionCountryCodeFragmentToEnterPhoneNumberFragment());
+    findNavController(view).safeNavigate(CountryCodeFragmentDirections.actionCountryCodeFragmentToEnterPhoneNumberFragment())
   }
 
-
-  public void showErrorDialog(Context context, String msg) {
-    new MaterialAlertDialogBuilder(context).setMessage(msg).setPositiveButton(R.string.ok, null).show();
+  private fun showErrorDialog(msg: String?) {
+    MaterialAlertDialogBuilder(requireContext()).setMessage(msg).setPositiveButton(R.string.ok, null).show()
   }
 
-  @Override
-  public void setCountry(int countryCode) {
+  override fun setCountry(countryCode: Int) {}
+  override fun onNumberFocused() {}
+  override fun onNumberInputDone(view: View) {}
+  override fun setNationalNumber(number: String) {}
 
-  }
-
-
-  @Override public void onNumberFocused() {
-
-  }
-
-  @Override public void onNumberInputDone(@NonNull View view) {
-
-  }
-
-  @Override public void setNationalNumber(@NonNull String number) {
-
+  companion object {
+    private const val NUMBER_COUNTRY_SELECT = "number_country"
   }
 }

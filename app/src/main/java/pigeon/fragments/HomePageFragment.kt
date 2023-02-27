@@ -1,58 +1,45 @@
-package pigeon.fragments;
+package pigeon.fragments
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.content.Intent
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import org.thoughtcrime.securesms.MainNavigator.REQUEST_CONFIG_CHANGES
+import org.thoughtcrime.securesms.NewConversationActivity
+import org.thoughtcrime.securesms.R
+import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity.Companion.home
+import org.thoughtcrime.securesms.databinding.EnterCodeOptionDialogBinding
+import org.thoughtcrime.securesms.databinding.PigeonFragmentHomePageBinding
+import org.thoughtcrime.securesms.permissions.Permissions
+import pigeon.base.PigeonBaseFragment
+import pigeon.extensions.focusOnLeft
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
-import org.thoughtcrime.securesms.NewConversationActivity;
-import org.thoughtcrime.securesms.R;
-import org.thoughtcrime.securesms.permissions.Permissions;
-import org.thoughtcrime.securesms.util.views.CircularProgressMaterialButton;
-
-import static pigeon.extensions.KotilinExtensionsKt.focusOnLeft;
+class HomePageFragment : PigeonBaseFragment<PigeonFragmentHomePageBinding>() {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        Permissions.onRequestPermissionsResult(this, requestCode, permissions, grantResults)
+    }
 
 
-public class HomePageFragment extends Fragment {
-
-  @Override
-  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-    Permissions.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+  override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): PigeonFragmentHomePageBinding {
+    return PigeonFragmentHomePageBinding.inflate(inflater, container, false)
   }
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-  }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+      binding?.run {
+        newMessageButton.setOnClickListener { v: View? -> startActivity(Intent(requireActivity(), NewConversationActivity::class.java)) }
+        newMessageButton.focusOnLeft()
+        newGroupButton.focusOnLeft()
+        markAllReadButton.focusOnLeft()
+        settingsButton.focusOnLeft()
+        searchButton.focusOnLeft()
+      }
+    }
 
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState)
-  {
-    return inflater.inflate(R.layout.pigeon_fragment_home_page, container, false);
-  }
-
-  @Override
-  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-
-
-    TextView newMessageButton = view.findViewById(R.id.new_message_button);
-    newMessageButton.setOnClickListener(v -> startActivity(new Intent(requireActivity(), NewConversationActivity.class)));
-    focusOnLeft(newMessageButton);
-    TextView newGroupButton = view.findViewById(R.id.new_group_button);
-    focusOnLeft(newGroupButton);
-    TextView markAllRead_button = view.findViewById(R.id.mark_all_read_button);
-    focusOnLeft(markAllRead_button);
-    TextView settingsButton = view.findViewById(R.id.settings_button);
-    focusOnLeft(settingsButton);
-    TextView searchButton = view.findViewById(R.id.search_button);
-    focusOnLeft(searchButton);
-  }
+    fun goToAppSettings() {
+        requireActivity().startActivityForResult(home(requireContext()), REQUEST_CONFIG_CHANGES)
+    }
 }

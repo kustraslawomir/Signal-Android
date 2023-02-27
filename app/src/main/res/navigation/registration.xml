@@ -65,7 +65,7 @@
         android:id="@+id/countryCodeFragment"
         android:name="pigeon.fragments.CountryCodeFragment"
         android:label="fragment_countryCodee"
-        tools:layout="@layout/fragment_pigeon_registration_country_code">
+        tools:layout="@layout/pigeon_registration_country_code_fragment">
 
         <action
             android:id="@+id/action_countryCodeFragment_to_enterPhoneNumberFragment"
