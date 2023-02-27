@@ -93,6 +93,8 @@ import java.util.function.Consumer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import kotlin.Unit;
 
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
+
 /**
  * Fragment for selecting a one or more contacts from a list.
  *
@@ -470,6 +472,9 @@ public final class ContactSelectionListFragment extends LoggingFragment
   }
 
   private boolean hideLetterHeaders() {
+    if(!isSignalVersion()){
+      return true;
+    }
     return hasQueryFilter() || shouldDisplayRecents();
   }
 
@@ -814,7 +819,11 @@ public final class ContactSelectionListFragment extends LoggingFragment
       builder.setQuery(contactSearchState.getQuery());
 
       if (listCallback != null) {
-        builder.arbitrary(ContactSelectionListAdapter.ArbitraryRepository.ArbitraryRow.NEW_GROUP.getCode());
+        builder.arbitrary(ContactSelectionListAdapter.ArbitraryRepository.ArbitraryRow.INVITE_TO_SIGNAL.getCode());
+      }
+
+      if (listCallback != null) {
+        //builder.arbitrary(ContactSelectionListAdapter.ArbitraryRepository.ArbitraryRow.NEW_GROUP.getCode());
       }
 
       if (transportType != null) {
@@ -851,10 +860,6 @@ public final class ContactSelectionListFragment extends LoggingFragment
             true,
             null
         ));
-      }
-
-      if (listCallback != null) {
-        builder.arbitrary(ContactSelectionListAdapter.ArbitraryRepository.ArbitraryRow.INVITE_TO_SIGNAL.getCode());
       }
 
       if (includeNew) {

@@ -24,6 +24,7 @@ import org.thoughtcrime.securesms.util.EditTextExtensionsKt;
 import org.thoughtcrime.securesms.util.ServiceUtil;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.ViewUtil;
+import static pigeon.extensions.KotilinExtensionsKt.focusOnLeft;
 
 public final class ContactFilterView extends FrameLayout {
   private   OnFilterChangedListener listener;
@@ -53,6 +54,8 @@ public final class ContactFilterView extends FrameLayout {
     this.dialpadToggle   = findViewById(R.id.search_dialpad);
     this.clearToggle     = findViewById(R.id.search_clear);
     this.toggleContainer = findViewById(R.id.toggle_container);
+
+    focusOnLeft(searchText);
 
     EditTextExtensionsKt.setIncognitoKeyboardEnabled(searchText, TextSecurePreferences.isIncognitoKeyboardEnabled(context));
 

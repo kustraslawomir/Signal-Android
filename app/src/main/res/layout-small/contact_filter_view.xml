@@ -8,11 +8,8 @@
         android:id="@+id/background_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="44dp"
         android:orientation="horizontal"
-        android:background="@drawable/pigeon_rounded_rectangle_surface_variant_32"
-        android:paddingStart="16dp"
-        android:paddingEnd="6dp">
+        tools:background="@color/sim_background">
 
         <LinearLayout
             android:id="@+id/toggle_container"
@@ -21,21 +18,20 @@
             android:orientation="horizontal">
 
             <EditText
+                android:layout_marginLeft="@dimen/pigeon_start_margin"
                 android:id="@+id/search_view"
-                style="@style/Mp02.Signal.Text.FocusableMediumCommonTextButton"
-                android:layout_width="0dp"
+                style="@style/Mp02.Signal.Text.CommonTextButton"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:autofillHints="personGivenName"
-                android:background="@android:color/transparent"
-                android:fontFamily="sans-serif"
-                android:gravity="center_vertical"
-                android:hint="@string/Pigeon_HomePage_search"
+                android:layout_marginTop="@dimen/pigeon_small_margin"
+                android:backgroundTint="@color/transparent"
+                android:hint="@string/pigeon_ContactFilterView__search_name_or_number"
+                android:imeOptions="actionDone"
                 android:inputType="textPersonName"
-                android:lineSpacingExtra="6sp"
-                android:singleLine="true"
-                android:textColorHint="@color/white" />
+                android:paddingTop="8dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/white_focus"
+                android:textColorHint="@color/signal_text_hint" />
 
             <org.thoughtcrime.securesms.components.AnimatingToggle
                 android:id="@+id/button_toggle"

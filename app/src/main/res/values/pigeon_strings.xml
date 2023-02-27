@@ -87,6 +87,7 @@ Updated May 25, 2018\n
     <string name="Pigeon_HomePage_mark_all_read">Mark all read</string>
     <string name="Pigeon_HomePage_settings">Settings</string>
     <string name="Pigeon_HomePage_search">Search</string>
+    <string name="pigeon_ContactFilterView__search_name_or_number">Search</string>
     <string name="Pigeon_KbsSplashFragment__create_your_pin">Create</string>
 
 

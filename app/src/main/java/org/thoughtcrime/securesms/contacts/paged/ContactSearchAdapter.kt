@@ -331,6 +331,8 @@ open class ContactSearchAdapter(
     private val number: TextView = itemView.findViewById(R.id.number)
 
     override fun bind(model: UnknownRecipientModel) {
+      itemView.focusOnLeft()
+
       checkbox.visible = displayCheckBox
       checkbox.isSelected = false
       name.setText(
@@ -341,6 +343,8 @@ open class ContactSearchAdapter(
         }
       )
       number.text = model.data.query
+      name.focusOnLeft()
+
       itemView.setOnClickListener {
         onClick.onClicked(itemView, model.data, false)
       }
@@ -558,7 +562,6 @@ open class ContactSearchAdapter(
     private val headerActionView: MaterialButton = itemView.findViewById(R.id.section_header_action)
 
     override fun bind(model: HeaderModel) {
-      headerTextView.focusOnLeft()
       headerTextView.setText(
         when (model.header.sectionKey) {
           ContactSearchConfiguration.SectionKey.STORIES -> R.string.ContactsCursorLoader_my_stories

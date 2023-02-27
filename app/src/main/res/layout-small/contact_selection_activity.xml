@@ -9,8 +9,8 @@
 
     <org.thoughtcrime.securesms.util.views.DarkOverflowToolbar
         android:id="@+id/toolbar"
-        android:layout_width="0px"
-        android:layout_height="0px"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:theme="?attr/settingsToolbarStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,9 +24,7 @@
         android:id="@+id/contact_filter_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dsl_settings_gutter"
         android:layout_marginTop="4dp"
-        android:layout_marginRight="@dimen/dsl_settings_gutter"
         android:layout_marginBottom="12dp"
         android:minHeight="44dp"
         android:visibility="visible"/>

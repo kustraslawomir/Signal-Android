@@ -4,27 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="24dp"
+    android:visibility="gone"
+    android:minHeight="48dp"
     android:orientation="horizontal"
-    tools:background="@color/black"
     tools:viewBindingIgnore="true">
 
     <TextView
+        android:id="@+id/section_header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:paddingStart="@dimen/dsl_settings_gutter"
         android:paddingTop="16dp"
         android:paddingEnd="@dimen/dsl_settings_gutter"
-        android:id="@+id/section_header"
-        style="@style/Mp02.Signal.Text.FocusableSmallCommonTextButton"
-        android:layout_width="match_parent"
-        android:textColor="@color/white"
-        android:layout_height="wrap_content"
+        android:paddingBottom="12dp"
+        android:textAppearance="@style/Signal.Text.TitleSmall"
         tools:text="Section Header" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/section_header_action"
         style="@style/Signal.Widget.Button.Large.Tonal"
-        android:layout_width="0px"
-        android:layout_height="0px"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="@dimen/dsl_settings_gutter"
         android:layout_marginEnd="@dimen/dsl_settings_gutter"

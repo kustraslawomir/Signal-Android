@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="@dimen/dsl_settings_gutter"
-    android:paddingTop="12dp"
-    android:paddingEnd="@dimen/dsl_settings_gutter"
     tools:background="@color/black"
     tools:viewBindingIgnore="true">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/invite_text"
+        style="@style/Mp02.Signal.Text.MaterialTextButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/pigeon_start_margin"
+        android:layout_marginEnd="@dimen/dsl_settings_gutter"
+        android:text="@string/contact_selection_activity__invite_to_signal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/invite_image"
@@ -20,12 +30,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/invite_text"
-        style="@style/Mp02.Signal.Text.FocusableSmallCommonTextButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/contact_selection_activity__invite_to_signal"
-        tools:text="Section Header" />
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
