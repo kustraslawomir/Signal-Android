@@ -327,23 +327,19 @@ open class ContactSearchAdapter(
   ) : MappingViewHolder<UnknownRecipientModel>(itemView) {
 
     private val checkbox: CheckBox = itemView.findViewById(R.id.check_box)
-    private val name: FromTextView = itemView.findViewById(R.id.name)
+    private val name: TextView = itemView.findViewById(R.id.name)
     private val number: TextView = itemView.findViewById(R.id.number)
 
     override fun bind(model: UnknownRecipientModel) {
-      itemView.focusOnLeft()
-
       checkbox.visible = displayCheckBox
       checkbox.isSelected = false
-      name.setText(
-        when (model.data.mode) {
-          ContactSearchConfiguration.NewRowMode.NEW_CONVERSATION -> R.string.contact_selection_list__unknown_contact
-          ContactSearchConfiguration.NewRowMode.BLOCK -> R.string.contact_selection_list__unknown_contact_block
-          ContactSearchConfiguration.NewRowMode.ADD_TO_GROUP -> R.string.contact_selection_list__unknown_contact_add_to_group
-        }
-      )
+      name.setText(when (model.data.mode) {
+        ContactSearchConfiguration.NewRowMode.NEW_CONVERSATION -> R.string.contact_selection_list__unknown_contact
+        ContactSearchConfiguration.NewRowMode.BLOCK -> R.string.contact_selection_list__unknown_contact_block
+        ContactSearchConfiguration.NewRowMode.ADD_TO_GROUP -> R.string.contact_selection_list__unknown_contact_add_to_group
+      })
+      itemView.focusOnLeft()
       number.text = model.data.query
-      name.focusOnLeft()
 
       itemView.setOnClickListener {
         onClick.onClicked(itemView, model.data, false)
@@ -440,6 +436,7 @@ open class ContactSearchAdapter(
         return
       }
 
+      itemView.focusOnLeft()
       name.setText(getRecipient(model))
       badge.setBadgeFromRecipient(getRecipient(model))
 

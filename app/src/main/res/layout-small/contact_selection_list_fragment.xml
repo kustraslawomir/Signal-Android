@@ -6,8 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
@@ -21,7 +19,7 @@
             android:id="@+id/recycler_view"
             android:listSelector="@drawable/listview_background_selector"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             tools:listitem="@layout/contact_search_item" />
 
         <TextView
@@ -31,11 +29,7 @@
             android:layout_marginTop="15dp"
             android:gravity="center|center_vertical"
             android:text="@string/contact_selection_group_activity__finding_contacts"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="20sp"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

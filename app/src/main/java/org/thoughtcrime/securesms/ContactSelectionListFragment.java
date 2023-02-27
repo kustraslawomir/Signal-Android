@@ -818,12 +818,12 @@ public final class ContactSelectionListFragment extends LoggingFragment
     return ContactSearchConfiguration.build(builder -> {
       builder.setQuery(contactSearchState.getQuery());
 
-      if (listCallback != null) {
+      if (listCallback != null && isSignalVersion()) {
         builder.arbitrary(ContactSelectionListAdapter.ArbitraryRepository.ArbitraryRow.INVITE_TO_SIGNAL.getCode());
       }
 
       if (listCallback != null) {
-        //builder.arbitrary(ContactSelectionListAdapter.ArbitraryRepository.ArbitraryRow.NEW_GROUP.getCode());
+        builder.arbitrary(ContactSelectionListAdapter.ArbitraryRepository.ArbitraryRow.NEW_GROUP.getCode());
       }
 
       if (transportType != null) {
@@ -843,7 +843,7 @@ public final class ContactSelectionListFragment extends LoggingFragment
         builder.addSection(new ContactSearchConfiguration.Section.Individuals(
             includeSelf,
             transportType,
-            true,
+            isSignalVersion(),
             null,
             !hideLetterHeaders()
         ));

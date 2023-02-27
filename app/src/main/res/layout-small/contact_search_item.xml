@@ -10,15 +10,15 @@
     <org.thoughtcrime.securesms.components.FromTextView
         android:id="@+id/name"
         style="@style/Mp02.Signal.Text.MaterialTextButton"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
-        android:ellipsize="marquee"
-        android:singleLine="true"
+        android:layout_marginEnd="@dimen/dsl_settings_gutter"
+        android:text="@string/contact_selection_activity__invite_to_signal"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/lorem/random" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
@@ -117,4 +117,5 @@
             tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
