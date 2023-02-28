@@ -30,16 +30,17 @@ class HomePageFragment : PigeonBaseFragment<PigeonFragmentHomePageBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
       binding?.run {
-        newMessageButton.setOnClickListener { v: View? -> startActivity(Intent(requireActivity(), NewConversationActivity::class.java)) }
+        newMessageButton.setOnClickListener { startActivity(Intent(requireActivity(), NewConversationActivity::class.java)) }
         newMessageButton.focusOnLeft()
         newGroupButton.focusOnLeft()
         markAllReadButton.focusOnLeft()
         settingsButton.focusOnLeft()
+        settingsButton.setOnClickListener { goToAppSettings() }
         searchButton.focusOnLeft()
       }
     }
 
-    fun goToAppSettings() {
+    private fun goToAppSettings() {
         requireActivity().startActivityForResult(home(requireContext()), REQUEST_CONFIG_CHANGES)
     }
 }
