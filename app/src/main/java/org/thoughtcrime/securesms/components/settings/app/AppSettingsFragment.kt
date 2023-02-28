@@ -24,6 +24,7 @@ import org.thoughtcrime.securesms.util.adapter.mapping.LayoutFactory
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingAdapter
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingViewHolder
 import org.thoughtcrime.securesms.util.navigation.safeNavigate
+import pigeon.extensions.isSignalVersion
 
 class AppSettingsFragment : DSLSettingsFragment(R.string.text_secure_normal__menu_settings) {
 
@@ -35,13 +36,50 @@ class AppSettingsFragment : DSLSettingsFragment(R.string.text_secure_normal__men
     adapter.registerFactory(SubscriptionPreference::class.java, LayoutFactory(::SubscriptionPreferenceViewHolder, R.layout.dsl_preference_item))
 
     viewModel.state.observe(viewLifecycleOwner) { state ->
-      adapter.submitList(getConfiguration(state).toMappingModelList())
+      if (isSignalVersion()) {
+        adapter.submitList(getConfiguration(state).toMappingModelList())
+      } else {
+        adapter.submitList(getPigeonConfiguration(state).toMappingModelList())
+      }
     }
   }
 
   override fun onResume() {
     super.onResume()
     viewModel.refreshExpiredGiftBadge()
+  }
+
+  private fun getPigeonConfiguration(state: AppSettingsState): DSLConfiguration {
+    return configure {
+
+      clickPref(
+        title = DSLSettingsText.from(R.string.preferences__notifications),
+        onClick = {
+          findNavController().safeNavigate(R.id.action_appSettingsFragment_to_notificationsSettingsFragment)
+        }
+      )
+
+      clickPref(
+        title = DSLSettingsText.from(R.string.preferences__privacy),
+        onClick = {
+          findNavController().safeNavigate(R.id.action_appSettingsFragment_to_privacySettingsFragment)
+        }
+      )
+
+      clickPref(
+        title = DSLSettingsText.from(R.string.preferences_chats__chats),
+        onClick = {
+          findNavController().safeNavigate(R.id.action_appSettingsFragment_to_chatsSettingsFragment)
+        }
+      )
+
+      clickPref(
+        title = DSLSettingsText.from(R.string.preferences__linked_devices),
+        onClick = {
+          findNavController().safeNavigate(R.id.action_appSettingsFragment_to_deviceActivity)
+        }
+      )
+    }
   }
 
   private fun getConfiguration(state: AppSettingsState): DSLConfiguration {

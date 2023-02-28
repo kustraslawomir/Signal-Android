@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.util.Material3OnScrollHelper
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingAdapter
+import pigeon.extensions.focusOnLeft
+import pigeon.extensions.isSignalVersion
 import java.lang.UnsupportedOperationException
 
 @Discouraged("The DSL API can be completely replaced by compose. See ComposeFragment or ComposeBottomSheetFragment for an alternative to this API")
@@ -67,6 +69,10 @@ abstract class DSLSettingsFragment(
       getMaterial3OnScrollHelper(toolbar)?.let {
         it.attach(this)
       }
+
+      if (!isSignalVersion()){
+      }
+
     }
 
     when (settingsAdapter) {

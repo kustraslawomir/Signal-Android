@@ -41,6 +41,47 @@ fun View.focusOnLeft() {
   }
 }
 
+fun View.recyclerFocusOnLeft(vararg childs: TextView) {
+
+  if (!isSignalVersion()) {
+    val BUTTON_SCALE_FOCUS = 1.3f
+    val BUTTON_SCALE_NON_FOCUS = 1.0f
+    val BUTTON_TRANSLATION_X_FOCUS = 12.0f
+    val BUTTON_TRANSLATION_X_NON_FOCUS = 1.0f
+
+    val focus = View.OnFocusChangeListener { _, hasFocus ->
+      val scale: Float = if (hasFocus) {
+        BUTTON_SCALE_FOCUS
+      } else {
+        BUTTON_SCALE_NON_FOCUS
+      }
+
+      val translationX: Float = if (hasFocus) {
+        BUTTON_TRANSLATION_X_FOCUS
+      } else {
+        BUTTON_TRANSLATION_X_NON_FOCUS
+      }
+
+      ViewCompat.animate(this)
+        .scaleX(scale)
+        .scaleY(scale)
+        .translationX(translationX)
+        .start()
+
+      val color = if (hasFocus) {
+        R.color.white_focus
+      } else {
+        R.color.white_not_focus
+      }
+
+      childs.forEach {
+        it.setTextColor(ContextCompat.getColor(this.context, color))
+      }
+    }
+    this.onFocusChangeListener = focus
+  }
+}
+
 fun View.focusOnRight() {
 
   if (!isSignalVersion()) {
