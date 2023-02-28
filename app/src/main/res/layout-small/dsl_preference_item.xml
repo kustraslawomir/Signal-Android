@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="56dp"
+    android:focusable="true"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
     tools:background="@color/black"
     tools:viewBindingIgnore="true">
 
@@ -65,15 +67,13 @@
         style="@style/Mp02.Signal.Text.CommonTextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="@dimen/dsl_settings_gutter"
+        android:layout_marginStart="@dimen/pigeon_start_margin"
         android:textAlignment="viewStart"
         android:focusable="true"
-        android:clickable="true"
+        android:layout_marginVertical="@dimen/pigeon_small_margin"
         android:focusableInTouchMode="true"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:text="Message font size" />
 
 

@@ -27,6 +27,7 @@ import org.thoughtcrime.securesms.util.adapter.mapping.MappingAdapter
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingViewHolder
 import org.thoughtcrime.securesms.util.views.LearnMoreTextView
 import org.thoughtcrime.securesms.util.visible
+import pigeon.extensions.focusOnLeft
 
 @Discouraged("The DSL API can be completely replaced by compose. See ComposeFragment or ComposeBottomSheetFragment for an alternative to this API")
 class DSLSettingsAdapter : MappingAdapter() {
@@ -57,6 +58,13 @@ abstract class PreferenceViewHolder<T : PreferenceModel<T>>(itemView: View) : Ma
 
   @CallSuper
   override fun bind(model: T) {
+    titleView.focusOnLeft()
+    itemView.setOnFocusChangeListener { v, hasFocus ->
+      if (hasFocus){
+        titleView.requestFocus()
+      }
+    }
+
     listOf(itemView, titleView, summaryView).forEach {
       it.isEnabled = model.isEnabled
     }
