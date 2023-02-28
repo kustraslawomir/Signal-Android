@@ -81,6 +81,8 @@
         <item name="android:textAlignment">textStart</item>
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
         <item name="android:defaultFocusHighlightEnabled" tools:ignore="NewApi">false</item>
     </style>
 
@@ -89,39 +91,8 @@
         <item name="android:focusableInTouchMode">false</item>
     </style>
 
-    <style name="Mp02.Signal.Text.BigCommonTextButton">
+    <style name="Mp02.Signal.Text.BigCommonTextButton" parent="Mp02.Signal.Text.CommonTextButton">
         <item name="android:textSize">36sp</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:textAlignment">textStart</item>
-        <item name="android:textColor">@color/mp02_common_text_button</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:ellipsize">end</item>
-        <item name="colorPrimary">@color/white_focus</item>
-        <item name="android:defaultFocusHighlightEnabled" tools:ignore="NewApi">false</item>
-    </style>
-
-    <style name="Mp02.Signal.Text.FocusableMediumCommonTextButton">
-        <item name="android:textSize">24sp</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:textAlignment">textStart</item>
-        <item name="android:textColor">@color/mp02_common_text_button</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:ellipsize">end</item>
-        <item name="android:focusable">true</item>
-        <item name="android:focusableInTouchMode">true</item>
-        <item name="android:defaultFocusHighlightEnabled" tools:ignore="NewApi">false</item>
-    </style>
-
-    <style name="Mp02.Signal.Text.FocusableSmallCommonTextButton">
-        <item name="android:textSize">18sp</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:textAlignment">textStart</item>
-        <item name="android:textColor">@color/mp02_common_text_button</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:ellipsize">end</item>
-        <item name="android:focusable">true</item>
-        <item name="android:focusableInTouchMode">true</item>
-        <item name="android:defaultFocusHighlightEnabled" tools:ignore="NewApi">false</item>
     </style>
 
     <style name="Mp02.Signal.Text.Body" parent="Signal.Text.Body">
