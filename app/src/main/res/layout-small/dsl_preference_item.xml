@@ -66,6 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
+        android:layout_marginEnd="@dimen/pigeon_start_margin"
         android:textAlignment="viewStart"
         android:focusable="true"
         android:layout_marginVertical="@dimen/pigeon_small_margin"
