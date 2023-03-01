@@ -64,6 +64,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
+
 public class InputPanel extends LinearLayout
     implements AudioRecordingHandler,
                KeyboardAwareLinearLayout.OnKeyboardShownListener,
@@ -367,9 +369,11 @@ public class InputPanel extends LinearLayout
     mediaKeyboard.setColorFilter(iconTint);
     quickAudioToggle.setColorFilter(iconTint);
     quickCameraToggle.setColorFilter(iconTint);
-    composeText.setTextColor(textColor);
-    composeText.setHintTextColor(textHintColor);
-    quoteView.setWallpaperEnabled(enabled);
+    if (isSignalVersion()) {
+      composeText.setTextColor(textColor);
+      composeText.setHintTextColor(textHintColor);
+      quoteView.setWallpaperEnabled(enabled);
+    }
   }
 
   public void setHideForMessageRequestState(boolean hideForMessageRequestState) {

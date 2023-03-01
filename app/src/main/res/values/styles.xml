@@ -279,13 +279,14 @@
         <item name="android:maxLines">5</item>
         <item name="android:maxLength">65536</item>
         <item name="android:textColor">@color/signal_text_primary</item>
-        <item name="android:textColorHint">@color/signal_colorOnSurfaceVariant</item>
         <item name="android:capitalize">sentences</item>
         <item name="android:autoText">true</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:imeOptions">flagNoEnterAction</item>
+        <item name="android:textSize">24sp</item>
         <item name="android:inputType">textAutoCorrect|textCapSentences|textMultiLine</item>
-        <item name="android:contentDescription">@string/conversation_activity__compose_description</item>
+        <item name="android:contentDescription">@string/conversation_activity__compose_description
+        </item>
     </style>
 
     <style name="AttachmentTypeLabel">

@@ -11,6 +11,7 @@ import org.thoughtcrime.securesms.util.adapter.mapping.LayoutFactory
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingModel
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingViewHolder
 import pigeon.extensions.focusOnLeft
+import pigeon.extensions.recyclerFocusOnLeft
 
 class ContactSelectionListAdapter(
   context: Context,
@@ -44,7 +45,7 @@ class ContactSelectionListAdapter(
     }
 
     override fun bind(model: InviteToSignalModel) {
-      itemView.focusOnLeft()
+      itemView.recyclerFocusOnLeft(itemView.findViewById(R.id.invite_text))
     }
   }
 
@@ -54,7 +55,7 @@ class ContactSelectionListAdapter(
     }
 
     override fun bind(model: NewGroupModel) {
-      itemView.focusOnLeft()
+      itemView.recyclerFocusOnLeft(itemView.findViewById(R.id.invite_text))
     }
   }
 

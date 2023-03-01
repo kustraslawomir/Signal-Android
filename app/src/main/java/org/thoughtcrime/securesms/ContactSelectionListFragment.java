@@ -472,7 +472,7 @@ public final class ContactSelectionListFragment extends LoggingFragment
   }
 
   private boolean hideLetterHeaders() {
-    if(!isSignalVersion()){
+    if (!isSignalVersion()) {
       return true;
     }
     return hasQueryFilter() || shouldDisplayRecents();
@@ -818,7 +818,7 @@ public final class ContactSelectionListFragment extends LoggingFragment
     return ContactSearchConfiguration.build(builder -> {
       builder.setQuery(contactSearchState.getQuery());
 
-      if (listCallback != null && isSignalVersion()) {
+      if (isSignalVersion() && listCallback != null) {
         builder.arbitrary(ContactSelectionListAdapter.ArbitraryRepository.ArbitraryRow.INVITE_TO_SIGNAL.getCode());
       }
 

@@ -3,8 +3,4 @@
     android:shape="rectangle">
     <size android:width="1px" />
     <solid android:color="#ffffffff" />
-    <padding
-        android:bottom="-12px"
-        android:left="-2px"
-        android:top="-10px" />
 </shape>

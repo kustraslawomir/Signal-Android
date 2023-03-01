@@ -459,6 +459,7 @@ public class ConversationParentFragment extends Fragment
   private Material3OnScrollHelper      material3OnScrollHelper;
   private InlineQueryResultsController inlineQueryResultsController;
   private OnBackPressedCallback        backPressedCallback;
+  private SendButtonListener sendButtonListener;
 
   private LiveRecipient recipient;
   private long          threadId;
@@ -2075,9 +2076,8 @@ public class ConversationParentFragment extends Fragment
     audioRecorder     = new AudioRecorder(requireContext(), inputPanel);
     typingTextWatcher = new ComposeTextWatcher();
 
-    SendButtonListener        sendButtonListener        = new SendButtonListener();
     ComposeKeyPressedListener composeKeyPressedListener = new ComposeKeyPressedListener();
-
+    sendButtonListener = new SendButtonListener();
     composeText.setOnEditorActionListener(sendButtonListener);
     composeText.setCursorPositionChangedListener(this);
     attachButton.setOnClickListener(new AttachButtonListener());
@@ -2126,10 +2126,23 @@ public class ConversationParentFragment extends Fragment
 
     composeText.setOnKeyListener(composeKeyPressedListener);
     composeText.addTextChangedListener(composeKeyPressedListener);
-    composeText.setOnEditorActionListener(sendButtonListener);
+    //composeText.setOnEditorActionListener(sendButtonListener);
     composeText.setOnClickListener(composeKeyPressedListener);
     composeText.setOnFocusChangeListener(composeKeyPressedListener);
+    view.findViewById(R.id.send_text).setOnClickListener(new OnClickListener() {
+      @Override public void onClick(View v) {
+        sendButtonListener.onClick(composeText);
+        composeText.requestFocus();
+      }
+    });
 
+    /*composeText.setOnEditorActionListener((v, actionId, event) -> {
+      if (actionId == EditorInfo.IME_ACTION_DONE) {
+        sendButtonListener.onClick(composeText);
+        return true;
+      }
+      return false;
+    });*/
     if (Camera.getNumberOfCameras() > 0) {
       quickCameraToggle.setVisibility(View.VISIBLE);
       quickCameraToggle.setOnClickListener(new QuickCameraToggleListener());
@@ -4527,5 +4540,10 @@ public class ConversationParentFragment extends Fragment
     default boolean isInBubble() {
       return false;
     }
+  }
+
+  public void onKeycodeCallPressed() {
+    sendButtonListener.onClick(composeText);
+    composeText.requestFocus();
   }
 }

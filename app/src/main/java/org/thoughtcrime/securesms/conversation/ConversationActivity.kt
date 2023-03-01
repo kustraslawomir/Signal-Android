@@ -2,13 +2,17 @@ package org.thoughtcrime.securesms.conversation
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.Window
+import android.view.WindowManager
+import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.Toolbar
 import io.reactivex.rxjava3.subjects.PublishSubject
 import io.reactivex.rxjava3.subjects.Subject
+import org.signal.core.util.logging.Log
 import org.thoughtcrime.securesms.PassphraseRequiredActivity
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.components.HidingLinearLayout
@@ -20,6 +24,9 @@ import org.thoughtcrime.securesms.util.Debouncer
 import org.thoughtcrime.securesms.util.DynamicNoActionBarTheme
 import org.thoughtcrime.securesms.util.DynamicTheme
 import org.thoughtcrime.securesms.util.views.Stub
+import pigeon.extensions.isSignalVersion
+import pigeon.navigation.KeyEventBehaviour
+import pigeon.navigation.PigeonKeyEventBehaviourImpl
 import java.util.concurrent.TimeUnit
 
 open class ConversationActivity : PassphraseRequiredActivity(), ConversationParentFragment.Callback, DonationPaymentComponent {
@@ -31,6 +38,7 @@ open class ConversationActivity : PassphraseRequiredActivity(), ConversationPare
   private val transitionDebouncer: Debouncer = Debouncer(150, TimeUnit.MILLISECONDS)
   private lateinit var fragment: ConversationParentFragment
   private var shareDataTimestamp: Long = -1L
+  private val keyEventBehaviour: KeyEventBehaviour = PigeonKeyEventBehaviourImpl()
 
   private val dynamicTheme: DynamicTheme = DynamicNoActionBarTheme()
   override fun onPreCreate() {
@@ -41,6 +49,10 @@ open class ConversationActivity : PassphraseRequiredActivity(), ConversationPare
     supportPostponeEnterTransition()
     transitionDebouncer.publish { supportStartPostponedEnterTransition() }
     window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
+
+    if (!isSignalVersion()) {
+      window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+    }
 
     if (savedInstanceState != null) {
       shareDataTimestamp = savedInstanceState.getLong(STATE_WATERMARK, -1L)
@@ -128,6 +140,14 @@ open class ConversationActivity : PassphraseRequiredActivity(), ConversationPare
 
   fun getReminderView(): Stub<ReminderView> {
     return fragment.reminderView
+  }
+
+  override fun dispatchKeyEvent(event: KeyEvent?): Boolean {
+    if (isSignalVersion()) {
+      return super.dispatchKeyEvent(event)
+    }
+    keyEventBehaviour.dispatchConversationKeyEvent(event!!, supportFragmentManager)
+    return super.dispatchKeyEvent(event)
   }
 
   override val stripeRepository: StripeRepository by lazy { StripeRepository(this) }
