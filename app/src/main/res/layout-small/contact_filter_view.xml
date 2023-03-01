@@ -18,11 +18,13 @@
             android:orientation="horizontal">
 
             <EditText
+                android:paddingStart="@dimen/pigeon_cursor_padding"
                 android:layout_marginLeft="@dimen/pigeon_start_margin"
                 android:id="@+id/search_view"
                 style="@style/Mp02.Signal.Text.CommonTextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textCursorDrawable="@drawable/mp02_cursor_style"
                 android:layout_marginTop="@dimen/pigeon_small_margin"
                 android:backgroundTint="@color/transparent"
                 android:hint="@string/pigeon_ContactFilterView__search_name_or_number"

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Mp02.Signal.Background"
     android:layout_width="match_parent"
@@ -10,7 +9,7 @@
 
     <TextView
         android:id="@+id/new_message_button"
-        style="@style/Mp02.Signal.Text.FocusableMediumCommonTextButton"
+        style="@style/Mp02.Signal.Text.CommonTextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
@@ -19,7 +18,7 @@
 
     <TextView
         android:id="@+id/new_group_button"
-        style="@style/Mp02.Signal.Text.FocusableMediumCommonTextButton"
+        style="@style/Mp02.Signal.Text.CommonTextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
@@ -28,7 +27,7 @@
 
     <TextView
         android:id="@+id/mark_all_read_button"
-        style="@style/Mp02.Signal.Text.FocusableMediumCommonTextButton"
+        style="@style/Mp02.Signal.Text.CommonTextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
@@ -37,7 +36,7 @@
 
     <TextView
         android:id="@+id/settings_button"
-        style="@style/Mp02.Signal.Text.FocusableMediumCommonTextButton"
+        style="@style/Mp02.Signal.Text.CommonTextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
@@ -46,7 +45,7 @@
 
     <TextView
         android:id="@+id/search_button"
-        style="@style/Mp02.Signal.Text.FocusableMediumCommonTextButton"
+        style="@style/Mp02.Signal.Text.CommonTextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
@@ -61,5 +60,6 @@
         android:layout_marginEnd="@dimen/pigeon_start_margin"
         android:layout_marginBottom="@dimen/pigeon_small_margin"
         android:background="@color/white" />
+
 
 </LinearLayout>
