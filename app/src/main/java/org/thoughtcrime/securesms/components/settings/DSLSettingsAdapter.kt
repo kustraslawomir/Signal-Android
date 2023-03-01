@@ -59,12 +59,12 @@ abstract class PreferenceViewHolder<T : PreferenceModel<T>>(itemView: View) : Ma
 
   override fun onAttachedToWindow() {
     super.onAttachedToWindow()
-    itemView.recyclerFocusOnLeft(titleView)
+    itemView.recyclerFocusOnLeft(titleView, summaryView)
   }
 
   @CallSuper
   override fun bind(model: T) {
-    itemView.recyclerFocusOnLeft(titleView)
+    itemView.recyclerFocusOnLeft(titleView, summaryView)
 
     listOf(itemView, titleView, summaryView).forEach {
       it.isEnabled = model.isEnabled
@@ -219,16 +219,9 @@ class SwitchPreferenceViewHolder(itemView: View) : PreferenceViewHolder<SwitchPr
   override fun bind(model: SwitchPreference) {
     super.bind(model)
     if (!isSignalVersion()) {
+      onChangeTextListener(model, model.isChecked)
       switchWidget.setOnCheckedChangeListener { _, isChecked ->
-        val originalTitle = model.title.resolve(itemView.context)
-        val switchStateRes = if (isChecked) {
-          R.string.Pigeon_Settings_switch_on
-        } else {
-          R.string.Pigeon_Settings_switch_off
-        }
-        titleView.text = getContext().getString(R.string.Pigeon_Settings_switch_all,
-          originalTitle, getContext().getString(switchStateRes)
-        )
+        onChangeTextListener(model, isChecked)
       }
     }
     switchWidget.isEnabled = model.isEnabled
@@ -236,6 +229,18 @@ class SwitchPreferenceViewHolder(itemView: View) : PreferenceViewHolder<SwitchPr
     itemView.setOnClickListener {
       model.onClick()
     }
+  }
+
+  private fun onChangeTextListener(model:SwitchPreference, isChecked:Boolean){
+    val originalTitle = model.title.resolve(itemView.context)
+    val switchStateRes = if (isChecked) {
+      R.string.Pigeon_Settings_switch_on
+    } else {
+      R.string.Pigeon_Settings_switch_off
+    }
+    titleView.text = getContext().getString(R.string.Pigeon_Settings_switch_all,
+      originalTitle, getContext().getString(switchStateRes)
+    )
   }
 }
 

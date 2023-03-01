@@ -26,26 +26,6 @@
             tools:srcCompat="@drawable/ic_advanced_24"
             tools:visibility="visible" />
 
-        <TextView
-            android:id="@+id/summary"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="@dimen/dsl_settings_gutter"
-            android:layout_marginBottom="16dp"
-            android:lineSpacingExtra="4sp"
-            android:textAlignment="viewStart"
-            android:textAppearance="@style/Signal.Text.BodyMedium"
-            android:textColor="@color/text_color_secondary_enabled_selector"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/icon_end"
-            app:layout_constraintStart_toEndOf="@id/icon"
-            app:layout_constraintTop_toBottomOf="@id/title"
-            app:layout_goneMarginStart="@dimen/dsl_settings_gutter"
-            app:layout_goneMarginTop="16dp"
-            tools:text="Some random text to get stuff onto more than one line but not absurdly long like lorem/random" />
-
         <ImageView
             android:id="@+id/icon_end"
             android:layout_width="24dp"
@@ -74,6 +54,23 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:text="Message font size" />
+
+    <TextView
+        android:id="@+id/summary"
+        style="@style/Mp02.Signal.Text.SmallTextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/pigeon_start_margin"
+        android:layout_marginEnd="@dimen/pigeon_start_margin"
+        android:layout_marginBottom="16dp"
+        android:lineSpacingExtra="4sp"
+        android:textAlignment="viewStart"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_goneMarginStart="@dimen/dsl_settings_gutter"
+        app:layout_goneMarginTop="16dp"
+        tools:text="Some random text to get stuff onto more than one line but not absurdly long like lorem/random" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

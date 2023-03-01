@@ -92,6 +92,7 @@ Updated May 25, 2018\n
     <string name="Pigeon_Settings_switch_on">ON</string>
     <string name="Pigeon_Settings_switch_off">OFF</string>
     <string name="Pigeon_Settings_switch_all">%s: %s</string>
+    <string name="Pigeon_Settings_profile">Profile</string>
 
 
 </resources>

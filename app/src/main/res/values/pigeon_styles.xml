@@ -79,9 +79,6 @@
         <item name="colorPrimary">@color/white_not_focus</item>
         <item name="android:textColor">@color/mp02_common_text_button</item>
         <item name="android:textAlignment">textStart</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:ellipsize">marquee</item>
-        <item name="android:marqueeRepeatLimit">marquee_forever</item>
         <item name="android:focusable">true</item>
         <item name="android:focusableInTouchMode">true</item>
         <item name="android:defaultFocusHighlightEnabled" tools:ignore="NewApi">false</item>
@@ -94,8 +91,6 @@
         <item name="android:textColor">@color/mp02_common_text_button</item>
         <item name="android:textAlignment">textStart</item>
         <item name="android:singleLine">true</item>
-        <item name="android:ellipsize">marquee</item>
-        <item name="android:marqueeRepeatLimit">marquee_forever</item>
         <item name="android:focusable">true</item>
         <item name="android:focusableInTouchMode">true</item>
         <item name="android:defaultFocusHighlightEnabled" tools:ignore="NewApi">false</item>

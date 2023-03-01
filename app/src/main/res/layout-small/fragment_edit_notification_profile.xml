@@ -64,7 +64,7 @@
 
         <org.thoughtcrime.securesms.components.emoji.EmojiEditText
             android:id="@+id/edit_notification_profile_name"
-            style="@style/Mp02.Signal.Text.CommonTextButton"
+            android:textColor="@color/mp02_common_text_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
