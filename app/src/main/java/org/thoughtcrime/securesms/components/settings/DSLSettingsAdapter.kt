@@ -27,7 +27,7 @@ import org.thoughtcrime.securesms.util.adapter.mapping.MappingAdapter
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingViewHolder
 import org.thoughtcrime.securesms.util.views.LearnMoreTextView
 import org.thoughtcrime.securesms.util.visible
-import pigeon.extensions.focusOnLeft
+import pigeon.extensions.isSignalVersion
 import pigeon.extensions.recyclerFocusOnLeft
 
 @Discouraged("The DSL API can be completely replaced by compose. See ComposeFragment or ComposeBottomSheetFragment for an alternative to this API")
@@ -213,6 +213,19 @@ class SwitchPreferenceViewHolder(itemView: View) : PreferenceViewHolder<SwitchPr
 
   override fun bind(model: SwitchPreference) {
     super.bind(model)
+    if (!isSignalVersion()) {
+      switchWidget.setOnCheckedChangeListener { _, isChecked ->
+        val originalTitle = model.title.resolve(itemView.context)
+        val switchStateRes = if (isChecked) {
+          R.string.Pigeon_Settings_switch_on
+        } else {
+          R.string.Pigeon_Settings_switch_off
+        }
+        titleView.text = getContext().getString(R.string.Pigeon_Settings_switch_all,
+          originalTitle, getContext().getString(switchStateRes)
+        )
+      }
+    }
     switchWidget.isEnabled = model.isEnabled
     switchWidget.isChecked = model.isChecked
     itemView.setOnClickListener {
