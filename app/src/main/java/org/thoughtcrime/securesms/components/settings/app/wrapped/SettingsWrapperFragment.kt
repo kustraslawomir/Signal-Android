@@ -5,8 +5,11 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import org.thoughtcrime.securesms.R
+import pigeon.extensions.isSignalVersion
 
 /**
  * Wraps a fragment to give it a Settings style toolbar. This class should be used sparingly, and
@@ -22,6 +25,11 @@ abstract class SettingsWrapperFragment : Fragment(R.layout.settings_wrapper_frag
 
     toolbar.setNavigationOnClickListener {
       onBackPressed()
+    }
+
+    if (!isSignalVersion()){
+      toolbar.isVisible = false
+      view.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.black)
     }
 
     requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, OnBackPressed())
