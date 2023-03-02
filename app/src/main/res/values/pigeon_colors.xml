@@ -5,4 +5,5 @@
     <color name="pigeon_core_ultramarine_50">#80ffffff</color>
     <color name="pigeon_conversation_item_color">#3e3e3e</color>
     <color name="pigeon_input_background_color">#1E1E1E</color>
+    <color name="conversation_background">#343434</color>
 </resources>

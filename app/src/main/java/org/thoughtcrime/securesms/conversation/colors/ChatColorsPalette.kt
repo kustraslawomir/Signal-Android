@@ -160,7 +160,7 @@ object ChatColorsPalette {
     // endregion
 
     @JvmStatic
-    val default = ULTRAMARINE
+    val default = STEEL
 
     val solids = listOf(
       CRIMSON,
