@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:duplicateParentState="true"
-    tools:background="@color/black"
+    style="@style/Mp02.Signal.Background"
     tools:viewBindingIgnore="true">
 
     <LinearLayout
@@ -23,20 +22,18 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/ic_advanced_24"
-            tools:visibility="visible" />
+            tools:srcCompat="@drawable/ic_advanced_24" />
 
-        <ImageView
-            android:id="@+id/icon_end"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_widget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dsl_settings_gutter"
-            android:importantForAccessibility="no"
+            android:clickable="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/ic_advanced_24"
-            tools:visibility="visible" />
+            app:useMaterialThemeColors="true" />
 
     </LinearLayout>
 
@@ -47,12 +44,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
         android:layout_marginEnd="@dimen/pigeon_start_margin"
-        android:textAlignment="viewStart"
-        android:focusable="true"
-        android:layout_marginVertical="@dimen/pigeon_small_margin"
-        android:focusableInTouchMode="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="Message font size" />
 
     <TextView
@@ -64,13 +59,9 @@
         android:layout_marginEnd="@dimen/pigeon_start_margin"
         android:layout_marginBottom="16dp"
         android:lineSpacingExtra="4sp"
-        android:textAlignment="viewStart"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title"
-        app:layout_goneMarginStart="@dimen/dsl_settings_gutter"
-        app:layout_goneMarginTop="16dp"
-        tools:text="Some random text to get stuff onto more than one line but not absurdly long like lorem/random" />
-
+        tools:text="Some random text to get stuff onto more than one line but not absurdly long like lorem/random"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

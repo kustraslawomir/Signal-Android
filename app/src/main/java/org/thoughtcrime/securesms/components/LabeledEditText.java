@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -83,8 +84,13 @@ public class LabeledEditText extends FrameLayout implements View.OnFocusChangeLi
 
   @Override
   public void onFocusChange(View v, boolean hasFocus) {
-    border.setBackgroundResource(hasFocus ? R.drawable.labeled_edit_text_background_active
-                                          : R.drawable.labeled_edit_text_background_inactive);
+    if (!isSignalVersion()) {
+      border.setBackgroundResource(hasFocus ? R.drawable.labeled_edit_text_background_active
+                                            : R.drawable.labeled_edit_text_background_inactive);
+    } else  {
+      border.setBackgroundResource(hasFocus ? R.drawable.labeled_edit_text_background_active
+                                            : R.drawable.labeled_edit_text_background_inactive);
+    }
   }
 
   @Override
