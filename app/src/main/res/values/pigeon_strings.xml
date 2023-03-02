@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="pigeon_app_name" translatable="false">Pigeon</string>
+
     <string name="Pigeon.Save">Save</string>
     <string name="Pigeon.Options">Options</string>
     <string name="Pigeon.Close">Close</string>
@@ -89,6 +91,11 @@ Updated May 25, 2018\n
     <string name="Pigeon_HomePage_search">Search</string>
     <string name="pigeon_ContactFilterView__search_name_or_number">Search</string>
     <string name="Pigeon_KbsSplashFragment__create_your_pin">Create</string>
+    <string name="Pigeon_Settings_switch_on">ON</string>
+    <string name="Pigeon_Settings_switch_off">OFF</string>
+    <string name="Pigeon_Settings_switch_all">%s: %s</string>
+    <string name="Pigeon_Settings_profile">Profile</string>
     <string name="Pigeon_conversation_activity__type_message_push">Pigeon message</string>
+
 
 </resources>

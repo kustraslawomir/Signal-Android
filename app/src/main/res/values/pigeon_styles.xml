@@ -73,6 +73,17 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="Mp02.Signal.Text.SmallTextButton">
+        <item name="android:textSize">12sp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="colorPrimary">@color/white_not_focus</item>
+        <item name="android:textColor">@color/mp02_common_text_button</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:defaultFocusHighlightEnabled" tools:ignore="NewApi">false</item>
+    </style>
+
     <style name="Mp02.Signal.Text.CommonTextButton">
         <item name="android:textSize">24sp</item>
         <item name="android:includeFontPadding">false</item>
@@ -80,7 +91,6 @@
         <item name="android:textColor">@color/mp02_common_text_button</item>
         <item name="android:textAlignment">textStart</item>
         <item name="android:singleLine">true</item>
-        <item name="android:ellipsize">end</item>
         <item name="android:focusable">true</item>
         <item name="android:focusableInTouchMode">true</item>
         <item name="android:defaultFocusHighlightEnabled" tools:ignore="NewApi">false</item>
@@ -111,7 +121,8 @@
         <item name="android:singleLine">true</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:background">@android:color/transparent</item>
-        <item name="android:ellipsize">end</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:marqueeRepeatLimit">marquee_forever</item>
         <item name="android:padding">0sp</item>
         <item name="android:lineSpacingExtra">0sp</item>
         <item name="android:letterSpacing">0</item>
@@ -119,6 +130,8 @@
         <item name="android:minHeight">0sp</item>
         <item name="android:insetTop">0sp</item>
         <item name="android:insetBottom">0sp</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
         <item name="android:defaultFocusHighlightEnabled" tools:ignore="NewApi">true</item>
     </style>
     <style name="Mp02.Signal.Text.MaterialTextButtonFocusable" parent="Widget.MaterialComponents.Button.TextButton">

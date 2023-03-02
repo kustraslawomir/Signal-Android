@@ -9,6 +9,8 @@ import org.thoughtcrime.securesms.conversation.colors.AvatarColor
 import org.thoughtcrime.securesms.util.adapter.mapping.LayoutFactory
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingAdapter
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingViewHolder
+import pigeon.extensions.focusOnLeft
+import pigeon.extensions.isSignalVersion
 
 /**
  * DSL custom preference for showing no profiles/empty state.
@@ -31,6 +33,9 @@ object NoNotificationProfiles {
     override fun bind(model: Model) {
       icon.background.colorFilter = SimpleColorFilter(AvatarColor.A100.colorInt())
       button.setOnClickListener { model.onClick() }
+      if (!isSignalVersion()){
+        button.focusOnLeft()
+      }
     }
   }
 }

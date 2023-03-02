@@ -33,6 +33,7 @@ import org.thoughtcrime.securesms.pin.RegistrationLockV2Dialog
 import org.thoughtcrime.securesms.util.ViewUtil
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingAdapter
 import org.thoughtcrime.securesms.util.navigation.safeNavigate
+import pigeon.extensions.isSignalVersion
 
 class AccountSettingsFragment : DSLSettingsFragment(R.string.AccountSettingsFragment__account) {
 
@@ -113,13 +114,15 @@ class AccountSettingsFragment : DSLSettingsFragment(R.string.AccountSettingsFrag
         )
       }
 
-      clickPref(
-        title = DSLSettingsText.from(R.string.preferences_chats__transfer_account),
-        summary = DSLSettingsText.from(R.string.preferences_chats__transfer_account_to_a_new_android_device),
-        onClick = {
-          Navigation.findNavController(requireView()).safeNavigate(R.id.action_accountSettingsFragment_to_oldDeviceTransferActivity)
-        }
-      )
+      if (isSignalVersion()) {
+        clickPref(
+          title = DSLSettingsText.from(R.string.preferences_chats__transfer_account),
+          summary = DSLSettingsText.from(R.string.preferences_chats__transfer_account_to_a_new_android_device),
+          onClick = {
+            Navigation.findNavController(requireView()).safeNavigate(R.id.action_accountSettingsFragment_to_oldDeviceTransferActivity)
+          }
+        )
+      }
 
       clickPref(
         title = DSLSettingsText.from(R.string.preferences__delete_account, ContextCompat.getColor(requireContext(), R.color.signal_alert_primary)),

@@ -53,6 +53,20 @@ class AppSettingsFragment : DSLSettingsFragment(R.string.text_secure_normal__men
     return configure {
 
       clickPref(
+        title = DSLSettingsText.from(R.string.Pigeon_Settings_profile),
+        onClick = {
+          findNavController().safeNavigate(R.id.action_appSettingsFragment_to_manageProfileActivity)
+        }
+      )
+
+      clickPref(
+        title = DSLSettingsText.from(R.string.AccountSettingsFragment__account),
+        onClick = {
+          findNavController().safeNavigate(R.id.action_appSettingsFragment_to_accountSettingsFragment)
+        }
+      )
+
+      clickPref(
         title = DSLSettingsText.from(R.string.preferences__notifications),
         onClick = {
           findNavController().safeNavigate(R.id.action_appSettingsFragment_to_notificationsSettingsFragment)
