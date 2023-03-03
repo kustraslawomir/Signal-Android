@@ -15,12 +15,52 @@
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/verify_subheader"
+                style="@style/Signal.Text.BodyLarge"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:text="@string/RegistrationActivity_you_will_receive_a_verification_code"
+                android:textColor="@color/core_grey_60"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/verify_header"
+                tools:layout_editor_absoluteX="0dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancel_button"
+                style="@style/Signal.Widget.Button.Large.Secondary"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="@android:string/cancel"
+                android:textColor="@color/core_grey_60"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/registerButton"
+                app:layout_constraintVertical_bias="0" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -34,11 +74,11 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/country_code"
-                style="@style/Mp02.Signal.TextInputLayout.Registration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:focusable="false"
                 android:enabled="false"
+                android:background="@color/black"
                 android:focusableInTouchMode="false"
                 android:clickable="false"
                 android:visibility="visible"
@@ -49,10 +89,14 @@
                     style="@style/Mp02.Signal.Text.BigCommonTextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:digits="+1234567890"
-                    android:imeOptions="actionNext"
-                    android:inputType="none"
+                    android:background="@color/black"
                     android:maxLength="4"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
+                    android:textIsSelectable="true"
+                    android:inputType="none"
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
                     android:singleLine="true"
@@ -62,13 +106,16 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/number"
                 style="@style/Mp02.Signal.TextInputLayout.Registration"
+                android:id="@+id/number"
                 android:layout_marginStart="@dimen/pigeon_small_margin"
                 android:layout_width="0dp"
+                android:focusable="true"
+                android:clickable="true"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="@string/RegistrationActivity_phone_number_description">
+                app:hintEnabled="false"
+                app:helperTextEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     style="@style/Mp02.Signal.Text.BigCommonTextButton"
@@ -76,9 +123,13 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
                     android:inputType="phone"
+                    android:nextFocusDown="@id/registerButton"
+                    android:nextFocusUp="@id/registerButton"
                     android:textColor="@color/white_focus"
                     android:padding="0dp"
                     tools:text="@tools:sample/us_phones" />
+
+                <requestFocus/>
 
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -94,41 +145,12 @@
             android:textColor="@color/white_focus"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/verify_subheader"
-            style="@style/Signal.Text.BodyLarge"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp"
-            android:text="@string/RegistrationActivity_you_will_receive_a_verification_code"
-            android:textColor="@color/core_grey_60"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/verify_header"
-            tools:layout_editor_absoluteX="0dp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/cancel_button"
-            style="@style/Signal.Widget.Button.Large.Secondary"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="@android:string/cancel"
-            android:textColor="@color/core_grey_60"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerButton"
-            app:layout_constraintVertical_bias="0" />
-
         <org.thoughtcrime.securesms.util.views.CircularProgressMaterialButton
             android:id="@+id/registerButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:nextFocusDown="@id/number"
+            android:nextFocusUp="@id/number"
             app:circularProgressMaterialButton__label="@string/RegistrationActivity_next"
             android:layout_marginBottom="@dimen/conversation_bottom_padding"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -306,12 +306,17 @@
                     android:layout_marginTop="@dimen/pigeon_bottom_margin"
                     android:layout_marginStart="@dimen/pigeon_start_margin"
                     android:imeOptions="actionDone"
+                    android:autofillHints="personGivenName"
                     android:inputType="textPersonName"
                     android:padding="0dp"
                     android:backgroundTint="@color/transparent"
                     android:textAlignment="textStart"
                     android:textColor="@color/white_focus"
-                    tools:text="@tools:sample/us_zipcodes" />
+                    tools:text="@tools:sample/us_zipcodes">
+
+                    <requestFocus/>
+
+                </EditText>
 
                 <TextView
                     android:id="@+id/pigeon_family_name_wrapper"
