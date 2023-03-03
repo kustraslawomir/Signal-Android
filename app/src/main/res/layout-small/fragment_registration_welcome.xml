@@ -38,12 +38,14 @@
 
     <TextView
         android:id="@+id/disclaimer_button"
-        style="@style/Mp02.Signal.Text.BigCommonTextButton"
+        style="@style/Mp02.Signal.Text.CommonTextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
         android:layout_marginTop="@dimen/pigeon_big_margin"
-        android:ellipsize="end"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:marqueeRepeatLimit="marquee_forever"
         android:gravity="start"
         android:text="@string/Pigeon_RegistrationActivity_take_privacy_with_you_be_yourself_in_every_message"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +61,7 @@
         android:marqueeRepeatLimit="marquee_forever"
         android:gravity="start"
         android:layout_marginStart="@dimen/pigeon_start_margin"
-        android:layout_marginTop="@dimen/pigeon_big_margin"
+        android:layout_marginTop="@dimen/pigeon_small_margin"
         android:text="@string/RegistrationActivity_terms_and_privacy"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/disclaimer_button" />
