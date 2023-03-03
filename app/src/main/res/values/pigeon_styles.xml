@@ -92,6 +92,8 @@
         <item name="android:textAlignment">textStart</item>
         <item name="android:singleLine">true</item>
         <item name="android:focusable">true</item>
+        <item name="android:fadingEdge">horizontal</item>
+        <item name="android:scrollHorizontally">true</item>
         <item name="android:focusableInTouchMode">true</item>
         <item name="android:defaultFocusHighlightEnabled" tools:ignore="NewApi">false</item>
     </style>
@@ -120,6 +122,7 @@
         <item name="android:textAlignment">textStart</item>
         <item name="android:singleLine">true</item>
         <item name="android:textAllCaps">false</item>
+        <item name="android:scrollHorizontally">true</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="android:ellipsize">marquee</item>
         <item name="android:marqueeRepeatLimit">marquee_forever</item>

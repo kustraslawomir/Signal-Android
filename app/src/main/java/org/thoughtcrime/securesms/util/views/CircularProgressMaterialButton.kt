@@ -55,6 +55,7 @@ class CircularProgressMaterialButton @JvmOverloads constructor(
   }
 
   fun setupAnimation(isBigSize:Boolean = false){
+    materialButton.isSelected = true
     materialButton.focusOnLeft()
     if (isBigSize){
       materialButton.setBigText()

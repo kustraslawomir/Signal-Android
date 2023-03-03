@@ -118,7 +118,7 @@ public final class WelcomeFragment extends LoggingFragment {
 
       continueButton = view.findViewById(R.id.welcome_continue_button);
       continueButton.setOnClickListener(this::continueClicked);
-      continueButton.setupAnimation(true);
+      continueButton.setupAnimation(false);
 
       Button restoreFromBackup = view.findViewById(R.id.welcome_transfer_or_restore);
       restoreFromBackup.setOnClickListener(this::restoreFromBackupClicked);
