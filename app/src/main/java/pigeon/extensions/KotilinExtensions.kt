@@ -129,14 +129,6 @@ fun View.focusOnRight() {
         .scaleY(scale)
         .start()
 
-      if (this is TextView) {
-        if (hasFocus) {
-          this.ellipsize = TextUtils.TruncateAt.MARQUEE
-        } else {
-          this.ellipsize = TextUtils.TruncateAt.START
-        }
-      }
-
     }
     this.onFocusChangeListener = focus
   }
