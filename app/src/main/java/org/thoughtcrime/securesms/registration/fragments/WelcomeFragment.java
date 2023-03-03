@@ -128,6 +128,11 @@ public final class WelcomeFragment extends LoggingFragment {
 
       focusOnLeft(welcomeTermsButton);
 
+      TextView disclaimerButton = view.findViewById(R.id.disclaimer_button);
+      disclaimerButton.setOnClickListener(v -> onDisclaimerClicked());
+
+      focusOnLeft(disclaimerButton);
+
       if (!canUserSelectBackup()) {
         restoreFromBackup.setText(R.string.registration_activity__transfer_account);
       }
@@ -245,6 +250,10 @@ public final class WelcomeFragment extends LoggingFragment {
     } else {
       SafeNavigation.safeNavigate(NavHostFragment.findNavController(this), R.id.action_welcomeFragment_to_termsFragment);
     }
+  }
+
+  private void onDisclaimerClicked() {
+    SafeNavigation.safeNavigate(NavHostFragment.findNavController(this), R.id.action_read_disclaimer);
   }
 
   private boolean canUserSelectBackup() {

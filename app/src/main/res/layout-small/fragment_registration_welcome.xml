@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/pigeon_small_margin"
+    android:orientation="vertical"
     tools:viewBindingIgnore="true">
 
     <ImageView
@@ -29,10 +30,23 @@
         android:layout_marginStart="@dimen/pigeon_normal_margin"
         android:layout_marginTop="@dimen/pigeon_normal_margin"
         android:gravity="center"
-        android:visibility="gone"
         android:text="@string/Pigeon_RegistrationActivity_take_privacy_with_you_be_yourself_in_every_message"
         android:textColor="@color/white_not_focus"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="@+id/welcome_continue_button"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/disclaimer_button"
+        style="@style/Mp02.Signal.Text.BigCommonTextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/pigeon_start_margin"
+        android:layout_marginTop="@dimen/pigeon_big_margin"
+        android:ellipsize="end"
+        android:gravity="start"
+        android:text="@string/Pigeon_RegistrationActivity_take_privacy_with_you_be_yourself_in_every_message"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -40,13 +54,13 @@
         style="@style/Mp02.Signal.Text.BigCommonTextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/pigeon_start_margin"
         android:ellipsize="end"
         android:gravity="start"
-        android:layout_marginStart="@dimen/pigeon_start_margin"
-        android:layout_marginTop="@dimen/pigeon_big_margin"
+        android:layout_marginTop="@dimen/pigeon_small_margin"
         android:text="@string/RegistrationActivity_terms_and_privacy"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/disclaimer_button" />
 
     <org.thoughtcrime.securesms.util.views.CircularProgressMaterialButton
         android:id="@+id/welcome_continue_button"
