@@ -39,7 +39,7 @@ fun View.focusOnLeft() {
           }
           this.layoutParams = currentParams
           this.requestLayout()
-          if (this is TextView) {
+          if (this is TextView && this !is EditText) {
             this.ellipsize = TextUtils.TruncateAt.MARQUEE
             this.isSelected = true
           }
