@@ -59,6 +59,13 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
+        <action
+            android:id="@+id/action_read_disclaimer"
+            app:destination="@id/discalimerFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <fragment
@@ -402,7 +409,12 @@
     <fragment
         android:id="@+id/termsFragment"
         android:name="pigeon.fragments.TermsFragment"
-        tools:layout="@layout/pigeon_fragment_registration_terms">
+        tools:layout="@layout/pigeon_fragment_registration_terms" />
+
+    <fragment
+        android:id="@+id/discalimerFragment"
+        android:name="pigeon.fragments.DisclaimerFragment"
+        tools:layout="@layout/fragment_registration_disclaimer">
 
     </fragment>
 

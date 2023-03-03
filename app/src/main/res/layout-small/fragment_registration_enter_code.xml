@@ -155,7 +155,9 @@
                 android:textColor="@color/white_focus"
                 app:layout_constraintTop_toBottomOf="@+id/verify_header"
                 tools:layout_editor_absoluteX="0dp"
-                tools:text="@tools:sample/us_zipcodes" />
+                tools:text="@tools:sample/us_zipcodes" >
+                <requestFocus />
+            </EditText>
 
             <org.thoughtcrime.securesms.components.registration.VerificationPinKeyboard
                 android:id="@+id/keyboard"

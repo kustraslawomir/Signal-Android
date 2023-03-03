@@ -4,10 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.fragment.app.Fragment
 import org.thoughtcrime.securesms.R
-import org.thoughtcrime.securesms.databinding.PigeonFragmentHomePageBinding
 import org.thoughtcrime.securesms.databinding.PigeonFragmentRegistrationTermsBinding
 import org.thoughtcrime.securesms.permissions.Permissions
 import pigeon.base.PigeonBaseFragment

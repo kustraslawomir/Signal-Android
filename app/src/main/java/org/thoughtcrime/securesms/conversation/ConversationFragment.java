@@ -212,6 +212,8 @@ import java.util.concurrent.ExecutionException;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import kotlin.Unit;
 
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
+
 @SuppressLint("StaticFieldLeak")
 public class ConversationFragment extends LoggingFragment implements MultiselectForwardBottomSheet.Callback, ConversationBottomSheetCallback {
   private static final String TAG = Log.tag(ConversationFragment.class);
@@ -369,7 +371,9 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     this.conversationViewModel  = new ViewModelProvider(getParentFragment(), (ViewModelProvider.Factory) new ConversationViewModel.Factory()).get(ConversationViewModel.class);
 
     disposables.add(conversationViewModel.getChatColors().subscribe(chatColors -> {
-      recyclerViewColorizer.setChatColors(chatColors);
+      if (!isSignalVersion()) {
+        recyclerViewColorizer.setChatColors(chatColors);
+      }
       scrollToMentionButton.setUnreadCountBackgroundTint(chatColors.asSingleColor());
       scrollToBottomButton.setUnreadCountBackgroundTint(chatColors.asSingleColor());
     }));
