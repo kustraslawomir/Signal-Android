@@ -786,7 +786,9 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
   private void setBubbleState(MessageRecord messageRecord, @NonNull Recipient recipient, boolean hasWallpaper, @NonNull Colorizer colorizer) {
     this.hasWallpaper = hasWallpaper;
 
-    ViewUtil.updateLayoutParams(bodyBubble, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    if (isSignalVersion()) {
+      ViewUtil.updateLayoutParams(bodyBubble, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    }
     bodyText.setTextColor(colorizer.getIncomingBodyTextColor(context, hasWallpaper));
     bodyText.setLinkTextColor(colorizer.getIncomingBodyTextColor(context, hasWallpaper));
 
