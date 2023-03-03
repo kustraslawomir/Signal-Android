@@ -1,4 +1,4 @@
-package org.thoughtcrime.securesms.permissions;
+package pigeon.permissions;
 
 
 import android.app.AlertDialog;

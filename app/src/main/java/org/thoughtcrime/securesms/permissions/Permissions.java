@@ -37,6 +37,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import pigeon.permissions.PigeonRationaleDialog;
+
 public class Permissions {
 
   private static final String TAG = Log.tag(Permissions.class);
