@@ -410,22 +410,28 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
 
   @Subscribe(threadMode = ThreadMode.MAIN)
   public void onVerificationCodeReceived(@NonNull ReceivedSmsEvent event) {
-    verificationCodeView.clear();
+    if (isSignalVersion()) {
+      verificationCodeView.clear();
 
-    List<Integer> parsedCode = convertVerificationCodeToDigits(event.getCode());
+      List<Integer> parsedCode = convertVerificationCodeToDigits(event.getCode());
 
-    autoCompleting = true;
+      autoCompleting = true;
 
-    final int size = parsedCode.size();
+      final int size = parsedCode.size();
 
-    for (int i = 0; i < size; i++) {
-      final int index = i;
-      verificationCodeView.postDelayed(() -> {
-        verificationCodeView.append(parsedCode.get(index));
-        if (index == size - 1) {
-          autoCompleting = false;
-        }
-      }, i * 200L);
+      for (int i = 0; i < size; i++) {
+        final int index = i;
+        verificationCodeView.postDelayed(() -> {
+          verificationCodeView.append(parsedCode.get(index));
+          if (index == size - 1) {
+            autoCompleting = false;
+          }
+        }, i * 200L);
+      }
+    } else  {
+      autoCompleting = true;
+      pigeonCodeView.setText(event.getCode());
+      autoCompleting = false;
     }
   }
 
