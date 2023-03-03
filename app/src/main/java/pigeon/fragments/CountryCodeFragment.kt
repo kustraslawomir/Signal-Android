@@ -1,5 +1,6 @@
 package pigeon.fragments
 
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -54,11 +55,11 @@ class CountryCodeFragment : LoggingFragment(), RegistrationNumberInputController
       nextButton.setOnClickListener { v: View -> handleRegister(v) }
       if (!isSignalVersion()) {
         verifyHeader.focusOnRight()
-        Objects.requireNonNull(countryCode).focusOnRight()
+        countryCode.focusOnRight()
         verifyHeader.requestFocus()
         val arguments = CountryPickerFragmentArgs.Builder().setResultKey(NUMBER_COUNTRY_SELECT).build()
-        countryCode.setOnClickListener { v: View? -> findNavController(v!!).safeNavigate(R.id.action_pickCountry, arguments.toBundle()) }
         verifyHeader.setOnClickListener { v: View? -> findNavController(v!!).safeNavigate(R.id.action_pickCountry, arguments.toBundle()) }
+        countryCode.setOnClickListener { v: View? -> findNavController(v!!).safeNavigate(R.id.action_pickCountry, arguments.toBundle()) }
         parentFragmentManager.setFragmentResultListener(NUMBER_COUNTRY_SELECT, this@CountryCodeFragment) { requestKey: String?, result: Bundle ->
           val resultCode = result.getInt(CountryPickerFragment.KEY_COUNTRY_CODE)
           val resultCountryName = result.getString(CountryPickerFragment.KEY_COUNTRY)
