@@ -170,6 +170,7 @@ public abstract class BaseKbsPinFragment<ViewModel extends BaseKbsPinViewModel> 
     input.addTextChangedListener(new AfterTextChanged(s -> viewModel.setUserEntry(s.toString())));
     input.setImeOptions(EditorInfo.IME_ACTION_NEXT);
     input.setOnEditorActionListener(this::handleEditorAction);
+    input.requestFocus();
     keyboardToggle.setOnClickListener(v -> viewModel.toggleAlphaNumeric());
     confirm.setOnClickListener(v -> viewModel.confirm());
   }

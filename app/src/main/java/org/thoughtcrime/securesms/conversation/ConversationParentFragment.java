@@ -2126,7 +2126,7 @@ public class ConversationParentFragment extends Fragment
 
     composeText.setOnKeyListener(composeKeyPressedListener);
     composeText.addTextChangedListener(composeKeyPressedListener);
-    //composeText.setOnEditorActionListener(sendButtonListener);
+    composeText.setOnEditorActionListener(sendButtonListener);
     composeText.setOnClickListener(composeKeyPressedListener);
     composeText.setOnFocusChangeListener(composeKeyPressedListener);
     view.findViewById(R.id.send_text).setOnClickListener(new OnClickListener() {
@@ -2136,13 +2136,13 @@ public class ConversationParentFragment extends Fragment
       }
     });
 
-    /*composeText.setOnEditorActionListener((v, actionId, event) -> {
+    composeText.setOnEditorActionListener((v, actionId, event) -> {
       if (actionId == EditorInfo.IME_ACTION_DONE) {
         sendButtonListener.onClick(composeText);
         return true;
       }
       return false;
-    });*/
+    });
     if (Camera.getNumberOfCameras() > 0) {
       quickCameraToggle.setVisibility(View.VISIBLE);
       quickCameraToggle.setOnClickListener(new QuickCameraToggleListener());

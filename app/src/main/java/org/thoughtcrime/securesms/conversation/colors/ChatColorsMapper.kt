@@ -71,6 +71,6 @@ object ChatColorsMapper {
 
   @JvmStatic
   fun getMaterialColor(chatColors: ChatColors): MaterialColor {
-    return materialColorToChatColorsBiMap.inverse()[chatColors] ?: MaterialColor.GREY
+    return materialColorToChatColorsBiMap.inverse()[chatColors] ?: MaterialColor.ULTRAMARINE
   }
 }

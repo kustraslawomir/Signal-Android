@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <org.thoughtcrime.securesms.conversation.ConversationItem xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:viewBindingIgnore="true"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/conversation_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingEnd="@dimen/conversation_individual_right_gutter"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:focusable="true"
     android:nextFocusLeft="@id/container"
     android:nextFocusRight="@id/embedded_text_editor"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingEnd="@dimen/conversation_individual_right_gutter"
+    tools:background="@color/sim_background"
+    tools:viewBindingIgnore="true">
 
     <FrameLayout
         android:id="@+id/reply_icon_wrapper"
@@ -27,9 +28,9 @@
             android:id="@+id/reply_icon"
             android:layout_width="@dimen/conversation_item_reply_size"
             android:layout_height="@dimen/conversation_item_reply_size"
+            android:layout_gravity="center"
             android:padding="9dp"
             android:tint="@color/signal_icon_tint_primary"
-            android:layout_gravity="center"
             app:srcCompat="@drawable/symbol_reply_24" />
 
     </FrameLayout>
@@ -41,11 +42,10 @@
         android:layout_alignWithParentIfMissing="true"
         android:layout_marginStart="@dimen/message_bubble_edge_margin"
         android:layout_toStartOf="@+id/indicators_parent"
-        android:background="@color/white"
+        android:background="@drawable/send_item_bg"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:orientation="vertical"
-        tools:backgroundTint="@color/core_grey_05">
+        android:orientation="vertical">
 
         <org.thoughtcrime.securesms.components.emoji.EmojiTextView
             android:id="@+id/conversation_item_body"
@@ -59,19 +59,19 @@
             android:textColor="@color/conversation_item_sent_text_primary_color"
             android:textColorLink="@color/conversation_item_sent_text_primary_color"
             app:emoji_maxLength="1000"
-            app:scaleEmojis="true"
             app:measureLastLine="true"
+            app:scaleEmojis="true"
             tools:text="Mango pickle lorem ipsum" />
 
         <org.thoughtcrime.securesms.components.ConversationItemFooter
             android:id="@+id/conversation_item_footer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:layout_marginStart="@dimen/message_bubble_horizontal_padding"
             android:layout_marginTop="-5dp"
             android:layout_marginEnd="@dimen/message_bubble_horizontal_padding"
             android:layout_marginBottom="@dimen/message_bubble_bottom_padding"
-            android:layout_gravity="end"
             android:clipChildren="false"
             android:clipToPadding="false"
             app:footer_icon_color="@color/conversation_item_sent_text_secondary_color"
@@ -106,8 +106,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="8dp"
-        android:padding="8dp"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        android:padding="8dp" />
 
     <FrameLayout
         android:layout_width="wrap_content"
@@ -115,7 +115,7 @@
         android:layout_alignStart="@id/body_bubble"
         android:layout_alignTop="@id/body_bubble"
         android:layout_alignBottom="@id/body_bubble"
-        android:layout_marginStart="-42dp" >
+        android:layout_marginStart="-42dp">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/scheduled_indicator"

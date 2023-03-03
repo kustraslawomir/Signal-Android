@@ -72,11 +72,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="@dimen/message_bubble_edge_margin"
         android:layout_toEndOf="@id/contact_photo_container"
-        android:background="@color/white"
+        android:background="@drawable/received_item_bg"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:orientation="vertical"
-        tools:backgroundTint="@color/pigeon_conversation_item_color">
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/group_sender_holder"

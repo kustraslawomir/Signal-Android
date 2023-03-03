@@ -160,6 +160,8 @@ import java.util.concurrent.TimeUnit;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
+
 /**
  * A view that displays an individual conversation item within a conversation
  * thread.  Used by ComposeMessageActivity's ListActivity via a ConversationAdapter.
@@ -388,7 +390,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     this.conversationRecipient.observeForever(this);
 
     setGutterSizes(messageRecord, groupThread);
-    setMessageShape(messageRecord, previousMessageRecord, nextMessageRecord, groupThread);
+      setMessageShape(messageRecord, previousMessageRecord, nextMessageRecord, groupThread);
     setMediaAttributes(messageRecord, previousMessageRecord, nextMessageRecord, groupThread, hasWallpaper, isMessageRequestAccepted, allowedToPlayInline);
     setBodyText(messageRecord, searchQuery, isMessageRequestAccepted);
     setBubbleState(messageRecord, messageRecord.getRecipient(), hasWallpaper, colorizer);
@@ -658,11 +660,14 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
   }
 
   private void initializeAttributes() {
-    defaultBubbleColor             = ContextCompat.getColor(context, R.color.signal_background_secondary);
+    defaultBubbleColor             = ContextCompat.getColor(context, R.color.conversation_item_recv_bubble_color_normal);
     defaultBubbleColorForWallpaper = ContextCompat.getColor(context, R.color.conversation_item_recv_bubble_color_wallpaper);
   }
 
   private @ColorInt int getDefaultBubbleColor(boolean hasWallpaper) {
+    if (!isSignalVersion()) {
+      return ContextCompat.getColor(context, R.color.white);
+    }
     return hasWallpaper ? defaultBubbleColorForWallpaper : defaultBubbleColor;
   }
 
@@ -786,7 +791,9 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     bodyText.setLinkTextColor(colorizer.getIncomingBodyTextColor(context, hasWallpaper));
 
     if (messageRecord.isOutgoing() && !messageRecord.isRemoteDelete()) {
-      bodyBubble.getBackground().setColorFilter(recipient.getChatColors().getChatBubbleColorFilter());
+      if(isSignalVersion()){
+        bodyBubble.getBackground().setColorFilter(recipient.getChatColors().getChatBubbleColorFilter());
+      }
       bodyText.setTextColor(colorizer.getOutgoingBodyTextColor(context));
       bodyText.setLinkTextColor(colorizer.getOutgoingBodyTextColor(context));
       footer.setTextColor(colorizer.getOutgoingFooterTextColor(context));
@@ -795,16 +802,22 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       footer.setOnlyShowSendingStatus(false, messageRecord);
     } else if (messageRecord.isRemoteDelete()) {
       if (hasWallpaper) {
-        bodyBubble.getBackground().setColorFilter(ContextCompat.getColor(context, R.color.wallpaper_bubble_color), PorterDuff.Mode.SRC_IN);
+        if(isSignalVersion()){
+          bodyBubble.getBackground().setColorFilter(ContextCompat.getColor(context, R.color.wallpaper_bubble_color), PorterDuff.Mode.SRC_IN);
+        }
       } else {
-        bodyBubble.getBackground().setColorFilter(ContextCompat.getColor(context, R.color.signal_background_primary), PorterDuff.Mode.MULTIPLY);
+        if(isSignalVersion()){
+          bodyBubble.getBackground().setColorFilter(ContextCompat.getColor(context, R.color.signal_background_primary), PorterDuff.Mode.MULTIPLY);
+        }
         footer.setIconColor(ContextCompat.getColor(context, R.color.signal_icon_tint_secondary));
         footer.setRevealDotColor(ContextCompat.getColor(context, R.color.signal_icon_tint_secondary));
       }
       footer.setTextColor(ContextCompat.getColor(context, R.color.signal_text_secondary));
       footer.setOnlyShowSendingStatus(messageRecord.isRemoteDelete(), messageRecord);
     } else {
-      bodyBubble.getBackground().setColorFilter(getDefaultBubbleColor(hasWallpaper), PorterDuff.Mode.SRC_IN);
+      if (isSignalVersion()) {
+        bodyBubble.getBackground().setColorFilter(getDefaultBubbleColor(hasWallpaper), PorterDuff.Mode.SRC_IN);
+      }
       footer.setTextColor(colorizer.getIncomingFooterTextColor(context, hasWallpaper));
       footer.setIconColor(colorizer.getIncomingFooterIconColor(context, hasWallpaper));
       footer.setRevealDotColor(colorizer.getIncomingFooterIconColor(context, hasWallpaper));
@@ -1788,7 +1801,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
         if (hasWallpaper && hasNoBubble(current)) {
           groupSenderHolder.setBackgroundResource(R.drawable.wallpaper_bubble_background_tintable_11);
-          groupSenderHolder.getBackground().setColorFilter(getDefaultBubbleColor(hasWallpaper), PorterDuff.Mode.MULTIPLY);
+          //groupSenderHolder.getBackground().setColorFilter(getDefaultBubbleColor(hasWallpaper), PorterDuff.Mode.MULTIPLY);
         } else {
           groupSenderHolder.setBackground(null);
         }

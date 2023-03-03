@@ -12,8 +12,8 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:orientation="vertical"
             android:visibility="gone">
 
@@ -25,8 +25,8 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="24dp"
+                android:focusable="false"
                 android:minWidth="210dp"
-                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/pin_restore_pin_description"
@@ -37,6 +37,7 @@
                     style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusable="false"
                     android:gravity="center_horizontal"
                     android:imeOptions="actionDone"
                     android:inputType="numberPassword"
@@ -92,12 +93,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/pigeon_start_margin"
             android:layout_marginTop="16dp"
-            android:text="@string/PinRestoreEntryFragment_skip"
-            android:focusable="true"
             android:clickable="true"
             android:enabled="true"
-            android:visibility="visible"
+            android:focusable="true"
             android:focusableInTouchMode="true"
+            android:text="@string/PinRestoreEntryFragment_skip"
+            android:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -105,9 +106,9 @@
             android:id="@+id/pin_restore_pin_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:enabled="false"
+            android:gravity="center_horizontal"
             android:text="@string/RegistrationLockFragment__enter_your_pin"
             android:textAppearance="@style/TextAppearance.Signal.Title1"
             android:textColor="@color/white"
@@ -120,15 +121,18 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="12dp"
             android:backgroundTint="@color/transparent"
-            android:textAlignment="center"
+            android:imeOptions="actionDone"
             android:inputType="numberPassword"
             android:minWidth="210dp"
-            android:imeOptions="actionDone"
+            android:textAlignment="center"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pin_restore_pin_title"
-            tools:text="@tools:sample/us_phones" />
+            tools:text="@tools:sample/us_phones">
+
+            <requestFocus />
+        </EditText>
 
 
         <TextView

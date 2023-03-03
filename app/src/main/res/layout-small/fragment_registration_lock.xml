@@ -48,10 +48,14 @@
             tools:text="@tools:sample/us_phones"
             android:inputType="numberPassword"
             android:minWidth="210dp"
+            android:textCursorDrawable="@drawable/mp02_cursor_style"
+            android:focusableInTouchMode="true"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/kbs_lock_pin_description" />
+            app:layout_constraintTop_toBottomOf="@id/kbs_lock_pin_description" >
+            <requestFocus />
+        </com.google.android.material.textfield.TextInputEditText>
 
         <TextView
             android:id="@+id/kbs_lock_pin_input_label"
