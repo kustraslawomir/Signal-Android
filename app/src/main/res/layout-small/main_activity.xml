@@ -25,13 +25,6 @@
             android:name="org.thoughtcrime.securesms.main.MainActivityListHostFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
             tools:context=".MainActivity" />
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/conversation_list_tabs"
-            android:name="org.thoughtcrime.securesms.stories.tabs.ConversationListTabsFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
