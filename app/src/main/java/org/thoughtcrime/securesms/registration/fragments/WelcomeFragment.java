@@ -124,7 +124,7 @@ public final class WelcomeFragment extends LoggingFragment {
 
       continueButton = view.findViewById(R.id.welcome_continue_button);
       continueButton.setOnClickListener(this::continueClicked);
-      continueButton.setupAnimation(false);
+      continueButton.setupAnimation();
 
       Button restoreFromBackup = view.findViewById(R.id.welcome_transfer_or_restore);
       restoreFromBackup.setOnClickListener(this::restoreFromBackupClicked);
@@ -149,6 +149,7 @@ public final class WelcomeFragment extends LoggingFragment {
         if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
           welcomeLayout.setVisibility(View.GONE);
           extraLayout.setVisibility(View.VISIBLE);
+          continueButton.requestFocus();
           disclaimerButton.requestFocus();
           extraScreenIsShowed = false;
           return true;

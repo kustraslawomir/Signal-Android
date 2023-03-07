@@ -102,7 +102,7 @@ public class EditProfileFragment extends LoggingFragment {
     if (!isSignalVersion()) {
       animateGroup(binding.pigeonGivenName, binding.pigeonGivenNameWrapper);
       animateGroup(binding.pigeonFamilyName, binding.pigeonFamilyNameWrapper);
-      binding.finishButton.setupAnimation(false);
+      binding.finishButton.setupAnimation();
     }
 
     getParentFragmentManager().setFragmentResultListener(AvatarPickerFragment.REQUEST_KEY_SELECT_AVATAR, getViewLifecycleOwner(), (key, bundle) -> {

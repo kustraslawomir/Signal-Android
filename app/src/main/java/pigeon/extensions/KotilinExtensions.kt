@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import org.thoughtcrime.securesms.R
-import org.thoughtcrime.securesms.util.padding
 
 
 fun View.focusOnLeft(vararg childs: TextView) {
@@ -115,13 +114,11 @@ fun View.recyclerFocusOnLeft(vararg childs: TextView) {
   }
 }
 
-fun View.focusOnRight() {
+fun View.focusOnRight(vararg childs: View) {
 
   if (!isSignalVersion()) {
-    val BUTTON_SCALE_FOCUS = 1.3f
+    val BUTTON_SCALE_FOCUS = 1.5f
     val BUTTON_SCALE_NON_FOCUS = 1.0f
-    val BUTTON_TRANSLATION_X_FOCUS = 50.0f
-    val BUTTON_TRANSLATION_X_NON_FOCUS = 1.0f
 
     val focus = View.OnFocusChangeListener { _, hasFocus ->
       val scale: Float = if (hasFocus) {
@@ -130,17 +127,30 @@ fun View.focusOnRight() {
         BUTTON_SCALE_NON_FOCUS
       }
 
-      val translationX: Float = if (hasFocus) {
-        BUTTON_TRANSLATION_X_FOCUS
-      } else {
-        BUTTON_TRANSLATION_X_NON_FOCUS
-      }
+      this.post {
+        this.setupEllipsize(hasFocus)
+        childs.forEach {
+          it.setupEllipsize(hasFocus)
+          if (it.tag != "header") {
+            val params = it.layoutParams as ViewGroup.MarginLayoutParams
 
-      ViewCompat.animate(this)
-        .translationX(translationX)
-        .scaleX(scale)
-        .scaleY(scale)
-        .start()
+            if (hasFocus) {
+              params.width = 210
+              params.marginStart = 60
+            } else {
+              params.width = 310
+              params.marginStart = 0
+            }
+
+            it.layoutParams = params
+            it.requestLayout()
+            ViewCompat.animate(it)
+              .scaleX(scale)
+              .scaleY(scale)
+              .start()
+          }
+        }
+      }
 
     }
     this.onFocusChangeListener = focus
@@ -198,6 +208,16 @@ fun EditText.animateGroup(parent: TextView) {
       parent.setTextColor(ContextCompat.getColor(this.context, parentColor))
       this.setTextColor(ContextCompat.getColor(this.context, parentColor))
     }
+    this.onFocusChangeListener = focus
+  }
+}
+
+fun View.focusColor(vararg childs: TextView) {
+  if (!isSignalVersion()) {
+    val focus = View.OnFocusChangeListener { _, hasFocus ->
+        this.setupEllipsize(hasFocus)
+        childs.forEach { it.setupEllipsize(hasFocus) }
+      }
     this.onFocusChangeListener = focus
   }
 }

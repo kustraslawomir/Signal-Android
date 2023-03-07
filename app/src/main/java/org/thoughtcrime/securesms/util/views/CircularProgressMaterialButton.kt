@@ -16,9 +16,9 @@ import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.theme.overlay.MaterialThemeOverlay
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.util.visible
-import pigeon.extensions.isSignalVersion
+import pigeon.extensions.focusColor
 import pigeon.extensions.focusOnLeft
-import pigeon.extensions.setBigText
+import pigeon.extensions.isSignalVersion
 import kotlin.math.max
 
 /**
@@ -51,15 +51,15 @@ class CircularProgressMaterialButton @JvmOverloads constructor(
       val label = getString(R.styleable.CircularProgressMaterialButton_circularProgressMaterialButton__label)
 
       materialButton.text = label
+
+      this@CircularProgressMaterialButton.isFocusable = true
+      this@CircularProgressMaterialButton.isClickable = true
+      this@CircularProgressMaterialButton.focusColor(materialButton)
     }
   }
 
-  fun setupAnimation(isBigSize:Boolean = false){
-    materialButton.isSelected = true
-    materialButton.focusOnLeft()
-    if (isBigSize){
-      materialButton.setBigText()
-    }
+  fun setupAnimation() {
+    this.focusOnLeft(materialButton)
   }
 
   fun setText(@StringRes resId: Int) {
@@ -76,8 +76,8 @@ class CircularProgressMaterialButton @JvmOverloads constructor(
 
   override fun setClickable(clickable: Boolean) {
     super.setClickable(clickable)
-    materialButton.isClickable = clickable
     if (isSignalVersion()) {
+      materialButton.isClickable = clickable
       progressIndicator.visible = clickable
     }
   }
@@ -100,7 +100,11 @@ class CircularProgressMaterialButton @JvmOverloads constructor(
   }
 
   override fun setOnClickListener(onClickListener: OnClickListener?) {
-    materialButton.setOnClickListener(onClickListener)
+    if (isSignalVersion()) {
+      materialButton.setOnClickListener(onClickListener)
+    } else {
+      super.setOnClickListener(onClickListener)
+    }
   }
 
   @VisibleForTesting

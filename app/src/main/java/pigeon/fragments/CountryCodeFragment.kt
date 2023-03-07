@@ -1,6 +1,5 @@
 package pigeon.fragments
 
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -22,7 +21,6 @@ import org.thoughtcrime.securesms.util.LifecycleDisposable
 import org.thoughtcrime.securesms.util.navigation.safeNavigate
 import pigeon.extensions.focusOnRight
 import pigeon.extensions.isSignalVersion
-import java.util.Objects
 
 class CountryCodeFragment : LoggingFragment(), RegistrationNumberInputController.Callbacks {
   private var viewModel: RegistrationViewModel? = null
@@ -54,17 +52,16 @@ class CountryCodeFragment : LoggingFragment(), RegistrationNumberInputController
 
       nextButton.setOnClickListener { v: View -> handleRegister(v) }
       if (!isSignalVersion()) {
-        verifyHeader.focusOnRight()
-        countryCode.focusOnRight()
-        verifyHeader.requestFocus()
+        countryCodeLayout.focusOnRight(verifyHeader, countryCode.editText!!)
+        countryCodeLayout.requestFocus()
         val arguments = CountryPickerFragmentArgs.Builder().setResultKey(NUMBER_COUNTRY_SELECT).build()
-        verifyHeader.setOnClickListener { v: View? -> findNavController(v!!).safeNavigate(R.id.action_pickCountry, arguments.toBundle()) }
-        countryCode.setOnClickListener { v: View? -> findNavController(v!!).safeNavigate(R.id.action_pickCountry, arguments.toBundle()) }
+        countryCodeLayout.setOnClickListener { v: View? -> findNavController(v!!).safeNavigate(R.id.action_pickCountry, arguments.toBundle()) }
         parentFragmentManager.setFragmentResultListener(NUMBER_COUNTRY_SELECT, this@CountryCodeFragment) { requestKey: String?, result: Bundle ->
           val resultCode = result.getInt(CountryPickerFragment.KEY_COUNTRY_CODE)
           val resultCountryName = result.getString(CountryPickerFragment.KEY_COUNTRY)
           viewModel!!.onCountrySelected(resultCountryName, resultCode)
           controller.setPigeonNumberAndCountryCode(viewModel!!.number)
+          nextButton.requestFocus()
         }
       }
       disposables.bindTo(viewLifecycleOwner.lifecycle)
