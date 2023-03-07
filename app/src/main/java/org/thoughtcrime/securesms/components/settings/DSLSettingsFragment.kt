@@ -70,9 +70,6 @@ abstract class DSLSettingsFragment(
         it.attach(this)
       }
 
-      if (!isSignalVersion()){
-      }
-
     }
 
     when (settingsAdapter) {

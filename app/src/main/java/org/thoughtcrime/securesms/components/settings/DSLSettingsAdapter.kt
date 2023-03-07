@@ -27,8 +27,8 @@ import org.thoughtcrime.securesms.util.adapter.mapping.MappingAdapter
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingViewHolder
 import org.thoughtcrime.securesms.util.views.LearnMoreTextView
 import org.thoughtcrime.securesms.util.visible
+import pigeon.extensions.focusOnLeft
 import pigeon.extensions.isSignalVersion
-import pigeon.extensions.recyclerFocusOnLeft
 
 @Discouraged("The DSL API can be completely replaced by compose. See ComposeFragment or ComposeBottomSheetFragment for an alternative to this API")
 class DSLSettingsAdapter : MappingAdapter() {
@@ -59,12 +59,12 @@ abstract class PreferenceViewHolder<T : PreferenceModel<T>>(itemView: View) : Ma
 
   override fun onAttachedToWindow() {
     super.onAttachedToWindow()
-    itemView.recyclerFocusOnLeft(titleView, summaryView)
+    itemView.focusOnLeft(titleView, summaryView)
   }
 
   @CallSuper
   override fun bind(model: T) {
-    itemView.recyclerFocusOnLeft(titleView, summaryView)
+    itemView.focusOnLeft(titleView, summaryView)
 
     listOf(itemView, titleView, summaryView).forEach {
       it.isEnabled = model.isEnabled
@@ -231,14 +231,15 @@ class SwitchPreferenceViewHolder(itemView: View) : PreferenceViewHolder<SwitchPr
     }
   }
 
-  private fun onChangeTextListener(model:SwitchPreference, isChecked:Boolean){
+  private fun onChangeTextListener(model: SwitchPreference, isChecked: Boolean) {
     val originalTitle = model.title.resolve(itemView.context)
     val switchStateRes = if (isChecked) {
       R.string.Pigeon_Settings_switch_on
     } else {
       R.string.Pigeon_Settings_switch_off
     }
-    titleView.text = getContext().getString(R.string.Pigeon_Settings_switch_all,
+    titleView.text = getContext().getString(
+      R.string.Pigeon_Settings_switch_all,
       originalTitle, getContext().getString(switchStateRes)
     )
   }

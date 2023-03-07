@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:duplicateParentState="true"
+    android:paddingBottom="8dp"
+    android:paddingStart="@dimen/pigeon_start_margin"
     tools:background="@color/black"
     tools:viewBindingIgnore="true">
 
@@ -45,14 +46,10 @@
         style="@style/Mp02.Signal.Text.CommonTextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/pigeon_start_margin"
-        android:layout_marginEnd="@dimen/pigeon_start_margin"
-        android:textAlignment="viewStart"
         android:focusable="true"
-        android:layout_marginVertical="@dimen/pigeon_small_margin"
         android:focusableInTouchMode="true"
+        android:textAlignment="viewStart"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         tools:text="Message font size" />
 
     <TextView
@@ -60,9 +57,6 @@
         style="@style/Mp02.Signal.Text.SmallTextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/pigeon_start_margin"
-        android:layout_marginEnd="@dimen/pigeon_start_margin"
-        android:layout_marginBottom="16dp"
         android:lineSpacingExtra="4sp"
         android:textAlignment="viewStart"
         android:visibility="visible"
