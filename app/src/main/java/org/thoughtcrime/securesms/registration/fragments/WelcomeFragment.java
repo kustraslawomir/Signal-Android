@@ -81,6 +81,8 @@ public final class WelcomeFragment extends LoggingFragment {
   private CircularProgressMaterialButton continueButton;
   private RegistrationViewModel          viewModel;
 
+  private Boolean extraScreenIsShowed = false;
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     return inflater.inflate(R.layout.fragment_registration_welcome, container, false);
@@ -148,13 +150,18 @@ public final class WelcomeFragment extends LoggingFragment {
           welcomeLayout.setVisibility(View.GONE);
           extraLayout.setVisibility(View.VISIBLE);
           disclaimerButton.requestFocus();
+          extraScreenIsShowed = false;
           return true;
         }
         return false;
       });
 
       disclaimerButton.setOnKeyListener((v, keyCode, event) -> {
-        if (keyCode == KeyEvent.KEYCODE_DPAD_UP && v.isFocused()) {
+        if (keyCode == KeyEvent.KEYCODE_DPAD_UP && event.getAction() == KeyEvent.ACTION_UP) {
+          if (!extraScreenIsShowed){
+            extraScreenIsShowed = true;
+            return false;
+          }
           welcomeLayout.setVisibility(View.VISIBLE);
           extraLayout.setVisibility(View.GONE);
           titleTextView.requestFocus();

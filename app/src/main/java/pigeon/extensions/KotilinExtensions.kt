@@ -15,10 +15,8 @@ import org.thoughtcrime.securesms.util.padding
 fun View.focusOnLeft(vararg childs: TextView) {
 
   if (!isSignalVersion()) {
-    val BUTTON_SCALE_FOCUS = 1.2f
+    val BUTTON_SCALE_FOCUS = 1.5f
     val BUTTON_SCALE_NON_FOCUS = 1.0f
-
-    val originalWidth = 310
 
     val focus = View.OnFocusChangeListener { _, hasFocus ->
       val scale: Float = if (hasFocus) {
@@ -27,35 +25,28 @@ fun View.focusOnLeft(vararg childs: TextView) {
         BUTTON_SCALE_NON_FOCUS
       }
 
-      this.post {
-        val params = this.layoutParams as ViewGroup.MarginLayoutParams
-
-        if (hasFocus) {
-          params.marginStart = 35
-        } else {
-          params.marginStart = 30
-        }
-
-        this.layoutParams = params
-      }
-
-      this.setupEllipsize(hasFocus)
-      childs.forEach { it.setupEllipsize(hasFocus) }
-
-      if (hasFocus) {
-        val currentParams = this.layoutParams.apply {
-          width = originalWidth
-        }
-        this.layoutParams = currentParams
-        this.requestLayout()
-      } else {
-        this.layoutParams.width = originalWidth
-      }
-
       ViewCompat.animate(this)
         .scaleX(scale)
         .scaleY(scale)
         .start()
+
+      this.post {
+        val params = this.layoutParams as ViewGroup.MarginLayoutParams
+
+        if (hasFocus) {
+          params.width = 210
+          params.marginStart = 60
+        } else {
+          params.width = 270
+          params.marginStart = 30
+        }
+
+        this.layoutParams = params
+        this.requestLayout()
+
+        this.setupEllipsize(hasFocus)
+        childs.forEach { it.setupEllipsize(hasFocus) }
+      }
 
     }
     this.onFocusChangeListener = focus
