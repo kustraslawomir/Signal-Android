@@ -76,11 +76,12 @@
                 android:id="@+id/country_code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:focusable="false"
-                android:enabled="false"
                 android:background="@color/black"
-                android:focusableInTouchMode="false"
                 android:clickable="false"
+                android:descendantFocusability="blocksDescendants"
+                android:enabled="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:visibility="visible"
                 app:errorEnabled="false"
                 app:hintEnabled="false">
@@ -88,48 +89,58 @@
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     style="@style/Mp02.Signal.Text.BigCommonTextButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@color/black"
-                    android:maxLength="4"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/black"
+                    android:clickable="false"
                     android:enabled="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:clickable="false"
-                    android:textIsSelectable="true"
-                    android:inputType="none"
-                    android:paddingStart="0dp"
-                    android:paddingEnd="0dp"
+                    android:maxLength="4"
+                    android:padding="0dp"
                     android:singleLine="true"
                     android:textColor="@color/white_focus"
+                    android:textIsSelectable="true"
                     tools:text="+121" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Mp02.Signal.TextInputLayout.Registration"
                 android:id="@+id/number"
-                android:layout_marginStart="@dimen/pigeon_small_margin"
                 android:layout_width="0dp"
-                android:focusable="true"
-                android:clickable="true"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/pigeon_bottom_margin"
                 android:layout_weight="1"
-                app:hintEnabled="false"
-                app:helperTextEnabled="false">
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="start"
+                android:nextFocusUp="@id/registerButton"
+                android:nextFocusDown="@id/registerButton"
+                app:boxBackgroundColor="@color/black"
+                app:boxBackgroundMode="none"
+                app:boxStrokeColor="@color/black"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:counterEnabled="false"
+                app:helperTextEnabled="false"
+                app:hintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/numberEditText"
                     style="@style/Mp02.Signal.Text.BigCommonTextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@color/black"
+                    android:backgroundTint="@color/black"
                     android:imeOptions="actionDone"
                     android:inputType="phone"
-                    android:nextFocusDown="@id/registerButton"
                     android:nextFocusUp="@id/registerButton"
-                    android:textColor="@color/white_focus"
+                    android:nextFocusDown="@id/registerButton"
                     android:padding="0dp"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/white_focus"
                     tools:text="@tools:sample/us_phones" />
 
-                <requestFocus/>
+                <requestFocus />
 
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -149,10 +160,10 @@
             android:id="@+id/registerButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:nextFocusDown="@id/number"
-            android:nextFocusUp="@id/number"
-            app:circularProgressMaterialButton__label="@string/RegistrationActivity_next"
             android:layout_marginBottom="@dimen/conversation_bottom_padding"
+            android:nextFocusUp="@id/numberEditText"
+            android:nextFocusDown="@id/numberEditText"
+            app:circularProgressMaterialButton__label="@string/RegistrationActivity_next"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

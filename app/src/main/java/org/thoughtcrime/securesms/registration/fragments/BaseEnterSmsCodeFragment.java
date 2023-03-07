@@ -50,7 +50,7 @@ import pigeon.dialogs.EnterCodeOption;
 import static org.thoughtcrime.securesms.registration.fragments.RegistrationViewDelegate.setDebugLogSubmitMultiTapView;
 import static org.thoughtcrime.securesms.registration.fragments.RegistrationViewDelegate.showConfirmNumberDialogIfTranslated;
 import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
-import static pigeon.extensions.KotilinExtensionsKt.animateGroup;
+import static pigeon.extensions.KotilinExtensionsKt.focusOnRight;
 
 /**
  * Base fragment used by registration and change number flow to input an SMS verification code or request a
@@ -108,13 +108,22 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
     if (isSignalVersion()) {
       setOnCodeFullyEnteredListener(verificationCodeView);
     } else {
-      animateGroup(pigeonCodeView, view.findViewById(R.id.verify_header));
+      focusOnRight(pigeonCodeView, view.findViewById(R.id.verify_header));
       setPigeonOnCodeFullyEnteredListener();
       pigeonOptionButton.setOnClickListener(
           v -> {
             ArrayList<ActionCountDownButton> list = new ArrayList<>();
-            list.add(callMeCountDown);
-            list.add(resendSmsCountDown);
+            if (callMeCountDown.getVisibility() == View.VISIBLE) {
+              list.add(callMeCountDown);
+            }
+            if (resendSmsCountDown.getVisibility() == View.VISIBLE) {
+              list.add(resendSmsCountDown);
+            }
+
+            if (list.isEmpty()){
+              Toast.makeText(requireContext(), getString(R.string.no_options_available), Toast.LENGTH_SHORT).show();
+              return;
+            }
             dialog.showWithButtons(getParentFragmentManager(),list);
           }
       );

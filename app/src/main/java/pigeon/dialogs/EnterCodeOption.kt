@@ -53,7 +53,7 @@ class EnterCodeOption : DialogFragment() {
       } else {
         optionButton1.visibility = View.VISIBLE
         optionButton1.focusOnLeft()
-        optionButton1.text = getString(R.string.RegistrationActivity_call)
+        optionButton1.text = buttons.first().text
         optionButton1.setOnClickListener {
           dialog?.dismiss()
           activity?.runOnUiThread {
@@ -63,7 +63,7 @@ class EnterCodeOption : DialogFragment() {
         if (buttons.size == 2) {
           optionButton2.visibility = View.VISIBLE
           optionButton2.focusOnLeft()
-          optionButton2.text = getString(R.string.RegistrationActivity_resend_code)
+          optionButton2.text = buttons[1].text
           optionButton2.setOnClickListener {
             dialog?.dismiss()
             activity?.runOnUiThread {
