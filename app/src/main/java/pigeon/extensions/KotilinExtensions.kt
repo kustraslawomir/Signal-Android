@@ -3,22 +3,22 @@ package pigeon.extensions
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import org.thoughtcrime.securesms.R
+import org.thoughtcrime.securesms.util.padding
 
 
 fun View.focusOnLeft(vararg childs: TextView) {
 
   if (!isSignalVersion()) {
-    val BUTTON_SCALE_FOCUS = 1.3f
+    val BUTTON_SCALE_FOCUS = 1.2f
     val BUTTON_SCALE_NON_FOCUS = 1.0f
-    val BUTTON_TRANSLATION_X_FOCUS = 12.0f
-    val BUTTON_TRANSLATION_X_NON_FOCUS = 1.0f
 
-    val originalWidth = 240
+    val originalWidth = 310
 
     val focus = View.OnFocusChangeListener { _, hasFocus ->
       val scale: Float = if (hasFocus) {
@@ -27,10 +27,16 @@ fun View.focusOnLeft(vararg childs: TextView) {
         BUTTON_SCALE_NON_FOCUS
       }
 
-      val translationX: Float = if (hasFocus) {
-        BUTTON_TRANSLATION_X_FOCUS
-      } else {
-        BUTTON_TRANSLATION_X_NON_FOCUS
+      this.post {
+        val params = this.layoutParams as ViewGroup.MarginLayoutParams
+
+        if (hasFocus) {
+          params.marginStart = 35
+        } else {
+          params.marginStart = 30
+        }
+
+        this.layoutParams = params
       }
 
       this.setupEllipsize(hasFocus)
@@ -38,7 +44,7 @@ fun View.focusOnLeft(vararg childs: TextView) {
 
       if (hasFocus) {
         val currentParams = this.layoutParams.apply {
-          width = originalWidth - 12
+          width = originalWidth
         }
         this.layoutParams = currentParams
         this.requestLayout()
@@ -49,7 +55,6 @@ fun View.focusOnLeft(vararg childs: TextView) {
       ViewCompat.animate(this)
         .scaleX(scale)
         .scaleY(scale)
-        .translationX(translationX)
         .start()
 
     }

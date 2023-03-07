@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.annotation.StringRes;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.ActivityNavigator;
@@ -133,7 +135,33 @@ public final class WelcomeFragment extends LoggingFragment {
       TextView disclaimerButton = view.findViewById(R.id.disclaimer_button);
       disclaimerButton.setOnClickListener(v -> onDisclaimerClicked());
 
+      ConstraintLayout welcomeLayout = view.findViewById(R.id.welcome_layout);
+      ConstraintLayout extraLayout   = view.findViewById(R.id.extra_buttons);
+
       focusOnLeft(disclaimerButton);
+
+      TextView titleTextView = view.findViewById(R.id.tv_welcome_title);
+      titleTextView.requestFocus();
+
+      titleTextView.setOnKeyListener((v, keyCode, event) -> {
+        if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+          welcomeLayout.setVisibility(View.GONE);
+          extraLayout.setVisibility(View.VISIBLE);
+          disclaimerButton.requestFocus();
+          return true;
+        }
+        return false;
+      });
+
+      disclaimerButton.setOnKeyListener((v, keyCode, event) -> {
+        if (keyCode == KeyEvent.KEYCODE_DPAD_UP && v.isFocused()) {
+          welcomeLayout.setVisibility(View.VISIBLE);
+          extraLayout.setVisibility(View.GONE);
+          titleTextView.requestFocus();
+          return true;
+        }
+        return false;
+      });
 
       if (!canUserSelectBackup()) {
         restoreFromBackup.setText(R.string.registration_activity__transfer_account);
