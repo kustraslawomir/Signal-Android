@@ -67,7 +67,10 @@ public class ConversationItemBodyBubble extends LinearLayout {
     }
 
     this.quoteViewProjection = quoteViewProjection;
-    clipProjectionDrawable.setProjections(getProjections());
+
+    if (clipProjectionDrawable != null) {
+      clipProjectionDrawable.setProjections(getProjections());
+    }
   }
 
   public void setVideoPlayerProjection(@Nullable Projection videoPlayerProjection) {
@@ -76,7 +79,10 @@ public class ConversationItemBodyBubble extends LinearLayout {
     }
 
     this.videoPlayerProjection = videoPlayerProjection;
-    clipProjectionDrawable.setProjections(getProjections());
+
+    if (clipProjectionDrawable != null) {
+      clipProjectionDrawable.setProjections(getProjections());
+    }
   }
 
   public @Nullable Projection getVideoPlayerProjection() {

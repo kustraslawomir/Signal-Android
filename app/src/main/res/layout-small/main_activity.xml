@@ -1,25 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:viewBindingIgnore="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@color/sim_background"
+    android:listSelector="@drawable/listview_background_selector"
+    tools:viewBindingIgnore="true">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:name="org.thoughtcrime.securesms.main.MainActivityListHostFragment"
-        android:id="@+id/fragment_container"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:visibility="visible"
-        android:layout_weight="1"
-        tools:context=".MainActivity" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/conversation_list_tabs"
-        android:visibility="gone"
-        android:name="org.thoughtcrime.securesms.stories.tabs.ConversationListTabsFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/homePageFragment"
+            android:name="pigeon.fragments.HomePageFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            tools:context=".MainActivity" />
 
-</LinearLayout>
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment_container"
+            android:name="org.thoughtcrime.securesms.main.MainActivityListHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            tools:context=".MainActivity" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/conversation_list_tabs"
+            android:name="org.thoughtcrime.securesms.stories.tabs.ConversationListTabsFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
