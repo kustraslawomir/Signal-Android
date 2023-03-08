@@ -59,7 +59,7 @@ abstract class PreferenceViewHolder<T : PreferenceModel<T>>(itemView: View) : Ma
 
   override fun onAttachedToWindow() {
     super.onAttachedToWindow()
-    itemView.focusOnLeft(titleView)
+//    itemView.focusOnLeft(titleView)
   }
 
   @CallSuper
