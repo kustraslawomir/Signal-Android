@@ -55,6 +55,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import io.reactivex.rxjava3.disposables.Disposable;
+import static pigeon.extensions.KotilinExtensionsKt.focusOnLeft;
 
 public class ManageProfileFragment extends LoggingFragment {
 
@@ -156,6 +157,14 @@ public class ManageProfileFragment extends LoggingFragment {
     binding.manageProfileUsernameShare.setOnClickListener(v -> {
       SafeNavigation.safeNavigate(Navigation.findNavController(v), ManageProfileFragmentDirections.actionManageProfileFragmentToShareUsernameDialog());
     });
+
+    initPigeonCode();
+  }
+
+  private void initPigeonCode(){
+    focusOnLeft(binding.manageProfileNameContainer, binding.manageProfileName, binding.manageProfileNameSubtitle);
+    focusOnLeft(binding.manageProfileUsernameContainer, binding.manageProfileUsername, binding.manageProfileUsernameSubtitle);
+    focusOnLeft(binding.manageProfileAboutContainer, binding.manageProfileAbout, binding.manageProfileAboutSubtitle);
   }
 
   @Override
