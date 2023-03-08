@@ -158,8 +158,13 @@ public final class EnterPhoneNumberFragment extends LoggingFragment implements R
     if (supportActionBar != null) {
       supportActionBar.setTitle(null);
     }
-    controller.prepopulateCountryCode();
-    controller.setNumberAndCountryCode(viewModel.getNumber());
+
+    final NumberViewState viewModelNumber = viewModel.getNumber();
+    if (viewModelNumber.getCountryCode() == 0) {
+      controller.prepopulateCountryCode();
+    }
+    controller.setNumberAndCountryCode(viewModelNumber);
+
     showKeyboard(number.getEditText());
 
     if (viewModel.hasUserSkippedReRegisterFlow() && viewModel.shouldAutoShowSmsConfirmDialog()) {
@@ -327,6 +332,9 @@ public final class EnterPhoneNumberFragment extends LoggingFragment implements R
                                                               String.format(getString(R.string.RegistrationActivity_the_number_you_specified_s_is_invalid), viewModel.getNumber().getFullFormattedNumber()));
                                     } else if (processor.isNonNormalizedNumber()) {
                                       handleNonNormalizedNumberError(processor.getOriginalNumber(), processor.getNormalizedNumber(), mode);
+                                    } else if (processor.isTokenRejected()) {
+                                      Log.i(TAG, "The server did not accept the information.", processor.getError());
+                                      showErrorDialog(register.getContext(), getString(R.string.RegistrationActivity_we_need_to_verify_that_youre_human));
                                     } else {
                                       Log.i(TAG, "Unknown error during verification code request", processor.getError());
                                       showErrorDialog(register.getContext(), getString(R.string.RegistrationActivity_unable_to_connect_to_service));

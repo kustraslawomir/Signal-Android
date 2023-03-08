@@ -122,6 +122,7 @@ public final class RegistrationViewModel extends BaseRegistrationViewModel {
   }
 
   public void setUserSkippedReRegisterFlow(boolean userSkippedReRegisterFlow) {
+    Log.i(TAG, "User skipped re-register flow.");
     this.userSkippedReRegisterFlow = userSkippedReRegisterFlow;
     if (userSkippedReRegisterFlow) {
       setAutoShowSmsConfirmDialog(true);
@@ -165,7 +166,7 @@ public final class RegistrationViewModel extends BaseRegistrationViewModel {
                                     VerifyResponseProcessor processor = new VerifyResponseWithoutKbs(verifyAccountWithoutKbsResponse);
                                     String                  pin       = SignalStore.kbsValues().getPin();
 
-                                    if (processor.registrationLock() && SignalStore.kbsValues().getRegistrationLockToken() != null && pin != null) {
+                                    if ((processor.isKbsLocked() || processor.registrationLock()) && SignalStore.kbsValues().getRegistrationLockToken() != null && pin != null) {
                                       KbsPinData pinData = new KbsPinData(SignalStore.kbsValues().getOrCreateMasterKey(), SignalStore.kbsValues().getRegistrationLockTokenResponse());
 
                                       return verifyAccountRepository.registerAccount(sessionId, getRegistrationData(), pin, () -> pinData)
@@ -236,7 +237,10 @@ public final class RegistrationViewModel extends BaseRegistrationViewModel {
                  .observeOn(Schedulers.io())
                  .flatMap(data -> {
                    if (data.canProceed) {
-                     return verifyReRegisterWithRecoveryPassword(pin, data.pinData);
+                     return updateFcmTokenValue().subscribeOn(Schedulers.io())
+                                                 .observeOn(Schedulers.io())
+                                                 .onErrorReturnItem("")
+                                                 .flatMap(s -> verifyReRegisterWithRecoveryPassword(pin, data.pinData));
                    } else {
                      throw new IllegalStateException("Unable to get token or master key");
                    }
@@ -300,6 +304,7 @@ public final class RegistrationViewModel extends BaseRegistrationViewModel {
     }
 
     return verifyAccountRepository.registerAccount(null, registrationData, null, null)
+                                  .observeOn(Schedulers.io())
                                   .onErrorReturn(ServiceResponse::forUnknownError)
                                   .map(VerifyResponseWithoutKbs::new)
                                   .flatMap(processor -> {
@@ -325,8 +330,7 @@ public final class RegistrationViewModel extends BaseRegistrationViewModel {
                                     } else {
                                       return Single.just(processor);
                                     }
-                                  })
-                                  .observeOn(AndroidSchedulers.mainThread());
+                                  });
   }
 
   public @NonNull Single<Boolean> canEnterSkipSmsFlow() {
@@ -336,6 +340,7 @@ public final class RegistrationViewModel extends BaseRegistrationViewModel {
 
     return Single.just(hasRecoveryPassword())
                  .flatMap(hasRecoveryPassword -> {
+                   Log.i(TAG, "Checking if user has existing recovery password: " + hasRecoveryPassword);
                    if (hasRecoveryPassword) {
                      return Single.just(true);
                    } else {
