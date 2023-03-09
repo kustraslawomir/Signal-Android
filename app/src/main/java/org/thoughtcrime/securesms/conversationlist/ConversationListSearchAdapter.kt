@@ -17,6 +17,7 @@ import org.thoughtcrime.securesms.util.adapter.mapping.LayoutFactory
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingModel
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingViewHolder
 import org.thoughtcrime.securesms.util.visible
+import pigeon.extensions.focusOnLeft
 import java.util.Locale
 
 /**
@@ -82,6 +83,7 @@ class ConversationListSearchAdapter(
     itemView: View
   ) : MappingViewHolder<ThreadModel>(itemView) {
     override fun bind(model: ThreadModel) {
+      itemView.focusOnLeft(itemView.findViewById(R.id.conversation_list_item_name))
       itemView.setOnClickListener {
         threadListener.onClicked(itemView, model.thread, false)
       }
@@ -105,6 +107,7 @@ class ConversationListSearchAdapter(
     itemView: View
   ) : MappingViewHolder<MessageModel>(itemView) {
     override fun bind(model: MessageModel) {
+      itemView.focusOnLeft(itemView.findViewById(R.id.conversation_list_item_name))
       itemView.setOnClickListener {
         messageListener.onClicked(itemView, model.message, false)
       }
@@ -126,6 +129,7 @@ class ConversationListSearchAdapter(
     itemView: View
   ) : MappingViewHolder<GroupWithMembersModel>(itemView) {
     override fun bind(model: GroupWithMembersModel) {
+      itemView.focusOnLeft()
       itemView.setOnClickListener {
         groupWithMembersListener.onClicked(itemView, model.groupWithMembers, false)
       }

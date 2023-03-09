@@ -154,7 +154,6 @@
                 android:id="@+id/space_left"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="?android:windowBackground"
                 android:paddingStart="5dp"
                 android:visibility="gone"
                 tools:text="160/160 (1)"

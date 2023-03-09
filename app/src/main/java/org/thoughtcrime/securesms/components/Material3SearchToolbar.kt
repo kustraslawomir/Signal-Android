@@ -55,13 +55,18 @@ class Material3SearchToolbar @JvmOverloads constructor(
   }
 
   fun setSearchInputHint(@StringRes hintStringRes: Int) {
-    if (isSignalVersion()) {
-      input.setHint(hintStringRes)
+    if (!isSignalVersion()) {
+      return
     }
+
+    input.setHint(hintStringRes)
   }
 
   fun display(x: Float, y: Float) {
-    if (isSignalVersion()) {
+    if (!isSignalVersion()) {
+      return
+    }
+
       if (!visible) {
         circularRevealPoint.set(x, y)
 
@@ -71,11 +76,14 @@ class Material3SearchToolbar @JvmOverloads constructor(
         visibility = VISIBLE
         ViewUtil.focusAndShowKeyboard(input)
         animator.start()
-      }
     }
   }
 
   fun collapse() {
+    if (!isSignalVersion()) {
+      return
+    }
+
     if (visibility == VISIBLE) {
       listener?.onSearchClosed()
       ViewUtil.hideKeyboard(context, input)

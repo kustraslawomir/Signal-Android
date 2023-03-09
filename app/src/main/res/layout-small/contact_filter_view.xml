@@ -76,7 +76,6 @@
                     android:contentDescription="@string/contact_filter_toolbar__clear_entered_text_description"
                     android:visibility="gone"
                     app:srcCompat="@drawable/ic_x_conversation_filter_24" />
-
             </org.thoughtcrime.securesms.components.AnimatingToggle>
         </LinearLayout>
     </LinearLayout>
