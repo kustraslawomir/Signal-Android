@@ -59,12 +59,12 @@ abstract class PreferenceViewHolder<T : PreferenceModel<T>>(itemView: View) : Ma
 
   override fun onAttachedToWindow() {
     super.onAttachedToWindow()
-    itemView.focusOnLeft(titleView, summaryView)
+//    itemView.focusOnLeft(titleView)
   }
 
   @CallSuper
   override fun bind(model: T) {
-    itemView.focusOnLeft(titleView, summaryView)
+    itemView.focusOnLeft(titleView)
 
     listOf(itemView, titleView, summaryView).forEach {
       it.isEnabled = model.isEnabled

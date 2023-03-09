@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="0dp"
     android:layout_height="0dp"
+    android:layout_marginStart="@dimen/pigeon_start_margin"
     android:orientation="horizontal"
     tools:background="@color/black"
+    android:descendantFocusability="blocksDescendants"
     tools:viewBindingIgnore="true">
 
     <com.google.android.material.button.MaterialButton
@@ -13,7 +15,6 @@
         style="@style/Mp02.Signal.Text.MaterialTextButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/pigeon_start_margin"
         android:layout_marginEnd="@dimen/dsl_settings_gutter"
         android:text="@string/contact_selection_activity__invite_to_signal"
         app:layout_constraintBottom_toBottomOf="parent"

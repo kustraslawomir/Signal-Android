@@ -99,7 +99,7 @@ public class DeleteAccountFragment extends Fragment {
 
   @SuppressLint("ClickableViewAccessibility")
   private void initializeSpinner(@NonNull Spinner countrySpinner) {
-    countrySpinnerAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item);
+    countrySpinnerAdapter = new ArrayAdapter<>(requireContext(), R.layout.pigeon_simple_spinner_item);
     countrySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
     countrySpinner.setAdapter(countrySpinnerAdapter);

@@ -95,11 +95,7 @@ class ReRegisterWithPinFragment : LoggingFragment(R.layout.pin_restore_entry_fra
   }
 
   private fun handlePinEntry() {
-    val pin: String? = if (isSignalVersion()) {
-      binding.pinRestorePinInput.text?.toString()
-    } else {
-      binding.pigeonPinRestorePinInput?.text?.toString()
-    }
+    val pin: String? = binding.pinRestorePinInput.text?.toString()
 
     val trimmedLength = pin?.replace(" ", "")?.length ?: 0
     if (trimmedLength == 0) {
@@ -118,12 +114,10 @@ class ReRegisterWithPinFragment : LoggingFragment(R.layout.pin_restore_entry_fra
       .doOnSubscribe {
         ViewUtil.hideKeyboard(requireContext(), binding.pinRestorePinInput)
         binding.pinRestorePinInput.isEnabled = false
-        binding.pigeonPinRestorePinInput?.isEnabled = false
         binding.pinRestorePinConfirm.setSpinning()
       }
       .doAfterTerminate {
         binding.pinRestorePinInput.isEnabled = true
-        binding.pigeonPinRestorePinInput?.isEnabled = true
         binding.pinRestorePinConfirm.cancelSpinning()
       }
       .subscribe { processor ->

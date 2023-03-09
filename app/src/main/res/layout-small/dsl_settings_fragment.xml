@@ -5,7 +5,7 @@
     style="@style/Mp02.Signal.Background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/pigeon_small_margin"
+    android:paddingVertical="@dimen/pigeon_small_margin"
     tools:context=".components.settings.DSLSettingsActivity"
     tools:viewBindingIgnore="true">
 

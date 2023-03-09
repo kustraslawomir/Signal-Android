@@ -1,5 +1,6 @@
 package pigeon.extensions
 
+import android.animation.ValueAnimator
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.View
@@ -14,42 +15,49 @@ import org.thoughtcrime.securesms.R
 fun View.focusOnLeft(vararg childs: TextView) {
 
   if (!isSignalVersion()) {
-    val BUTTON_SCALE_FOCUS = 1.5f
-    val BUTTON_SCALE_NON_FOCUS = 1.0f
-
     val focus = View.OnFocusChangeListener { _, hasFocus ->
-      val scale: Float = if (hasFocus) {
-        BUTTON_SCALE_FOCUS
-      } else {
-        BUTTON_SCALE_NON_FOCUS
-      }
-
-      ViewCompat.animate(this)
-        .scaleX(scale)
-        .scaleY(scale)
-        .start()
-
       this.post {
         val params = this.layoutParams as ViewGroup.MarginLayoutParams
 
         if (hasFocus) {
-          params.width = 210
-          params.marginStart = 60
+          params.marginStart = 5
         } else {
-          params.width = 270
           params.marginStart = 30
         }
 
         this.layoutParams = params
         this.requestLayout()
 
+        (this as? TextView)?.setupTextSize(hasFocus)
         this.setupEllipsize(hasFocus)
-        childs.forEach { it.setupEllipsize(hasFocus) }
+        childs.forEach {
+          (it as? TextView)?.setupTextSize(hasFocus)
+          it.setupEllipsize(hasFocus)
+        }
       }
-
     }
     this.onFocusChangeListener = focus
   }
+}
+
+fun TextView.setupTextSize(hasFocus: Boolean) {
+  val animationDuration: Long = 0
+
+  val animator = if (hasFocus) {
+    ValueAnimator.ofFloat(this.textSize, (this.textSize * 1.5).toFloat())
+  } else {
+    ValueAnimator.ofFloat(this.textSize, (this.textSize / 1.5).toFloat())
+  }
+
+  animator.duration = animationDuration
+
+  animator.addUpdateListener { valueAnimator ->
+    val animatedValue = valueAnimator.animatedValue as Float
+    this.textSize = animatedValue
+  }
+
+  animator.start()
+
 }
 
 fun View.setupEllipsize(hasFocus: Boolean) {
@@ -215,9 +223,9 @@ fun EditText.animateGroup(parent: TextView) {
 fun View.focusColor(vararg childs: TextView) {
   if (!isSignalVersion()) {
     val focus = View.OnFocusChangeListener { _, hasFocus ->
-        this.setupEllipsize(hasFocus)
-        childs.forEach { it.setupEllipsize(hasFocus) }
-      }
+      this.setupEllipsize(hasFocus)
+      childs.forEach { it.setupEllipsize(hasFocus) }
+    }
     this.onFocusChangeListener = focus
   }
 }

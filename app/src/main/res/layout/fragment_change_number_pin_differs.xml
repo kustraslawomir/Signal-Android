@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:viewBindingIgnore="true"
+    style="@style/Mp02.Signal.Background"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,6 +18,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="@string/ChangeNumberPinDiffersFragment__pins_do_not_match"
+            android:textColor="@color/white"
             android:textAppearance="@style/TextAppearance.Signal.Title1"
             app:layout_constraintBottom_toTopOf="@id/change_number_pin_differs_keep_old_pin"
             app:layout_constraintTop_toTopOf="parent"
@@ -33,24 +35,24 @@
             android:minHeight="66dp"
             android:text="@string/ChangeNumberPinDiffersFragment__the_pin_associated_with_your_new_number_is_different_from_the_pin_associated_with_your_old_one"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-            android:textColor="@color/core_grey_60"
+            android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/change_number_pin_differs_title" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/change_number_pin_differs_keep_old_pin"
-            style="@style/Signal.Widget.Button.Large.Secondary"
+            style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/pigeon_small_margin"
             android:text="@string/ChangeNumberPinDiffersFragment__keep_old_pin"
             app:layout_constraintBottom_toTopOf="@id/change_number_pin_differs_update_pin"
-            tools:layout_editor_absoluteX="32dp" />
+            />
 
         <org.thoughtcrime.securesms.util.views.CircularProgressMaterialButton
             android:id="@+id/change_number_pin_differs_update_pin"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginStart="@dimen/pigeon_small_margin"
             android:layout_marginBottom="16dp"
             app:circularProgressMaterialButton__label="@string/ChangeNumberPinDiffersFragment__update_pin"
             app:layout_constraintBottom_toBottomOf="parent"
