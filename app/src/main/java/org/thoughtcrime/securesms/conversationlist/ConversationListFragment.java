@@ -204,6 +204,7 @@ import kotlin.Unit;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
 
 
 public class ConversationListFragment extends MainFragment implements ActionMode.Callback,
@@ -440,6 +441,8 @@ public class ConversationListFragment extends MainFragment implements ActionMode
                                                          }));
 
     requireCallback().bindScrollHelper(list);
+    initializeSearchListener();
+
   }
 
   @Override
@@ -467,7 +470,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
   public void onResume() {
     super.onResume();
 
-    initializeSearchListener();
     updateReminders();
     EventBus.getDefault().register(this);
     itemAnimator.disable();
@@ -798,6 +800,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     imm.hideSoftInputFromWindow(requireView().getWindowToken(), 0);
   }
 
+
   private void initializeSearchListener() {
     viewModel.getConversationFilterRequest().observe(getViewLifecycleOwner(), this::updateSearchToolbarHint);
     viewModel.getConversationFilterRequest().observe(getViewLifecycleOwner(), contactSearchMediator::onConversationFilterRequestChanged);
@@ -806,36 +809,44 @@ public class ConversationListFragment extends MainFragment implements ActionMode
       fadeOutButtonsAndMegaphone(250);
       requireCallback().onSearchOpened();
 
-      requireCallback().getSearchToolbar().get().setListener(new Material3SearchToolbar.Listener() {
-        @Override
-        public void onSearchTextChange(String text) {
-          String trimmed = text.trim();
-
-          contactSearchMediator.onFilterChanged(trimmed);
-
-          if (trimmed.length() > 0) {
-            if (activeAdapter != searchAdapter && list != null) {
-              setAdapter(searchAdapter);
-            }
-          } else {
-            if (activeAdapter != defaultAdapter) {
-              if (list != null) {
-                setAdapter(defaultAdapter);
-              }
-            }
-          }
-        }
-
-        @Override
-        public void onSearchClosed() {
-          if (list != null) {
-            setAdapter(defaultAdapter);
-          }
-          requireCallback().onSearchClosed();
-          fadeInButtonsAndMegaphone(250);
-        }
-      });
+      setSearchTextWatcher();
       updateSearchToolbarHint(Objects.requireNonNull(viewModel.getConversationFilterRequest().getValue()));
+    });
+
+    if (!isSignalVersion()) {
+      setSearchTextWatcher();
+    }
+  }
+
+  private void setSearchTextWatcher() {
+    requireCallback().getSearchToolbar().get().setListener(new Material3SearchToolbar.Listener() {
+      @Override
+      public void onSearchTextChange(String text) {
+        String trimmed = text.trim();
+
+        contactSearchMediator.onFilterChanged(trimmed);
+
+        if (trimmed.length() > 0) {
+          if (activeAdapter != searchAdapter && list != null) {
+            setAdapter(searchAdapter);
+          }
+        } else {
+          if (activeAdapter != defaultAdapter) {
+            if (list != null) {
+              setAdapter(defaultAdapter);
+            }
+          }
+        }
+      }
+
+      @Override
+      public void onSearchClosed() {
+        if (list != null) {
+          setAdapter(defaultAdapter);
+        }
+        requireCallback().onSearchClosed();
+        fadeInButtonsAndMegaphone(250);
+      }
     });
   }
 
@@ -967,7 +978,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
         return;
       }
 
-      if (firstVisibleItem == 0) {
+      if (firstVisibleItem == 0 && isSignalVersion()) {
         list.scrollToPosition(0);
       }
       onPostSubmitList(conversations.size());
