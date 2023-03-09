@@ -31,7 +31,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="android:windowBackground">@drawable/mp02_splash_bg</item>
+        <item name="android:windowBackground">@color/sim_background</item>
 
         <item name="theme_type">light</item>
         <item name="colorPrimary">@color/core_ultramarine</item>
