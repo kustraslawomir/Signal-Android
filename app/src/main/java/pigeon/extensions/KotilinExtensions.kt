@@ -41,7 +41,7 @@ fun View.focusOnLeft(vararg childs: TextView) {
 }
 
 fun TextView.setupTextSize(hasFocus: Boolean) {
-  val animationDuration: Long = 200
+  val animationDuration: Long = 0
 
   val animator = if (hasFocus) {
     ValueAnimator.ofFloat(this.textSize, (this.textSize * 1.5).toFloat())
