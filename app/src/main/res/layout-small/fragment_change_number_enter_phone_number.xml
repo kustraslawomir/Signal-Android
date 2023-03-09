@@ -61,6 +61,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
+                    android:backgroundTint="@color/white"
                     android:textAlignment="viewStart" />
 
             </FrameLayout>
@@ -78,7 +79,7 @@
 
                 <org.thoughtcrime.securesms.components.LabeledEditText
                     android:id="@+id/change_number_enter_phone_number_old_number_country_code"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
                     android:layout_weight="1"
@@ -89,8 +90,7 @@
                     android:id="@+id/change_number_enter_phone_number_old_number_number"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    app:labeledEditText_background="@color/signal_background_primary"
+                    android:layout_weight="2"
                     app:labeledEditText_label="@string/ChangeNumberEnterPhoneNumberFragment__old_phone_number"
                     app:labeledEditText_textLayout="@layout/phone_text" />
             </LinearLayout>
@@ -122,6 +122,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
+                    android:backgroundTint="@color/white"
                     android:textAlignment="viewStart" />
 
             </FrameLayout>
@@ -139,7 +140,7 @@
 
                 <org.thoughtcrime.securesms.components.LabeledEditText
                     android:id="@+id/change_number_enter_phone_number_new_number_country_code"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
                     android:layout_weight="1"
@@ -150,8 +151,7 @@
                     android:id="@+id/change_number_enter_phone_number_new_number_number"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    app:labeledEditText_background="@color/signal_background_primary"
+                    android:layout_weight="2"
                     app:labeledEditText_label="@string/ChangeNumberEnterPhoneNumberFragment__new_phone_number"
                     app:labeledEditText_textLayout="@layout/phone_text" />
             </LinearLayout>
