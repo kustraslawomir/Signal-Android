@@ -57,11 +57,6 @@ abstract class PreferenceViewHolder<T : PreferenceModel<T>>(itemView: View) : Ma
   protected val titleView: TextView = itemView.findViewById(R.id.title)
   protected val summaryView: TextView = itemView.findViewById(R.id.summary)
 
-  override fun onAttachedToWindow() {
-    super.onAttachedToWindow()
-//    itemView.focusOnLeft(titleView)
-  }
-
   @CallSuper
   override fun bind(model: T) {
     itemView.focusOnLeft(titleView)
