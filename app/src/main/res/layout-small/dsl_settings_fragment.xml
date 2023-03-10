@@ -26,6 +26,8 @@
         android:layout_height="match_parent"
         android:listSelector="@drawable/listview_background_selector"
         android:orientation="vertical"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/pigeon_start_margin"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
