@@ -182,17 +182,15 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/fragment_backup_toggle"
-            android:layout_width="wrap_content"
+            style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/primary_action_button_background_36dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:text="@string/BackupsPreferenceFragment__turn_on"
-            android:textColor="@color/core_white"
-            app:backgroundTint="?colorAccent" />
+            android:text="@string/BackupsPreferenceFragment__turn_on" />
 
         <View
             android:layout_width="match_parent"
@@ -207,6 +205,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
+            android:textColorLink="@color/white"
             android:text="@string/BackupsPreferenceFragment__to_restore_a_backup"
             android:textAppearance="@style/Signal.Text.Preview"
             android:textColor="@color/signal_text_secondary" />

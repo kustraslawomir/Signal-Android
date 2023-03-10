@@ -6,7 +6,7 @@
     <string name="Pigeon.Options">Options</string>
     <string name="Pigeon.Close">Close</string>
     <string name="RegistrationActivity_pigeon_captcha_mouse_cursor">➤</string>
-    <string name="Pigeon_RegistrationActivity_enter_your_phone_number">Mobile</string>
+    <string name="Pigeon_RegistrationActivity_enter_your_phone_number">Mobile phone</string>
     <string name="Pigeon_RegistrationActivity_take_privacy_with_you_be_yourself_in_every_message">Pigeon disclaimer</string>
     <string name="disclaimer_1">Pigeon on the MP02 makes the phone compatible with the Signal secure communication system. By completing the permission dialogue when you register, you allow or deny Pigeon permission to access your contact book, microphone, SMS for the verification code, and calls.\n\n</string>
     <string name="disclaimer_2">These permissions are requested to enable certain features from Pigeon to Signal, such as finding contacts, reading, receiving and sending messages, and making calls through secure end-to-end encryption communication on Pigeon.\n\n</string>
