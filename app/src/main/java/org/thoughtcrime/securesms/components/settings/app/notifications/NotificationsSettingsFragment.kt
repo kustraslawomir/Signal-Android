@@ -36,6 +36,7 @@ import org.thoughtcrime.securesms.util.ViewUtil
 import org.thoughtcrime.securesms.util.adapter.mapping.LayoutFactory
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingAdapter
 import org.thoughtcrime.securesms.util.navigation.safeNavigate
+import pigeon.extensions.isSignalVersion
 
 private const val MESSAGE_SOUND_SELECT: Int = 1
 private const val CALL_RINGTONE_SELECT: Int = 2
@@ -82,7 +83,11 @@ class NotificationsSettingsFragment : DSLSettingsFragment(R.string.preferences__
     viewModel = ViewModelProvider(this, factory)[NotificationsSettingsViewModel::class.java]
 
     viewModel.state.observe(viewLifecycleOwner) {
+      if (isSignalVersion()){
       adapter.submitList(getConfiguration(it).toMappingModelList())
+      } else {
+        adapter.submitList(getPigeonConfiguration(it).toMappingModelList())
+      }
     }
   }
 
@@ -260,6 +265,107 @@ class NotificationsSettingsFragment : DSLSettingsFragment(R.string.preferences__
       )
     }
   }
+
+  private fun getPigeonConfiguration(state: NotificationsSettingsState): DSLConfiguration {
+    return configure {
+      sectionHeaderPref(R.string.NotificationsSettingsFragment__messages)
+
+      switchPref(
+        title = DSLSettingsText.from(R.string.preferences__notifications),
+        isChecked = state.messageNotificationsState.notificationsEnabled,
+        onClick = {
+          viewModel.setMessageNotificationsEnabled(!state.messageNotificationsState.notificationsEnabled)
+        }
+      )
+
+      if (Build.VERSION.SDK_INT >= 30) {
+        clickPref(
+          title = DSLSettingsText.from(R.string.preferences__customize),
+          summary = DSLSettingsText.from(R.string.preferences__change_sound_and_vibration),
+          isEnabled = state.messageNotificationsState.notificationsEnabled,
+          onClick = {
+            NotificationChannels.getInstance().openChannelSettings(requireActivity(), NotificationChannels.getInstance().messagesChannel, null)
+          }
+        )
+      } else {
+        clickPref(
+          title = DSLSettingsText.from(R.string.preferences__sound),
+          summary = DSLSettingsText.from(getRingtoneSummary(state.messageNotificationsState.sound)),
+          isEnabled = state.messageNotificationsState.notificationsEnabled,
+          onClick = {
+            launchMessageSoundSelectionIntent()
+          }
+        )
+
+        switchPref(
+          title = DSLSettingsText.from(R.string.preferences__vibrate),
+          isChecked = state.messageNotificationsState.vibrateEnabled,
+          isEnabled = state.messageNotificationsState.notificationsEnabled,
+          onClick = {
+            viewModel.setMessageNotificationVibration(!state.messageNotificationsState.vibrateEnabled)
+          }
+        )
+      }
+
+      switchPref(
+        title = DSLSettingsText.from(R.string.preferences_notifications__in_chat_sounds),
+        isChecked = state.messageNotificationsState.inChatSoundsEnabled,
+        isEnabled = state.messageNotificationsState.notificationsEnabled,
+        onClick = {
+          viewModel.setMessageNotificationInChatSoundsEnabled(!state.messageNotificationsState.inChatSoundsEnabled)
+        }
+      )
+
+      radioListPref(
+        title = DSLSettingsText.from(R.string.preferences_notifications__show),
+        listItems = notificationPrivacyLabels,
+        selected = notificationPrivacyValues.indexOf(state.messageNotificationsState.messagePrivacy),
+        isEnabled = state.messageNotificationsState.notificationsEnabled,
+        onSelected = {
+          viewModel.setMessageNotificationPrivacy(notificationPrivacyValues[it])
+        }
+      )
+
+      sectionHeaderPref(R.string.NotificationsSettingsFragment__calls)
+
+      switchPref(
+        title = DSLSettingsText.from(R.string.preferences__notifications),
+        isChecked = state.callNotificationsState.notificationsEnabled,
+        onClick = {
+          viewModel.setCallNotificationsEnabled(!state.callNotificationsState.notificationsEnabled)
+        }
+      )
+
+      clickPref(
+        title = DSLSettingsText.from(R.string.preferences_notifications__ringtone),
+        summary = DSLSettingsText.from(getRingtoneSummary(state.callNotificationsState.ringtone)),
+        isEnabled = state.callNotificationsState.notificationsEnabled,
+        onClick = {
+          launchCallRingtoneSelectionIntent()
+        }
+      )
+
+      switchPref(
+        title = DSLSettingsText.from(R.string.preferences__vibrate),
+        isChecked = state.callNotificationsState.vibrateEnabled,
+        isEnabled = state.callNotificationsState.notificationsEnabled,
+        onClick = {
+          viewModel.setCallVibrateEnabled(!state.callNotificationsState.vibrateEnabled)
+        }
+      )
+
+      sectionHeaderPref(R.string.NotificationsSettingsFragment__notification_profiles)
+
+      clickPref(
+        title = DSLSettingsText.from(R.string.NotificationsSettingsFragment__profiles),
+        summary = DSLSettingsText.from(R.string.NotificationsSettingsFragment__create_a_profile_to_receive_notifications_only_from_people_and_groups_you_choose),
+        onClick = {
+          findNavController().safeNavigate(R.id.action_notificationsSettingsFragment_to_notificationProfilesFragment)
+        }
+      )
+    }
+  }
+
 
   private fun getRingtoneSummary(uri: Uri): String {
     return if (TextUtils.isEmpty(uri.toString())) {
