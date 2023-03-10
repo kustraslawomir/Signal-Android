@@ -112,8 +112,8 @@
 
                     <org.thoughtcrime.securesms.messagerequests.MessageRequestsBottomView
                         android:id="@+id/conversation_activity_message_request_bottom_bar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:clickable="true"
                         android:visibility="gone" />
 

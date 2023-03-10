@@ -96,6 +96,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static org.thoughtcrime.securesms.database.model.LiveUpdateMessage.recipientToStringAsync;
+import static pigeon.extensions.KotilinExtensionsKt.focusOnLeft;
 
 public final class ConversationListItem extends ConstraintLayout implements BindableConversationListItem, Unbindable {
   @SuppressWarnings("unused")
@@ -209,6 +210,13 @@ public final class ConversationListItem extends ConstraintLayout implements Bind
                    @NonNull Set<Long> typingThreads,
                    @NonNull ConversationSet selectedConversations)
   {
+
+    focusOnLeft(this,
+                 fromView,
+                 subjectView,
+                 archivedView,
+                 unreadIndicator);
+
     bindThread(lifecycleOwner, thread, glideRequests, locale, typingThreads, selectedConversations, null);
   }
 

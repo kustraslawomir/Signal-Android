@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <androidx.fragment.app.FragmentContainerView
@@ -26,11 +26,5 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:context=".MainActivity" />
-
-<!--        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/conversation_list_tabs"
-            android:name="org.thoughtcrime.securesms.stories.tabs.ConversationListTabsFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />-->
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

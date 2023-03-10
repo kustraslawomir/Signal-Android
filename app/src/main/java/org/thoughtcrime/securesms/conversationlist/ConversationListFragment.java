@@ -978,7 +978,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
         return;
       }
 
-      if (firstVisibleItem == 0 && isSignalVersion()) {
+      if (firstVisibleItem == 0) {
         list.scrollToPosition(0);
       }
       onPostSubmitList(conversations.size());

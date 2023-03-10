@@ -47,6 +47,7 @@ import org.thoughtcrime.securesms.util.runRevealAnimation
 import org.thoughtcrime.securesms.util.views.Stub
 import org.thoughtcrime.securesms.util.visible
 import org.whispersystems.signalservice.api.websocket.WebSocketConnectionState
+import pigeon.extensions.isSignalVersion
 
 class MainActivityListHostFragment : Fragment(R.layout.main_activity_list_host_fragment), ConversationListFragment.Callback, Material3OnScrollHelperBinder {
 
@@ -342,10 +343,12 @@ class MainActivityListHostFragment : Fragment(R.layout.main_activity_list_host_f
   }
 
   override fun bindScrollHelper(recyclerView: RecyclerView) {
-    Material3OnScrollHelper(
-      requireActivity(),
-      listOf(_toolbarBackground),
-      listOf(_searchToolbar)
-    ).attach(recyclerView)
+    if (isSignalVersion()) {
+      Material3OnScrollHelper(
+        requireActivity(),
+        listOf(_toolbarBackground),
+        listOf(_searchToolbar)
+      ).attach(recyclerView)
+    }
   }
 }
