@@ -96,6 +96,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static org.thoughtcrime.securesms.database.model.LiveUpdateMessage.recipientToStringAsync;
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
 import static pigeon.extensions.KotilinExtensionsKt.focusOnLeft;
 
 public final class ConversationListItem extends ConstraintLayout implements BindableConversationListItem, Unbindable {
@@ -171,7 +172,9 @@ public final class ConversationListItem extends ConstraintLayout implements Bind
     this.thumbTarget             = new GlideLiveDataTarget(thumbSize, thumbSize);
     this.searchStyleFactory      = () -> new CharacterStyle[] { new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.signal_colorOnSurface)), SpanUtil.getBoldSpan() };
 
-    getLayoutTransition().setDuration(150);
+    if (isSignalVersion()) {
+      getLayoutTransition().setDuration(150);
+    }
   }
 
   /**
