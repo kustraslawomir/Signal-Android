@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <org.thoughtcrime.securesms.components.InsetAwareConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:viewBindingIgnore="true"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/sim_background"
-    android:layout_height="match_parent">
+    tools:viewBindingIgnore="true">
 
     <include layout="@layout/system_ui_guidelines" />
 
@@ -74,10 +74,10 @@
                 android:id="@+id/conversation_activity_panel_parent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:nextFocusDown="@id/send_text"
                 android:clipChildren="false"
-                android:clipToPadding="false">
+                android:clipToPadding="false"
+                android:nextFocusDown="@id/send_text"
+                android:orientation="vertical">
 
                 <ViewStub
                     android:id="@+id/scheduled_messages_stub"
@@ -246,39 +246,44 @@
     <LinearLayout
         android:id="@+id/conversation_banner_container"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@id/parent_end_guideline"
         app:layout_constraintStart_toStartOf="@id/parent_start_guideline"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <ViewStub
             android:id="@+id/voice_note_player_stub"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:inflatedId="@+id/voice_note_player"
-            android:layout="@layout/voice_note_player_stub" />
+            android:layout="@layout/voice_note_player_stub"
+            android:visibility="gone" />
 
         <ViewStub
             android:id="@+id/unverified_banner_stub"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:inflatedId="@+id/unverified_banner"
-            android:layout="@layout/conversation_activity_unverified_banner_stub" />
+            android:layout="@layout/conversation_activity_unverified_banner_stub"
+            android:visibility="gone" />
 
         <ViewStub
             android:id="@+id/reminder_stub"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:inflatedId="@+id/reminder"
-            android:layout="@layout/conversation_activity_reminderview_stub" />
+            android:layout="@layout/conversation_activity_reminderview_stub"
+            android:visibility="gone" />
 
         <ViewStub
             android:id="@+id/review_banner_stub"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:inflatedId="@+id/review_banner"
-            android:layout="@layout/review_banner_view" />
+            android:layout="@layout/review_banner_view"
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -288,6 +293,7 @@
         android:layout_height="0dp"
         android:inflatedId="@+id/conversation_reaction_scrubber"
         android:layout="@layout/conversation_reaction_scrubber"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/parent_end_guideline"
         app:layout_constraintStart_toStartOf="@+id/parent_start_guideline"

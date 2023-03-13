@@ -8,6 +8,7 @@
     android:layout_height="wrap_content"
     android:clipChildren="false"
     android:clipToPadding="false"
+    android:background="@drawable/listview_background_selector"
     android:focusable="true"
     android:nextFocusLeft="@id/container"
     android:nextFocusRight="@id/embedded_text_editor"
