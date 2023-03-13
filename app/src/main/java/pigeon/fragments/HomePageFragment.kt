@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.doAfterTextChanged
 import org.signal.core.util.concurrent.SignalExecutors
 import org.thoughtcrime.securesms.MainNavigator.REQUEST_CONFIG_CHANGES
 import org.thoughtcrime.securesms.NewConversationActivity
@@ -13,6 +12,7 @@ import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity.Co
 import org.thoughtcrime.securesms.database.SignalDatabase.Companion.threads
 import org.thoughtcrime.securesms.databinding.PigeonFragmentHomePageBinding
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
+import org.thoughtcrime.securesms.groups.ui.creategroup.CreateGroupActivity
 import org.thoughtcrime.securesms.notifications.MarkReadReceiver
 import org.thoughtcrime.securesms.permissions.Permissions
 import pigeon.base.PigeonBaseFragment
@@ -34,9 +34,7 @@ class HomePageFragment : PigeonBaseFragment<PigeonFragmentHomePageBinding>() {
     binding?.run {
 
       newMessageButton.focusOnLeft()
-      newMessageButton.setOnClickListener {
-        handleNewMessage()
-      }
+      newMessageButton.setOnClickListener { handleNewMessage() }
 
       markAllReadButton.focusOnLeft()
       markAllReadButton.setOnClickListener {
@@ -46,6 +44,8 @@ class HomePageFragment : PigeonBaseFragment<PigeonFragmentHomePageBinding>() {
       settingsButton.setOnClickListener { handleAppSettings() }
 
       newGroupButton.focusOnLeft()
+      newGroupButton.setOnClickListener { goToGroupCreation() }
+
     }
   }
 
@@ -55,6 +55,10 @@ class HomePageFragment : PigeonBaseFragment<PigeonFragmentHomePageBinding>() {
 
   private fun handleAppSettings() {
     requireActivity().startActivityForResult(home(requireContext()), REQUEST_CONFIG_CHANGES)
+  }
+
+  private fun goToGroupCreation() {
+    requireActivity().startActivity(CreateGroupActivity.newIntent(requireContext()));
   }
 
   private fun handleMarkAllRead() {
