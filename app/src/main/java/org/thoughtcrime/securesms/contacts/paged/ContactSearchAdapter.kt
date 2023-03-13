@@ -29,7 +29,7 @@ import org.thoughtcrime.securesms.util.adapter.mapping.MappingModelList
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingViewHolder
 import org.thoughtcrime.securesms.util.adapter.mapping.PagingMappingAdapter
 import org.thoughtcrime.securesms.util.visible
-import pigeon.extensions.recyclerFocusOnLeft
+import pigeon.extensions.focusOnLeft
 
 /**
  * Default contact search adapter, using the models defined in `ContactSearchItems`
@@ -338,7 +338,7 @@ open class ContactSearchAdapter(
         ContactSearchConfiguration.NewRowMode.BLOCK -> R.string.contact_selection_list__unknown_contact_block
         ContactSearchConfiguration.NewRowMode.ADD_TO_GROUP -> R.string.contact_selection_list__unknown_contact_add_to_group
       })
-      itemView.recyclerFocusOnLeft(name, number)
+      itemView.focusOnLeft(name, number)
       number.text = model.data.query
 
       itemView.setOnClickListener {
@@ -436,7 +436,7 @@ open class ContactSearchAdapter(
         return
       }
 
-      itemView.recyclerFocusOnLeft(name, number)
+      itemView.focusOnLeft(name, number)
       name.setText(getRecipient(model))
       badge.setBadgeFromRecipient(getRecipient(model))
 
