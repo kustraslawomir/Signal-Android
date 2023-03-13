@@ -139,10 +139,10 @@
             tools:visibility="visible" />
 
         <LinearLayout
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:gravity="center_vertical"
             android:orientation="vertical">
 
@@ -200,7 +200,9 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="4dp"
         android:contentDescription="@string/conversation_list_item_view__contact_photo_image"
+        android:focusable="false"
         android:foreground="@drawable/contact_photo_background"
+        android:visibility="gone"
         app:layout_constraintStart_toEndOf="@id/conversation_list_item_check_container"
         app:layout_constraintTop_toTopOf="@id/conversation_list_item_name"
         app:layout_goneMarginStart="0dp"
@@ -213,6 +215,8 @@
         android:layout_marginStart="28dp"
         android:layout_marginTop="30dp"
         android:contentDescription="@string/ImageView__badge"
+        android:focusable="false"
+        android:visibility="gone"
         app:badge_size="medium"
         app:layout_constraintStart_toStartOf="@id/conversation_list_item_avatar"
         app:layout_constraintTop_toTopOf="@id/conversation_list_item_avatar" />
@@ -223,6 +227,7 @@
         android:layout_height="0dp"
         android:layout_marginStart="12dp"
         android:background="@drawable/unread_count_background_new"
+        android:focusable="false"
         android:includeFontPadding="false"
         android:minWidth="18dp"
         android:minHeight="18dp"

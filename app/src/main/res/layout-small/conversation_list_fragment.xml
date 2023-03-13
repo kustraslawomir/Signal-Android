@@ -15,6 +15,7 @@
         tools:listitem="@layout/conversation_list_item_view" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:focusable="false"
         android:id="@+id/constraint_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
