@@ -59,7 +59,7 @@ class CircularProgressMaterialButton @JvmOverloads constructor(
   }
 
   fun setupAnimation() {
-    this.focusOnLeft(materialButton)
+    this.focusOnLeft()
   }
 
   fun setText(@StringRes resId: Int) {

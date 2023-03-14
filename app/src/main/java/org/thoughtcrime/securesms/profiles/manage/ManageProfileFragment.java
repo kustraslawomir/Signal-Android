@@ -162,9 +162,9 @@ public class ManageProfileFragment extends LoggingFragment {
   }
 
   private void initPigeonCode(){
-    focusOnLeft(binding.manageProfileNameContainer, binding.manageProfileName, binding.manageProfileNameSubtitle);
-    focusOnLeft(binding.manageProfileUsernameContainer, binding.manageProfileUsername, binding.manageProfileUsernameSubtitle);
-    focusOnLeft(binding.manageProfileAboutContainer, binding.manageProfileAbout, binding.manageProfileAboutSubtitle);
+    focusOnLeft(binding.manageProfileNameContainer);
+    focusOnLeft(binding.manageProfileUsernameContainer);
+    focusOnLeft(binding.manageProfileAboutContainer);
   }
 
   @Override

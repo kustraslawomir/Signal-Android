@@ -44,7 +44,7 @@ class ContactSelectionListAdapter(
     }
 
     override fun bind(model: InviteToSignalModel) {
-      itemView.focusOnLeft(itemView.findViewById(R.id.invite_text))
+      itemView.focusOnLeft()
     }
   }
 
@@ -54,7 +54,7 @@ class ContactSelectionListAdapter(
     }
 
     override fun bind(model: NewGroupModel) {
-      itemView.focusOnLeft(itemView.findViewById(R.id.invite_text))
+      itemView.focusOnLeft()
     }
   }
 

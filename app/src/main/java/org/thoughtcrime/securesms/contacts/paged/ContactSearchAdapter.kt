@@ -338,7 +338,7 @@ open class ContactSearchAdapter(
         ContactSearchConfiguration.NewRowMode.BLOCK -> R.string.contact_selection_list__unknown_contact_block
         ContactSearchConfiguration.NewRowMode.ADD_TO_GROUP -> R.string.contact_selection_list__unknown_contact_add_to_group
       })
-      itemView.focusOnLeft(name, number)
+      itemView.focusOnLeft()
       number.text = model.data.query
 
       itemView.setOnClickListener {
@@ -436,7 +436,7 @@ open class ContactSearchAdapter(
         return
       }
 
-      itemView.focusOnLeft(name, number)
+      itemView.focusOnLeft()
       name.setText(getRecipient(model))
       badge.setBadgeFromRecipient(getRecipient(model))
 

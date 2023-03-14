@@ -34,6 +34,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import static pigeon.extensions.KotilinExtensionsKt.focusOnLeft;
 
 public class CreateGroupActivity extends ContactSelectionActivity {
 
@@ -43,6 +44,8 @@ public class CreateGroupActivity extends ContactSelectionActivity {
 
   private MaterialButton       skip;
   private FloatingActionButton next;
+
+  private MaterialButton       nextPigeon;
 
   public static Intent newIntent(@NonNull Context context) {
     Intent intent = new Intent(context, CreateGroupActivity.class);
@@ -68,10 +71,15 @@ public class CreateGroupActivity extends ContactSelectionActivity {
 
     skip = findViewById(R.id.skip);
     next = findViewById(R.id.next);
+    nextPigeon = findViewById(R.id.next_pigeon);
     extendSkip();
+
+    focusOnLeft(skip);
+    focusOnLeft(nextPigeon);
 
     skip.setOnClickListener(v -> handleNextPressed());
     next.setOnClickListener(v -> handleNextPressed());
+    nextPigeon.setOnClickListener(v -> handleNextPressed());
   }
 
   @Override
@@ -128,11 +136,13 @@ public class CreateGroupActivity extends ContactSelectionActivity {
   private void extendSkip() {
     skip.setVisibility(View.VISIBLE);
     next.setVisibility(View.GONE);
+    nextPigeon.setVisibility(View.GONE);
   }
 
   private void shrinkSkip() {
     skip.setVisibility(View.GONE);
     next.setVisibility(View.VISIBLE);
+    nextPigeon.setVisibility(View.VISIBLE);
   }
 
   private void handleNextPressed() {

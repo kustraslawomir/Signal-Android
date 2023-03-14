@@ -12,7 +12,7 @@ import androidx.core.view.ViewCompat
 import org.thoughtcrime.securesms.R
 
 
-fun View.focusOnLeft(vararg childs: TextView) {
+fun View.focusOnLeft() {
 
   if (!isSignalVersion()) {
     val focus = View.OnFocusChangeListener { _, hasFocus ->
@@ -28,16 +28,29 @@ fun View.focusOnLeft(vararg childs: TextView) {
         this.layoutParams = params
         this.requestLayout()
 
-        (this as? TextView)?.setupTextSize(hasFocus)
-        this.setupEllipsize(hasFocus)
-        childs.forEach {
-          (it as? TextView)?.setupTextSize(hasFocus)
+        this.getAllChildren().forEach {
+          if (it.tag != "header") {
+            (it as? TextView)?.setupTextSize(hasFocus)
+          }
           it.setupEllipsize(hasFocus)
         }
       }
     }
     this.onFocusChangeListener = focus
   }
+}
+
+fun View.getAllChildren(): List<View> {
+  val result = ArrayList<View>()
+  if (this !is ViewGroup) {
+    result.add(this)
+  } else {
+    for (index in 0 until this.childCount) {
+      val child = this.getChildAt(index)
+      result.addAll(child.getAllChildren())
+    }
+  }
+  return result
 }
 
 fun TextView.setupTextSize(hasFocus: Boolean) {

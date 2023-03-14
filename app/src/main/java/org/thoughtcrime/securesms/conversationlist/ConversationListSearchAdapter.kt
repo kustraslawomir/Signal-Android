@@ -83,7 +83,7 @@ class ConversationListSearchAdapter(
     itemView: View
   ) : MappingViewHolder<ThreadModel>(itemView) {
     override fun bind(model: ThreadModel) {
-      itemView.focusOnLeft(itemView.findViewById(R.id.conversation_list_item_name))
+      itemView.focusOnLeft()
       itemView.setOnClickListener {
         threadListener.onClicked(itemView, model.thread, false)
       }
@@ -107,7 +107,7 @@ class ConversationListSearchAdapter(
     itemView: View
   ) : MappingViewHolder<MessageModel>(itemView) {
     override fun bind(model: MessageModel) {
-      itemView.focusOnLeft(itemView.findViewById(R.id.conversation_list_item_name))
+      itemView.focusOnLeft()
       itemView.setOnClickListener {
         messageListener.onClicked(itemView, model.message, false)
       }

@@ -14,6 +14,44 @@
         android:visibility="gone"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:id="@+id/show_contacts_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/show_contacts_button"
+                style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:padding="10dp"
+                android:text="@string/contact_selection_list_fragment__show_contacts"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/show_contacts_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:lineSpacingMultiplier="1.3"
+                android:text="@string/contact_selection_list_fragment__signal_needs_access_to_your_contacts_in_order_to_display_them"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
         <FrameLayout
             android:id="@+id/chipGroupScrollContainer"
             android:layout_width="match_parent"
@@ -71,7 +109,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/header_container">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -109,67 +147,25 @@
             tools:visibility="visible" />
     </FrameLayout>
 
-    <LinearLayout
-        android:id="@+id/show_contacts_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="gone">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/show_contacts_button"
-            style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:padding="10dp"
-            android:text="@string/contact_selection_list_fragment__show_contacts"
-            android:textColor="@color/white" />
-
-        <TextView
-            android:id="@+id/show_contacts_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:lineSpacingMultiplier="1.3"
-            android:text="@string/contact_selection_list_fragment__signal_needs_access_to_your_contacts_in_order_to_display_them"
-            android:textSize="15sp" />
-
-    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/header_container"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/header_action"
-            style="@style/Widget.Signal.Button.Small"
+            style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
             android:ellipsize="end"
-            android:fontFamily="sans-serif-medium"
             android:maxLines="1"
-            android:textColor="@color/signal_text_primary"
             android:visibility="gone"
-            app:backgroundTint="@color/signal_colorSurface1"
-            app:iconTint="@color/signal_colorOnSurfaceVariant"
-            app:layout_constraintEnd_toEndOf="@id/swipe_refresh"
-            app:layout_constraintTop_toTopOf="@id/swipe_refresh"
             tools:visibility="visible" />
     </FrameLayout>
 

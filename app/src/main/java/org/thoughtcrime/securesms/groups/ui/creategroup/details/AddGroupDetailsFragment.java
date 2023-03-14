@@ -56,6 +56,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static pigeon.extensions.KotilinExtensionsKt.focusOnLeft;
+
 public class AddGroupDetailsFragment extends LoggingFragment {
 
   private static final int   AVATAR_PLACEHOLDER_INSET_DP = 18;
@@ -68,6 +70,7 @@ public class AddGroupDetailsFragment extends LoggingFragment {
   private EditText                       name;
   private Toolbar                        toolbar;
   private View                           disappearingMessagesRow;
+  private TextView                       header;
 
   @Override
   public void onAttach(@NonNull Context context) {
@@ -94,6 +97,7 @@ public class AddGroupDetailsFragment extends LoggingFragment {
     name                    = view.findViewById(R.id.name);
     toolbar                 = view.findViewById(R.id.toolbar);
     disappearingMessagesRow = view.findViewById(R.id.group_disappearing_messages_row);
+    header                  = view.findViewById(R.id.header);
 
     setCreateEnabled(false);
 
@@ -151,6 +155,8 @@ public class AddGroupDetailsFragment extends LoggingFragment {
     });
 
     name.requestFocus();
+    focusOnLeft(name);
+    focusOnLeft(create);
 
     getParentFragmentManager().setFragmentResultListener(AvatarPickerFragment.REQUEST_KEY_SELECT_AVATAR,
                                                          getViewLifecycleOwner(),
@@ -173,7 +179,7 @@ public class AddGroupDetailsFragment extends LoggingFragment {
       return;
     }
 
-    final Media result                                             = data.getParcelable(AvatarPickerFragment.SELECT_AVATAR_MEDIA);
+    final Media                                     result         = data.getParcelable(AvatarPickerFragment.SELECT_AVATAR_MEDIA);
     final DecryptableStreamUriLoader.DecryptableUri decryptableUri = new DecryptableStreamUriLoader.DecryptableUri(result.getUri());
 
     viewModel.setAvatarMedia(result);

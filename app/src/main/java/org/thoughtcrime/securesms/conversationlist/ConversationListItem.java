@@ -214,11 +214,7 @@ public final class ConversationListItem extends ConstraintLayout implements Bind
                    @NonNull ConversationSet selectedConversations)
   {
 
-    focusOnLeft(this,
-                 fromView,
-                 subjectView,
-                 archivedView,
-                 unreadIndicator);
+    focusOnLeft(this);
 
     bindThread(lifecycleOwner, thread, glideRequests, locale, typingThreads, selectedConversations, null);
   }
