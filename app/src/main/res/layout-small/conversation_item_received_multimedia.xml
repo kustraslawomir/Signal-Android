@@ -7,9 +7,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clipChildren="false"
-    android:background="@drawable/light_listview_background_selector"
+    android:background="@drawable/light_selectable_list_item_background"
     android:clipToPadding="false"
     android:focusable="true"
+
     android:nextFocusLeft="@+id/conversation_item"
     android:nextFocusRight="@+id/embedded_text_editor"
     android:orientation="vertical"
@@ -299,6 +300,7 @@
             android:background="@drawable/circle_tintable"
             android:backgroundTint="@color/signal_colorSurfaceVariant"
             android:padding="6dp"
+            android:focusable="false"
             android:tint="@color/signal_colorOnSurfaceVariant"
             app:srcCompat="@drawable/ic_replies_outline_20" />
 

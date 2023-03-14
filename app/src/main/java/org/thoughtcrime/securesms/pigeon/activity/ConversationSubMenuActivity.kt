@@ -42,6 +42,6 @@ class ConversationSubMenuActivity : Activity(), ConversationSubMenuAdapter.ItemC
     const val HANDLE_FORWARD = 200
     const val HANDLE_REACT = 300
     const val HANDLE_TAKE_BACK_MESSAGE = 400
-    const val HANDLE_SUBMENU = 1
+    const val HANDLE_SUBMENU = 1001
   }
 }

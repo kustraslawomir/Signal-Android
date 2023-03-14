@@ -10,7 +10,6 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:listSelector="@drawable/listview_background_selector"
         android:scrollbars="vertical"
         tools:listitem="@layout/conversation_list_item_view" />
 
