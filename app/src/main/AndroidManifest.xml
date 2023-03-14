@@ -947,7 +947,16 @@
         </intent-filter>
     </receiver>
 
-    <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
-</application>
+        <activity
+            android:name=".pigeon.activity.ConversationSubMenuActivity"
+            android:configChanges="touchscreen|keyboard|keyboardHidden|orientation|screenLayout|screenSize"
+            android:theme="@style/TextSecure.LightRegistrationTheme"
+            android:windowSoftInputMode="stateVisible" />
+
+
+    </application>
 </manifest>

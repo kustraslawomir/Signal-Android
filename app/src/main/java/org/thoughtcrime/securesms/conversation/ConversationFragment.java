@@ -39,7 +39,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
@@ -211,7 +210,9 @@ import java.util.concurrent.ExecutionException;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import kotlin.Unit;
+import org.thoughtcrime.securesms.pigeon.activity.ConversationSubMenuActivity;
 
+import static pigeon.extensions.BuildExtensionsKt.isPigeonVersion;
 import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
 
 @SuppressLint("StaticFieldLeak")
@@ -1580,6 +1581,11 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
 
     @Override
     public void onItemLongClick(View itemView, MultiselectPart item) {
+      if (isPigeonVersion()) {
+        Intent intent = new Intent(requireContext(), ConversationSubMenuActivity.class);
+        startActivityForResult(intent, ConversationSubMenuActivity.HANDLE_SUBMENU);
+        return;
+      }
 
       if (actionMode != null) return;
 
