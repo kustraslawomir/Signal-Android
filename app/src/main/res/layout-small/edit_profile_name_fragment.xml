@@ -4,6 +4,7 @@
     tools:viewBindingIgnore="true"
     style="@style/Mp02.Signal.Background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="org.thoughtcrime.securesms.profiles.manage.ManageProfileActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -28,7 +29,6 @@
         android:layout_gravity="center"
         android:hint="@string/EditProfileNameFragment_first_name"
         android:minHeight="56dp"
-        android:theme="@style/ThemeOverlay.Signal.EditProfileInput"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
@@ -36,8 +36,7 @@
             android:id="@+id/edit_profile_name_given_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="personGivenName"
-            android:inputType="textPersonName"
+            android:inputType="textNoSuggestions|textVisiblePassword|textCapWords"
             android:singleLine="true" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -59,8 +58,7 @@
             android:id="@+id/edit_profile_name_family_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="personFamilyName"
-            android:inputType="textPersonName"
+            android:inputType="textNoSuggestions|textVisiblePassword|textCapWords"
             android:singleLine="true" />
 
     </com.google.android.material.textfield.TextInputLayout>
