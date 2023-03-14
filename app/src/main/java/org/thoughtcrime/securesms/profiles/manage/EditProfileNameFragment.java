@@ -24,6 +24,7 @@ import org.signal.core.util.StringUtil;
 import org.thoughtcrime.securesms.util.ViewUtil;
 import org.thoughtcrime.securesms.util.text.AfterTextChanged;
 import org.thoughtcrime.securesms.util.views.CircularProgressMaterialButton;
+import static pigeon.extensions.BuildExtensionsKt.*;
 
 /**
  * Simple fragment to edit your profile name.
@@ -135,11 +136,13 @@ public class EditProfileNameFragment extends Fragment {
   private static void setEditTextEnabled(@NonNull EditText text, boolean enabled) {
     text.setEnabled(enabled);
     text.setFocusable(enabled);
-    if (enabled) {
-      text.setInputType(EditorInfo.TYPE_TEXT_VARIATION_PERSON_NAME);
-    } else {
-      text.clearFocus();
-      text.setInputType(EditorInfo.TYPE_NULL);
+    if (isSignalVersion()) {
+      if (enabled) {
+        text.setInputType(EditorInfo.TYPE_TEXT_VARIATION_PERSON_NAME);
+      } else {
+        text.clearFocus();
+        text.setInputType(EditorInfo.TYPE_NULL);
+      }
     }
   }
 }
