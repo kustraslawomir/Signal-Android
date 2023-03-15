@@ -390,7 +390,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     this.conversationRecipient.observeForever(this);
 
     setGutterSizes(messageRecord, groupThread);
-      setMessageShape(messageRecord, previousMessageRecord, nextMessageRecord, groupThread);
+    setMessageShape(messageRecord, previousMessageRecord, nextMessageRecord, groupThread);
     setMediaAttributes(messageRecord, previousMessageRecord, nextMessageRecord, groupThread, hasWallpaper, isMessageRequestAccepted, allowedToPlayInline);
     setBodyText(messageRecord, searchQuery, isMessageRequestAccepted);
     setBubbleState(messageRecord, messageRecord.getRecipient(), hasWallpaper, colorizer);
@@ -998,11 +998,12 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       String          deletedMessage = context.getString(messageRecord.isOutgoing() ? R.string.ConversationItem_you_deleted_this_message : R.string.ConversationItem_this_message_was_deleted);
       SpannableString italics        = new SpannableString(deletedMessage);
       italics.setSpan(new StyleSpan(android.graphics.Typeface.ITALIC), 0, deletedMessage.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-      italics.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.signal_text_primary)),
-                      0,
-                      deletedMessage.length(),
-                      Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
+      if (isSignalVersion()) {
+        italics.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.signal_text_primary)),
+                        0,
+                        deletedMessage.length(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+      }
       bodyText.setText(italics);
       bodyText.setVisibility(View.VISIBLE);
       bodyText.setOverflowText(null);

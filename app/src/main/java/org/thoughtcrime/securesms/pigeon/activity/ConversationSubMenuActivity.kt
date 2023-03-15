@@ -30,8 +30,9 @@ class ConversationSubMenuActivity : Activity(), ConversationSubMenuAdapter.ItemC
     val result = when (position) {
       0 -> HANDLE_REPLY_MESSAGE
       1 -> HANDLE_FORWARD
-      3 -> HANDLE_REACT
-      else -> HANDLE_TAKE_BACK_MESSAGE
+      2 -> HANDLE_REACT
+      3 -> HANDLE_TAKE_BACK_MESSAGE
+      else -> -1
     }
     setResult(result)
     finish()

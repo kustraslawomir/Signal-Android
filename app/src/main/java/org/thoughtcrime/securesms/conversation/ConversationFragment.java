@@ -281,6 +281,8 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
   private @Nullable ConversationData conversationData;
   private @Nullable ChatWallpaper    chatWallpaper;
 
+  private final DatabaseObserver.Observer threadDeletedObserver = this::onThreadDelete;
+
   public static void prepare(@NonNull Context context) {
     FrameLayout parent = new FrameLayout(context);
     parent.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
@@ -291,12 +293,12 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     CachedInflater.from(context).cacheUntilLimit(R.layout.conversation_item_sent_multimedia, parent, 10);
     CachedInflater.from(context).cacheUntilLimit(R.layout.conversation_item_update, parent, 5);
     CachedInflater.from(context).cacheUntilLimit(R.layout.cursor_adapter_header_footer_view, parent, 2);
-  }  private final DatabaseObserver.Observer threadDeletedObserver = this::onThreadDelete;
+  }
 
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
-    this.locale      = Locale.getDefault();
+    this.locale = Locale.getDefault();
     startupStopwatch = new Stopwatch("conversation-open");
     SignalLocalMetrics.ConversationOpen.start();
   }
@@ -796,13 +798,6 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     Set<MessageRecord> messageRecords = Stream.of(multiselectParts).map(MultiselectPart::getMessageRecord).collect(Collectors.toSet());
     buildRemoteDeleteConfirmationDialog(messageRecords).show();
   }
-  private void handleDeleteMessagesAsPigeonApplication(final Set<MultiselectPart> multiselectParts) {
-    Set<MessageRecord> messageRecords = Stream.of(multiselectParts).map(MultiselectPart::getMessageRecord).collect(Collectors.toSet());
-    AlertDialog dialog = buildRemoteDeleteConfirmationDialog(messageRecords).create();
-    dialog.show();
-    dialog.getButton(DialogInterface.BUTTON_POSITIVE)
-          .performClick();
-  }
 
   private void performSave(final MediaMmsMessageRecord message) {
     List<SaveAttachmentTask.Attachment> attachments = Stream.of(message.getSlideDeck().getSlides())
@@ -994,16 +989,6 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
                                                     lastSeenDecoration.setUnreadCount(unreadCount);
                                                     list.invalidateItemDecorations();
                                                   }));
-    }
-  }
-
-  public void scrollToBottom() {
-    if (getListLayoutManager().findFirstVisibleItemPosition() < SCROLL_ANIMATION_THRESHOLD) {
-      Log.d(TAG, "scrollToBottom: Smooth scrolling to bottom of screen.");
-      list.smoothScrollToPosition(0);
-    } else {
-      Log.d(TAG, "scrollToBottom: Scrolling to bottom of screen.");
-      list.scrollToPosition(0);
     }
   }
 
@@ -1294,20 +1279,44 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
       ApplicationDependencies.getJobManager().add(new DirectoryRefreshJob(false));
     }
 
-    if (selectedConversationMessage == null) {
+    Log.w("PIGEON", ""+requestCode +" | "+ resultCode);
+    if (selectedConversationMessage == null || requestCode != HANDLE_SUBMENU) {
+
       return;
     }
+
+
     if (resultCode == HANDLE_REPLY_MESSAGE) {
       handleReplyMessage(selectedConversationMessage);
     } else if (resultCode == HANDLE_FORWARD) {
       handleForwardMessageParts(selectedConversationMessage.getMultiselectCollection().toSet());
     } else if (resultCode == HANDLE_TAKE_BACK_MESSAGE) {
       handleDeleteMessagesAsPigeonApplication(selectedConversationMessage.getMultiselectCollection().toSet());
+    } else if (resultCode == HANDLE_REACT) {
+      //todo
     }
+  }
 
-    if (requestCode == HANDLE_SUBMENU) {
-      ((ConversationAdapter) list.getAdapter()).clearSelection();
+  public void scrollToBottom() {
+    if (getListLayoutManager().findFirstVisibleItemPosition() < SCROLL_ANIMATION_THRESHOLD) {
+      Log.d(TAG, "scrollToBottom: Smooth scrolling to bottom of screen.");
+      list.smoothScrollToPosition(0);
+    } else {
+      Log.d(TAG, "scrollToBottom: Scrolling to bottom of screen.");
+      list.scrollToPosition(0);
     }
+  }
+
+  private void handleDeleteMessagesAsPigeonApplication(final Set<MultiselectPart> multiselectParts) {
+    Set<MessageRecord> messageRecords = Stream.of(multiselectParts).map(MultiselectPart::getMessageRecord).collect(Collectors.toSet());
+    Runnable deleteForEveryone = () -> {
+      SignalExecutors.BOUNDED.execute(() -> {
+        for (MessageRecord message : messageRecords) {
+          MessageSender.sendRemoteDelete(message.getId());
+        }
+      });
+    };
+    deleteForEveryone.run();
   }
 
   @Override
@@ -1759,6 +1768,15 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
 
     @Override
     public void onItemLongClick(View itemView, MultiselectPart item) {
+
+      if (isPigeonVersion()) {
+        Intent intent = new Intent(requireContext(), ConversationSubMenuActivity.class);
+        startActivityForResult(intent, ConversationSubMenuActivity.HANDLE_SUBMENU);
+        selectedConversationMessage = item.getConversationMessage();
+        clearFocusedItem();
+        return;
+      }
+
       if (actionMode != null) return;
 
       MessageRecord messageRecord = item.getConversationMessage().getMessageRecord();
@@ -1782,14 +1800,6 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
         list.setLayoutFrozen(true);
 
         if (itemView instanceof ConversationItem) {
-
-          if (isPigeonVersion()) {
-            Intent intent = new Intent(requireContext(), ConversationSubMenuActivity.class);
-            startActivityForResult(intent, ConversationSubMenuActivity.HANDLE_SUBMENU);
-            selectedConversationMessage = item.getConversationMessage();
-            return;
-          }
-
           Uri audioUri = getAudioUriForLongClick(messageRecord);
           if (audioUri != null) {
             listener.onVoiceNotePause(audioUri);
@@ -2497,6 +2507,8 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
       listener.onMessageActionToolbarClosed();
     }
   }
+
+
 
 
 }
