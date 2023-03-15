@@ -18,6 +18,8 @@ import org.signal.core.util.concurrent.SimpleTask;
 import java.io.IOException;
 import java.util.Objects;
 
+import pigeon.extensions.BuildExtensionsKt;
+
 public final class RegistrationLockV2Dialog {
 
   private static final String TAG = Log.tag(RegistrationLockV2Dialog.class);
@@ -26,19 +28,22 @@ public final class RegistrationLockV2Dialog {
 
   public static void showEnableDialog(@NonNull Context context, @NonNull Runnable onSuccess) {
       AlertDialog dialog = new MaterialAlertDialogBuilder(context)
-          .setTitle(R.string.RegistrationLockV2Dialog_turn_on_registration_lock)
-          .setView(R.layout.registration_lock_v2_dialog)
+          // Too low space for Pigeon
+//          .setTitle(R.string.RegistrationLockV2Dialog_turn_on_registration_lock)
+//          .setView(R.layout.registration_lock_v2_dialog)
           .setMessage(R.string.RegistrationLockV2Dialog_if_you_forget_your_signal_pin_when_registering_again)
           .setNegativeButton(android.R.string.cancel, null)
           .setPositiveButton(R.string.RegistrationLockV2Dialog_turn_on, null)
           .create();
       dialog.setOnShowListener(d -> {
-        ProgressBar progress       = Objects.requireNonNull(dialog.findViewById(R.id.reglockv2_dialog_progress));
+        if (BuildExtensionsKt.isSignalVersion()) {
+          ProgressBar progress       = Objects.requireNonNull(dialog.findViewById(R.id.reglockv2_dialog_progress));
+        }
         View        positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
 
         positiveButton.setOnClickListener(v -> {
-          progress.setIndeterminate(true);
-          progress.setVisibility(View.VISIBLE);
+//          progress.setIndeterminate(true);
+//          progress.setVisibility(View.VISIBLE);
 
           SimpleTask.run(SignalExecutors.UNBOUNDED, () -> {
             try {
@@ -50,7 +55,7 @@ public final class RegistrationLockV2Dialog {
               return false;
             }
           }, (success) -> {
-            progress.setVisibility(View.GONE);
+//            progress.setVisibility(View.GONE);
 
             if (!success) {
               Toast.makeText(context, R.string.preferences_app_protection__failed_to_enable_registration_lock, Toast.LENGTH_LONG).show();
