@@ -18,7 +18,6 @@
     android:id="@android:id/text1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/listview_background_selector"
     android:drawableStart="?android:attr/listChoiceIndicatorSingle"
     android:drawableLeft="?android:attr/listChoiceIndicatorSingle"
     android:drawablePadding="20dp"
@@ -29,5 +28,4 @@
     android:paddingLeft="@dimen/abc_select_dialog_padding_start_material"
     android:paddingEnd="?attr/dialogPreferredPadding"
     android:paddingRight="?attr/dialogPreferredPadding"
-    android:textAppearance="?android:attr/textAppearanceMedium"
-    android:textColor="@color/white_focus" />
+    android:textAppearance="?android:attr/textAppearanceMedium" />
