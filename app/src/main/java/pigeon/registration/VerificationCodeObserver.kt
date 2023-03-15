@@ -33,7 +33,7 @@ class VerificationCodeObserver(private val mContext: Context, private val mHandl
                 val pattern = Pattern.compile("SIGNAL.+(\\d{3}-?\\d{3})")
                 val matcher = pattern.matcher(body)
                 if (matcher.find()) {
-                    code = matcher.group(1)
+                    code = matcher.group(1) ?: return
                     val result = code.replace("-".toRegex(), "")
                     mHandler.obtainMessage(mReceivedCode, result).sendToTarget()
                 }

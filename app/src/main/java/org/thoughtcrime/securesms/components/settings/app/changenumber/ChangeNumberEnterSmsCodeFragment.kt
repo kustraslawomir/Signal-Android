@@ -12,6 +12,7 @@ import org.thoughtcrime.securesms.components.settings.app.changenumber.ChangeNum
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.registration.fragments.BaseEnterSmsCodeFragment
 import org.thoughtcrime.securesms.util.navigation.safeNavigate
+import pigeon.extensions.isSignalVersion
 
 class ChangeNumberEnterSmsCodeFragment : BaseEnterSmsCodeFragment<ChangeNumberViewModel>(R.layout.fragment_change_number_enter_code) {
 
@@ -47,7 +48,11 @@ class ChangeNumberEnterSmsCodeFragment : BaseEnterSmsCodeFragment<ChangeNumberVi
   }
 
   override fun handleSuccessfulVerify() {
-    displaySuccess { changeNumberSuccess() }
+    if (isSignalVersion()) {
+      displaySuccess { changeNumberSuccess() }
+    } else {
+      displayPigeonSuccess { changeNumberSuccess() }
+    }
   }
 
   override fun navigateToCaptcha() {

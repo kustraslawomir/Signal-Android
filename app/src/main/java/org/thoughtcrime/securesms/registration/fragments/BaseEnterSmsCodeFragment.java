@@ -398,8 +398,8 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
     });
   }
 
-  protected void displayPigeonSuccess() {
-    SafeNavigation.safeNavigate(Navigation.findNavController(requireView()), EnterSmsCodeFragmentDirections.actionSuccessfulRegistration());
+  protected void displayPigeonSuccess(@NonNull Runnable runAfterAnimation) {
+    runAfterAnimation.run();
   }
 
   protected void handleRegistrationLock(long timeRemaining) {

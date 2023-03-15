@@ -45,7 +45,7 @@ public final class EnterSmsCodeFragment extends BaseEnterSmsCodeFragment<Registr
         displaySuccess(() -> SafeNavigation.safeNavigate(Navigation.findNavController(requireView()), EnterSmsCodeFragmentDirections.actionSuccessfulRegistration()));
       } else {
         Log.d(TAG, "Register success");
-        displayPigeonSuccess();
+        displayPigeonSuccess(() -> SafeNavigation.safeNavigate(Navigation.findNavController(requireView()), EnterSmsCodeFragmentDirections.actionSuccessfulRegistration()));
       }
     });
   }
