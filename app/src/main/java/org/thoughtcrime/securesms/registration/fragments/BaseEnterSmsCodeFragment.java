@@ -1,6 +1,9 @@
 package org.thoughtcrime.securesms.registration.fragments;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -39,6 +42,7 @@ import org.thoughtcrime.securesms.util.dualsim.MccMncProducer;
 import org.thoughtcrime.securesms.util.navigation.SafeNavigation;
 import org.whispersystems.signalservice.internal.push.LockedException;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -46,6 +50,7 @@ import java.util.List;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.Disposable;
 import pigeon.dialogs.EnterCodeOption;
+import pigeon.registration.VerificationCodeObserver;
 
 import static org.thoughtcrime.securesms.registration.fragments.RegistrationViewDelegate.setDebugLogSubmitMultiTapView;
 import static org.thoughtcrime.securesms.registration.fragments.RegistrationViewDelegate.showConfirmNumberDialogIfTranslated;
@@ -60,20 +65,22 @@ import static pigeon.extensions.KotilinExtensionsKt.focusOnRight;
  */
 public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistrationViewModel> extends LoggingFragment implements SignalStrengthPhoneStateListener.Callback {
 
-  private static final String                  TAG         = Log.tag(BaseEnterSmsCodeFragment.class);
-  protected final      LifecycleDisposable     disposables = new LifecycleDisposable();
-  private              ScrollView              scrollView;
-  private              TextView                subheader;
-  private              VerificationCodeView    verificationCodeView;
-  private              VerificationPinKeyboard keyboard;
-  private              ActionCountDownButton   callMeCountDown;
-  private              ActionCountDownButton   resendSmsCountDown;
-  private              MaterialButton          wrongNumber;
-  private              MaterialButton          bottomSheetButton;
-  private              MaterialButton          pigeonOptionButton;
-  private              EditText                pigeonCodeView;
-  private              boolean                 autoCompleting;
-  private              ViewModel               viewModel;
+  private static final int MSG_RECEIVED_CODE = 1001;
+  private static final String                   TAG         = Log.tag(BaseEnterSmsCodeFragment.class);
+  protected final      LifecycleDisposable      disposables = new LifecycleDisposable();
+  private              ScrollView               scrollView;
+  private              TextView                 subheader;
+  private              VerificationCodeView     verificationCodeView;
+  private              VerificationPinKeyboard  keyboard;
+  private              ActionCountDownButton    callMeCountDown;
+  private              ActionCountDownButton    resendSmsCountDown;
+  private              MaterialButton           wrongNumber;
+  private              MaterialButton           bottomSheetButton;
+  private              MaterialButton           pigeonOptionButton;
+  private              EditText                 pigeonCodeView;
+  private              boolean                  autoCompleting;
+  private              ViewModel                viewModel;
+  private              VerificationCodeObserver pigeonSmsObserver;
 
   private final EnterCodeOption dialog = new EnterCodeOption();
 
@@ -108,6 +115,7 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
     if (isSignalVersion()) {
       setOnCodeFullyEnteredListener(verificationCodeView);
     } else {
+      initPigeonObserver();
       focusOnRight(pigeonCodeView);
       setPigeonOnCodeFullyEnteredListener();
       pigeonOptionButton.setOnClickListener(
@@ -120,11 +128,11 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
               list.add(resendSmsCountDown);
             }
 
-            if (list.isEmpty()){
+            if (list.isEmpty()) {
               Toast.makeText(requireContext(), getString(R.string.no_options_available), Toast.LENGTH_SHORT).show();
               return;
             }
-            dialog.showWithButtons(getParentFragmentManager(),list);
+            dialog.showWithButtons(getParentFragmentManager(), list);
           }
       );
     }
@@ -215,6 +223,38 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
         resendSmsCountDown.setVisibility(View.INVISIBLE);
       }
     });
+  }
+
+  @Override public void onDestroyView() {
+    super.onDestroyView();
+      requireContext().getContentResolver().unregisterContentObserver(pigeonSmsObserver);
+      pigeonSmsObserver = null;
+  }
+
+  private void initPigeonObserver(){
+    CodeHandler handler = new CodeHandler(this);
+    pigeonSmsObserver = new VerificationCodeObserver(requireContext(), handler, MSG_RECEIVED_CODE);
+    Uri uri = Uri.parse("content://sms");
+    requireContext().getContentResolver().registerContentObserver(uri, true, pigeonSmsObserver);
+  }
+
+  private static class CodeHandler extends Handler {
+    private WeakReference<BaseEnterSmsCodeFragment> mRef;
+
+    CodeHandler(BaseEnterSmsCodeFragment fragment) {
+      mRef = new WeakReference<>(fragment);
+    }
+
+    @Override
+    public void handleMessage(Message msg) {
+      super.handleMessage(msg);
+      if (msg.what == MSG_RECEIVED_CODE) {
+        String code = (String) msg.obj;
+        EditText view = mRef.get().pigeonCodeView;
+        view.setText(code);
+        view.setSelection(code.length());
+      }
+    }
   }
 
   private void returnToPhoneEntryScreen() {
@@ -437,7 +477,7 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
           }
         }, i * 200L);
       }
-    } else  {
+    } else {
       autoCompleting = true;
       pigeonCodeView.setText(event.getCode());
       autoCompleting = false;

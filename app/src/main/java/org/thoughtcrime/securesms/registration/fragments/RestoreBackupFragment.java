@@ -57,6 +57,7 @@ import org.thoughtcrime.securesms.util.Util;
 import org.signal.core.util.concurrent.SimpleTask;
 import org.thoughtcrime.securesms.util.navigation.SafeNavigation;
 import org.thoughtcrime.securesms.util.views.CircularProgressMaterialButton;
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -97,16 +98,26 @@ public final class RestoreBackupFragment extends LoggingFragment {
 
     skipRestoreButton.setOnClickListener((v) -> {
                        Log.i(TAG, "User skipped backup restore.");
-                       SafeNavigation.safeNavigate(Navigation.findNavController(view),
-                                                   RestoreBackupFragmentDirections.actionSkip());
+                       if (isSignalVersion()) {
+                         SafeNavigation.safeNavigate(Navigation.findNavController(view),
+                                                     RestoreBackupFragmentDirections.actionSkip());
+                       } else {
+                         SafeNavigation.safeNavigate(Navigation.findNavController(view),
+                                                     RestoreBackupFragmentDirections.actionPigeonCodeFragment());
+                       }
                      });
 
     viewModel = new ViewModelProvider(requireActivity()).get(RegistrationViewModel.class);
 
     if (viewModel.isReregister()) {
       Log.i(TAG, "Skipping backup restore during re-register.");
-      SafeNavigation.safeNavigate(Navigation.findNavController(view),
-                                  RestoreBackupFragmentDirections.actionSkipNoReturn());
+      if (isSignalVersion()) {
+        SafeNavigation.safeNavigate(Navigation.findNavController(view),
+                                    RestoreBackupFragmentDirections.actionSkipNoReturn());
+      } else {
+        SafeNavigation.safeNavigate(Navigation.findNavController(view),
+                                    RestoreBackupFragmentDirections.actionPigeonCodeFragment());
+      }
       return;
     }
 
@@ -117,8 +128,13 @@ public final class RestoreBackupFragment extends LoggingFragment {
 
     if (SignalStore.settings().isBackupEnabled()) {
       Log.i(TAG, "Backups enabled, so a backup must have been previously restored.");
-      SafeNavigation.safeNavigate(Navigation.findNavController(view),
-                                  RestoreBackupFragmentDirections.actionSkipNoReturn());
+      if (isSignalVersion()) {
+        SafeNavigation.safeNavigate(Navigation.findNavController(view),
+                                    RestoreBackupFragmentDirections.actionSkipNoReturn());
+      } else {
+        SafeNavigation.safeNavigate(Navigation.findNavController(view),
+                                    RestoreBackupFragmentDirections.actionPigeonCodeFragment());
+      }
       return;
     }
 
@@ -134,8 +150,13 @@ public final class RestoreBackupFragment extends LoggingFragment {
       initializeBackupDetection(view);
     } else {
       Log.i(TAG, "Skipping backup detection. We don't have the permission.");
-      SafeNavigation.safeNavigate(Navigation.findNavController(view),
-                                  RestoreBackupFragmentDirections.actionSkipNoReturn());
+      if (isSignalVersion()) {
+        SafeNavigation.safeNavigate(Navigation.findNavController(view),
+                                    RestoreBackupFragmentDirections.actionSkipNoReturn());
+      } else {
+        SafeNavigation.safeNavigate(Navigation.findNavController(view),
+                                    RestoreBackupFragmentDirections.actionPigeonCodeFragment());
+      }
     }
   }
 
@@ -152,8 +173,13 @@ public final class RestoreBackupFragment extends LoggingFragment {
 
       enableBackups(requireContext());
 
-      SafeNavigation.safeNavigate(Navigation.findNavController(requireView()),
-                                  RestoreBackupFragmentDirections.actionBackupRestored());
+      if (isSignalVersion()) {
+        SafeNavigation.safeNavigate(Navigation.findNavController(requireView()),
+                                    RestoreBackupFragmentDirections.actionBackupRestored());
+      } else {
+        SafeNavigation.safeNavigate(Navigation.findNavController(requireView()),
+                                    RestoreBackupFragmentDirections.actionPigeonCodeFragment());
+      }
     }
   }
 
@@ -175,8 +201,13 @@ public final class RestoreBackupFragment extends LoggingFragment {
 
     if (backup == null) {
       Log.i(TAG, "Skipping backup detection. No backup found, or permission revoked since.");
-      SafeNavigation.safeNavigate(Navigation.findNavController(view),
-                                  RestoreBackupFragmentDirections.actionNoBackupFound());
+      if (isSignalVersion()) {
+        SafeNavigation.safeNavigate(Navigation.findNavController(view),
+                                    RestoreBackupFragmentDirections.actionNoBackupFound());
+      } else {
+        SafeNavigation.safeNavigate(Navigation.findNavController(view),
+                                    RestoreBackupFragmentDirections.actionPigeonCodeFragment());
+      }
     } else {
       restoreBackupSize.setText(getString(R.string.RegistrationActivity_backup_size_s, Util.getPrettyFileSize(backup.getSize())));
       restoreBackupTime.setText(getString(R.string.RegistrationActivity_backup_timestamp_s, DateUtils.getExtendedRelativeTimeSpanString(requireContext(), Locale.getDefault(), backup.getTimestamp())));
@@ -374,8 +405,13 @@ public final class RestoreBackupFragment extends LoggingFragment {
     if (BackupUtil.isUserSelectionRequired(requireContext()) && !BackupUtil.canUserAccessBackupDirectory(requireContext())) {
       displayConfirmationDialog(requireContext());
     } else {
-      SafeNavigation.safeNavigate(Navigation.findNavController(requireView()),
-                                  RestoreBackupFragmentDirections.actionBackupRestored());
+      if (isSignalVersion()) {
+        SafeNavigation.safeNavigate(Navigation.findNavController(requireView()),
+                                    RestoreBackupFragmentDirections.actionBackupRestored());
+      } else {
+        SafeNavigation.safeNavigate(Navigation.findNavController(requireView()),
+                                    RestoreBackupFragmentDirections.actionPigeonCodeFragment());
+      }
     }
   }
 
@@ -405,8 +441,13 @@ public final class RestoreBackupFragment extends LoggingFragment {
                      BackupPassphrase.set(context, null);
                      dialog.dismiss();
 
-                     SafeNavigation.safeNavigate(Navigation.findNavController(requireView()),
-                                                 RestoreBackupFragmentDirections.actionBackupRestored());
+                     if (isSignalVersion()) {
+                       SafeNavigation.safeNavigate(Navigation.findNavController(requireView()),
+                                                   RestoreBackupFragmentDirections.actionBackupRestored());
+                     }  else {
+                       SafeNavigation.safeNavigate(Navigation.findNavController(requireView()),
+                                                   RestoreBackupFragmentDirections.actionPigeonCodeFragment());
+                     }
                    })
                    .setCancelable(false)
                    .show();
