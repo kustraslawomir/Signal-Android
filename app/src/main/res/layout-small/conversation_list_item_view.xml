@@ -16,8 +16,10 @@
     <TextView
         android:id="@+id/conversation_list_item_unread_indicator"
         style="@style/Signal.Text.Caption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        android:focusable="false"
         android:background="@drawable/unread_count_background"
         android:gravity="center"
         android:minWidth="26sp"
@@ -84,8 +86,9 @@
 
         <org.thoughtcrime.securesms.components.AlertView
             android:id="@+id/conversation_list_item_alert"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:focusable="false"
             android:layout_below="@id/conversation_list_item_name"
             android:layout_alignParentStart="true"
             android:layout_marginEnd="2dp"
@@ -96,8 +99,10 @@
 
         <FrameLayout
             android:id="@+id/conversation_list_item_summary_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            android:focusable="false"
             android:layout_below="@id/conversation_list_item_name"
             android:layout_toStartOf="@+id/conversation_list_item_status_container"
             android:layout_toEndOf="@id/conversation_list_item_alert"
@@ -126,8 +131,8 @@
 
         <org.thoughtcrime.securesms.components.ThumbnailView
             android:id="@+id/conversation_list_item_thumbnail"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_alignParentTop="true"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="5dp"
@@ -136,6 +141,7 @@
             android:layout_toStartOf="@+id/conversation_list_item_date"
             android:contentDescription="@string/conversation_activity__attachment_thumbnail"
             android:visibility="gone"
+            android:focusable="false"
             tools:visibility="visible" />
 
         <LinearLayout
@@ -177,8 +183,8 @@
         <TextView
             android:id="@+id/conversation_list_item_archived"
             style="@style/Signal.Text.Caption"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_below="@id/conversation_list_item_date"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="5dp"
@@ -187,6 +193,8 @@
             android:paddingTop="2dp"
             android:paddingEnd="6dp"
             android:paddingBottom="2dp"
+            android:visibility="gone"
+            android:focusable="false"
             android:text="@string/conversation_list_item_view__archived"
             android:textColor="@color/core_white"
             android:textSize="14sp" />
