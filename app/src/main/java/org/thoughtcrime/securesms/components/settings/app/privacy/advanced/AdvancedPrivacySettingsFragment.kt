@@ -29,6 +29,7 @@ import org.thoughtcrime.securesms.util.CommunicationActions
 import org.thoughtcrime.securesms.util.SpanUtil
 import org.thoughtcrime.securesms.util.ViewUtil
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingAdapter
+import pigeon.extensions.isSignalVersion
 
 class AdvancedPrivacySettingsFragment : DSLSettingsFragment(R.string.preferences__advanced) {
 
@@ -120,21 +121,24 @@ class AdvancedPrivacySettingsFragment : DSLSettingsFragment(R.string.preferences
               android.R.string.ok
             ) { _, _ -> viewModel.disablePushMessages() }
           }
+          if (isSignalVersion()) {
+            val icon: Drawable = requireNotNull(ContextCompat.getDrawable(builder.context, R.drawable.symbol_info_24))
+            icon.setBounds(0, 0, ViewUtil.dpToPx(32), ViewUtil.dpToPx(32))
 
-          val icon: Drawable = requireNotNull(ContextCompat.getDrawable(builder.context, R.drawable.symbol_info_24))
-          icon.setBounds(0, 0, ViewUtil.dpToPx(32), ViewUtil.dpToPx(32))
+            val title = TextView(builder.context)
+            val padding = ViewUtil.dpToPx(16)
+            title.setText(R.string.ApplicationPreferencesActivity_disable_signal_messages_and_calls)
+            title.setPadding(padding, padding, padding, padding)
+            title.compoundDrawablePadding = padding / 2
+            TextViewCompat.setTextAppearance(title, R.style.TextAppearance_Signal_Title2_MaterialDialog)
+            TextViewCompat.setCompoundDrawablesRelative(title, icon, null, null, null)
+            builder
+              .setCustomTitle(title)
+              .show()
+          } else {
+            builder.show()
+          }
 
-          val title = TextView(builder.context)
-          val padding = ViewUtil.dpToPx(16)
-          title.setText(R.string.ApplicationPreferencesActivity_disable_signal_messages_and_calls)
-          title.setPadding(padding, padding, padding, padding)
-          title.compoundDrawablePadding = padding / 2
-          TextViewCompat.setTextAppearance(title, R.style.TextAppearance_Signal_Title2_MaterialDialog)
-          TextViewCompat.setCompoundDrawablesRelative(title, icon, null, null, null)
-
-          builder
-            .setCustomTitle(title)
-            .show()
         } else {
           startActivity(RegistrationNavigationActivity.newIntentForReRegistration(requireContext()))
         }
