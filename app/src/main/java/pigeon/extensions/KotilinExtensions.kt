@@ -94,44 +94,16 @@ fun View.setupEllipsize(hasFocus: Boolean) {
   }
 }
 
-fun View.focusOnRight(vararg childs: View) {
+fun View.focusOnRight() {
 
   if (!isSignalVersion()) {
-    val BUTTON_SCALE_FOCUS = 1.5f
-    val BUTTON_SCALE_NON_FOCUS = 1.0f
-
     val focus = View.OnFocusChangeListener { _, hasFocus ->
-      val scale: Float = if (hasFocus) {
-        BUTTON_SCALE_FOCUS
-      } else {
-        BUTTON_SCALE_NON_FOCUS
-      }
-
-      this.post {
-        this.setupEllipsize(hasFocus)
-        childs.forEach {
-          it.setupEllipsize(hasFocus)
-          if (it.tag != "header") {
-            val params = it.layoutParams as ViewGroup.MarginLayoutParams
-
-            if (hasFocus) {
-              params.width = 210
-              params.marginStart = 60
-            } else {
-              params.width = 310
-              params.marginStart = 0
-            }
-
-            it.layoutParams = params
-            it.requestLayout()
-            ViewCompat.animate(it)
-              .scaleX(scale)
-              .scaleY(scale)
-              .start()
-          }
+      this.getAllChildren().forEach {
+        if (it.tag != "header") {
+          (it as? TextView)?.setupTextSize(hasFocus)
         }
+        it.setupEllipsize(hasFocus)
       }
-
     }
     this.onFocusChangeListener = focus
   }

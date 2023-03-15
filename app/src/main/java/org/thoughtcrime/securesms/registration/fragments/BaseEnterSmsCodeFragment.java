@@ -108,7 +108,7 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
     if (isSignalVersion()) {
       setOnCodeFullyEnteredListener(verificationCodeView);
     } else {
-      focusOnRight(pigeonCodeView, view.findViewById(R.id.verify_header));
+      focusOnRight(pigeonCodeView);
       setPigeonOnCodeFullyEnteredListener();
       pigeonOptionButton.setOnClickListener(
           v -> {

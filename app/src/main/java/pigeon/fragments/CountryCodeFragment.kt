@@ -52,7 +52,7 @@ class CountryCodeFragment : LoggingFragment(), RegistrationNumberInputController
 
       nextButton.setOnClickListener { v: View -> handleRegister(v) }
       if (!isSignalVersion()) {
-        countryCodeLayout.focusOnRight(verifyHeader, countryCode.editText!!)
+        countryCodeLayout.focusOnRight()
         countryCodeLayout.requestFocus()
         val arguments = CountryPickerFragmentArgs.Builder().setResultKey(NUMBER_COUNTRY_SELECT).build()
         countryCodeLayout.setOnClickListener { v: View? -> findNavController(v!!).safeNavigate(R.id.action_pickCountry, arguments.toBundle()) }
