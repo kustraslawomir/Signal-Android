@@ -63,6 +63,7 @@ import org.thoughtcrime.securesms.util.fragments.findListener
 import org.thoughtcrime.securesms.util.fragments.requireListener
 import org.thoughtcrime.securesms.util.views.SimpleProgressDialog
 import org.thoughtcrime.securesms.util.visible
+import pigeon.extensions.isPigeonVersion
 
 /**
  * Allows selection and optional sending to one or more users.
@@ -199,6 +200,11 @@ class MultiselectForwardFragment :
     container.addView(bottomBarAndSpacer)
 
     contactSearchMediator.getSelectionState().observe(viewLifecycleOwner) { contactSelection ->
+      if (contactSelection.isNotEmpty() && isPigeonVersion()) {
+        onSend(sendButton)
+        return@observe
+      }
+
       if (contactSelection.isNotEmpty() && args.selectSingleRecipient) {
         onSend(sendButton)
         return@observe
