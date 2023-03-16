@@ -354,15 +354,6 @@ class NotificationsSettingsFragment : DSLSettingsFragment(R.string.preferences__
         }
       )
 
-      sectionHeaderPref(R.string.NotificationsSettingsFragment__notification_profiles)
-
-      clickPref(
-        title = DSLSettingsText.from(R.string.NotificationsSettingsFragment__profiles),
-        summary = DSLSettingsText.from(R.string.NotificationsSettingsFragment__create_a_profile_to_receive_notifications_only_from_people_and_groups_you_choose),
-        onClick = {
-          findNavController().safeNavigate(R.id.action_notificationsSettingsFragment_to_notificationProfilesFragment)
-        }
-      )
     }
   }
 
