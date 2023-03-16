@@ -228,7 +228,7 @@
 
         <item name="colorControlNormal">@color/core_grey_90</item>
 
-        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Signal.MaterialAlertDialog</item>
+        <item name="materialAlertDialogTheme">@style/Pigeon.MaterialAlertDialog</item>
         <item name="materialTimePickerTheme">@style/Signal.ThemeOverlay.TimePicker</item>
         <item name="materialTimePickerStyle">@style/Signal.Widget.TimePicker</item>
 
@@ -318,7 +318,7 @@
 
         <item name="colorControlNormal">@color/core_white</item>
 
-        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Signal.MaterialAlertDialog</item>
+        <item name="materialAlertDialogTheme">@style/Pigeon.MaterialAlertDialog</item>
         <item name="materialTimePickerTheme">@style/Signal.ThemeOverlay.TimePicker</item>
         <item name="materialTimePickerStyle">@style/Signal.Widget.TimePicker</item>
 

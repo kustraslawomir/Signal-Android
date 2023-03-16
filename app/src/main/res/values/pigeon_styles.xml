@@ -14,7 +14,7 @@
         <item name="android:windowCloseOnTouchOutside">false</item>
     </style>
 
-    <style name="Mp02.Signal.ListTextView" >
+    <style name="Mp02.Signal.ListTextView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_vertical</item>
@@ -136,6 +136,7 @@
         <item name="android:clickable">true</item>
         <item name="android:defaultFocusHighlightEnabled" tools:ignore="NewApi">true</item>
     </style>
+
     <style name="Mp02.Signal.Text.MaterialTextButtonFocusable" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textSize">24sp</item>
         <item name="android:includeFontPadding">false</item>
@@ -171,6 +172,32 @@
         <item name="android:imeOptions">flagNoEnterAction</item>
         <item name="android:inputType">textAutoCorrect|textCapSentences|textMultiLine</item>
         <item name="android:contentDescription">@string/conversation_activity__compose_description</item>
+    </style>
+
+    <style name="PigeonAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="android:layout">@layout/abc_alert_dialog_material</item>
+        <item name="listLayout">@layout/abc_select_dialog_material</item>
+        <item name="listItemLayout">@layout/select_dialog_item_material</item>
+        <item name="multiChoiceItemLayout">@layout/select_dialog_multichoice_material</item>
+        <item name="singleChoiceItemLayout">@layout/pigeon_select_dialog_singlechoice_material</item>
+        <item name="buttonIconDimen">@dimen/abc_alert_dialog_button_dimen</item>
+    </style>
+
+    <style name="Pigeon.MaterialAlertDialog" parent="@style/ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="alertDialogStyle">@style/Pigeon.MaterialAlertDialogStyle</item>
+        <item name="android:dialogCornerRadius" tools:ignore="NewApi">28dp</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.Signal.Title.Text</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/MaterialAlertDialog.Signal.Body.Text</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Signal.Widget.Button.Dialog</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Signal.Widget.Button.Dialog</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Signal.Widget.Button.Dialog</item>
+        <item name="textColorAlertDialogListItem">@color/signal_colorOnSurfaceVariant</item>
+        <item name="android:checkedTextViewStyle">@style/Widget.Signal.CheckedTextView</item>
+    </style>
+
+    <style name="Pigeon.MaterialAlertDialogStyle" parent="MaterialAlertDialog.Material3">
+        <item name="singleChoiceItemLayout">@layout/pigeon_select_dialog_singlechoice_material</item>
+        <item name="shapeAppearance">@style/Signal.ShapeOverlay.Rounded</item>
     </style>
 
 </resources>
