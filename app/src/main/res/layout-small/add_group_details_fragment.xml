@@ -5,7 +5,8 @@
     style="@style/Mp02.Signal.Background"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="org.thoughtcrime.securesms.groups.ui.creategroup.details.AddGroupDetailsFragment">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -162,15 +163,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <org.thoughtcrime.securesms.components.emoji.EmojiEditText
-        style="@style/Mp02.Signal.Text.CommonTextButton"
         android:id="@+id/name"
+        style="@style/Mp02.Signal.Text.CommonTextButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@null"
+        android:textSize="24sp"
         android:inputType="text"
         android:maxLines="1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/header"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/header" />
 
     <org.thoughtcrime.securesms.util.views.CircularProgressMaterialButton
@@ -179,6 +181,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAllCaps="false"
+        android:layout_marginTop="5dp"
         android:layout_marginStart="@dimen/pigeon_start_margin"
         app:circularProgressMaterialButton__label="@string/AddGroupDetailsFragment__create_group"
         app:layout_constraintStart_toStartOf="parent"
