@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
         android:layout_marginTop="@dimen/pigeon_small_margin"
-        android:nextFocusUp="@id/new_group_button"
+        android:nextFocusDown="@id/new_group_button"
+        android:nextFocusUp="@id/new_message_button"
         android:text="@string/Pigeon_HomePage_new_message" />
 
     <TextView
