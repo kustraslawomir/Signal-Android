@@ -1,11 +1,14 @@
 package pigeon.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import org.greenrobot.eventbus.EventBus
 import org.signal.core.util.concurrent.SignalExecutors
+import org.thoughtcrime.securesms.MainActivity
 import org.thoughtcrime.securesms.MainNavigator.REQUEST_CONFIG_CHANGES
 import org.thoughtcrime.securesms.NewConversationActivity
 import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity.Companion.home
@@ -20,12 +23,19 @@ import pigeon.extensions.focusOnLeft
 
 class HomePageFragment : PigeonBaseFragment<PigeonFragmentHomePageBinding>() {
 
+  private lateinit var mainActivity: MainActivity
+
   override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
     Permissions.onRequestPermissionsResult(this, requestCode, permissions, grantResults)
   }
 
   override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): PigeonFragmentHomePageBinding {
     return PigeonFragmentHomePageBinding.inflate(inflater, container, false)
+  }
+
+  override fun onAttach(context: Context) {
+    super.onAttach(context)
+    mainActivity = context as MainActivity
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,6 +56,9 @@ class HomePageFragment : PigeonBaseFragment<PigeonFragmentHomePageBinding>() {
       newGroupButton.focusOnLeft()
       newGroupButton.setOnClickListener { goToGroupCreation() }
 
+      searchButton.focusOnLeft()
+      searchButton.setOnClickListener {
+      }
     }
   }
 
