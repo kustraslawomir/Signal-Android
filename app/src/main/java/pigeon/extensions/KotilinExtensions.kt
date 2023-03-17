@@ -2,13 +2,11 @@ package pigeon.extensions
 
 import android.animation.ValueAnimator
 import android.text.TextUtils
-import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import org.thoughtcrime.securesms.R
 
 
@@ -109,47 +107,45 @@ fun View.focusOnRight() {
   }
 }
 
-fun TextView.setBigText() {
-  this.setTextSize(TypedValue.COMPLEX_UNIT_SP, 36f)
-}
-
 fun EditText.animateGroup(parent: TextView) {
   if (!isSignalVersion()) {
-    val BUTTON_SCALE_FOCUS = 1.3f
-    val BUTTON_SCALE_NON_FOCUS = 1.0f
-    val BUTTON_TRANSLATION_X_FOCUS = 12.0f
-    val BUTTON_TRANSLATION_X_NON_FOCUS = 1.0f
-    val BUTTON_TRANSLATION_X_FOCUS_PARENT = -30.0f
-    val BUTTON_TRANSLATION_X_NON_FOCUS_PARENT = 1.0f
 
     val focus = View.OnFocusChangeListener { _, hasFocus ->
-      val scale: Float = if (hasFocus) {
-        BUTTON_SCALE_FOCUS
-      } else {
-        BUTTON_SCALE_NON_FOCUS
+      this.post {
+        val params = this.layoutParams as ViewGroup.MarginLayoutParams
+
+        if (hasFocus) {
+          params.marginStart = 5
+        } else {
+          params.marginStart = 30
+        }
+
+        this.layoutParams = params
+        this.requestLayout()
       }
 
-      val translationX: Float = if (hasFocus) {
-        BUTTON_TRANSLATION_X_FOCUS
-      } else {
-        BUTTON_TRANSLATION_X_NON_FOCUS
+      parent.post {
+        val params = parent.layoutParams as ViewGroup.MarginLayoutParams
+
+        if (hasFocus) {
+          params.marginStart = 5
+        } else {
+          params.marginStart = 30
+        }
+
+        parent.layoutParams = params
+        parent.requestLayout()
       }
 
-      val translationParentX: Float = if (hasFocus) {
-        BUTTON_TRANSLATION_X_FOCUS_PARENT
-      } else {
-        BUTTON_TRANSLATION_X_NON_FOCUS_PARENT
+      if (this.tag != "header") {
+        (this as? TextView)?.setupTextSize(hasFocus)
       }
+        this.setupEllipsize(hasFocus)
 
-      ViewCompat.animate(this)
-        .scaleX(scale)
-        .scaleY(scale)
-        .translationX(translationX)
-        .start()
-
-      ViewCompat.animate(parent)
-        .translationX(translationParentX)
-        .start()
+      if (parent.tag != "header") {
+        (parent as? TextView)?.setupTextSize(hasFocus)
+      }
+      parent.setupEllipsize(hasFocus)
 
       val parentColor = if (hasFocus) {
         R.color.white_focus

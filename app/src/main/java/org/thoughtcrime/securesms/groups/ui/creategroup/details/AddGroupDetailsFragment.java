@@ -56,7 +56,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static pigeon.extensions.KotilinExtensionsKt.focusOnLeft;
+import static pigeon.extensions.KotilinExtensionsKt.*;
 
 public class AddGroupDetailsFragment extends LoggingFragment {
 
@@ -155,7 +155,7 @@ public class AddGroupDetailsFragment extends LoggingFragment {
     });
 
     name.requestFocus();
-    focusOnLeft(name);
+    animateGroup(name, header);
     focusOnLeft(create);
 
     getParentFragmentManager().setFragmentResultListener(AvatarPickerFragment.REQUEST_KEY_SELECT_AVATAR,

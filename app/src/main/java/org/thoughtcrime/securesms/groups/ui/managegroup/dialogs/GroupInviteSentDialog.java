@@ -16,6 +16,8 @@ import org.thoughtcrime.securesms.recipients.Recipient;
 import java.util.ArrayList;
 import java.util.List;
 
+import pigeon.extensions.BuildExtensionsKt;
+
 public final class GroupInviteSentDialog {
 
   private GroupInviteSentDialog() {
@@ -36,12 +38,12 @@ public final class GroupInviteSentDialog {
     if (size == 1) {
       builder.setMessage(context.getString(R.string.GroupManagement_invite_single_user, recipients.get(0).getDisplayName(context)));
     } else {
-      builder.setMessage(R.string.GroupManagement_invite_multiple_users)
-             .setView(R.layout.dialog_multiple_group_invites_sent);
+      builder.setMessage(R.string.GroupManagement_invite_multiple_users);
+//             .setView(R.layout.dialog_multiple_group_invites_sent);
     }
 
     Dialog dialog = builder.show();
-    if (size > 1) {
+    if (size > 1 && BuildExtensionsKt.isSignalVersion()) {
       GroupMemberListView invitees = dialog.findViewById(R.id.list_invitees);
 
       invitees.initializeAdapter(lifecycleOwner);
