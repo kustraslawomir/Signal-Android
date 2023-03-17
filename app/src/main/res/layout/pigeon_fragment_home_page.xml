@@ -23,10 +23,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
         android:layout_marginTop="@dimen/pigeon_small_margin"
-        android:nextFocusDown="@id/new_message_button"
+        android:nextFocusDown="@id/mark_all_read_button"
         android:text="@string/Pigeon_HomePage_new_group" />
 
     <TextView
+        android:nextFocusDown="@id/settings_button"
         android:id="@+id/mark_all_read_button"
         style="@style/Mp02.Signal.Text.CommonTextButton"
         android:layout_width="match_parent"
@@ -37,10 +38,19 @@
 
     <TextView
         android:id="@+id/settings_button"
+        android:nextFocusDown="@id/search_button"
         style="@style/Mp02.Signal.Text.CommonTextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
         android:layout_marginTop="@dimen/pigeon_small_margin"
         android:text="@string/Pigeon_HomePage_settings" />
+    <TextView
+        android:id="@+id/search_button"
+        style="@style/Mp02.Signal.Text.CommonTextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/pigeon_start_margin"
+        android:layout_marginTop="@dimen/pigeon_small_margin"
+        android:text="@string/Pigeon_HomePage_search" />
 </LinearLayout>
