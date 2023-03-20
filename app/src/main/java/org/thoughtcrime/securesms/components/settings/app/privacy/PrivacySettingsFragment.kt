@@ -531,19 +531,6 @@ class PrivacySettingsFragment : DSLSettingsFragment(R.string.preferences__privac
         }
       )
 
-      switchPref(
-        title = DSLSettingsText.from(R.string.preferences__incognito_keyboard),
-        summary = DSLSettingsText.from(R.string.preferences__request_keyboard_to_disable),
-        isChecked = state.incognitoKeyboard,
-        onClick = {
-          viewModel.setIncognitoKeyboard(!state.incognitoKeyboard)
-        }
-      )
-
-      textPref(
-        summary = DSLSettingsText.from(incognitoSummary)
-      )
-
       clickPref(
         title = DSLSettingsText.from(R.string.preferences__advanced),
         summary = DSLSettingsText.from(R.string.PrivacySettingsFragment__signal_message_and_calls),
