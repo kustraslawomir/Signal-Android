@@ -6,16 +6,20 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 
+import org.signal.core.util.logging.Log;
 import org.thoughtcrime.securesms.components.voice.VoiceNoteMediaController;
 import org.thoughtcrime.securesms.components.voice.VoiceNoteMediaControllerOwner;
 import org.thoughtcrime.securesms.devicetransfer.olddevice.OldDeviceTransferLockedDialog;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
+import org.thoughtcrime.securesms.main.MainActivityListHostFragment;
 import org.thoughtcrime.securesms.stories.Stories;
 import org.thoughtcrime.securesms.stories.tabs.ConversationListTabRepository;
 import org.thoughtcrime.securesms.stories.tabs.ConversationListTabsViewModel;
@@ -27,6 +31,8 @@ import org.thoughtcrime.securesms.util.DynamicTheme;
 import org.thoughtcrime.securesms.util.SplashScreenUtil;
 import org.thoughtcrime.securesms.util.WindowUtil;
 
+import static androidx.navigation.Navigation.findNavController;
+import static pigeon.extensions.BuildExtensionsKt.isPigeonVersion;
 import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
 
 public class MainActivity extends PassphraseRequiredActivity implements VoiceNoteMediaControllerOwner {
@@ -47,6 +53,12 @@ public class MainActivity extends PassphraseRequiredActivity implements VoiceNot
                     Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
     return intent;
+  }
+
+  @Override
+  protected void onPreCreate() {
+    super.onPreCreate();
+    dynamicTheme.onCreate(this);
   }
 
   @Override
@@ -72,27 +84,6 @@ public class MainActivity extends PassphraseRequiredActivity implements VoiceNot
   }
 
   @Override
-  public Intent getIntent() {
-    return super.getIntent().setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                                      Intent.FLAG_ACTIVITY_NEW_TASK |
-                                      Intent.FLAG_ACTIVITY_SINGLE_TOP);
-  }
-
-  @Override
-  protected void onNewIntent(Intent intent) {
-    super.onNewIntent(intent);
-    handleGroupLinkInIntent(intent);
-    handleProxyInIntent(intent);
-    handleSignalMeIntent(intent);
-  }
-
-  @Override
-  protected void onPreCreate() {
-    super.onPreCreate();
-    dynamicTheme.onCreate(this);
-  }
-
-  @Override
   protected void onResume() {
     super.onResume();
     dynamicTheme.onResume(this);
@@ -103,24 +94,31 @@ public class MainActivity extends PassphraseRequiredActivity implements VoiceNot
     updateTabVisibility();
   }
 
-  @Override
-  protected void onStop() {
-    super.onStop();
-    SplashScreenUtil.setSplashScreenThemeIfNecessary(this, SignalStore.settings().getTheme());
-  }
-
-  @Override
-  public void onBackPressed() {
-    if (!navigator.onBackPressed()) {
-      super.onBackPressed();
+  private void handleGroupLinkInIntent(Intent intent) {
+    Uri data = intent.getData();
+    if (data != null) {
+      CommunicationActions.handlePotentialGroupLinkUrl(this, data.toString());
     }
   }
 
   @Override
-  protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    if (requestCode == MainNavigator.REQUEST_CONFIG_CHANGES && resultCode == RESULT_CONFIG_CHANGED) {
-      recreate();
+  public Intent getIntent() {
+    return super.getIntent().setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                                      Intent.FLAG_ACTIVITY_NEW_TASK |
+                                      Intent.FLAG_ACTIVITY_SINGLE_TOP);
+  }
+
+  private void handleProxyInIntent(Intent intent) {
+    Uri data = intent.getData();
+    if (data != null) {
+      CommunicationActions.handlePotentialProxyLinkUrl(this, data.toString());
+    }
+  }
+
+  private void handleSignalMeIntent(Intent intent) {
+    Uri data = intent.getData();
+    if (data != null) {
+      CommunicationActions.handlePotentialSignalMeUrl(this, data.toString());
     }
   }
 
@@ -137,29 +135,62 @@ public class MainActivity extends PassphraseRequiredActivity implements VoiceNot
     }
   }
 
+  public void expandHomePage() {
+    MainActivityListHostFragment fragment = (MainActivityListHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+    if (fragment != null) {
+      fragment.hideSearchBar();
+      findViewById(R.id.homePageFragment).setVisibility(View.VISIBLE);
+    }
+  }
+
+  public void collapseHomePage() {
+    MainActivityListHostFragment fragment = (MainActivityListHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+    if (fragment != null) {
+      fragment.showSearchBar();
+      findViewById(R.id.homePageFragment).setVisibility(View.GONE);
+    }
+  }
+
+  public boolean isHomePageVisible() {
+    return findViewById(R.id.homePageFragment).getVisibility() == View.VISIBLE;
+  }
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+    SplashScreenUtil.setSplashScreenThemeIfNecessary(this, SignalStore.settings().getTheme());
+  }
+
+  @Override
+  public void onBackPressed() {
+    if(isTaskRoot() && !isHomePageVisible()){
+      expandHomePage();
+      return;
+    }
+
+    if (!navigator.onBackPressed()) {
+      super.onBackPressed();
+    }
+  }
+
+  @Override
+  protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+    handleGroupLinkInIntent(intent);
+    handleProxyInIntent(intent);
+    handleSignalMeIntent(intent);
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == MainNavigator.REQUEST_CONFIG_CHANGES && resultCode == RESULT_CONFIG_CHANGED) {
+      recreate();
+    }
+  }
+
   public @NonNull MainNavigator getNavigator() {
     return navigator;
-  }
-
-  private void handleGroupLinkInIntent(Intent intent) {
-    Uri data = intent.getData();
-    if (data != null) {
-      CommunicationActions.handlePotentialGroupLinkUrl(this, data.toString());
-    }
-  }
-
-  private void handleProxyInIntent(Intent intent) {
-    Uri data = intent.getData();
-    if (data != null) {
-      CommunicationActions.handlePotentialProxyLinkUrl(this, data.toString());
-    }
-  }
-
-  private void handleSignalMeIntent(Intent intent) {
-    Uri data = intent.getData();
-    if (data != null) {
-      CommunicationActions.handlePotentialSignalMeUrl(this, data.toString());
-    }
   }
 
   @Override

@@ -58,6 +58,7 @@ class HomePageFragment : PigeonBaseFragment<PigeonFragmentHomePageBinding>() {
 
       searchButton.focusOnLeft()
       searchButton.setOnClickListener {
+        mainActivity.collapseHomePage()
       }
     }
   }

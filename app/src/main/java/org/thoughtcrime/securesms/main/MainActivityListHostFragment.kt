@@ -1,9 +1,13 @@
 package org.thoughtcrime.securesms.main
 
+import android.content.Context
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.ActionMenuView
@@ -65,15 +69,23 @@ class MainActivityListHostFragment : Fragment(R.layout.main_activity_list_host_f
   private lateinit var _searchToolbar: Stub<Material3SearchToolbar>
   private lateinit var _searchAction: ImageView
   private lateinit var _unreadPaymentsDot: View
+  private lateinit var _searchToolbarContainer: LinearLayout
 
   private var previousTopToastPopup: TopToastPopup? = null
 
   private val destinationChangedListener = DestinationChangedListener()
 
+  private lateinit var activity: MainActivity
+
   private val openSettings = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
     if (result.resultCode == MainActivity.RESULT_CONFIG_CHANGED) {
       requireActivity().recreate()
     }
+  }
+
+  override fun onAttach(context: Context) {
+    activity = context as MainActivity
+    super.onAttach(context)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -85,6 +97,7 @@ class MainActivityListHostFragment : Fragment(R.layout.main_activity_list_host_f
     _searchAction = view.findViewById(R.id.search_action)
     _searchToolbar = Stub(view.findViewById(R.id.search_toolbar))
     _unreadPaymentsDot = view.findViewById(R.id.unread_payments_indicator)
+    _searchToolbarContainer = view.findViewById(R.id.search_toolbar_container)
 
     notificationProfileStatus.setOnClickListener { handleNotificationProfile() }
     proxyStatus.setOnClickListener { onProxyStatusClicked() }
@@ -101,6 +114,8 @@ class MainActivityListHostFragment : Fragment(R.layout.main_activity_list_host_f
         R.id.storiesLandingFragment -> goToStateFromStories(state, controller)
       }
     }
+
+    hideSearchBar()
   }
 
   private fun goToStateFromConversationList(state: ConversationListTabsState, navController: NavController) {
@@ -350,5 +365,15 @@ class MainActivityListHostFragment : Fragment(R.layout.main_activity_list_host_f
         listOf(_searchToolbar)
       ).attach(recyclerView)
     }
+  }
+
+  fun showSearchBar() {
+    _searchToolbar.get().requestFocus()
+    _searchToolbarContainer.visibility = View.VISIBLE
+  }
+
+  fun hideSearchBar() {
+    _searchToolbar.get().clearText()
+    _searchToolbarContainer.visibility = View.GONE
   }
 }

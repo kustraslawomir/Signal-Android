@@ -101,11 +101,8 @@ Updated May 25, 2018\n
     <string name="RegistrationActivity_pigeon_terms_and_privacy">Signal Terms &amp; Privacy Policy</string>
     <string name="RegistrationActivity_pigeon_needs_access_to_your_contacts_and_media_in_order_to_connect_with_friends">Pigeon needs the contacts and media permissions to help you connect with friends and send messages. Your contacts are uploaded using Signal\'s private contact discovery, which means they are end-to-end encrypted and never visible to the Signal and Pigeon service.</string>
     <string name="no_options_available">No options available</string>
-
     <string name="conversation_context__menu_reply_to_message">Reply message</string>
     <string name="conversation_context__menu_forward_message">Forward message</string>
     <string name="conversation_context__menu_react_to_message">React to message</string>
     <string name="conversation_context__menu_take_back_message">Take back message</string>
-
-
 </resources>

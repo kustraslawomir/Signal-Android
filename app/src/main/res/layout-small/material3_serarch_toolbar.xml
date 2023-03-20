@@ -34,14 +34,6 @@
             android:textColorHint="@color/signal_text_hint"
             android:textCursorDrawable="@drawable/mp02_cursor_style" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:alpha="0.5"
-            android:layout_marginStart="@dimen/pigeon_start_margin"
-            android:layout_marginEnd="@dimen/pigeon_start_margin"
-            android:background="@color/white" />
-
         <LinearLayout
             android:id="@+id/background_holder"
             android:layout_width="0dp"
