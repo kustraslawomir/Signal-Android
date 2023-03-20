@@ -1,14 +1,32 @@
 package org.thoughtcrime.securesms.conversation
 
+import android.Manifest
+import android.animation.ValueAnimator
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.database.Cursor
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.provider.ContactsContract
+import android.text.TextUtils
 import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnFocusChangeListener
+import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.view.animation.Animation
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator
+import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.rxjava3.subjects.PublishSubject
 import io.reactivex.rxjava3.subjects.Subject
 import org.thoughtcrime.securesms.PassphraseRequiredActivity
@@ -38,6 +56,12 @@ open class ConversationActivity : PassphraseRequiredActivity(), ConversationPare
   private var shareDataTimestamp: Long = -1L
   private val keyEventBehaviour: KeyEventBehaviour = PigeonKeyEventBehaviourImpl()
 
+  protected var pigeonTitleView: ConversationTitleView? = null
+  private val mList: MutableList<String> = mutableListOf()
+  private val mListGp: MutableList<String> = mutableListOf()
+  private var sentToMe: String? = null
+  private var isAddContacts = true
+
   private val dynamicTheme: DynamicTheme = DynamicNoActionBarTheme()
   override fun onPreCreate() {
     dynamicTheme.onCreate(this)
@@ -63,6 +87,10 @@ open class ConversationActivity : PassphraseRequiredActivity(), ConversationPare
       replaceFragment(intent!!)
     } else {
       fragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as ConversationParentFragment
+    }
+
+    if (isSingleConversation()) {
+      isContact(getRecipient().requireE164())
     }
   }
 
@@ -150,4 +178,198 @@ open class ConversationActivity : PassphraseRequiredActivity(), ConversationPare
 
   override val stripeRepository: StripeRepository by lazy { StripeRepository(this) }
   override val googlePayResultPublisher: Subject<DonationPaymentComponent.GooglePayResult> = PublishSubject.create()
+
+  private fun isPushGroupConversation(): Boolean {
+    return getRecipient().isPushGroup
+  }
+
+  private fun initializeViews() {
+    pigeonTitleView = findViewById(R.id.conversation_title_view)
+    pigeonTitleView?.visibility = View.GONE
+  }
+
+  private fun isSingleConversation(): Boolean {
+    return !getRecipient().isGroup
+  }
+
+  private fun isContact(recipientNumber: String) {
+    if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+      ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_CONTACTS), 1)
+    } else {
+      var cursor: Cursor? = null
+      try {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+          cursor = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null)
+        }
+        if (cursor != null) {
+          while (cursor.moveToNext()) {
+            val contactNumber = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER))
+            if (contactNumber == recipientNumber) {
+              isAddContacts = false
+              break
+            }
+          }
+        }
+      } catch (e: Exception) {
+        e.printStackTrace()
+      } finally {
+        cursor?.close()
+      }
+    }
+  }
+
+
+  fun initMenuListGp() {
+    mListGp.clear()
+//    val enabled = !(isPushGroupConversation() && !isActiveGroup())
+    val enabled = !(isPushGroupConversation())
+    sentToMe = pigeonTitleView?.titleName ?: ""
+    val Send_text = getString(R.string.conversation_activity__send) + " " + sentToMe
+    if (enabled) {
+      mListGp.add(Send_text)
+      mListGp.add(getString(R.string.conversation__menu_voice_message))
+      mListGp.add(getString(R.string.MessageRecord_group_call))
+      mListGp.add(getString(R.string.conversation__menu_conversation_settings))
+      mListGp.add(getString(R.string.conversation__menu_edit_group))
+      mListGp.add(getString(R.string.conversation__menu_leave_group))
+    } else {
+      mListGp.add(getString(R.string.conversation__menu_conversation_settings))
+      mListGp.add(getString(R.string.ExpirationDialog_disappearing_messages))
+    }
+  }
+
+  private fun initMenuList() {
+    mList.clear()
+    sentToMe = pigeonTitleView?.titleName ?: ""
+    val Send_text = getString(R.string.conversation_activity__send) + " " + sentToMe
+    mList.add(Send_text)
+    mList.add(getString(R.string.conversation__menu_voice_message))
+    if (sentToMe != getString(R.string.note_to_self)) {
+      mList.add(getString(R.string.conversation_callable_insecure__menu_call))
+    }
+    mList.add(getString(R.string.conversation__menu_conversation_settings))
+    mList.add(getString(R.string.conversation_secure_verified__menu_reset_secure_session))
+    if (isAddContacts) {
+      mList.add(getString(R.string.conversation_add_to_contacts__menu_add_to_contacts))
+    }
+  }
+
+  class TwoLineMenuAdapter : RecyclerView.Adapter<TwoLineMenuAdapter.ViewHolder> {
+    private var mMenuList: MutableList<String>
+    var mFocusHeight = 0
+    var mNormalHeight = 0
+    var mNormalPaddingX = 0
+    var mFocusPaddingX = 0
+    var mFocusTextSize = 0
+    var mNormalTextSize = 0
+    private val animDownAndGone: Animation? = null
+    private val animDownAndVisible: Animation? = null
+    private val animUpAndGone: Animation? = null
+    private val animUpAndVisible: Animation? = null
+    var rl: RelativeLayout? = null
+    var mfts = 0
+    var mfh = 0
+    var mt = 0
+
+    interface OnItemClickListener {
+      fun onClick(position: Int)
+    }
+
+    var mListener: OnItemClickListener? = null
+    fun setOnItemClickListener(listener: OnItemClickListener?) {
+      mListener = listener
+    }
+
+    constructor(menulist: List<String>) {
+      mMenuList = menulist.toMutableList()
+    }
+
+    constructor(relativeLayout: RelativeLayout?, marginTop: Int, menulist: List<String>) {
+      mMenuList = menulist.toMutableList()
+      mt = marginTop
+      rl = relativeLayout
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+      val view: View = LayoutInflater.from(parent.context).inflate(R.layout.pigeon_custom_menu_item, parent, false)
+      val res = parent.context.resources
+      //Resources res = getResources();
+      mFocusHeight = res.getDimensionPixelSize(R.dimen.focus_item_height)
+      mNormalHeight = res.getDimensionPixelSize(R.dimen.item_height)
+      mFocusTextSize = res.getDimensionPixelSize(R.dimen.focus_item_textsize)
+      mNormalTextSize = res.getDimensionPixelSize(R.dimen.item_textsize)
+      mFocusPaddingX = res.getDimensionPixelSize(R.dimen.focus_item_padding_x)
+      mNormalPaddingX = res.getDimensionPixelSize(R.dimen.item_padding_x)
+      view.onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
+        startFocusAnimationSingleLine(v, hasFocus)
+        if (hasFocus) {
+          (view as TextView).setTextColor(Color.WHITE)
+        } else {
+          (view as TextView).setTextColor(Color.GRAY)
+        }
+      }
+      return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+      val item = mMenuList[position]
+      holder.itemView.setOnClickListener { mListener!!.onClick(position) }
+      holder.menutext.text = item
+      holder.menutext.tag = position
+    }
+
+    private fun startFocusAnimationSingleLine(v: View, focused: Boolean) {
+      val va: ValueAnimator
+      val item = v as TextView
+      va = if (focused) {
+        ValueAnimator.ofFloat(0f, 1f)
+      } else {
+        ValueAnimator.ofFloat(1f, 0f)
+      }
+      va.addUpdateListener { valueAnimator: ValueAnimator ->
+        val scale = valueAnimator.animatedValue as Float
+        val height = (mFocusHeight - mNormalHeight).toFloat() * scale + mNormalHeight.toFloat()
+        val textsize = (mFocusTextSize - mNormalTextSize).toFloat() * scale + mNormalTextSize.toFloat()
+        val padding = mNormalPaddingX.toFloat() - (mNormalPaddingX - mFocusPaddingX).toFloat() * scale
+        val alpha = (0x81f + (0xff - 0x81).toFloat() * scale).toInt()
+        val color = alpha * 0x1000000 + 0xffffff
+        item.textSize = textsize.toInt().toFloat()
+        item.setTextColor(color)
+        item.setPadding(
+          padding.toInt(), item.paddingTop,
+          item.paddingRight, item.paddingBottom
+        )
+        item.layoutParams.height = height.toInt()
+      }
+      val FastOutLinearInInterpolator = FastOutLinearInInterpolator()
+      va.interpolator = FastOutLinearInInterpolator
+      if (focused) {
+        va.duration = 270
+        va.start()
+      } else {
+        va.duration = 270
+        va.start()
+      }
+      item.ellipsize = TextUtils.TruncateAt.MARQUEE
+    }
+
+    fun removeData(position: Int) {
+      mMenuList.removeAt(position)
+      notifyItemRemoved(position)
+      notifyDataSetChanged()
+    }
+
+    override fun getItemCount(): Int {
+      return mMenuList.size
+    }
+
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+      var menutext: TextView
+
+      init {
+        menutext = itemView.findViewById<View>(R.id.menu_item) as TextView
+      }
+    }
+  }
+
 }

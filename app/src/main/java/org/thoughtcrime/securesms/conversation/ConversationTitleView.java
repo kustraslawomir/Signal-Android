@@ -223,4 +223,8 @@ public class ConversationTitleView extends RelativeLayout {
     subtitle.setVisibility(!isSelf && expirationBadgeContainer.getVisibility() != VISIBLE && !TextUtils.isEmpty(subtitle.getText()) ? VISIBLE : GONE);
     updateVerifiedSubtitleVisibility();
   }
+
+  String getTitleName() {
+    return title.getText().toString();
+  }
 }

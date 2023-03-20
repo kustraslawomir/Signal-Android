@@ -105,4 +105,9 @@ Updated May 25, 2018\n
     <string name="conversation_context__menu_forward_message">Forward message</string>
     <string name="conversation_context__menu_react_to_message">React to message</string>
     <string name="conversation_context__menu_take_back_message">Take back message</string>
+    <string name="conversation__menu_voice_message">Voice message</string>
+    <string name="conversation__menu_edit_group">Edit group</string>
+    <string name="ExpirationDialog_disappearing_messages">Disappearing messages</string>
+    <string name="conversation_secure_verified__menu_reset_secure_session">Reset secure session</string>
+
 </resources>
