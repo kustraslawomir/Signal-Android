@@ -88,10 +88,6 @@ open class ConversationActivity : PassphraseRequiredActivity(), ConversationPare
     } else {
       fragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as ConversationParentFragment
     }
-
-    if (isSingleConversation()) {
-      isContact(getRecipient().requireE164())
-    }
   }
 
   override fun onDestroy() {
@@ -188,10 +184,6 @@ open class ConversationActivity : PassphraseRequiredActivity(), ConversationPare
     pigeonTitleView?.visibility = View.GONE
   }
 
-  private fun isSingleConversation(): Boolean {
-    return !getRecipient().isGroup
-  }
-
   private fun isContact(recipientNumber: String) {
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
       ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_CONTACTS), 1)
@@ -223,7 +215,6 @@ open class ConversationActivity : PassphraseRequiredActivity(), ConversationPare
     mListGp.clear()
 //    val enabled = !(isPushGroupConversation() && !isActiveGroup())
     val enabled = !(isPushGroupConversation())
-    sentToMe = pigeonTitleView?.titleName ?: ""
     val Send_text = getString(R.string.conversation_activity__send) + " " + sentToMe
     if (enabled) {
       mListGp.add(Send_text)
@@ -240,7 +231,6 @@ open class ConversationActivity : PassphraseRequiredActivity(), ConversationPare
 
   private fun initMenuList() {
     mList.clear()
-    sentToMe = pigeonTitleView?.titleName ?: ""
     val Send_text = getString(R.string.conversation_activity__send) + " " + sentToMe
     mList.add(Send_text)
     mList.add(getString(R.string.conversation__menu_voice_message))

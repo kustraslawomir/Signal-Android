@@ -331,6 +331,7 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import kotlin.Unit;
+import pigeon.extensions.BuildExtensionsKt;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
@@ -475,6 +476,8 @@ public class ConversationParentFragment extends Fragment
   private IdentityRecordList   identityRecords = new IdentityRecordList(Collections.emptyList());
   private Callback             callback;
   private RecentEmojiPageModel recentEmojis;
+
+  private MaterialButton pigeonGrupCall;
 
   public static ConversationParentFragment create(Intent intent) {
     ConversationParentFragment fragment = new ConversationParentFragment();
@@ -2064,8 +2067,12 @@ public class ConversationParentFragment extends Fragment
     releaseChannelUnmute                = ViewUtil.findStubById(view, R.id.conversation_release_notes_unmute_stub);
     joinGroupCallButton                 = view.findViewById(R.id.conversation_group_call_join);
 
+    pigeonGrupCall                      = view.findViewById(R.id.conversation_group_call);
+
     sendButton.setPopupContainer((ViewGroup) view);
     sendButton.setSnackbarContainer(view.findViewById(R.id.fragment_content));
+
+    pigeonGrupCall.setOnClickListener(v -> handleDial(getRecipient(), true));
 
     container.setIsBubble(isInBubble());
     container.addOnKeyboardShownListener(this);
@@ -2522,27 +2529,31 @@ public class ConversationParentFragment extends Fragment
     callingTooltipShown = true;
 
     SignalStore.tooltips().markGroupCallSpeakerViewSeen();
-    TooltipPopup.forTarget(anchor)
-                .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.signal_accent_green))
-                .setTextColor(getResources().getColor(R.color.core_white))
-                .setText(R.string.ConversationActivity__tap_here_to_start_a_group_call)
-                .setOnDismissListener(() -> SignalStore.tooltips().markGroupCallingTooltipSeen())
-                .show(TooltipPopup.POSITION_BELOW);
+    if (BuildExtensionsKt.isSignalVersion()) {
+      TooltipPopup.forTarget(anchor)
+                  .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.signal_accent_green))
+                  .setTextColor(getResources().getColor(R.color.core_white))
+                  .setText(R.string.ConversationActivity__tap_here_to_start_a_group_call)
+                  .setOnDismissListener(() -> SignalStore.tooltips().markGroupCallingTooltipSeen())
+                  .show(TooltipPopup.POSITION_BELOW);
+    }
   }
 
   private void showStickerIntroductionTooltip() {
     TextSecurePreferences.setMediaKeyboardMode(requireContext(), MediaKeyboardMode.STICKER);
     inputPanel.setMediaKeyboardToggleMode(KeyboardPage.STICKER);
 
-    TooltipPopup.forTarget(inputPanel.getMediaKeyboardToggleAnchorView())
-                .setBackgroundTint(getResources().getColor(R.color.core_ultramarine))
-                .setTextColor(getResources().getColor(R.color.core_white))
-                .setText(R.string.ConversationActivity_new_say_it_with_stickers)
-                .setOnDismissListener(() -> {
-                  TextSecurePreferences.setHasSeenStickerIntroTooltip(requireContext(), true);
-                  EventBus.getDefault().removeStickyEvent(StickerPackInstallEvent.class);
-                })
-                .show(TooltipPopup.POSITION_ABOVE);
+    if (BuildExtensionsKt.isSignalVersion()) {
+      TooltipPopup.forTarget(inputPanel.getMediaKeyboardToggleAnchorView())
+                  .setBackgroundTint(getResources().getColor(R.color.core_ultramarine))
+                  .setTextColor(getResources().getColor(R.color.core_white))
+                  .setText(R.string.ConversationActivity_new_say_it_with_stickers)
+                  .setOnDismissListener(() -> {
+                    TextSecurePreferences.setHasSeenStickerIntroTooltip(requireContext(), true);
+                    EventBus.getDefault().removeStickyEvent(StickerPackInstallEvent.class);
+                  })
+                  .show(TooltipPopup.POSITION_ABOVE);
+    }
   }
 
   @Override
@@ -2681,10 +2692,12 @@ public class ConversationParentFragment extends Fragment
     EventBus.getDefault().removeStickyEvent(event);
 
     if (!inputPanel.isStickerMode()) {
-      TooltipPopup.forTarget(inputPanel.getMediaKeyboardToggleAnchorView())
-                  .setText(R.string.ConversationActivity_sticker_pack_installed)
-                  .setIconGlideModel(event.getIconGlideModel())
-                  .show(TooltipPopup.POSITION_ABOVE);
+      if (BuildExtensionsKt.isSignalVersion()) {
+        TooltipPopup.forTarget(inputPanel.getMediaKeyboardToggleAnchorView())
+                    .setText(R.string.ConversationActivity_sticker_pack_installed)
+                    .setIconGlideModel(event.getIconGlideModel())
+                    .show(TooltipPopup.POSITION_ABOVE);
+      }
     }
   }
 
