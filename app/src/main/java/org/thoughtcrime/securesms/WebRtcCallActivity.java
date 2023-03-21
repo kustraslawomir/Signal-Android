@@ -94,6 +94,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.Disposable;
+import pigeon.extensions.BuildExtensionsKt;
 
 import static org.thoughtcrime.securesms.components.sensors.Orientation.PORTRAIT_BOTTOM_EDGE;
 
@@ -142,7 +143,7 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
     super.onCreate(savedInstanceState);
 
     boolean isLandscapeEnabled = getResources().getConfiguration().smallestScreenWidthDp >= 480;
-    if (!isLandscapeEnabled) {
+    if (!isLandscapeEnabled || BuildExtensionsKt.isPigeonVersion()) {
       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
@@ -631,7 +632,7 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
   }
 
   @Override
-  public void onMessageResentAfterSafetyNumberChange() { }
+  public void onMessageResentAfterSafetyNumberChange() {}
 
   @Override
   public void onCanceled() {
@@ -703,7 +704,7 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
         handleUntrustedIdentity(event); break;
     }
 
-    boolean enableVideo = event.getLocalParticipant().getCameraState().getCameraCount() > 0 && enableVideoIfAvailable;
+    boolean enableVideo = event.getLocalParticipant().getCameraState().getCameraCount() > 0 && enableVideoIfAvailable && BuildExtensionsKt.isSignalVersion();
 
     viewModel.updateFromWebRtcViewModel(event, enableVideo);
 

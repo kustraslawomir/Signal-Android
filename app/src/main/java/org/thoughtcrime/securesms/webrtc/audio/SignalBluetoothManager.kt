@@ -12,6 +12,7 @@ import android.content.IntentFilter
 import org.signal.core.util.logging.Log
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
 import org.thoughtcrime.securesms.util.safeUnregisterReceiver
+import pigeon.extensions.isSignalVersion
 import java.util.concurrent.TimeUnit
 
 /**
@@ -81,7 +82,9 @@ class SignalBluetoothManager(
     }
 
     bluetoothReceiver = BluetoothHeadsetBroadcastReceiver()
-    context.registerReceiver(bluetoothReceiver, bluetoothHeadsetFilter)
+    if (isSignalVersion()) {
+      context.registerReceiver(bluetoothReceiver, bluetoothHeadsetFilter)
+    }
 
     Log.i(TAG, "Headset profile state: ${bluetoothAdapter?.getProfileConnectionState(BluetoothProfile.HEADSET)?.toStateString()}")
     Log.i(TAG, "Bluetooth proxy for headset profile has started")

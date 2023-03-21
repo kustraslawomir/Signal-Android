@@ -16,6 +16,7 @@ import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.service.webrtc.AndroidTelecomUtil
 import org.thoughtcrime.securesms.util.safeUnregisterReceiver
 import org.whispersystems.signalservice.api.util.Preconditions
+import pigeon.extensions.isSignalVersion
 
 private val TAG = Log.tag(SignalAudioManager::class.java)
 

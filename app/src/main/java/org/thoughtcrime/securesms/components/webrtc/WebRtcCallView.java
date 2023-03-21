@@ -269,9 +269,11 @@ public class WebRtcCallView extends ConstraintLayout {
 
     hangup.setOnClickListener(v -> runIfNonNull(controlsListener, ControlsListener::onEndCallPressed));
     decline.setOnClickListener(v -> runIfNonNull(controlsListener, ControlsListener::onDenyCallPressed));
+    declineLabel.setOnClickListener(v -> decline.performClick());
 
     answer.setOnClickListener(v -> runIfNonNull(controlsListener, ControlsListener::onAcceptCallPressed));
     answerWithoutVideo.setOnClickListener(v -> runIfNonNull(controlsListener, ControlsListener::onAcceptCallWithVoiceOnlyPressed));
+    answerLabel.setOnClickListener(v -> answerWithoutVideo.performClick());
 
     pictureInPictureGestureHelper   = PictureInPictureGestureHelper.applyTo(smallLocalRenderFrame);
     pictureInPictureExpansionHelper = new PictureInPictureExpansionHelper();
