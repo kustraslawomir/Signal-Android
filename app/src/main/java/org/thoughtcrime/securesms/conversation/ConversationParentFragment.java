@@ -74,8 +74,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.pm.ShortcutInfoCompat;
@@ -480,6 +482,12 @@ public class ConversationParentFragment extends Fragment
 
   private MaterialButton pigeonGroupCall;
   private MaterialButton pigeonCall;
+
+  private LinearLayoutCompat primaryLayout;
+  private LinearLayoutCompat extraLayout;
+  private MaterialButton send2;
+
+  private Boolean extraScreenIsShowed = false;
 
   public static ConversationParentFragment create(Intent intent) {
     ConversationParentFragment fragment = new ConversationParentFragment();
@@ -2071,6 +2079,9 @@ public class ConversationParentFragment extends Fragment
 
     pigeonGroupCall                     = view.findViewById(R.id.conversation_group_call);
     pigeonCall                          = view.findViewById(R.id.conversation_call);
+    primaryLayout                       = view.findViewById(R.id.prime_buttons);
+    extraLayout                         = view.findViewById(R.id.extra_buttons);
+    send2                               = view.findViewById(R.id.send_text_2);
 
     sendButton.setPopupContainer((ViewGroup) view);
     sendButton.setSnackbarContainer(view.findViewById(R.id.fragment_content));
@@ -2094,6 +2105,40 @@ public class ConversationParentFragment extends Fragment
     attachButton.setOnClickListener(new AttachButtonListener());
     attachButton.setOnLongClickListener(new AttachButtonLongClickListener());
     sendButton.setOnClickListener(sendButtonListener);
+    send2.setOnClickListener(v -> {
+      view.findViewById(R.id.send_text).performClick();
+      primaryLayout.setVisibility(View.VISIBLE);
+      extraLayout.setVisibility(View.GONE);
+      extraScreenIsShowed = false;
+      composeText.requestFocus();
+    });
+
+    view.findViewById(R.id.send_text).setOnKeyListener((v, keyCode, event) -> {
+      if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+        primaryLayout.setVisibility(View.GONE);
+        extraLayout.setVisibility(View.VISIBLE);
+        extraScreenIsShowed = false;
+        send2.requestFocus();
+        return true;
+      }
+      return false;
+    });
+
+    send2.setOnKeyListener((v, keyCode, event) -> {
+      if (keyCode == KeyEvent.KEYCODE_DPAD_UP && event.getAction() == KeyEvent.ACTION_UP) {
+        if (!extraScreenIsShowed){
+          extraScreenIsShowed = true;
+          return false;
+        }
+        primaryLayout.setVisibility(View.VISIBLE);
+        extraLayout.setVisibility(View.GONE);
+        return true;
+      } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN){
+        extraScreenIsShowed = false;
+      }
+      return false;
+    });
+
     sendButton.setScheduledSendListener(new SendButton.ScheduledSendListener() {
       @Override
       public void onSendScheduled() {

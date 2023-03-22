@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -57,6 +58,10 @@ public final class MicrophoneRecorderView extends FrameLayout implements View.On
 
     View recordButton = findViewById(R.id.quick_audio_toggle);
     recordButton.setOnTouchListener(this);
+
+    View voiceButton = findViewById(R.id.voice);
+    voiceButton.setOnKeyListener(View::onKeyLongPress);
+
   }
 
   public void cancelAction(boolean byUser) {
@@ -95,6 +100,38 @@ public final class MicrophoneRecorderView extends FrameLayout implements View.On
   private void hideUi() {
     floatingRecordButton.hide();
     lockDropTarget.hide();
+  }
+
+  @Override public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+    switch (event.getAction()) {
+      case MotionEvent.ACTION_DOWN:
+        if (!Permissions.hasAll(getContext(), Manifest.permission.RECORD_AUDIO)) {
+          if (handler != null) handler.onRecordPermissionRequired();
+        } else if (state == State.NOT_RUNNING) {
+          state = State.RUNNING_HELD;
+          lockDropTarget.display();
+          if (handler != null) handler.onRecordPressed();
+        }
+        break;
+      case MotionEvent.ACTION_CANCEL:
+      case MotionEvent.ACTION_UP:
+        if (this.state == State.RUNNING_HELD) {
+          state = State.NOT_RUNNING;
+          hideUi();
+          if (handler != null) handler.onRecordReleased();
+        }
+        break;
+      case MotionEvent.ACTION_MOVE:
+        if (this.state == State.RUNNING_HELD) {
+          int dimensionPixelSize = getResources().getDimensionPixelSize(R.dimen.recording_voice_lock_target);
+          if (floatingRecordButton.lastOffsetY <= dimensionPixelSize) {
+            lockAction();
+          }
+        }
+        break;
+    }
+
+    return false;
   }
 
   @Override

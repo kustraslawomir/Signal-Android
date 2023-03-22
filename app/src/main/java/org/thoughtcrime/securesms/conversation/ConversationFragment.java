@@ -1753,6 +1753,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
 
     @Override
     public void onItemClick(MultiselectPart item) {
+
       if (actionMode != null) {
         ((ConversationAdapter) list.getAdapter()).toggleSelection(item);
         list.invalidateItemDecorations();

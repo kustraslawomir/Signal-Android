@@ -5,9 +5,9 @@
     android:id="@+id/bottom_panel"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
     android:clipChildren="false"
     android:clipToPadding="false"
-    android:layout_gravity="bottom"
     android:orientation="vertical"
     tools:viewBindingIgnore="true">
 
@@ -118,18 +118,6 @@
                                     app:srcCompat="@drawable/ic_camera_24"
                                     app:tint="@color/signal_colorOnSurfaceVariant" />
 
-                                <org.thoughtcrime.securesms.components.MicrophoneRecorderView
-                                    android:id="@+id/recorder_view"
-                                    android:layout_width="24dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginEnd="12dp"
-                                    android:clipChildren="false"
-                                    android:clipToPadding="false">
-
-                                    <include layout="@layout/microphone_recorder_view" />
-
-                                </org.thoughtcrime.securesms.components.MicrophoneRecorderView>
 
                             </org.thoughtcrime.securesms.components.HidingLinearLayout>
 
@@ -157,15 +145,6 @@
                         </FrameLayout>
 
                     </LinearLayout>
-
-                    <include layout="@layout/recording_layout" />
-
-                    <org.thoughtcrime.securesms.conversation.VoiceNoteDraftView
-                        android:id="@+id/voice_note_draft_view"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:visibility="gone"
-                        tools:visibility="visible" />
 
                 </FrameLayout>
 
@@ -210,12 +189,18 @@
 
     </LinearLayout>
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/pigeon_input_background_color"
         android:orientation="vertical">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/prime_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -235,8 +220,8 @@
                 android:layout_marginStart="6dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="6dp"
-                android:visibility="gone"
                 android:focusable="false"
+                android:visibility="gone"
                 app:message_type="preview"
                 app:quote_colorPrimary="@color/signal_text_primary"
                 app:quote_colorSecondary="@color/signal_text_primary"
@@ -271,35 +256,83 @@
             android:defaultFocusHighlightEnabled="false"
             android:gravity="center"
             android:nextFocusUp="@id/embedded_text_editor"
-            android:nextFocusDown="@id/conversation_call"
+            android:nextFocusDown="@id/send_text"
             android:paddingStart="25dp"
             android:text="@string/conversation_activity__send"
             android:textSize="25sp"
             tools:ignore="UnusedAttribute" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/conversation_call"
-            style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:nextFocusUp="@id/send_text"
-            android:paddingStart="25dp"
-            android:nextFocusDown="@id/conversation_group_call"
-            android:text="@string/conversation_callable_insecure__menu_call"
-            android:visibility="visible"
-            tools:visibility="visible" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/conversation_group_call"
-            style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
-            android:layout_width="wrap_content"
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/extra_buttons"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="25dp"
-            android:text="@string/MessageRecord_group_call"
-            android:nextFocusUp="@id/conversation_call"
-            android:nextFocusDown="@id/conversation_group_call"
-            android:visibility="visible"
-            tools:visibility="visible" />
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/send_text_2"
+                style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="25dp"
+                android:text="@string/conversation_activity__send"
+                android:visibility="visible"
+                tools:visibility="visible" />
+
+            <org.thoughtcrime.securesms.components.MicrophoneRecorderView
+                android:id="@+id/recorder_view"
+                android:layout_width="24dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="12dp"
+                android:clipChildren="false"
+                android:clipToPadding="false">
+
+                <include layout="@layout/microphone_recorder_view" />
+
+            </org.thoughtcrime.securesms.components.MicrophoneRecorderView>
+
+
+            <include
+                layout="@layout/recording_layout" />
+
+            <org.thoughtcrime.securesms.conversation.VoiceNoteDraftView
+                android:id="@+id/voice_note_draft_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/conversation_call"
+                style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:nextFocusUp="@id/send_text"
+                android:nextFocusDown="@id/conversation_group_call"
+                android:paddingStart="25dp"
+                android:text="@string/conversation_callable_insecure__menu_call"
+                android:visibility="visible"
+                tools:visibility="visible" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/conversation_group_call"
+                style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:nextFocusUp="@id/conversation_call"
+                android:nextFocusDown="@id/conversation_group_call"
+                android:paddingStart="25dp"
+                android:text="@string/MessageRecord_group_call"
+                android:visibility="visible"
+                tools:visibility="visible" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </LinearLayout>
 
 </org.thoughtcrime.securesms.components.InputPanel>

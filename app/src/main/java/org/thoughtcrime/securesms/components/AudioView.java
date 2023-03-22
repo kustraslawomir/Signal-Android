@@ -126,6 +126,7 @@ public final class AudioView extends FrameLayout {
       this.seekBar         = findViewById(R.id.seek);
       this.duration        = findViewById(R.id.duration);
 
+
       lottieDirection = REVERSE;
       this.playPauseButton.setOnClickListener(new PlayPauseClickedListener());
       this.playPauseButton.setOnLongClickListener(v -> performLongClick());
@@ -148,6 +149,11 @@ public final class AudioView extends FrameLayout {
         typedArray.recycle();
       }
     }
+    playVoiceListener();
+  }
+
+  public void playVoiceListener(){
+    this.setOnClickListener(v -> playPauseButton.performClick());
   }
 
   @Override
