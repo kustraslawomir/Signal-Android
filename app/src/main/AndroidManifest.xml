@@ -129,11 +129,12 @@
     <activity android:name=".WebRtcCallActivity"
               android:theme="@style/TextSecure.DarkTheme.WebRTCCall"
               android:excludeFromRecents="true"
-              android:supportsPictureInPicture="true"
+              android:screenOrientation="portrait"
+              android:supportsPictureInPicture="false"
               android:windowSoftInputMode="stateAlwaysHidden"
               android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
               android:taskAffinity=".calling"
-              android:resizeableActivity="true"
+              android:resizeableActivity="false"
               android:launchMode="singleTask"/>
 
     <activity android:name=".messagerequests.CalleeMustAcceptMessageRequestActivity"

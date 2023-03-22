@@ -56,7 +56,6 @@ open class ConversationActivity : PassphraseRequiredActivity(), ConversationPare
   private var shareDataTimestamp: Long = -1L
   private val keyEventBehaviour: KeyEventBehaviour = PigeonKeyEventBehaviourImpl()
 
-  protected var pigeonTitleView: ConversationTitleView? = null
   private val mList: MutableList<String> = mutableListOf()
   private val mListGp: MutableList<String> = mutableListOf()
   private var sentToMe: String? = null
@@ -177,37 +176,6 @@ open class ConversationActivity : PassphraseRequiredActivity(), ConversationPare
 
   private fun isPushGroupConversation(): Boolean {
     return getRecipient().isPushGroup
-  }
-
-  private fun initializeViews() {
-    pigeonTitleView = findViewById(R.id.conversation_title_view)
-    pigeonTitleView?.visibility = View.GONE
-  }
-
-  private fun isContact(recipientNumber: String) {
-    if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-      ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_CONTACTS), 1)
-    } else {
-      var cursor: Cursor? = null
-      try {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          cursor = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null)
-        }
-        if (cursor != null) {
-          while (cursor.moveToNext()) {
-            val contactNumber = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER))
-            if (contactNumber == recipientNumber) {
-              isAddContacts = false
-              break
-            }
-          }
-        }
-      } catch (e: Exception) {
-        e.printStackTrace()
-      } finally {
-        cursor?.close()
-      }
-    }
   }
 
 

@@ -106,15 +106,6 @@
                         android:visibility="gone" />
 
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/conversation_group_call"
-                        style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/MessageRecord_group_call"
-                        android:visibility="visible"
-                        tools:visibility="visible" />
-
                     <ViewStub
                         android:id="@+id/conversation_cannot_send_announcement_stub"
                         android:layout_width="match_parent"

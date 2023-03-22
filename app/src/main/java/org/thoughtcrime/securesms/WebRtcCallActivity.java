@@ -627,7 +627,11 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
     if (state.getGroupCallState().isConnected()) {
       ApplicationDependencies.getSignalCallManager().groupApproveSafetyChange(changedRecipients);
     } else {
-      viewModel.startCall(state.getLocalParticipant().isVideoEnabled());
+      if (BuildExtensionsKt.isSignalVersion()) {
+        viewModel.startCall(state.getLocalParticipant().isVideoEnabled());
+      } else  {
+        viewModel.startCall(false);
+      }
     }
   }
 
@@ -752,7 +756,11 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
 
     @Override
     public void onStartCall(boolean isVideoCall) {
-      viewModel.startCall(isVideoCall);
+      if (BuildExtensionsKt.isSignalVersion()) {
+        viewModel.startCall(isVideoCall);
+      } else  {
+        viewModel.startCall(false);
+      }
     }
 
     @Override

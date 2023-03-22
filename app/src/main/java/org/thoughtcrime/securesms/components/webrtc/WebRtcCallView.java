@@ -253,6 +253,8 @@ public class WebRtcCallView extends ConstraintLayout {
       runIfNonNull(controlsListener, listener -> listener.onAudioOutputChanged(outputMode));
     });
 
+    audioToggleLabel.setOnClickListener(v -> audioToggle.performClick());
+
     videoToggle.setOnCheckedChangeListener((v, isOn) -> {
       runIfNonNull(controlsListener, listener -> listener.onVideoChanged(isOn));
     });
@@ -261,6 +263,8 @@ public class WebRtcCallView extends ConstraintLayout {
       runIfNonNull(controlsListener, listener -> listener.onMicChanged(isOn));
     });
 
+    micToggleLabel.setOnClickListener(v -> micToggle.performClick());
+
     ringToggle.setOnCheckedChangeListener((v, isOn) -> {
       runIfNonNull(controlsListener, listener -> listener.onRingGroupChanged(isOn, ringToggle.isActivated()));
     });
@@ -268,6 +272,8 @@ public class WebRtcCallView extends ConstraintLayout {
     cameraDirectionToggle.setOnClickListener(v -> runIfNonNull(controlsListener, ControlsListener::onCameraDirectionChanged));
 
     hangup.setOnClickListener(v -> runIfNonNull(controlsListener, ControlsListener::onEndCallPressed));
+    hangupLabel.setOnClickListener(v -> hangup.performClick());
+
     decline.setOnClickListener(v -> runIfNonNull(controlsListener, ControlsListener::onDenyCallPressed));
     declineLabel.setOnClickListener(v -> decline.performClick());
 

@@ -478,7 +478,8 @@ public class ConversationParentFragment extends Fragment
   private Callback             callback;
   private RecentEmojiPageModel recentEmojis;
 
-  private MaterialButton pigeonGrupCall;
+  private MaterialButton pigeonGroupCall;
+  private MaterialButton pigeonCall;
 
   public static ConversationParentFragment create(Intent intent) {
     ConversationParentFragment fragment = new ConversationParentFragment();
@@ -2068,12 +2069,14 @@ public class ConversationParentFragment extends Fragment
     releaseChannelUnmute                = ViewUtil.findStubById(view, R.id.conversation_release_notes_unmute_stub);
     joinGroupCallButton                 = view.findViewById(R.id.conversation_group_call_join);
 
-    pigeonGrupCall                      = view.findViewById(R.id.conversation_group_call);
+    pigeonGroupCall                     = view.findViewById(R.id.conversation_group_call);
+    pigeonCall                          = view.findViewById(R.id.conversation_call);
 
     sendButton.setPopupContainer((ViewGroup) view);
     sendButton.setSnackbarContainer(view.findViewById(R.id.fragment_content));
 
-    pigeonGrupCall.setOnClickListener(v -> handleDial(getRecipient(), true));
+    pigeonGroupCall.setOnClickListener(v -> handleVideo(getRecipient()));
+    pigeonCall.setOnClickListener(v -> handleDial(getRecipient(), true));
 
     container.setIsBubble(isInBubble());
     container.addOnKeyboardShownListener(this);
@@ -2485,14 +2488,14 @@ public class ConversationParentFragment extends Fragment
 
     recipient.observe(this, r -> {
       groupCallViewModel.onRecipientChange(r);
+      pigeonGroupCall.setVisibility(r.isGroup() ? View.VISIBLE : View.GONE);
+      pigeonCall.setVisibility(!r.isGroup() ? View.VISIBLE : View.GONE);
     });
 
     groupCallViewModel.hasActiveGroupCall().observe(getViewLifecycleOwner(), hasActiveCall -> {
       invalidateOptionsMenu();
       joinGroupCallButton.setVisibility(hasActiveCall ? View.VISIBLE : View.GONE);
     });
-
-    groupCallViewModel.groupCallHasCapacity().observe(getViewLifecycleOwner(), hasCapacity -> joinGroupCallButton.setText(hasCapacity ? R.string.ConversationActivity_join : R.string.ConversationActivity_full));
   }
 
   public void initializeDraftViewModel() {

@@ -271,11 +271,35 @@
             android:defaultFocusHighlightEnabled="false"
             android:gravity="center"
             android:nextFocusUp="@id/embedded_text_editor"
-            android:nextFocusDown="@id/send_text"
+            android:nextFocusDown="@id/conversation_call"
             android:paddingStart="25dp"
             android:text="@string/conversation_activity__send"
             android:textSize="25sp"
             tools:ignore="UnusedAttribute" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/conversation_call"
+            style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:nextFocusUp="@id/send_text"
+            android:paddingStart="25dp"
+            android:nextFocusDown="@id/conversation_group_call"
+            android:text="@string/conversation_callable_insecure__menu_call"
+            android:visibility="visible"
+            tools:visibility="visible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/conversation_group_call"
+            style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="25dp"
+            android:text="@string/MessageRecord_group_call"
+            android:nextFocusUp="@id/conversation_call"
+            android:nextFocusDown="@id/conversation_group_call"
+            android:visibility="visible"
+            tools:visibility="visible" />
     </LinearLayout>
 
 </org.thoughtcrime.securesms.components.InputPanel>
