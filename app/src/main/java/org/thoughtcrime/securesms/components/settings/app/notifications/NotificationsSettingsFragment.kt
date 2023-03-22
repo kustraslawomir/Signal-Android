@@ -178,15 +178,17 @@ class NotificationsSettingsFragment : DSLSettingsFragment(R.string.preferences__
         }
       )
 
-      radioListPref(
-        title = DSLSettingsText.from(R.string.preferences_notifications__show),
-        listItems = notificationPrivacyLabels,
-        selected = notificationPrivacyValues.indexOf(state.messageNotificationsState.messagePrivacy),
-        isEnabled = state.messageNotificationsState.notificationsEnabled,
-        onSelected = {
-          viewModel.setMessageNotificationPrivacy(notificationPrivacyValues[it])
-        }
-      )
+      if (isSignalVersion()) {
+        radioListPref(
+          title = DSLSettingsText.from(R.string.preferences_notifications__show),
+          listItems = notificationPrivacyLabels,
+          selected = notificationPrivacyValues.indexOf(state.messageNotificationsState.messagePrivacy),
+          isEnabled = state.messageNotificationsState.notificationsEnabled,
+          onSelected = {
+            viewModel.setMessageNotificationPrivacy(notificationPrivacyValues[it])
+          }
+        )
+      }
 
       if (Build.VERSION.SDK_INT < 30) {
         if (NotificationChannels.supported()) {
@@ -316,15 +318,17 @@ class NotificationsSettingsFragment : DSLSettingsFragment(R.string.preferences__
         }
       )
 
-      radioListPref(
-        title = DSLSettingsText.from(R.string.preferences_notifications__show),
-        listItems = notificationPrivacyLabels,
-        selected = notificationPrivacyValues.indexOf(state.messageNotificationsState.messagePrivacy),
-        isEnabled = state.messageNotificationsState.notificationsEnabled,
-        onSelected = {
-          viewModel.setMessageNotificationPrivacy(notificationPrivacyValues[it])
-        }
-      )
+      if (isSignalVersion()) {
+        radioListPref(
+          title = DSLSettingsText.from(R.string.preferences_notifications__show),
+          listItems = notificationPrivacyLabels,
+          selected = notificationPrivacyValues.indexOf(state.messageNotificationsState.messagePrivacy),
+          isEnabled = state.messageNotificationsState.notificationsEnabled,
+          onSelected = {
+            viewModel.setMessageNotificationPrivacy(notificationPrivacyValues[it])
+          }
+        )
+      }
 
       sectionHeaderPref(R.string.NotificationsSettingsFragment__calls)
 

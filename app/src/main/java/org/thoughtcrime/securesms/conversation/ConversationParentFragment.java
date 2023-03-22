@@ -333,6 +333,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import kotlin.Unit;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+import static pigeon.extensions.KotilinExtensionsKt.showWhenScrolledToBottom;
 
 /**
  * Fragment for displaying a message thread, as well as
@@ -3678,6 +3679,7 @@ public class ConversationParentFragment extends Fragment
   @Override
   public void bindScrollHelper(@NonNull RecyclerView recyclerView) {
     material3OnScrollHelper.attach(recyclerView);
+    showWhenScrolledToBottom(recyclerView, inputPanel);
   }
 
   @Override

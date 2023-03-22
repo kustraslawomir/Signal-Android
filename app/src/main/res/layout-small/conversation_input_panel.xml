@@ -7,6 +7,7 @@
     android:layout_height="wrap_content"
     android:clipChildren="false"
     android:clipToPadding="false"
+    android:layout_gravity="bottom"
     android:orientation="vertical"
     tools:viewBindingIgnore="true">
 
@@ -45,19 +46,6 @@
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:orientation="vertical">
-
-                <org.thoughtcrime.securesms.components.QuoteView
-                    android:id="@+id/quote_view"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginEnd="6dp"
-                    android:visibility="gone"
-                    app:message_type="preview"
-                    app:quote_colorPrimary="@color/signal_text_primary"
-                    app:quote_colorSecondary="@color/signal_text_primary"
-                    tools:visibility="visible" />
 
                 <org.thoughtcrime.securesms.components.LinkPreviewView
                     android:id="@+id/link_preview"
@@ -229,29 +217,51 @@
         android:background="@color/pigeon_input_background_color"
         android:orientation="vertical">
 
-        <org.thoughtcrime.securesms.components.ComposeText
-            android:id="@+id/embedded_text_editor"
-            style="@style/PigeonComposeEditText"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="25dp"
-            android:layout_weight="1"
-            android:nextFocusRight="@+id/send_text"
-            android:nextFocusForward="@+id/send_button"
             android:background="@drawable/pigeon_compose_background"
-            android:descendantFocusability="afterDescendants"
-            android:imeOptions="actionDone"
-            android:padding="8dp"
-            android:singleLine="false"
-            android:textCursorDrawable="@drawable/mp02_cursor_style"
-            tools:hint="Send TextSecure message"
-            tools:visibility="visible">
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="vertical">
 
-            <requestFocus />
-        </org.thoughtcrime.securesms.components.ComposeText>
+            <org.thoughtcrime.securesms.components.QuoteView
+                android:id="@+id/quote_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="6dp"
+                android:visibility="gone"
+                android:focusable="false"
+                app:message_type="preview"
+                app:quote_colorPrimary="@color/signal_text_primary"
+                app:quote_colorSecondary="@color/signal_text_primary"
+                tools:visibility="visible" />
+
+            <org.thoughtcrime.securesms.components.ComposeText
+                android:id="@+id/embedded_text_editor"
+                style="@style/PigeonComposeEditText"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:descendantFocusability="afterDescendants"
+                android:imeOptions="actionDone"
+                android:nextFocusRight="@+id/send_text"
+                android:nextFocusForward="@+id/send_button"
+                android:padding="8dp"
+                android:singleLine="false"
+                android:textCursorDrawable="@drawable/mp02_cursor_style"
+                tools:hint="Send TextSecure message"
+                tools:visibility="visible">
+
+                <requestFocus />
+            </org.thoughtcrime.securesms.components.ComposeText>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/send_text"

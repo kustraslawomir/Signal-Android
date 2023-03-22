@@ -10,14 +10,16 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingBottom="120dp"
         android:scrollbars="vertical"
         tools:listitem="@layout/conversation_list_item_view" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:focusable="false"
         android:id="@+id/constraint_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:focusable="false"
         android:visibility="gone"
         tools:viewBindingIgnore="true">
 

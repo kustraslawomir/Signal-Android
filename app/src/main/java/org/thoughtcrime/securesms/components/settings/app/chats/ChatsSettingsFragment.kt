@@ -16,6 +16,7 @@ import org.thoughtcrime.securesms.exporter.flow.SmsExportActivity
 import org.thoughtcrime.securesms.exporter.flow.SmsExportDialogs
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingAdapter
 import org.thoughtcrime.securesms.util.navigation.safeNavigate
+import pigeon.extensions.isSignalVersion
 
 class ChatsSettingsFragment : DSLSettingsFragment(R.string.preferences_chats__chats) {
 
@@ -102,14 +103,16 @@ class ChatsSettingsFragment : DSLSettingsFragment(R.string.preferences_chats__ch
         }
       )
 
-      switchPref(
-        title = DSLSettingsText.from(R.string.preferences__pref_use_address_book_photos),
-        summary = DSLSettingsText.from(R.string.preferences__display_contact_photos_from_your_address_book_if_available),
-        isChecked = state.useAddressBook,
-        onClick = {
-          viewModel.setUseAddressBook(!state.useAddressBook)
-        }
-      )
+      if (isSignalVersion()) {
+        switchPref(
+          title = DSLSettingsText.from(R.string.preferences__pref_use_address_book_photos),
+          summary = DSLSettingsText.from(R.string.preferences__display_contact_photos_from_your_address_book_if_available),
+          isChecked = state.useAddressBook,
+          onClick = {
+            viewModel.setUseAddressBook(!state.useAddressBook)
+          }
+        )
+      }
 
       switchPref(
         title = DSLSettingsText.from(R.string.preferences__pref_keep_muted_chats_archived),

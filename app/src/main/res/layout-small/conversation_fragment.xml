@@ -23,10 +23,9 @@
         android:cacheColorHint="@color/signal_background_primary"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:paddingBottom="@dimen/conversation_bottom_padding"
+        android:paddingBottom="120dp"
         android:scrollbars="vertical"
         android:splitMotionEvents="false"
-        android:overScrollMode="ifContentScrolls"
         app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout

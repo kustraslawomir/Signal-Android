@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_conversationListFragment_to_storiesLandingFragment"
             app:destination="@id/storiesLandingFragment" />
+        <action
+            android:id="@+id/action_conversationListFragment_to_conversationListFragment"
+            app:destination="@id/conversationListFragment" />
     </fragment>
 
     <fragment

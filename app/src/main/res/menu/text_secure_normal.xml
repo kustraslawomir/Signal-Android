@@ -24,6 +24,7 @@
           android:id="@+id/menu_settings" />
 
     <item android:title="@string/ConversationListFragment__notification_profile"
+        android:visible="false"
           android:id="@+id/menu_notification_profile" />
 
     <item android:title="@string/Insights__title"

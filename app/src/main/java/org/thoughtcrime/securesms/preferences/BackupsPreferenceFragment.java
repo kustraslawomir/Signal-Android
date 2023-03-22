@@ -49,6 +49,8 @@ import java.time.LocalTime;
 import java.util.Locale;
 import java.util.Objects;
 
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
+
 public class BackupsPreferenceFragment extends Fragment {
 
   private static final String TAG = Log.tag(BackupsPreferenceFragment.class);
@@ -206,7 +208,12 @@ public class BackupsPreferenceFragment extends Fragment {
 
   private void setInfo() {
     String link     = String.format("<a href=\"%s\">%s</a>", getString(R.string.backup_support_url), getString(R.string.BackupsPreferenceFragment__learn_more));
-    String infoText = getString(R.string.BackupsPreferenceFragment__to_restore_a_backup, link);
+    String infoText = "";
+    if (isSignalVersion()) {
+      infoText = getString(R.string.BackupsPreferenceFragment__to_restore_a_backup, link);
+    } else {
+      infoText = getString(R.string.BackupsPreferenceFragment__to_restore_a_backup, "");
+    }
 
     info.setText(HtmlCompat.fromHtml(infoText, 0));
     info.setMovementMethod(LinkMovementMethod.getInstance());

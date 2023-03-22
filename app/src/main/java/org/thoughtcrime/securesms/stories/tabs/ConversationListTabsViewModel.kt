@@ -9,6 +9,8 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
 import io.reactivex.rxjava3.subjects.PublishSubject
 import io.reactivex.rxjava3.subjects.Subject
+import org.signal.core.util.logging.Log
+import org.thoughtcrime.securesms.longmessage.TAG
 import org.thoughtcrime.securesms.stories.Stories
 import org.thoughtcrime.securesms.util.livedata.Store
 
@@ -63,6 +65,7 @@ class ConversationListTabsViewModel(repository: ConversationListTabRepository) :
   }
 
   fun isShowingArchived(isShowingArchived: Boolean) {
+    Log.w(TAG, "is showing archived: $isShowingArchived")
     store.update { it.copy(visibilityState = it.visibilityState.copy(isShowingArchived = isShowingArchived)) }
   }
 

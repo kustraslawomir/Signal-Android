@@ -17,6 +17,8 @@ import org.thoughtcrime.securesms.mms.GlideRequests;
 import java.util.Locale;
 import java.util.Set;
 
+import static pigeon.extensions.KotilinExtensionsKt.focusOnLeft;
+
 public class ConversationListItemAction extends FrameLayout implements BindableConversationListItem {
 
   private TextView description;
@@ -36,6 +38,7 @@ public class ConversationListItemAction extends FrameLayout implements BindableC
   @Override
   public void onFinishInflate() {
     super.onFinishInflate();
+    focusOnLeft(this);
     this.description = findViewById(R.id.description);
   }
 

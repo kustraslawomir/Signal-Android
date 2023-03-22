@@ -7,28 +7,9 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="30dp"
     android:layout_marginEnd="30dp"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
     tools:targetApi="o">
-
-    <TextView
-        android:id="@+id/conversation_list_item_unread_indicator"
-        style="@style/Signal.Text.Caption"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        android:focusable="false"
-        android:background="@drawable/unread_count_background"
-        android:gravity="center"
-        android:minWidth="26sp"
-        android:textColor="@color/core_white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/conversation_list_item_date"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="1" />
 
 
     <FrameLayout
@@ -88,10 +69,10 @@
             android:id="@+id/conversation_list_item_alert"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:focusable="false"
             android:layout_below="@id/conversation_list_item_name"
             android:layout_alignParentStart="true"
             android:layout_marginEnd="2dp"
+            android:focusable="false"
             android:paddingTop="2dp"
             android:visibility="gone"
             app:useSmallIcon="true"
@@ -101,12 +82,12 @@
             android:id="@+id/conversation_list_item_summary_container"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="gone"
-            android:focusable="false"
             android:layout_below="@id/conversation_list_item_name"
             android:layout_toStartOf="@+id/conversation_list_item_status_container"
             android:layout_toEndOf="@id/conversation_list_item_alert"
-            android:paddingEnd="1dp">
+            android:focusable="false"
+            android:paddingEnd="1dp"
+            android:visibility="gone">
 
             <org.thoughtcrime.securesms.components.emoji.SimpleEmojiTextView
                 android:id="@+id/conversation_list_item_summary"
@@ -140,8 +121,8 @@
             android:layout_marginEnd="5dp"
             android:layout_toStartOf="@+id/conversation_list_item_date"
             android:contentDescription="@string/conversation_activity__attachment_thumbnail"
-            android:visibility="gone"
             android:focusable="false"
+            android:visibility="gone"
             tools:visibility="visible" />
 
         <LinearLayout
@@ -150,35 +131,58 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <FrameLayout
-                android:id="@+id/conversation_list_item_status_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <org.thoughtcrime.securesms.components.DeliveryStatusView
-                    android:id="@+id/conversation_list_item_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    app:iconColor="@color/signal_icon_tint_secondary" />
-
-            </FrameLayout>
-
-            <TextView
-                android:id="@+id/conversation_list_item_date"
-                style="@style/Signal.Text.Caption"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
-                android:layout_marginStart="3dp"
-                android:layout_marginRight="8dp"
-                android:singleLine="true"
-                android:textColor="@color/signal_icon_tint_secondary"
-                tools:text="30 mins" />
+                <FrameLayout
+                    android:id="@+id/conversation_list_item_status_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
+                    <org.thoughtcrime.securesms.components.DeliveryStatusView
+                        android:id="@+id/conversation_list_item_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        app:iconColor="@color/signal_icon_tint_secondary" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/conversation_list_item_date"
+                    style="@style/Signal.Text.Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginStart="3dp"
+                    android:layout_marginRight="8dp"
+                    android:singleLine="true"
+                    android:textColor="@color/signal_icon_tint_secondary"
+                    tools:text="30 mins" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/conversation_list_item_unread_indicator"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/pigeon_unread_count_background"
+                android:gravity="center"
+                android:minWidth="@dimen/unread_count_bubble_diameter"
+                android:textColor="@color/core_white"
+                android:textSize="11sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/conversation_list_item_date"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="1" />
         </LinearLayout>
+
 
         <TextView
             android:id="@+id/conversation_list_item_archived"
@@ -189,15 +193,15 @@
             android:layout_alignParentEnd="true"
             android:layout_marginStart="5dp"
             android:background="@drawable/archived_indicator_background"
+            android:focusable="false"
             android:paddingStart="6dp"
             android:paddingTop="2dp"
             android:paddingEnd="6dp"
             android:paddingBottom="2dp"
-            android:visibility="gone"
-            android:focusable="false"
             android:text="@string/conversation_list_item_view__archived"
             android:textColor="@color/core_white"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="gone" />
 
     </RelativeLayout>
 
