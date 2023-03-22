@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.NavDirections
 import androidx.navigation.Navigator
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -368,12 +369,20 @@ class MainActivityListHostFragment : Fragment(R.layout.main_activity_list_host_f
   }
 
   fun showSearchBar() {
-    _searchToolbar.get().requestFocus()
-    _searchToolbarContainer.visibility = View.VISIBLE
+    if (::_searchToolbar.isInitialized) {
+      _searchToolbar.get().requestFocus()
+      _searchToolbarContainer.visibility = View.VISIBLE
+    }
   }
 
   fun hideSearchBar() {
-    _searchToolbar.get().clearText()
-    _searchToolbarContainer.visibility = View.GONE
+    if (::_searchToolbar.isInitialized) {
+      _searchToolbar.get().clearText()
+      _searchToolbarContainer.visibility = View.GONE
+    }
+  }
+
+  fun hideArchivedConversations() {
+    conversationListTabsViewModel.isShowingArchived(false)
   }
 }

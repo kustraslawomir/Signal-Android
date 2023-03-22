@@ -118,6 +118,8 @@
             android:textColorLink="@color/white"
             app:emoji_maxLength="1000"
             app:measureLastLine="true"
+            android:maxLines="2"
+            android:ellipsize="end"
             app:scaleEmojis="true"
             tools:text="Mango pickle lorem ipsum" />
 

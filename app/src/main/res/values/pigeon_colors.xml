@@ -8,4 +8,5 @@
     <color name="conversation_background">#343434</color>
     <color name="blue_A800_focus">#68A9EA</color>
     <color name="blue_A800_normal">#8068A9EA</color>
+    <color name="grey">#9D9D9D</color>
 </resources>

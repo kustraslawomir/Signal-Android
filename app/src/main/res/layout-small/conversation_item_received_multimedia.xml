@@ -139,6 +139,7 @@
             android:layout_marginTop="@dimen/message_bubble_top_padding"
             android:layout_marginEnd="6dp"
             android:visibility="gone"
+            android:focusable="false"
             app:message_type="incoming"
             app:quote_colorPrimary="@color/conversation_item_quote_text_color"
             app:quote_colorSecondary="@color/conversation_item_quote_text_color"
@@ -227,6 +228,8 @@
             android:textColorLink="@color/signal_text_primary"
             app:emoji_maxLength="1000"
             app:measureLastLine="true"
+            android:maxLines="2"
+            android:ellipsize="end"
             app:scaleEmojis="true"
             tools:text="Mango pickle lorem ipsum" />
 

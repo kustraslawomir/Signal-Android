@@ -7,7 +7,11 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import org.signal.core.util.logging.Log
 import org.thoughtcrime.securesms.R
+import org.thoughtcrime.securesms.longmessage.TAG
 
 
 fun View.focusOnLeft() {
@@ -35,6 +39,24 @@ fun View.focusOnLeft() {
       }
     }
     this.onFocusChangeListener = focus
+  }
+}
+
+fun RecyclerView.showWhenScrolledToBottom(view: View) {
+  this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+      super.onScrollStateChanged(recyclerView, newState)
+      val position = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+      view.shouldBeVisibleIf(position == 0)
+    }
+  })
+}
+
+fun View.shouldBeVisibleIf(condition: Boolean) {
+  visibility = if (condition) {
+    View.VISIBLE
+  } else {
+    View.GONE
   }
 }
 
@@ -140,7 +162,7 @@ fun EditText.animateGroup(parent: TextView) {
       if (this.tag != "header") {
         (this as? TextView)?.setupTextSize(hasFocus)
       }
-        this.setupEllipsize(hasFocus)
+      this.setupEllipsize(hasFocus)
 
       if (parent.tag != "header") {
         (parent as? TextView)?.setupTextSize(hasFocus)

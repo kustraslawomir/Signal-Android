@@ -87,12 +87,14 @@ class AppSettingsFragment : DSLSettingsFragment(R.string.text_secure_normal__men
         }
       )
 
-      clickPref(
-        title = DSLSettingsText.from(R.string.preferences__linked_devices),
-        onClick = {
-          findNavController().safeNavigate(R.id.action_appSettingsFragment_to_deviceActivity)
-        }
-      )
+      if (isSignalVersion()) {
+        clickPref(
+          title = DSLSettingsText.from(R.string.preferences__linked_devices),
+          onClick = {
+            findNavController().safeNavigate(R.id.action_appSettingsFragment_to_deviceActivity)
+          }
+        )
+      }
     }
   }
 
@@ -112,13 +114,15 @@ class AppSettingsFragment : DSLSettingsFragment(R.string.text_secure_normal__men
         }
       )
 
-      clickPref(
-        title = DSLSettingsText.from(R.string.preferences__linked_devices),
-        icon = DSLSettingsIcon.from(R.drawable.symbol_devices_24),
-        onClick = {
-          findNavController().safeNavigate(R.id.action_appSettingsFragment_to_deviceActivity)
-        }
-      )
+      if (isSignalVersion()) {
+        clickPref(
+          title = DSLSettingsText.from(R.string.preferences__linked_devices),
+          icon = DSLSettingsIcon.from(R.drawable.symbol_devices_24),
+          onClick = {
+            findNavController().safeNavigate(R.id.action_appSettingsFragment_to_deviceActivity)
+          }
+        )
+      }
 
       if (state.allowUserToGoToDonationManagementScreen) {
         clickPref(

@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.thoughtcrime.securesms.components.voice.VoiceNoteMediaController;
 import org.thoughtcrime.securesms.components.voice.VoiceNoteMediaControllerOwner;
+import org.thoughtcrime.securesms.conversationlist.ConversationListArchiveFragment;
 import org.thoughtcrime.securesms.devicetransfer.olddevice.OldDeviceTransferLockedDialog;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.main.MainActivityListHostFragment;
@@ -146,6 +147,13 @@ public class MainActivity extends PassphraseRequiredActivity implements VoiceNot
     }
   }
 
+  public void hideArchivedConversations(){
+    MainActivityListHostFragment fragment = (MainActivityListHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+    if (fragment != null) {
+      fragment.hideArchivedConversations();
+    }
+  }
+
   public boolean isHomePageVisible() {
     return findViewById(R.id.homePageFragment).getVisibility() == View.VISIBLE;
   }
@@ -160,7 +168,7 @@ public class MainActivity extends PassphraseRequiredActivity implements VoiceNot
   public void onBackPressed() {
     if(isTaskRoot() && !isHomePageVisible()){
       expandHomePage();
-      return;
+      hideArchivedConversations();
     }
 
     if (!navigator.onBackPressed()) {

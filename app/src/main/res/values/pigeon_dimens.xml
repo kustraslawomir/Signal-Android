@@ -10,4 +10,5 @@
     <dimen name="small_height">22px</dimen>
     <dimen name="focus_small_textsize">24px</dimen>
     <dimen name="small_textsize">14px</dimen>
+    <dimen name="unread_count_bubble_diameter">26sp</dimen>
 </resources>

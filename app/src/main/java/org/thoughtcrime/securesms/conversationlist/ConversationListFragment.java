@@ -410,7 +410,9 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     initializeTypingObserver();
     initializeVoiceNotePlayer();
 
-    RatingManager.showRatingDialogIfNecessary(requireContext());
+    if (isSignalVersion()) {
+      RatingManager.showRatingDialogIfNecessary(requireContext());
+    }
 
     TooltipCompat.setTooltipText(requireCallback().getSearchAction(), getText(R.string.SearchToolbar_search_for_conversations_contacts_and_messages));
 
@@ -1429,10 +1431,12 @@ public class ConversationListFragment extends MainFragment implements ActionMode
         items.add(new ActionItem(R.drawable.symbol_chat_24, getResources().getQuantityString(R.plurals.ConversationListFragment_read_plural, 1), () -> handleMarkAsRead(id)));
       }
 
-      if (conversation.getThreadRecord().isPinned()) {
-        items.add(new ActionItem(R.drawable.symbol_pin_slash_24, getResources().getQuantityString(R.plurals.ConversationListFragment_unpin_plural, 1), () -> handleUnpin(id)));
-      } else {
-        items.add(new ActionItem(R.drawable.symbol_pin_24, getResources().getQuantityString(R.plurals.ConversationListFragment_pin_plural, 1), () -> handlePin(Collections.singleton(conversation))));
+      if (isSignalVersion()) {
+        if (conversation.getThreadRecord().isPinned()) {
+          items.add(new ActionItem(R.drawable.symbol_pin_slash_24, getResources().getQuantityString(R.plurals.ConversationListFragment_unpin_plural, 1), () -> handleUnpin(id)));
+        } else {
+          items.add(new ActionItem(R.drawable.symbol_pin_24, getResources().getQuantityString(R.plurals.ConversationListFragment_pin_plural, 1), () -> handlePin(Collections.singleton(conversation))));
+        }
       }
 
       if (conversation.getThreadRecord().getRecipient().live().get().isMuted()) {
@@ -1544,10 +1548,12 @@ public class ConversationListFragment extends MainFragment implements ActionMode
       items.add(new ActionItem(R.drawable.symbol_chat_badge_24, getResources().getQuantityString(R.plurals.ConversationListFragment_unread_plural, count), () -> handleMarkAsUnread(selectionIds)));
     }
 
-    if (!isArchived() && hasUnpinned && canPin) {
-      items.add(new ActionItem(R.drawable.symbol_pin_24, getResources().getQuantityString(R.plurals.ConversationListFragment_pin_plural, count), () -> handlePin(viewModel.currentSelectedConversations())));
-    } else if (!isArchived() && !hasUnpinned) {
-      items.add(new ActionItem(R.drawable.symbol_pin_slash_24, getResources().getQuantityString(R.plurals.ConversationListFragment_unpin_plural, count), () -> handleUnpin(selectionIds)));
+    if (isSignalVersion()) {
+      if (!isArchived() && hasUnpinned && canPin) {
+        items.add(new ActionItem(R.drawable.symbol_pin_24, getResources().getQuantityString(R.plurals.ConversationListFragment_pin_plural, count), () -> handlePin(viewModel.currentSelectedConversations())));
+      } else if (!isArchived() && !hasUnpinned) {
+        items.add(new ActionItem(R.drawable.symbol_pin_slash_24, getResources().getQuantityString(R.plurals.ConversationListFragment_unpin_plural, count), () -> handleUnpin(selectionIds)));
+      }
     }
 
     if (isArchived()) {
