@@ -372,6 +372,8 @@ class MainActivityListHostFragment : Fragment(R.layout.main_activity_list_host_f
   }
 
   fun hideArchivedConversations() {
+    conversationListTabsViewModel.isShowingArchived(false)
+    presentToolbarForConversationListFragment()
     val controller: NavController = requireView().findViewById<View>(R.id.fragment_container).findNavController()
     controller.popBackStack(R.id.conversationListFragment, false)
   }

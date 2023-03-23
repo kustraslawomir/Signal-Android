@@ -2489,7 +2489,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
     public void onClick(View v) {
 
-      if (eventListener != null) {
+      if (eventListener != null && bodyText.getText().toString().contains(getResources().getString(R.string.ConversationItem_read_more))) {
         eventListener.onMoreTextClicked(conversationRecipient.getId(), messageRecord.getId(), messageRecord.isMms());
       }
       if (!shouldInterceptClicks(messageRecord) && parent != null) {
@@ -2642,9 +2642,5 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       }
     });
     builder.show();
-  }
-
-  public EmojiTextView getBodyTextView() {
-    return bodyText;
   }
 }
