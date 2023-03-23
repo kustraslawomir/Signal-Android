@@ -110,5 +110,8 @@ Updated May 25, 2018\n
     <string name="conversation__menu_edit_group">Edit group</string>
     <string name="ExpirationDialog_disappearing_messages">Disappearing messages</string>
     <string name="conversation_secure_verified__menu_reset_secure_session">Reset secure session</string>
+    <string name="ConversationActivity_reset_secure_session_question">Reset secure session?</string>
+    <string name="ConversationActivity_this_may_help_if_youre_having_encryption_problems">This may help if you\'re having encryption problems in this conversation. Your messages will be kept.</string>
+    <string name="ConversationActivity_reset">Reset</string>
 
 </resources>
