@@ -1,11 +1,8 @@
 package org.thoughtcrime.securesms.main
 
-import android.content.Context
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,7 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
-import androidx.navigation.NavDirections
 import androidx.navigation.Navigator
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -76,17 +72,10 @@ class MainActivityListHostFragment : Fragment(R.layout.main_activity_list_host_f
 
   private val destinationChangedListener = DestinationChangedListener()
 
-  private lateinit var activity: MainActivity
-
   private val openSettings = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
     if (result.resultCode == MainActivity.RESULT_CONFIG_CHANGED) {
       requireActivity().recreate()
     }
-  }
-
-  override fun onAttach(context: Context) {
-    activity = context as MainActivity
-    super.onAttach(context)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -383,6 +372,7 @@ class MainActivityListHostFragment : Fragment(R.layout.main_activity_list_host_f
   }
 
   fun hideArchivedConversations() {
-    conversationListTabsViewModel.isShowingArchived(false)
+    val controller: NavController = requireView().findViewById<View>(R.id.fragment_container).findNavController()
+    controller.popBackStack(R.id.conversationListFragment, false)
   }
 }

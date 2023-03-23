@@ -166,7 +166,7 @@ public class ConversationListArchiveFragment extends ConversationListFragment im
   }
 
   @Override public void onDestroyView() {
-    mainActivity.hideArchivedConversations();
+    mainActivity.expandHomePage();
     super.onDestroyView();
   }
 }
