@@ -2337,16 +2337,13 @@ public class ConversationParentFragment extends Fragment
   private void sendVoiceMessage() {
     inputPanel.onRecordPressed();
     myRT.setVisibility(View.VISIBLE);
-    voice.setText(getString(R.string.conversation__menu_voice_message));
+    voice.setText(getString(R.string.conversation__menu_voice_message_send));
     voice.setOnClickListener(v->stopVoiceMessage());
   }
 
   private void stopVoiceMessage() {
-    primaryLayout.setVisibility(View.VISIBLE);
-    extraLayout.setVisibility(View.GONE);
-    extraScreenIsShowed = false;
     inputPanel.onRecordReleased();
-    voice.setText(getString(R.string.conversation__menu_voice_message_send));
+    voice.setText(getString(R.string.conversation__menu_voice_message));
     voice.setOnClickListener(v->sendVoiceMessage());
   }
 
