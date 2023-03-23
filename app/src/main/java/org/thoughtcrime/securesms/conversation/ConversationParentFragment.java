@@ -423,8 +423,8 @@ public class ConversationParentFragment extends Fragment
   private   Stub<FrameLayout>            voiceNotePlayerViewStub;
   private   View                         navigationBarBackground;
 
-  private TextView myRT;
-  private MaterialButton voice;
+  private   TextView                 myRT;
+  private   MaterialButton           voice;
 
   private   AttachmentManager        attachmentManager;
   private   AudioRecorder            audioRecorder;
@@ -2085,7 +2085,7 @@ public class ConversationParentFragment extends Fragment
 
     pigeonGroupCall                     = view.findViewById(R.id.conversation_group_call);
     pigeonCall                          = view.findViewById(R.id.conversation_call);
-    voice                                = view.findViewById(R.id.voice);
+    voice                               = view.findViewById(R.id.voice);
     primaryLayout                       = view.findViewById(R.id.prime_buttons);
     extraLayout                         = view.findViewById(R.id.extra_buttons);
     send2                               = view.findViewById(R.id.send_text_2);
@@ -2337,16 +2337,13 @@ public class ConversationParentFragment extends Fragment
   private void sendVoiceMessage() {
     inputPanel.onRecordPressed();
     myRT.setVisibility(View.VISIBLE);
-    voice.setText(getString(R.string.conversation__menu_voice_message));
+    voice.setText(getString(R.string.conversation__menu_voice_message_send));
     voice.setOnClickListener(v->stopVoiceMessage());
   }
 
   private void stopVoiceMessage() {
-    primaryLayout.setVisibility(View.VISIBLE);
-    extraLayout.setVisibility(View.GONE);
-    extraScreenIsShowed = false;
     inputPanel.onRecordReleased();
-    voice.setText(getString(R.string.conversation__menu_voice_message_send));
+    voice.setText(getString(R.string.conversation__menu_voice_message));
     voice.setOnClickListener(v->sendVoiceMessage());
   }
 

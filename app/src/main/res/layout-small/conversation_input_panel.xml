@@ -299,6 +299,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="25dp"
+                android:nextFocusUp="@id/send_text_2"
                 android:nextFocusDown="@id/voice"
                 android:text="@string/conversation_activity__send"
                 android:visibility="visible"
@@ -312,7 +313,7 @@
                 android:nextFocusUp="@id/send_text_2"
                 android:nextFocusDown="@id/conversation_call"
                 android:paddingStart="25dp"
-                android:text="@string/ThreadRecord_voice_message"
+                android:text="@string/conversation__menu_voice_message"
                 android:visibility="visible"
                 tools:visibility="visible" />
 
