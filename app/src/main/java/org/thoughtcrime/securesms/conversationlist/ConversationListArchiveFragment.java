@@ -17,7 +17,6 @@
 package org.thoughtcrime.securesms.conversationlist;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -34,7 +33,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import org.thoughtcrime.securesms.MainActivity;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.components.registration.PulsingFloatingActionButton;
 import org.thoughtcrime.securesms.database.SignalDatabase;
@@ -56,13 +54,6 @@ public class ConversationListArchiveFragment extends ConversationListFragment im
 
   public static ConversationListArchiveFragment newInstance() {
     return new ConversationListArchiveFragment();
-  }
-
-  private MainActivity mainActivity;
-
-  @Override public void onAttach(@NonNull Context context) {
-    mainActivity = (MainActivity) context;
-    super.onAttach(context);
   }
 
   @Override
@@ -88,7 +79,6 @@ public class ConversationListArchiveFragment extends ConversationListFragment im
 
     fab.hide();
     cameraFab.hide();
-    mainActivity.collapseHomePage();
   }
 
   @Override
@@ -163,11 +153,6 @@ public class ConversationListArchiveFragment extends ConversationListFragment im
   @Override
   void updateEmptyState(boolean isConversationEmpty) {
     // Do nothing
-  }
-
-  @Override public void onDestroyView() {
-    mainActivity.expandHomePage();
-    super.onDestroyView();
   }
 }
 
