@@ -160,6 +160,7 @@ import java.util.concurrent.TimeUnit;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 
+import static pigeon.extensions.BuildExtensionsKt.isPigeonVersion;
 import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
 
 /**
@@ -910,6 +911,9 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
    * Today this is only {@link org.thoughtcrime.securesms.conversation.quotes.MessageQuotesBottomSheet}.
    */
   private boolean isCondensedMode() {
+    if(isPigeonVersion()){
+      return true;
+    }
     return displayMode == ConversationItemDisplayMode.CONDENSED;
   }
 
@@ -918,6 +922,9 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
    * Today, we only want to do this for the first message when we're in condensed mode.
    */
   private boolean isContentCondensed() {
+    if(isPigeonVersion()){
+      return true;
+    }
     return isCondensedMode() && !previousMessage.isPresent();
   }
 
@@ -2481,6 +2488,10 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     }
 
     public void onClick(View v) {
+
+      if (eventListener != null) {
+        eventListener.onMoreTextClicked(conversationRecipient.getId(), messageRecord.getId(), messageRecord.isMms());
+      }
       if (!shouldInterceptClicks(messageRecord) && parent != null) {
         parent.onClick(v);
       } else if (messageRecord.isFailed()) {
@@ -2631,5 +2642,9 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       }
     });
     builder.show();
+  }
+
+  public EmojiTextView getBodyTextView() {
+    return bodyText;
   }
 }
