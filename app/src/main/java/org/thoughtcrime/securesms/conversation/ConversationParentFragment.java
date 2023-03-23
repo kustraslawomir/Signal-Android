@@ -423,6 +423,9 @@ public class ConversationParentFragment extends Fragment
   private   Stub<FrameLayout>            voiceNotePlayerViewStub;
   private   View                         navigationBarBackground;
 
+  private TextView myRT;
+  private MaterialButton voice;
+
   private   AttachmentManager        attachmentManager;
   private   AudioRecorder            audioRecorder;
   private   RecordingSession         recordingSession;
@@ -471,6 +474,9 @@ public class ConversationParentFragment extends Fragment
   private int           reactWithAnyEmojiStartPage = -1;
   private boolean       isSearchRequested          = false;
   private boolean       reshowScheduleMessagesBar  = false;
+
+  private int record_flag = 0;
+
 
   private final LifecycleDisposable disposables            = new LifecycleDisposable();
   private final Debouncer           optionsMenuDebouncer   = new Debouncer(50);
@@ -2079,15 +2085,19 @@ public class ConversationParentFragment extends Fragment
 
     pigeonGroupCall                     = view.findViewById(R.id.conversation_group_call);
     pigeonCall                          = view.findViewById(R.id.conversation_call);
+    voice                                = view.findViewById(R.id.voice);
     primaryLayout                       = view.findViewById(R.id.prime_buttons);
     extraLayout                         = view.findViewById(R.id.extra_buttons);
     send2                               = view.findViewById(R.id.send_text_2);
+
+    myRT = view.findViewById(R.id.record_time);
 
     sendButton.setPopupContainer((ViewGroup) view);
     sendButton.setSnackbarContainer(view.findViewById(R.id.fragment_content));
 
     pigeonGroupCall.setOnClickListener(v -> handleVideo(getRecipient()));
     pigeonCall.setOnClickListener(v -> handleDial(getRecipient(), true));
+    voice.setOnClickListener(v -> sendVoiceMessage());
 
     container.setIsBubble(isInBubble());
     container.addOnKeyboardShownListener(this);
@@ -2323,6 +2333,23 @@ public class ConversationParentFragment extends Fragment
       toolbar.getOverflowIcon().setColorFilter(new SimpleColorFilter(tint));
     }
   }
+
+  private void sendVoiceMessage() {
+    inputPanel.onRecordPressed();
+    myRT.setVisibility(View.VISIBLE);
+    voice.setText(getString(R.string.conversation__menu_voice_message));
+    voice.setOnClickListener(v->stopVoiceMessage());
+  }
+
+  private void stopVoiceMessage() {
+    primaryLayout.setVisibility(View.VISIBLE);
+    extraLayout.setVisibility(View.GONE);
+    extraScreenIsShowed = false;
+    inputPanel.onRecordReleased();
+    voice.setText(getString(R.string.conversation__menu_voice_message_send));
+    voice.setOnClickListener(v->sendVoiceMessage());
+  }
+
 
   protected void initializeActionBar() {
     invalidateOptionsMenu();
@@ -3666,6 +3693,8 @@ public class ConversationParentFragment extends Fragment
       recentEmojis.onCodePointSelected(emoji);
     }
   }
+
+
 
   @Override
   public void onKeyEvent(KeyEvent keyEvent) {

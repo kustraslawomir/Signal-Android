@@ -147,7 +147,7 @@ public class InputPanel extends LinearLayout
                                                  TimeUnit.HOURS.toSeconds(1),
                                                  () -> microphoneRecorderView.cancelAction(false));
 
-    this.recordLockCancel.setOnClickListener(v -> microphoneRecorderView.cancelAction(true));
+//    this.recordLockCancel.setOnClickListener(v -> microphoneRecorderView.cancelAction(true));
 
     if (SignalStore.settings().isPreferSystemEmoji()) {
       mediaKeyboard.setVisibility(View.GONE);
@@ -460,7 +460,7 @@ public class InputPanel extends LinearLayout
   @Override
   public void onRecordLocked() {
     slideToCancel.hide();
-    recordLockCancel.setVisibility(View.VISIBLE);
+//    recordLockCancel.setVisibility(View.VISIBLE);
     fadeIn(buttonToggle);
     if (listener != null) listener.onRecorderLocked();
   }
@@ -481,7 +481,7 @@ public class InputPanel extends LinearLayout
   }
 
   private long onRecordHideEvent() {
-    recordLockCancel.setVisibility(View.GONE);
+//    recordLockCancel.setVisibility(View.GONE);
 
     ListenableFuture<Void> future      = slideToCancel.hide();
     long                   elapsedTime = recordTime.hide();

@@ -5,16 +5,6 @@
     tools:showIn="@layout/conversation_input_panel"
     tools:viewBindingIgnore="true">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/voice"
-        style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="25dp"
-        android:text="@string/ThreadRecord_voice_message"
-        android:visibility="visible"
-        tools:visibility="visible" />
-
     <ImageButton
         android:id="@+id/quick_audio_toggle"
         android:layout_width="24dp"
@@ -22,7 +12,6 @@
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="2dp"
         android:background="@null"
-        android:visibility="gone"
         android:contentDescription="@string/conversation_activity__quick_attachment_drawer_record_and_send_audio_description"
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/ic_mic_24"
