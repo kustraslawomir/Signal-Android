@@ -24,7 +24,13 @@ public final class SignalStorageModels {
     List<StorageId> ids            = new ArrayList<>(manifestRecord.getIdentifiersCount());
 
     for (ManifestRecord.Identifier id : manifestRecord.getIdentifiersList()) {
-      ids.add(StorageId.forType(id.getRaw().toByteArray(), id.getTypeValue()));
+      int i = ManifestRecord.Identifier.Type.UNKNOWN_VALUE;
+      try {
+        i = id.getType().getNumber();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      ids.add(StorageId.forType(id.getRaw().toByteArray(), i));
     }
 
     return new SignalStorageManifest(manifestRecord.getVersion(), ids);
