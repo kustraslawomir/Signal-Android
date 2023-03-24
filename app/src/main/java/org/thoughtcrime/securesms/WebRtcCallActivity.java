@@ -97,6 +97,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import pigeon.extensions.BuildExtensionsKt;
 
 import static org.thoughtcrime.securesms.components.sensors.Orientation.PORTRAIT_BOTTOM_EDGE;
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
 
 public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChangeDialog.Callback {
 
@@ -143,8 +144,8 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
     super.onCreate(savedInstanceState);
 
     boolean isLandscapeEnabled = getResources().getConfiguration().smallestScreenWidthDp >= 480;
-    if (!isLandscapeEnabled || BuildExtensionsKt.isPigeonVersion()) {
-      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    if (!isLandscapeEnabled || isSignalVersion()) {
+      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
     requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -627,7 +628,7 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
     if (state.getGroupCallState().isConnected()) {
       ApplicationDependencies.getSignalCallManager().groupApproveSafetyChange(changedRecipients);
     } else {
-      if (BuildExtensionsKt.isSignalVersion()) {
+      if (isSignalVersion()) {
         viewModel.startCall(state.getLocalParticipant().isVideoEnabled());
       } else  {
         viewModel.startCall(false);
@@ -708,7 +709,7 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
         handleUntrustedIdentity(event); break;
     }
 
-    boolean enableVideo = event.getLocalParticipant().getCameraState().getCameraCount() > 0 && enableVideoIfAvailable && BuildExtensionsKt.isSignalVersion();
+    boolean enableVideo = event.getLocalParticipant().getCameraState().getCameraCount() > 0 && enableVideoIfAvailable && isSignalVersion();
 
     viewModel.updateFromWebRtcViewModel(event, enableVideo);
 
@@ -756,7 +757,7 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
 
     @Override
     public void onStartCall(boolean isVideoCall) {
-      if (BuildExtensionsKt.isSignalVersion()) {
+      if (isSignalVersion()) {
         viewModel.startCall(isVideoCall);
       } else  {
         viewModel.startCall(false);
@@ -875,7 +876,9 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
 
       Optional<DisplayFeature> feature = windowLayoutInfo.getDisplayFeatures().stream().filter(f -> f instanceof FoldingFeature).findFirst();
       viewModel.setIsLandscapeEnabled(feature.isPresent());
-      setRequestedOrientation(feature.isPresent() ? ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+      if (isSignalVersion()) {
+        setRequestedOrientation(feature.isPresent() ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+      }
       if (feature.isPresent()) {
         FoldingFeature foldingFeature = (FoldingFeature) feature.get();
         Rect           bounds         = foldingFeature.getBounds();
