@@ -23,6 +23,9 @@ import org.thoughtcrime.securesms.util.views.LearnMoreTextView;
 
 import java.util.stream.Stream;
 
+import static pigeon.extensions.BuildExtensionsKt.isPigeonVersion;
+import static pigeon.extensions.KotilinExtensionsKt.focusOnLeft;
+
 public class MessageRequestsBottomView extends ConstraintLayout {
 
   private final Debouncer showProgressDebouncer = new Debouncer(250);
@@ -56,7 +59,6 @@ public class MessageRequestsBottomView extends ConstraintLayout {
   @Override
   protected void onFinishInflate() {
     super.onFinishInflate();
-
     inflate(getContext(), R.layout.message_request_bottom_bar, this);
 
     question            = findViewById(R.id.message_request_question);
@@ -70,6 +72,10 @@ public class MessageRequestsBottomView extends ConstraintLayout {
     blockedButtons      = findViewById(R.id.message_request_blocked_buttons);
     gv1MigrationButtons = findViewById(R.id.message_request_gv1_migration_buttons);
     busyIndicator       = findViewById(R.id.message_request_busy_indicator);
+
+    focusOnLeft(accept);
+    focusOnLeft(block);
+    focusOnLeft(delete);
 
     setWallpaperEnabled(false);
   }
@@ -170,6 +176,9 @@ public class MessageRequestsBottomView extends ConstraintLayout {
   }
 
   public void setWallpaperEnabled(boolean isEnabled) {
+    if (isPigeonVersion()) {
+      return;
+    }
     MessageRequestBarColorTheme theme = MessageRequestBarColorTheme.resolveTheme(isEnabled);
 
     Stream.of(delete, bigDelete, block, bigUnblock, accept, gv1Continue).forEach(button -> {
@@ -206,5 +215,9 @@ public class MessageRequestsBottomView extends ConstraintLayout {
 
   public void setGroupV1MigrationContinueListener(OnClickListener acceptOnClickListener) {
     gv1Continue.setOnClickListener(acceptOnClickListener);
+  }
+
+  public void focusAccept() {
+    accept.requestFocus();
   }
 }

@@ -4638,6 +4638,7 @@ public class ConversationParentFragment extends Fragment
       Log.d(TAG, "[presentMessageRequestState] " + messageData.getMessageState());
       messageRequestBottomView.setMessageData(messageData);
       messageRequestBottomView.setVisibility(View.VISIBLE);
+      messageRequestBottomView.focusAccept();
       noLongerMemberBanner.setVisibility(View.GONE);
       inputPanel.setHideForMessageRequestState(true);
     }

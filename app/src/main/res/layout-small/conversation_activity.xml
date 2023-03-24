@@ -112,12 +112,7 @@
                         android:layout_height="wrap_content"
                         android:layout="@layout/conversation_cannot_send_announcement_group" />
 
-                    <org.thoughtcrime.securesms.messagerequests.MessageRequestsBottomView
-                        android:id="@+id/conversation_activity_message_request_bottom_bar"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:clickable="true"
-                        android:visibility="gone" />
+
 
                     <ViewStub
                         android:id="@+id/conversation_release_notes_unmute_stub"
@@ -301,5 +296,15 @@
         app:layout_constraintEnd_toEndOf="@+id/parent_end_guideline"
         app:layout_constraintStart_toStartOf="@+id/parent_start_guideline"
         app:layout_constraintTop_toTopOf="@+id/status_bar_guideline" />
+
+    <org.thoughtcrime.securesms.messagerequests.MessageRequestsBottomView
+        android:id="@+id/conversation_activity_message_request_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone" />
 
 </org.thoughtcrime.securesms.components.InsetAwareConstraintLayout>
