@@ -428,6 +428,7 @@ dependencies {
     implementation libs.androidx.fragment.ktx
     implementation 'androidx.databinding:library:3.2.0-alpha11'
     lintChecks project(':lintchecks')
+    implementation files("libs/ringrtc-android-2.25.0.aar")
 
     coreLibraryDesugaring libs.android.tools.desugar
 
@@ -507,7 +508,7 @@ dependencies {
         }
     }
 
-    implementation libs.signal.ringrtc
+//    implementation libs.signal.ringrtc
 
     implementation libs.leolin.shortcutbadger
     implementation libs.emilsjolander.stickylistheaders
