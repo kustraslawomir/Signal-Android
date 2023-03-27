@@ -8,7 +8,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
+import org.thoughtcrime.securesms.phonenumbers.PhoneNumberFormatter;
 import org.thoughtcrime.securesms.profiles.ProfileName;
+import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.util.SingleLiveEvent;
 import org.signal.core.util.StringUtil;
 
@@ -16,12 +18,16 @@ public final class EditProfileNameViewModel extends ViewModel {
 
   private final ManageProfileRepository    repository;
   private final MutableLiveData<SaveState> saveState;
+
+  private final MutableLiveData<String>    pigeonPhoneNumber;
   private final SingleLiveEvent<Event>     events;
 
   public EditProfileNameViewModel() {
     this.repository = new ManageProfileRepository();
     this.saveState  = new MutableLiveData<>(SaveState.IDLE);
     this.events     = new SingleLiveEvent<>();
+    this.pigeonPhoneNumber      = new MutableLiveData<>();
+    pigeonPhoneNumber.postValue(PhoneNumberFormatter.prettyPrint(Recipient.self().requireE164()));
   }
 
   void onGivenNameChanged(@NonNull String text) {
@@ -38,6 +44,10 @@ public final class EditProfileNameViewModel extends ViewModel {
 
   @NonNull LiveData<Event> getEvents() {
     return events;
+  }
+
+  public @NonNull LiveData<String> getPigeonNumber() {
+    return pigeonPhoneNumber;
   }
 
   void onSaveClicked(@NonNull Context context, @NonNull String givenName, @NonNull String familyName) {

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,7 +25,11 @@ import org.signal.core.util.StringUtil;
 import org.thoughtcrime.securesms.util.ViewUtil;
 import org.thoughtcrime.securesms.util.text.AfterTextChanged;
 import org.thoughtcrime.securesms.util.views.CircularProgressMaterialButton;
+
+import pigeon.extensions.BuildExtensionsKt;
+
 import static pigeon.extensions.BuildExtensionsKt.*;
+import static pigeon.extensions.KotilinExtensionsKt.focusOnRight;
 
 /**
  * Simple fragment to edit your profile name.
@@ -37,6 +42,7 @@ public class EditProfileNameFragment extends Fragment {
   private EditText                       familyName;
   private CircularProgressMaterialButton saveButton;
   private EditProfileNameViewModel       viewModel;
+  private TextView                       managePhoneNumber;
 
   @Override
   public @NonNull View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,6 +54,11 @@ public class EditProfileNameFragment extends Fragment {
     this.givenName  = view.findViewById(R.id.edit_profile_name_given_name);
     this.familyName = view.findViewById(R.id.edit_profile_name_family_name);
     this.saveButton = view.findViewById(R.id.edit_profile_name_save);
+    this.managePhoneNumber = view.findViewById(R.id.manage_phone_number);
+
+    if (BuildExtensionsKt.isPigeonVersion()) {
+      focusOnRight(managePhoneNumber);
+    }
 
     initializeViewModel();
 
@@ -74,6 +85,8 @@ public class EditProfileNameFragment extends Fragment {
                                                                familyName.getText().toString()));
 
     ViewUtil.focusAndMoveCursorToEndAndOpenKeyboard(this.givenName);
+
+    viewModel.getPigeonNumber().observe(getViewLifecycleOwner(), this::presentPigeonNumber);
   }
 
   private void initializeViewModel() {
@@ -118,6 +131,14 @@ public class EditProfileNameFragment extends Fragment {
   private void presentEvent(@NonNull EditProfileNameViewModel.Event event) {
     if (event == EditProfileNameViewModel.Event.NETWORK_FAILURE) {
       Toast.makeText(requireContext(), R.string.EditProfileNameFragment_failed_to_save_due_to_network_issues_try_again_later, Toast.LENGTH_SHORT).show();
+    }
+  }
+
+  private void presentPigeonNumber(@Nullable String number) {
+    if (number == null || number.isEmpty()) {
+      managePhoneNumber.setText(R.string.ConversationSettingsFragment__phone_number);
+    } else {
+      managePhoneNumber.setText(number);
     }
   }
 
