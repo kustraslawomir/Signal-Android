@@ -18,6 +18,8 @@ import androidx.appcompat.view.ContextThemeWrapper;
 
 import org.thoughtcrime.securesms.R;
 
+import static pigeon.extensions.BuildExtensionsKt.isPigeonVersion;
+
 public class ThemeUtil {
 
   public static boolean isDarkNotificationTheme(@NonNull Context context) {
@@ -25,6 +27,9 @@ public class ThemeUtil {
   }
 
   public static boolean isDarkTheme(@NonNull Context context) {
+    if (isPigeonVersion()) {
+      return true;
+    }
     return getAttribute(context, R.attr.theme_type, "light").equals("dark");
   }
 
