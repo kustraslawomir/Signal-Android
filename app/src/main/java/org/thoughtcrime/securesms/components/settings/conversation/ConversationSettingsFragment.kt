@@ -955,7 +955,6 @@ class ConversationSettingsFragment : DSLSettingsFragment(
           customPref(
             LargeIconClickPreference.Model(
               title = DSLSettingsText.from(R.string.ConversationSettingsFragment__add_members),
-              icon = DSLSettingsIcon.from(R.drawable.add_to_a_group, NO_TINT),
               onClick = {
                 viewModel.onAddToGroup()
               }
@@ -998,13 +997,13 @@ class ConversationSettingsFragment : DSLSettingsFragment(
             }
           )
 
-          clickPref(
-            title = DSLSettingsText.from(R.string.ConversationSettingsFragment__requests_and_invites),
-            icon = DSLSettingsIcon.from(R.drawable.ic_update_group_add_16),
-            onClick = {
-              startActivity(ManagePendingAndRequestingMembersActivity.newIntent(requireContext(), groupState.groupId.requireV2()))
-            }
-          )
+//          clickPref(
+//            title = DSLSettingsText.from(R.string.ConversationSettingsFragment__requests_and_invites),
+//            icon = DSLSettingsIcon.from(R.drawable.ic_update_group_add_16),
+//            onClick = {
+//              startActivity(ManagePendingAndRequestingMembersActivity.newIntent(requireContext(), groupState.groupId.requireV2()))
+//            }
+//          )
 
           if (groupState.isSelfAdmin) {
             clickPref(

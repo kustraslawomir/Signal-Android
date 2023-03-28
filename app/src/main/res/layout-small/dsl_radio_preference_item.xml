@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:focusable="true"
+    android:layout_marginStart="@dimen/pigeon_start_margin"
     android:clickable="true"
     android:descendantFocusability="blocksDescendants"
     android:minHeight="56dp">
@@ -34,7 +35,6 @@
         android:id="@+id/radio_widget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dsl_settings_gutter"
         android:clickable="false"
         android:focusable="false"
         android:theme="@style/Signal.Widget.CompoundButton.RadioButton"
