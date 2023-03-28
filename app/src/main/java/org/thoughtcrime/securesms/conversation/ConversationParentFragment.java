@@ -490,6 +490,7 @@ public class ConversationParentFragment extends Fragment
 
   private MaterialButton pigeonGroupCall;
   private MaterialButton pigeonCall;
+  private MaterialButton pigeonSettings;
   private MaterialButton secureSession;
 
   private LinearLayoutCompat primaryLayout;
@@ -2092,6 +2093,7 @@ public class ConversationParentFragment extends Fragment
 
     pigeonGroupCall = view.findViewById(R.id.conversation_group_call);
     pigeonCall      = view.findViewById(R.id.conversation_call);
+    pigeonSettings  = view.findViewById(R.id.conversation_settings);
     secureSession   = view.findViewById(R.id.secure_session);
     voice           = view.findViewById(R.id.voice);
     primaryLayout   = view.findViewById(R.id.prime_buttons);
@@ -2609,6 +2611,14 @@ public class ConversationParentFragment extends Fragment
       pigeonGroupCall.setVisibility(r.isGroup() ? View.VISIBLE : View.GONE);
       pigeonCall.setVisibility(!r.isGroup() ? View.VISIBLE : View.GONE);
       secureSession.setVisibility(!r.isGroup() ? View.VISIBLE : View.GONE);
+      pigeonSettings.setOnClickListener(v -> {
+                                          if (r.isGroup()) {
+                                            handleManageGroup();
+                                          } else {
+                                            handleConversationSettings();
+                                          }
+                                        }
+      );
     });
 
     groupCallViewModel.hasActiveGroupCall().observe(getViewLifecycleOwner(), hasActiveCall -> {

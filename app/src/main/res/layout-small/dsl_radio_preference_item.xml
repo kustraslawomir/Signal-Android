@@ -44,6 +44,7 @@
 
     <TextView
         android:id="@+id/title"
+        android:textColor="@color/mp02_common_text_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -51,7 +52,6 @@
         android:layout_marginEnd="24dp"
         android:clickable="false"
         android:focusable="false"
-        android:textAppearance="@style/Signal.Text.Body"
         app:layout_constraintBottom_toTopOf="@id/summary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/radio_widget"
