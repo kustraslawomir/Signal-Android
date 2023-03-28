@@ -1448,10 +1448,12 @@ public class ConversationListFragment extends MainFragment implements ActionMode
       }
     }
 
-    items.add(new ActionItem(R.drawable.symbol_check_circle_24, getString(R.string.ConversationListFragment_select), () -> {
-      viewModel.startSelection(conversation);
-      startActionMode();
-    }));
+    if (isSignalVersion()) {
+      items.add(new ActionItem(R.drawable.symbol_check_circle_24, getString(R.string.ConversationListFragment_select), () -> {
+        viewModel.startSelection(conversation);
+        startActionMode();
+      }));
+    }
 
     if (conversation.getThreadRecord().isArchived()) {
       items.add(new ActionItem(R.drawable.symbol_archive_android_up_24, getResources().getQuantityString(R.plurals.ConversationListFragment_unarchive_plural, 1), () -> handleArchive(id, false)));
