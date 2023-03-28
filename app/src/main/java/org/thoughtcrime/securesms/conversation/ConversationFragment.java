@@ -1770,17 +1770,27 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     @Override
     public void onItemLongClick(View itemView, MultiselectPart item) {
 
+      MessageRecord messageRecord = item.getConversationMessage().getMessageRecord();
+
       if (isPigeonVersion()) {
-        Intent intent = new Intent(requireContext(), ConversationSubMenuActivity.class);
-        startActivityForResult(intent, ConversationSubMenuActivity.HANDLE_SUBMENU);
-        selectedConversationMessage = item.getConversationMessage();
-        clearFocusedItem();
+        if (messageRecord.isSecure() &&
+            !messageRecord.isRemoteDelete() &&
+            !messageRecord.isUpdate() &&
+            !recipient.get().isBlocked() &&
+            !messageRequestViewModel.shouldShowMessageRequest() &&
+            (!recipient.get().isGroup() || recipient.get().isActiveGroup()) &&
+            ((ConversationAdapter) list.getAdapter()).getSelectedItems().isEmpty())
+        {
+          Intent intent = new Intent(requireContext(), ConversationSubMenuActivity.class);
+          startActivityForResult(intent, ConversationSubMenuActivity.HANDLE_SUBMENU);
+          selectedConversationMessage = item.getConversationMessage();
+          clearFocusedItem();
+        }
         return;
       }
 
       if (actionMode != null) return;
 
-      MessageRecord messageRecord = item.getConversationMessage().getMessageRecord();
 
       if (isUnopenedGift(itemView, messageRecord)) {
         return;
