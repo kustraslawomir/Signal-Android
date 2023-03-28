@@ -899,6 +899,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
           if (getContext() != null) {
             ConversationFragment.prepare(getContext());
           }
+          showMainContent();
         });
       }
     });
@@ -1951,6 +1952,12 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     void onMultiSelectStarted();
 
     void onMultiSelectFinished();
+  }
+
+  private void showMainContent() {
+    Log.w(TAG, "show main content");
+    MainActivity mainActivity = (MainActivity) getContext();
+    mainActivity.showMainContentExt();
   }
 }
 

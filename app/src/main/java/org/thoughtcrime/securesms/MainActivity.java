@@ -6,12 +6,16 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.signal.core.util.logging.Log;
 import org.thoughtcrime.securesms.components.voice.VoiceNoteMediaController;
 import org.thoughtcrime.securesms.components.voice.VoiceNoteMediaControllerOwner;
 import org.thoughtcrime.securesms.devicetransfer.olddevice.OldDeviceTransferLockedDialog;
@@ -76,6 +80,7 @@ public class MainActivity extends PassphraseRequiredActivity implements VoiceNot
 
     conversationListTabsViewModel = new ViewModelProvider(this, factory).get(ConversationListTabsViewModel.class);
     updateTabVisibility();
+    findViewById(R.id.pre_loader_value).requestFocus();
   }
 
   @Override
@@ -130,32 +135,12 @@ public class MainActivity extends PassphraseRequiredActivity implements VoiceNot
     }
   }
 
-  public void expandHomePage() {
-    MainActivityListHostFragment fragment = (MainActivityListHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-    if (fragment != null) {
-      fragment.hideSearchBar();
-      findViewById(R.id.homePageFragment).setVisibility(View.VISIBLE);
-    }
-  }
-
   public void collapseHomePage() {
     MainActivityListHostFragment fragment = (MainActivityListHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
     if (fragment != null) {
       fragment.showSearchBar();
       findViewById(R.id.homePageFragment).setVisibility(View.GONE);
     }
-  }
-
-  public void hideArchivedConversations(){
-    MainActivityListHostFragment fragment = (MainActivityListHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-    if (fragment != null) {
-      expandHomePage();
-      fragment.hideArchivedConversations();
-    }
-  }
-
-  public boolean isHomePageVisible() {
-    return findViewById(R.id.homePageFragment).getVisibility() == View.VISIBLE;
   }
 
   @Override
@@ -166,12 +151,32 @@ public class MainActivity extends PassphraseRequiredActivity implements VoiceNot
 
   @Override
   public void onBackPressed() {
-    if(isTaskRoot() && !isHomePageVisible()){
+    if (isTaskRoot() && !isHomePageVisible()) {
       expandHomePage();
     }
     hideArchivedConversations();
     if (!navigator.onBackPressed()) {
       super.onBackPressed();
+    }
+  }
+
+  public boolean isHomePageVisible() {
+    return findViewById(R.id.homePageFragment).getVisibility() == View.VISIBLE;
+  }
+
+  public void expandHomePage() {
+    MainActivityListHostFragment fragment = (MainActivityListHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+    if (fragment != null) {
+      fragment.hideSearchBar();
+      findViewById(R.id.homePageFragment).setVisibility(View.VISIBLE);
+    }
+  }
+
+  public void hideArchivedConversations() {
+    MainActivityListHostFragment fragment = (MainActivityListHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+    if (fragment != null) {
+      expandHomePage();
+      fragment.hideArchivedConversations();
     }
   }
 
@@ -198,5 +203,12 @@ public class MainActivity extends PassphraseRequiredActivity implements VoiceNot
   @Override
   public @NonNull VoiceNoteMediaController getVoiceNoteMediaController() {
     return mediaController;
+  }
+
+  public void showMainContentExt() {
+    FrameLayout view = findViewById(R.id.pre_loader);
+    if (view != null) {
+      view.setVisibility(View.GONE);
+    }
   }
 }
