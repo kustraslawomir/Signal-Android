@@ -6,6 +6,8 @@ import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatToggleButton;
 
+import org.thoughtcrime.securesms.R;
+
 public class AccessibleToggleButton extends AppCompatToggleButton {
 
   private OnCheckedChangeListener listener;
@@ -32,6 +34,12 @@ public class AccessibleToggleButton extends AppCompatToggleButton {
     if (!notifyListener) {
       super.setOnCheckedChangeListener(null);
     }
+
+    String state = getContext().getString(R.string.preferences_off);
+    if (checked) {
+      state = getContext().getString(R.string.preferences_on);
+    }
+    this.setText(getContext().getString(R.string.WebRtcCallView__mute) + ":" + state);
 
     super.setChecked(checked);
 

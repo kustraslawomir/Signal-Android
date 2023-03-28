@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
 import android.view.animation.Animation;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -1037,6 +1038,7 @@ public class WebRtcCallView extends ConstraintLayout {
     videoToggle.setBackgroundResource(R.drawable.webrtc_call_screen_video_toggle);
     audioToggle.setImageResource(R.drawable.webrtc_call_screen_speaker_toggle);
     ringToggle.setBackgroundResource(R.drawable.webrtc_call_screen_ring_toggle);
+    updateButtonState();
   }
 
   private void updateButtonStateForSmallButtons() {
@@ -1046,6 +1048,11 @@ public class WebRtcCallView extends ConstraintLayout {
     videoToggle.setBackgroundResource(R.drawable.webrtc_call_screen_video_toggle_small);
     audioToggle.setImageResource(R.drawable.webrtc_call_screen_speaker_toggle_small);
     ringToggle.setBackgroundResource(R.drawable.webrtc_call_screen_ring_toggle_small);
+    updateButtonState();
+  }
+
+  private void updateButtonState(){
+
   }
 
   private boolean showParticipantsList() {
