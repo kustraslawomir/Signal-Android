@@ -1015,6 +1015,10 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       bodyText.setVisibility(View.VISIBLE);
       bodyText.setOverflowText(null);
     } else if (isCaptionlessMms(messageRecord) || isStoryReaction(messageRecord) || isGiftMessage(messageRecord) || messageRecord.isPaymentNotification()) {
+      if (messageRecord.isEndSession()){
+        bodyText.setText(context.getString(R.string.conversation_secure_verified__menu_reset_secure_session));
+        bodyText.setVisibility(View.VISIBLE);
+      }
       bodyText.setText(null);
       bodyText.setOverflowText(null);
       bodyText.setVisibility(View.GONE);

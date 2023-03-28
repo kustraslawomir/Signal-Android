@@ -62,7 +62,6 @@
             android:gravity="center_vertical"
             android:singleLine="true"
             android:textColor="@color/text_primary"
-            app:layout_constraintEnd_toStartOf="@id/conversation_list_item_date"
             tools:text="Long Chat name for testing purposes" />
 
         <org.thoughtcrime.securesms.components.AlertView
@@ -80,14 +79,14 @@
 
         <FrameLayout
             android:id="@+id/conversation_list_item_summary_container"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@id/conversation_list_item_name"
-            android:layout_toStartOf="@+id/conversation_list_item_status_container"
-            android:layout_toEndOf="@id/conversation_list_item_alert"
+            app:layout_constraintStart_toStartOf="@id/conversation_list_item_name"
+            app:layout_constraintTop_toBottomOf="@id/conversation_list_item_name"
             android:focusable="false"
             android:paddingEnd="1dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <org.thoughtcrime.securesms.components.emoji.SimpleEmojiTextView
                 android:id="@+id/conversation_list_item_summary"
@@ -96,8 +95,8 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/signal_text_secondary"
-                android:visibility="gone"
+                android:textColor="@color/white"
+                android:visibility="visible"
                 tools:text="I'll send those photos over to the Bugle ASAP." />
 
             <org.thoughtcrime.securesms.components.TypingIndicatorView
@@ -105,7 +104,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:typingIndicator_tint="@color/signal_icon_tint_secondary" />
 
         </FrameLayout>
