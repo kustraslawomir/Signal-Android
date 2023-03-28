@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.thoughtcrime.securesms.conversation.ConversationUpdateItem
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    tools:viewBindingIgnore="true"
+<org.thoughtcrime.securesms.conversation.ConversationUpdateItem xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/conversation_update_item"
-    android:layout_width="0dp"
-    android:layout_height="0dp"
-    android:visibility="gone"
-    android:focusable="false"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:background="@drawable/light_selectable_list_item_background"
     android:paddingStart="32dp"
-    android:paddingEnd="32dp">
+    android:paddingEnd="32dp"
+    android:visibility="visible"
+    tools:background="@color/black"
+    tools:viewBindingIgnore="true">
 
     <LinearLayout
         android:id="@+id/conversation_update_background"
@@ -18,12 +19,10 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/conversation_update_vertical_margin"
         android:layout_marginBottom="@dimen/conversation_update_vertical_margin"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
         android:paddingTop="@dimen/conversation_update_vertical_padding"
-        android:paddingBottom="@dimen/conversation_update_vertical_padding"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        android:paddingBottom="@dimen/conversation_update_vertical_padding">
 
         <org.thoughtcrime.securesms.components.emoji.EmojiTextView
             android:id="@+id/conversation_update_body"
@@ -36,7 +35,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/conversation_update_action"
-            style="@style/Widget.Signal.Button.Small"
+            style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
