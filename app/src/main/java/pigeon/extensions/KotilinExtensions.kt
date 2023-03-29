@@ -11,8 +11,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.signal.glide.Log
 import org.thoughtcrime.securesms.MainActivity
 import org.thoughtcrime.securesms.R
+import org.thoughtcrime.securesms.longmessage.TAG
 
 
 fun View.focusOnLeft() {
@@ -48,6 +50,7 @@ fun RecyclerView.showWhenScrolledToBottom(view: View) {
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
       super.onScrollStateChanged(recyclerView, newState)
       val position = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+      org.signal.core.util.logging.Log.w(TAG, "position: $position")
       view.shouldBeVisibleIf(position == 0)
     }
   })

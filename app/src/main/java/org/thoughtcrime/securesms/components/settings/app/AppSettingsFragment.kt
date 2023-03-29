@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.badges.BadgeImageView
@@ -84,6 +85,13 @@ class AppSettingsFragment : DSLSettingsFragment(R.string.text_secure_normal__men
         title = DSLSettingsText.from(R.string.preferences_chats__chats),
         onClick = {
           findNavController().safeNavigate(R.id.action_appSettingsFragment_to_chatsSettingsFragment)
+        }
+      )
+
+      clickPref(
+        title = DSLSettingsText.from(R.string.preferences__about),
+        onClick = {
+          Navigation.findNavController(requireView()).navigate(R.id.action_appSettingsFragment_to_aboutFragment)
         }
       )
 
