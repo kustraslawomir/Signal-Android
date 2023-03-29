@@ -20,7 +20,7 @@ object LargeIconClickPreference {
 
   class Model(
     override val title: DSLSettingsText?,
-    override val icon: DSLSettingsIcon? = null,
+    override val icon: DSLSettingsIcon,
     override val summary: DSLSettingsText? = null,
     val onClick: () -> Unit
   ) : PreferenceModel<Model>()

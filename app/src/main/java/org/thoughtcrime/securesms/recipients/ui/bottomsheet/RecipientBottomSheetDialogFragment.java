@@ -1,6 +1,7 @@
 package org.thoughtcrime.securesms.recipients.ui.bottomsheet;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,9 +9,11 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +25,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import org.signal.core.util.logging.Log;
@@ -101,6 +106,35 @@ public final class RecipientBottomSheetDialogFragment extends BottomSheetDialogF
     fragment.setArguments(args);
 
     return fragment;
+  }
+
+  @NonNull @Override public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+    Dialog dialog = super.onCreateDialog(savedInstanceState);
+    dialog.setOnShowListener(dialogInterface -> {
+      BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) dialogInterface;
+      setupFullHeight(bottomSheetDialog);
+    });
+    return dialog;
+  }
+
+  private void setupFullHeight(BottomSheetDialog bottomSheetDialog) {
+    FrameLayout            bottomSheet  = (FrameLayout) bottomSheetDialog.findViewById(R.id.design_bottom_sheet);
+    BottomSheetBehavior    behavior     = BottomSheetBehavior.from(bottomSheet);
+    ViewGroup.LayoutParams layoutParams = bottomSheet.getLayoutParams();
+
+    int windowHeight = getWindowHeight();
+    if (layoutParams != null) {
+      layoutParams.height = windowHeight;
+    }
+    bottomSheet.setLayoutParams(layoutParams);
+    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+  }
+
+  private int getWindowHeight() {
+    // Calculate window height for fullscreen use
+    DisplayMetrics displayMetrics = new DisplayMetrics();
+    ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+    return displayMetrics.heightPixels;
   }
 
   @Override

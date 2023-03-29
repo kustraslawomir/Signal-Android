@@ -11,6 +11,12 @@
         android:layout_height="wrap_content"
         tools:theme="@style/Theme.Signal.RoundedBottomSheet.Light">
 
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
         <org.thoughtcrime.securesms.avatar.view.AvatarView
             android:id="@+id/rbs_recipient_avatar"
             android:layout_width="80dp"
@@ -43,6 +49,12 @@
             app:layout_constraintStart_toStartOf="@+id/rbs_recipient_avatar"
             app:layout_constraintTop_toTopOf="@+id/rbs_recipient_avatar"
             tools:visibility="visible" />
+
+            <include layout="@layout/conversation_settings_button_strip" />
+
+            <include layout="@layout/dsl_divider_item" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <org.thoughtcrime.securesms.components.emoji.EmojiTextView
             android:id="@+id/rbs_full_name"
@@ -118,15 +130,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rbs_note_to_self_description">
 
-            <include layout="@layout/conversation_settings_button_strip" />
-
-            <include layout="@layout/dsl_divider_item" />
-
             <TextView
                 android:id="@+id/rbs_block_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?selectableItemBackground"
+                android:background="@drawable/light_selectable_list_item_background"
                 android:drawablePadding="16dp"
                 android:gravity="center_vertical"
                 android:minHeight="56dp"
@@ -142,7 +150,7 @@
                 android:id="@+id/rbs_unblock_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?selectableItemBackground"
+                android:background="@drawable/light_selectable_list_item_background"
                 android:drawablePadding="16dp"
                 android:gravity="center_vertical"
                 android:minHeight="56dp"
@@ -158,7 +166,7 @@
                 android:id="@+id/rbs_remove_from_group_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?selectableItemBackground"
+                android:background="@drawable/light_selectable_list_item_background"
                 android:drawablePadding="16dp"
                 android:gravity="center_vertical"
                 android:minHeight="56dp"
@@ -174,7 +182,7 @@
                 android:id="@+id/rbs_make_group_admin_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?selectableItemBackground"
+                android:background="@drawable/light_selectable_list_item_background"
                 android:drawablePadding="16dp"
                 android:gravity="center_vertical"
                 android:minHeight="56dp"
@@ -190,7 +198,7 @@
                 android:id="@+id/rbs_remove_group_admin_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?selectableItemBackground"
+                android:background="@drawable/light_selectable_list_item_background"
                 android:drawablePadding="16dp"
                 android:gravity="center_vertical"
                 android:minHeight="56dp"
@@ -206,7 +214,7 @@
                 android:id="@+id/rbs_add_to_group_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?selectableItemBackground"
+                android:background="@drawable/light_selectable_list_item_background"
                 android:drawablePadding="16dp"
                 android:gravity="center_vertical"
                 android:minHeight="56dp"
@@ -222,7 +230,7 @@
                 android:id="@+id/rbs_add_contact_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?selectableItemBackground"
+                android:background="@drawable/light_selectable_list_item_background"
                 android:drawablePadding="16dp"
                 android:gravity="center_vertical"
                 android:minHeight="56dp"
@@ -238,7 +246,7 @@
                 android:id="@+id/rbs_contact_details_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?selectableItemBackground"
+                android:background="@drawable/light_selectable_list_item_background"
                 android:drawablePadding="16dp"
                 android:gravity="center_vertical"
                 android:minHeight="56dp"
@@ -254,7 +262,7 @@
                 android:id="@+id/rbs_view_safety_number_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?selectableItemBackground"
+                android:background="@drawable/light_selectable_list_item_background"
                 android:drawablePadding="16dp"
                 android:gravity="center_vertical"
                 android:minHeight="56dp"

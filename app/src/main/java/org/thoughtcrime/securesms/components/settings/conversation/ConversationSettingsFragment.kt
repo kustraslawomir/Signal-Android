@@ -952,13 +952,12 @@ class ConversationSettingsFragment : DSLSettingsFragment(
         }
 
         if (groupState.canAddToGroup) {
-          customPref(
-            LargeIconClickPreference.Model(
-              title = DSLSettingsText.from(R.string.ConversationSettingsFragment__add_members),
-              onClick = {
-                viewModel.onAddToGroup()
-              }
-            )
+          clickPref(
+            title = DSLSettingsText.from(R.string.ConversationSettingsFragment__add_members),
+            summary = DSLSettingsText.from(if (groupState.groupLinkEnabled) R.string.preferences_on else R.string.preferences_off),
+            onClick = {
+              viewModel.onAddToGroup()
+            }
           )
         }
 
@@ -975,14 +974,11 @@ class ConversationSettingsFragment : DSLSettingsFragment(
         }
 
         if (groupState.canShowMoreGroupMembers) {
-          customPref(
-            LargeIconClickPreference.Model(
-              title = DSLSettingsText.from(R.string.ConversationSettingsFragment__see_all),
-              icon = DSLSettingsIcon.from(R.drawable.show_more, NO_TINT),
-              onClick = {
-                viewModel.revealAllMembers()
-              }
-            )
+          clickPref(
+            title = DSLSettingsText.from(R.string.ConversationSettingsFragment__see_all),
+            onClick = {
+              viewModel.revealAllMembers()
+            }
           )
         }
 
