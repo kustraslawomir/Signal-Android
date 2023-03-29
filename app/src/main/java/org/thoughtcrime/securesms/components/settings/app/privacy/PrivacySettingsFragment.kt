@@ -489,29 +489,37 @@ class PrivacySettingsFragment : DSLSettingsFragment(R.string.preferences__privac
           title = DSLSettingsText.from(R.string.preferences_app_protection__screen_lock),
           summary = DSLSettingsText.from(R.string.preferences_app_protection__lock_signal_access_with_android_screen_lock_or_fingerprint),
           isChecked = state.screenLock && isKeyguardSecure,
-          isEnabled = isKeyguardSecure,
+          isEnabled = true,
           onClick = {
-            viewModel.setScreenLockEnabled(!state.screenLock)
+            if (isKeyguardSecure) {
+              viewModel.setScreenLockEnabled(!state.screenLock)
 
-            val intent = Intent(requireContext(), KeyCachingService::class.java)
-            intent.action = KeyCachingService.LOCK_TOGGLED_EVENT
-            requireContext().startService(intent)
+              val intent = Intent(requireContext(), KeyCachingService::class.java)
+              intent.action = KeyCachingService.LOCK_TOGGLED_EVENT
+              requireContext().startService(intent)
 
-            ConversationUtil.refreshRecipientShortcuts()
+              ConversationUtil.refreshRecipientShortcuts()
+            } else {
+              Toast.makeText(requireContext(), R.string.PIN_screen_lock, Toast.LENGTH_SHORT).show()
+            }
           }
         )
 
         clickPref(
           title = DSLSettingsText.from(R.string.preferences_app_protection__screen_lock_inactivity_timeout),
           summary = DSLSettingsText.from(getScreenLockInactivityTimeoutSummary(state.screenLockActivityTimeout)),
-          isEnabled = isKeyguardSecure && state.screenLock,
+          isEnabled = true,
           onClick = {
-            childFragmentManager.clearFragmentResult(TimeDurationPickerDialog.RESULT_DURATION)
-            childFragmentManager.clearFragmentResultListener(TimeDurationPickerDialog.RESULT_DURATION)
-            childFragmentManager.setFragmentResultListener(TimeDurationPickerDialog.RESULT_DURATION, this@PrivacySettingsFragment) { _, bundle ->
-              viewModel.setScreenLockTimeout(bundle.getLong(TimeDurationPickerDialog.RESULT_KEY_DURATION_MILLISECONDS).milliseconds.inWholeSeconds)
+            if (isKeyguardSecure && state.screenLock) {
+              childFragmentManager.clearFragmentResult(TimeDurationPickerDialog.RESULT_DURATION)
+              childFragmentManager.clearFragmentResultListener(TimeDurationPickerDialog.RESULT_DURATION)
+              childFragmentManager.setFragmentResultListener(TimeDurationPickerDialog.RESULT_DURATION, this@PrivacySettingsFragment) { _, bundle ->
+                viewModel.setScreenLockTimeout(bundle.getLong(TimeDurationPickerDialog.RESULT_KEY_DURATION_MILLISECONDS).milliseconds.inWholeSeconds)
+              }
+              TimeDurationPickerDialog.create(state.screenLockActivityTimeout.seconds).show(childFragmentManager, null)
+            } else {
+              Toast.makeText(requireContext(), R.string.PIN_screen_lock_timeout, Toast.LENGTH_SHORT).show()
             }
-            TimeDurationPickerDialog.create(state.screenLockActivityTimeout.seconds).show(childFragmentManager, null)
           }
         )
       }
