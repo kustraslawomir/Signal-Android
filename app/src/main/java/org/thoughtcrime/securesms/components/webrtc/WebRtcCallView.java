@@ -1,5 +1,6 @@
 package org.thoughtcrime.securesms.components.webrtc;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
@@ -68,6 +69,7 @@ import java.util.Set;
 
 import static org.thoughtcrime.securesms.components.webrtc.WebRtcAudioOutput.HANDSET;
 import static org.thoughtcrime.securesms.components.webrtc.WebRtcAudioOutput.SPEAKER;
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
 import static pigeon.extensions.KotilinExtensionsKt.focusOnLeft;
 
 public class WebRtcCallView extends ConstraintLayout {
@@ -266,7 +268,7 @@ public class WebRtcCallView extends ConstraintLayout {
     setAudioLabelName(audioToggle.getOutputMode());
 
     audioToggle.setOnAudioOutputChangedListener(outputMode -> {
-     setAudioLabelName(outputMode);
+      setAudioLabelName(outputMode);
       runIfNonNull(controlsListener, listener -> listener.onAudioOutputChanged(outputMode));
     });
 
@@ -277,14 +279,18 @@ public class WebRtcCallView extends ConstraintLayout {
     });
 
     micToggle.setOnCheckedChangeListener((v, isOn) -> {
+      setMicrophoneLabelName(isOn);
       runIfNonNull(controlsListener, listener -> listener.onMicChanged(isOn));
     });
 
     micToggleLabel.setOnClickListener(v -> micToggle.performClick());
 
     ringToggle.setOnCheckedChangeListener((v, isOn) -> {
+      setRingLabelName(isOn);
       runIfNonNull(controlsListener, listener -> listener.onRingGroupChanged(isOn, ringToggle.isActivated()));
     });
+
+    ringToggleLabel.setOnClickListener(v -> ringToggle.performClick());
 
     cameraDirectionToggle.setOnClickListener(v -> runIfNonNull(controlsListener, ControlsListener::onCameraDirectionChanged));
 
@@ -349,7 +355,7 @@ public class WebRtcCallView extends ConstraintLayout {
   }
 
   private void setAudioLabelName(WebRtcAudioOutput outputMode){
-    String label = "";
+    String label;
     if (outputMode == HANDSET){
       label = getContext().getString(R.string.turn_speaker_on);
     } else if (outputMode == SPEAKER){
@@ -358,6 +364,27 @@ public class WebRtcCallView extends ConstraintLayout {
       label = getContext().getString(outputMode.getLabelRes());
     }
     audioToggleLabel.setText(label);
+  }
+
+  private void setMicrophoneLabelName(Boolean isMicrophoneEnabled){
+    String label;
+    if (!isMicrophoneEnabled){
+      label = getContext().getString(R.string.unmute);
+    } else {
+      label = getContext().getString(R.string.mute);
+    }
+    micToggleLabel.setText(label);
+  }
+
+  @SuppressLint("SetTextI18n")
+  private void setRingLabelName(Boolean isRingEnabled){
+    String label;
+    if (!isRingEnabled){
+      label = getContext().getString(R.string.preferences_off);
+    } else {
+      label = getContext().getString(R.string.preferences_on);
+    }
+    ringToggleLabel.setText(getContext().getString(R.string.WebRtcCallView__ring) + ":" + label);
   }
 
   @Override
@@ -427,6 +454,7 @@ public class WebRtcCallView extends ConstraintLayout {
 
   public void setMicEnabled(boolean isMicEnabled) {
     micToggle.setChecked(isMicEnabled, false);
+    setMicrophoneLabelName(isMicEnabled);
   }
 
   public void updateCallParticipants(@NonNull CallParticipantsViewState callParticipantsViewState) {
@@ -494,7 +522,9 @@ public class WebRtcCallView extends ConstraintLayout {
 
 
     videoToggle.setChecked(localCallParticipant.isVideoEnabled(), false);
-    smallLocalRender.setRenderInPip(true);
+    if (isSignalVersion()) {
+      smallLocalRender.setRenderInPip(true);
+    }
 
     if (state == WebRtcLocalRenderState.EXPANDED) {
       expandPip(localCallParticipant, focusedParticipant);
@@ -1066,7 +1096,6 @@ public class WebRtcCallView extends ConstraintLayout {
     videoToggle.setBackgroundResource(R.drawable.webrtc_call_screen_video_toggle);
     audioToggle.setImageResource(R.drawable.webrtc_call_screen_speaker_toggle);
     ringToggle.setBackgroundResource(R.drawable.webrtc_call_screen_ring_toggle);
-    updateButtonState();
   }
 
   private void updateButtonStateForSmallButtons() {
@@ -1076,11 +1105,6 @@ public class WebRtcCallView extends ConstraintLayout {
     videoToggle.setBackgroundResource(R.drawable.webrtc_call_screen_video_toggle_small);
     audioToggle.setImageResource(R.drawable.webrtc_call_screen_speaker_toggle_small);
     ringToggle.setBackgroundResource(R.drawable.webrtc_call_screen_ring_toggle_small);
-    updateButtonState();
-  }
-
-  private void updateButtonState(){
-
   }
 
   private boolean showParticipantsList() {
@@ -1096,6 +1120,7 @@ public class WebRtcCallView extends ConstraintLayout {
 
   public void setRingGroup(boolean shouldRingGroup) {
     ringToggle.setChecked(shouldRingGroup, false);
+    setRingLabelName(shouldRingGroup);
   }
 
   public void enableRingGroup(boolean enabled) {

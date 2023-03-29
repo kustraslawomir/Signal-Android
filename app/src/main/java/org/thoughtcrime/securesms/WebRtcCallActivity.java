@@ -289,7 +289,11 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
   }
 
   private boolean isInPipMode() {
-    return isSystemPipEnabledAndAvailable() && isInPictureInPictureMode();
+    if (isSignalVersion()) {
+      return isSystemPipEnabledAndAvailable() && isInPictureInPictureMode();
+    } else  {
+      return false;
+    }
   }
 
   private void processIntent(@NonNull Intent intent) {

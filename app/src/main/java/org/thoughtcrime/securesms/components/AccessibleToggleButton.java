@@ -35,12 +35,6 @@ public class AccessibleToggleButton extends AppCompatToggleButton {
       super.setOnCheckedChangeListener(null);
     }
 
-    String state = getContext().getString(R.string.preferences_off);
-    if (checked) {
-      state = getContext().getString(R.string.preferences_on);
-    }
-    this.setText(getContext().getString(R.string.WebRtcCallView__mute) + ":" + state);
-
     super.setChecked(checked);
 
     if (!notifyListener) {

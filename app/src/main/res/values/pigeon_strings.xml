@@ -116,6 +116,8 @@ Updated May 25, 2018\n
     <string name="preferences__about">About</string>
     <string name="turn_speaker_on">Turn speaker on</string>
     <string name="turn_speaker_off">Turn speaker off</string>
+    <string name="mute">Mute</string>
+    <string name="unmute">Unmute</string>
 
     <string name="PIN_screen_lock">To use the function, set a pin code in the PUNKT settings</string>
     <string name="PIN_screen_lock_timeout">To use the function, set a pin code in the PUNKT settings and turn on screen lock</string>
