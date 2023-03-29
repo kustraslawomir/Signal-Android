@@ -2,6 +2,7 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:viewBindingIgnore="true"
+    tools:background="@color/black"
     xmlns:tools="http://schemas.android.com/tools"
     tools:parentTag="org.thoughtcrime.securesms.components.webrtc.WebRtcCallView">
 
@@ -10,6 +11,19 @@
         android:layout_height="0dp"
         android:orientation="vertical"
         android:visibility="gone">
+
+        <TextView
+            android:id="@+id/call_screen_audio_ring_toggle_label"
+            style="@style/Mp02.Signal.Text.CommonTextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:layout_marginStart="@dimen/pigeon_start_margin"
+            android:gravity="center_horizontal"
+            android:text="@string/WebRtcCallView__ring"
+            app:layout_constraintTop_toBottomOf="@+id/call_screen_audio_mic_toggle_label"
+            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/fold_show_participants_menu_counter_wrapper"
@@ -393,6 +407,12 @@
             app:srcCompat="@drawable/webrtc_call_screen_hangup"
             tools:visibility="gone" />
 
+        <View
+            android:id="@+id/call_screen_full_shade"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black" />
+
         <ImageView
             android:id="@+id/call_screen_answer_call"
             android:layout_width="56dp"
@@ -461,19 +481,12 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/fold_top_guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:visibility="gone">
 
     </FrameLayout>
-
-    <View
-        android:id="@+id/call_screen_full_shade"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/black" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/call_screen"
@@ -511,19 +524,6 @@
             tools:visibility="visible" />
 
         <TextView
-            android:id="@+id/call_screen_audio_ring_toggle_label"
-            style="@style/Mp02.Signal.Text.CommonTextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:layout_marginStart="@dimen/pigeon_start_margin"
-            android:gravity="center_horizontal"
-            android:text="@string/WebRtcCallView__ring"
-            app:layout_constraintTop_toBottomOf="@+id/call_screen_audio_mic_toggle_label"
-            app:layout_constraintStart_toStartOf="parent"
-            android:visibility="gone" />
-
-        <TextView
             android:id="@+id/call_screen_end_call_label"
             style="@style/Mp02.Signal.Text.CommonTextButton"
             android:layout_width="wrap_content"
@@ -533,7 +533,7 @@
             android:gravity="center_horizontal"
             android:text="@string/WebRtcCallView__end_call"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/call_screen_audio_ring_toggle_label"
+            app:layout_constraintTop_toBottomOf="@+id/call_screen_audio_mic_toggle_label"
             app:layout_constraintStart_toStartOf="parent"
             tools:visibility="visible" />
 
@@ -586,22 +586,18 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/call_screen_error_cancel"
-            style="@style/Widget.Signal.Button.Flat"
-            android:layout_width="0dp"
+            style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/pigeon_start_margin"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="32dp"
             android:layout_weight="1"
             android:text="@android:string/cancel"
             android:textAllCaps="false"
-            android:textColor="@color/core_white"
             android:visibility="gone"
-            app:backgroundTint="@color/transparent_white_40"
-            app:layout_constraintBottom_toTopOf="@id/call_screen_navigation_bar_guideline"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/call_screen_start_call_controls"
             app:layout_constraintStart_toStartOf="parent"
-            tools:visibility="gone" />
+            tools:visibility="visible" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

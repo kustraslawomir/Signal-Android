@@ -66,6 +66,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.thoughtcrime.securesms.components.webrtc.WebRtcAudioOutput.HANDSET;
+import static org.thoughtcrime.securesms.components.webrtc.WebRtcAudioOutput.SPEAKER;
 import static pigeon.extensions.KotilinExtensionsKt.focusOnLeft;
 
 public class WebRtcCallView extends ConstraintLayout {
@@ -259,11 +261,12 @@ public class WebRtcCallView extends ConstraintLayout {
     focusOnLeft(declineLabel);
     focusOnLeft(startCall);
     focusOnLeft(hangupLabel);
+    focusOnLeft(errorButton);
 
-    audioToggleLabel.setText(audioToggle.getOutputMode().getLabelRes());
+    setAudioLabelName(audioToggle.getOutputMode());
 
     audioToggle.setOnAudioOutputChangedListener(outputMode -> {
-      audioToggleLabel.setText(outputMode.getLabelRes());
+     setAudioLabelName(outputMode);
       runIfNonNull(controlsListener, listener -> listener.onAudioOutputChanged(outputMode));
     });
 
@@ -343,6 +346,18 @@ public class WebRtcCallView extends ConstraintLayout {
 
     smallHeaderConstraints = new ConstraintSet();
     smallHeaderConstraints.clone(getContext(), R.layout.webrtc_call_view_header_small);
+  }
+
+  private void setAudioLabelName(WebRtcAudioOutput outputMode){
+    String label = "";
+    if (outputMode == HANDSET){
+      label = getContext().getString(R.string.turn_speaker_on);
+    } else if (outputMode == SPEAKER){
+      label = getContext().getString(R.string.turn_speaker_off);
+    } else {
+      label = getContext().getString(outputMode.getLabelRes());
+    }
+    audioToggleLabel.setText(label);
   }
 
   @Override
