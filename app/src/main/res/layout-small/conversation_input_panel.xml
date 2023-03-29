@@ -335,9 +335,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:nextFocusUp="@id/conversation_call"
-                android:nextFocusDown="@id/secure_session"
+                android:nextFocusDown="@id/conversation_settings"
                 android:paddingStart="25dp"
                 android:text="@string/MessageRecord_group_call"
+                android:visibility="visible"
+                tools:visibility="visible" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/conversation_settings"
+                style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:nextFocusUp="@id/conversation_group_call"
+                android:nextFocusDown="@id/secure_session"
+                android:paddingStart="25dp"
+                android:text="@string/conversation__menu_conversation_settings"
                 android:visibility="visible"
                 tools:visibility="visible" />
 
@@ -346,7 +358,7 @@
                 style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:nextFocusUp="@id/conversation_group_call"
+                android:nextFocusUp="@id/conversation_settings"
                 android:nextFocusDown="@id/secure_session"
                 android:paddingStart="25dp"
                 android:text="@string/ThreadRecord_secure_session_reset"

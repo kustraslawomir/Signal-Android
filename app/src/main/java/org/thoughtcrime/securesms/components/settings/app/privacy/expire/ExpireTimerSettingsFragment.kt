@@ -22,6 +22,7 @@ import org.thoughtcrime.securesms.util.livedata.ProcessState
 import org.thoughtcrime.securesms.util.livedata.distinctUntilChanged
 import org.thoughtcrime.securesms.util.navigation.safeNavigate
 import org.thoughtcrime.securesms.util.views.CircularProgressMaterialButton
+import pigeon.extensions.isSignalVersion
 
 /**
  * Depending on the arguments, can be used to set the universal expire timer, set expire timer
@@ -108,12 +109,14 @@ class ExpireTimerSettingsFragment : DSLSettingsFragment(
         hasCustomValue = hasCustomValue && state.currentTimer != seconds
       }
 
-      radioPref(
-        title = DSLSettingsText.from(R.string.ExpireTimerSettingsFragment__custom_time),
-        summary = if (hasCustomValue) DSLSettingsText.from(ExpirationUtil.getExpirationDisplayValue(requireContext(), state.currentTimer)) else null,
-        isChecked = hasCustomValue,
-        onClick = { NavHostFragment.findNavController(this@ExpireTimerSettingsFragment).safeNavigate(R.id.action_expireTimerSettingsFragment_to_customExpireTimerSelectDialog) }
-      )
+      if (isSignalVersion()) {
+        radioPref(
+          title = DSLSettingsText.from(R.string.ExpireTimerSettingsFragment__custom_time),
+          summary = if (hasCustomValue) DSLSettingsText.from(ExpirationUtil.getExpirationDisplayValue(requireContext(), state.currentTimer)) else null,
+          isChecked = hasCustomValue,
+          onClick = { NavHostFragment.findNavController(this@ExpireTimerSettingsFragment).safeNavigate(R.id.action_expireTimerSettingsFragment_to_customExpireTimerSelectDialog) }
+        )
+      }
     }
   }
 

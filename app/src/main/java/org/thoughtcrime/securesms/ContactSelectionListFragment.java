@@ -49,6 +49,7 @@ import androidx.transition.TransitionManager;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
@@ -86,12 +87,14 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
 import io.reactivex.rxjava3.disposables.Disposable;
 import kotlin.Unit;
+import pigeon.extensions.KotilinExtensionsKt;
 
 import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
 
@@ -138,8 +141,9 @@ public final class ContactSelectionListFragment extends LoggingFragment
   private ContactChipViewModel                        contactChipViewModel;
   private LifecycleDisposable                         lifecycleDisposable;
   private HeaderActionProvider                        headerActionProvider;
-  private TextView                                    headerActionView;
-  private ContactSearchMediator                       contactSearchMediator;
+  private TextView              headerActionView;
+  private MaterialButton        refresh;
+  private ContactSearchMediator contactSearchMediator;
 
   @Nullable private ListCallback            listCallback;
   @Nullable private ScrollCallback          scrollCallback;
@@ -247,6 +251,16 @@ public final class ContactSelectionListFragment extends LoggingFragment
     chipRecycler             = view.findViewById(R.id.chipRecycler);
     constraintLayout         = view.findViewById(R.id.container);
     headerActionView         = view.findViewById(R.id.header_action);
+    refresh                  = view.findViewById(R.id.refresh_action);
+
+    KotilinExtensionsKt.focusOnLeft(refresh);
+
+    refresh.setOnClickListener(v-> {
+      swipeRefresh.post(() -> {
+        swipeRefresh.setRefreshing(true);
+        ((ContactSelectionActivity) requireActivity()).onRefresh();
+      });
+    });
 
     final LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
 

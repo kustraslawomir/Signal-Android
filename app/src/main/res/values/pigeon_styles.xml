@@ -115,6 +115,20 @@
         <item name="android:textSize">24sp</item>
     </style>
 
+    <style name="Widget.Pigeon.TextInputLayout.Registration" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxCornerRadiusTopEnd">4dp</item>
+        <item name="boxCornerRadiusTopStart">4dp</item>
+        <item name="hintTextAppearance">@style/EditTextHint</item>
+    </style>
+
+    <style name="EditTextHint" parent="TextAppearance.AppCompat">
+        <item name="colorAccent">@android:color/white</item>
+        <item name="android:textColorHint">@color/white_not_focus</item>
+        <item name="colorControlNormal">@color/white_not_focus</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+    </style>
+
     <style name="Mp02.Signal.Text.MaterialTextButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textSize">24sp</item>
         <item name="android:includeFontPadding">false</item>

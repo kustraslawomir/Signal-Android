@@ -54,8 +54,10 @@ import static org.thoughtcrime.securesms.profiles.edit.EditProfileActivity.GROUP
 import static org.thoughtcrime.securesms.profiles.edit.EditProfileActivity.NEXT_BUTTON_TEXT;
 import static org.thoughtcrime.securesms.profiles.edit.EditProfileActivity.NEXT_INTENT;
 import static org.thoughtcrime.securesms.profiles.edit.EditProfileActivity.SHOW_TOOLBAR;
+import static pigeon.extensions.BuildExtensionsKt.isPigeonVersion;
 import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
 import static pigeon.extensions.KotilinExtensionsKt.animateGroup;
+import static pigeon.extensions.KotilinExtensionsKt.focusOnRight;
 
 /**
  * Used for profile creation during registration.
@@ -99,9 +101,9 @@ public class EditProfileFragment extends LoggingFragment {
     initializeProfileAvatar();
     initializeProfileName();
 
-    if (!isSignalVersion()) {
-      animateGroup(binding.pigeonGivenName, binding.pigeonGivenNameWrapper);
-      animateGroup(binding.pigeonFamilyName, binding.pigeonFamilyNameWrapper);
+    if (isPigeonVersion()) {
+      focusOnRight(binding.givenNameWrapper);
+      focusOnRight(binding.familyNameWrapper);
       binding.finishButton.setupAnimation();
     }
 
@@ -168,11 +170,7 @@ public class EditProfileFragment extends LoggingFragment {
       EditTextUtil.addGraphemeClusterLimitFilter(binding.givenName, FeatureFlags.getMaxGroupNameGraphemeLength());
       binding.profileDescriptionText.setVisibility(View.GONE);
       binding.whoCanFindMeContainer.setVisibility(View.GONE);
-      if (isSignalVersion()) {
-        binding.givenName.addTextChangedListener(new AfterTextChanged(s -> viewModel.setGivenName(s.toString())));
-      } else {
-        binding.pigeonGivenName.addTextChangedListener(new AfterTextChanged(s -> viewModel.setGivenName(s.toString())));
-      }
+      binding.givenName.addTextChangedListener(new AfterTextChanged(s -> viewModel.setGivenName(s.toString())));
       binding.givenNameWrapper.setHint(R.string.EditProfileFragment__group_name);
       binding.givenName.requestFocus();
       binding.toolbar.setTitle(R.string.EditProfileFragment__edit_group);
@@ -199,30 +197,19 @@ public class EditProfileFragment extends LoggingFragment {
     } else {
       EditTextUtil.addGraphemeClusterLimitFilter(binding.givenName, EditProfileNameFragment.NAME_MAX_GLYPHS);
       EditTextUtil.addGraphemeClusterLimitFilter(binding.familyName, EditProfileNameFragment.NAME_MAX_GLYPHS);
-      if (isSignalVersion()) {
-        binding.givenName.addTextChangedListener(new AfterTextChanged(s -> {
-          EditProfileNameFragment.trimFieldToMaxByteLength(s);
-          viewModel.setGivenName(s.toString());
-        }));
-        binding.familyName.addTextChangedListener(new AfterTextChanged(s -> {
-          EditProfileNameFragment.trimFieldToMaxByteLength(s);
-          viewModel.setFamilyName(s.toString());
-        }));
+      binding.givenName.addTextChangedListener(new AfterTextChanged(s -> {
+        EditProfileNameFragment.trimFieldToMaxByteLength(s);
+        viewModel.setGivenName(s.toString());
+      }));
+      binding.familyName.addTextChangedListener(new AfterTextChanged(s -> {
+        EditProfileNameFragment.trimFieldToMaxByteLength(s);
+        viewModel.setFamilyName(s.toString());
+      }));
 
-        binding.familyName.addTextChangedListener(new AfterTextChanged(s -> {
-          EditProfileNameFragment.trimFieldToMaxByteLength(s);
-          viewModel.setFamilyName(s.toString());
-        }));
-      } else {
-        Objects.requireNonNull(binding.pigeonGivenName).addTextChangedListener(new AfterTextChanged(s -> {
-          EditProfileNameFragment.trimFieldToMaxByteLength(s);
-          viewModel.setGivenName(s.toString());
-        }));
-        Objects.requireNonNull(binding.pigeonFamilyName).addTextChangedListener(new AfterTextChanged(s -> {
-          EditProfileNameFragment.trimFieldToMaxByteLength(s);
-          viewModel.setFamilyName(s.toString());
-        }));
-      }
+      binding.familyName.addTextChangedListener(new AfterTextChanged(s -> {
+        EditProfileNameFragment.trimFieldToMaxByteLength(s);
+        viewModel.setFamilyName(s.toString());
+      }));
 
       binding.groupDescriptionText.setVisibility(View.GONE);
       binding.profileDescriptionText.setLearnMoreVisible(true);
@@ -264,13 +251,8 @@ public class EditProfileFragment extends LoggingFragment {
       binding.finishButton.setAlpha(isValid ? 1f : 0.5f);
     });
 
-    if (isSignalVersion()) {
-      viewModel.givenName().observe(getViewLifecycleOwner(), givenName -> updateFieldIfNeeded(binding.givenName, givenName));
-      viewModel.familyName().observe(getViewLifecycleOwner(), familyName -> updateFieldIfNeeded(binding.familyName, familyName));
-    } else {
-      viewModel.givenName().observe(getViewLifecycleOwner(), givenName -> updateFieldIfNeeded(binding.pigeonGivenName, givenName));
-      viewModel.familyName().observe(getViewLifecycleOwner(), familyName -> updateFieldIfNeeded(binding.pigeonFamilyName, familyName));
-    }
+    viewModel.givenName().observe(getViewLifecycleOwner(), givenName -> updateFieldIfNeeded(binding.givenName, givenName));
+    viewModel.familyName().observe(getViewLifecycleOwner(), familyName -> updateFieldIfNeeded(binding.familyName, familyName));
 
     viewModel.profileName().observe(getViewLifecycleOwner(), profileName -> binding.namePreview.setText(profileName.toString()));
   }

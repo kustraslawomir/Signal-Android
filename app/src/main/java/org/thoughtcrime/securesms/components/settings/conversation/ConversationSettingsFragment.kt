@@ -91,6 +91,7 @@ import org.thoughtcrime.securesms.util.navigation.safeNavigate
 import org.thoughtcrime.securesms.util.views.SimpleProgressDialog
 import org.thoughtcrime.securesms.verify.VerifyIdentityActivity
 import org.thoughtcrime.securesms.wallpaper.ChatWallpaperActivity
+import pigeon.extensions.isSignalVersion
 
 private const val REQUEST_CODE_VIEW_CONTACT = 1
 private const val REQUEST_CODE_ADD_CONTACT = 2
@@ -250,10 +251,20 @@ class ConversationSettingsFragment : DSLSettingsFragment(
         }
       }
 
-      adapter.submitList(getConfiguration(state).toMappingModelList()) {
-        if (state.isLoaded) {
-          (view?.parent as? ViewGroup)?.doOnPreDraw {
-            callback.onContentWillRender()
+      if (isSignalVersion()) {
+        adapter.submitList(getConfiguration(state).toMappingModelList()) {
+          if (state.isLoaded) {
+            (view?.parent as? ViewGroup)?.doOnPreDraw {
+              callback.onContentWillRender()
+            }
+          }
+        }
+      } else {
+        adapter.submitList(getPigeonConfiguration(state).toMappingModelList()) {
+          if (state.isLoaded) {
+            (view?.parent as? ViewGroup)?.doOnPreDraw {
+              callback.onContentWillRender()
+            }
           }
         }
       }
@@ -752,6 +763,302 @@ class ConversationSettingsFragment : DSLSettingsFragment(
       }
     }
   }
+
+  private fun getPigeonConfiguration(state: ConversationSettingsState): DSLConfiguration {
+    return configure {
+      if (state.recipient == Recipient.UNKNOWN) {
+        return@configure
+      }
+
+      state.withGroupSettingsState { groupState ->
+        clickPref(
+          title = DSLSettingsText.from(R.string.conversation__menu_edit_group),
+          isEnabled = groupState.canEditGroupAttributes,
+          onClick = {
+            startActivity(EditProfileActivity.getIntentForGroupProfile(requireActivity(), groupState.groupId))
+          }
+        )
+      }
+
+      if (state.displayInternalRecipientDetails) {
+        customPref(
+          InternalPreference.Model(
+            recipient = state.recipient,
+            onInternalDetailsClicked = {
+              val action = ConversationSettingsFragmentDirections.actionConversationSettingsFragmentToInternalDetailsSettingsFragment(state.recipient.id)
+              navController.safeNavigate(action)
+            }
+          )
+        )
+      }
+
+      val summary = DSLSettingsText.from(formatDisappearingMessagesLifespan(state.disappearingMessagesLifespan))
+      val icon = if (state.disappearingMessagesLifespan <= 0 || state.recipient.isBlocked) {
+        R.drawable.ic_update_timer_disabled_16
+      } else {
+        R.drawable.ic_update_timer_16
+      }
+
+      var enabled = !state.recipient.isBlocked
+      state.withGroupSettingsState {
+        enabled = it.canEditGroupAttributes && !state.recipient.isBlocked
+      }
+
+      if (!state.recipient.isReleaseNotes && !state.recipient.isBlocked) {
+        clickPref(
+          title = DSLSettingsText.from(R.string.ConversationSettingsFragment__disappearing_messages),
+          summary = summary,
+          icon = DSLSettingsIcon.from(icon),
+          isEnabled = enabled,
+          onClick = {
+            val action = ConversationSettingsFragmentDirections.actionConversationSettingsFragmentToAppSettingsExpireTimer()
+              .setInitialValue(state.disappearingMessagesLifespan)
+              .setRecipientId(state.recipient.id)
+              .setForResultMode(false)
+
+            navController.safeNavigate(action)
+          }
+        )
+      }
+
+      if (!state.recipient.isSelf) {
+        clickPref(
+          title = DSLSettingsText.from(R.string.ConversationSettingsFragment__sounds_and_notifications),
+          icon = DSLSettingsIcon.from(R.drawable.ic_speaker_24),
+          onClick = {
+            val action = ConversationSettingsFragmentDirections.actionConversationSettingsFragmentToSoundsAndNotificationsSettingsFragment(state.recipient.id)
+
+            navController.safeNavigate(action)
+          }
+        )
+      }
+
+      state.withRecipientSettingsState { recipientState ->
+        when (recipientState.contactLinkState) {
+          ContactLinkState.OPEN -> {
+            @Suppress("DEPRECATION")
+            clickPref(
+              title = DSLSettingsText.from(R.string.ConversationSettingsFragment__contact_details),
+              icon = DSLSettingsIcon.from(R.drawable.ic_profile_circle_24),
+              onClick = {
+                startActivityForResult(Intent(Intent.ACTION_VIEW, state.recipient.contactUri), REQUEST_CODE_VIEW_CONTACT)
+              }
+            )
+          }
+          ContactLinkState.ADD -> {
+            @Suppress("DEPRECATION")
+            clickPref(
+              title = DSLSettingsText.from(R.string.ConversationSettingsFragment__add_as_a_contact),
+              icon = DSLSettingsIcon.from(R.drawable.ic_plus_24),
+              onClick = {
+                try {
+                  startActivityForResult(RecipientExporter.export(state.recipient).asAddContactIntent(), REQUEST_CODE_ADD_CONTACT)
+                } catch (e: ActivityNotFoundException) {
+                  Toast.makeText(context, R.string.ConversationSettingsFragment__contacts_app_not_found, Toast.LENGTH_SHORT).show()
+                }
+              }
+            )
+          }
+          ContactLinkState.NONE -> {
+          }
+        }
+
+        if (recipientState.identityRecord != null) {
+          clickPref(
+            title = DSLSettingsText.from(R.string.ConversationSettingsFragment__view_safety_number),
+            icon = DSLSettingsIcon.from(R.drawable.ic_safety_number_24),
+            onClick = {
+              startActivity(VerifyIdentityActivity.newIntent(requireActivity(), recipientState.identityRecord))
+            }
+          )
+        }
+      }
+
+      state.withRecipientSettingsState { recipientSettingsState ->
+        if (state.recipient.badges.isNotEmpty()) {
+
+          sectionHeaderPref(R.string.ManageProfileFragment_badges)
+
+          displayBadges(requireContext(), state.recipient.badges)
+
+          textPref(
+            summary = DSLSettingsText.from(
+              R.string.ConversationSettingsFragment__get_badges
+            )
+          )
+        }
+
+        if (recipientSettingsState.selfHasGroups && !state.recipient.isReleaseNotes) {
+
+          val groupsInCommonCount = recipientSettingsState.allGroupsInCommon.size
+          sectionHeaderPref(
+            DSLSettingsText.from(
+              if (groupsInCommonCount == 0) {
+                getString(R.string.ManageRecipientActivity_no_groups_in_common)
+              } else {
+                resources.getQuantityString(
+                  R.plurals.ManageRecipientActivity_d_groups_in_common,
+                  groupsInCommonCount,
+                  groupsInCommonCount
+                )
+              }
+            )
+          )
+
+          if (!state.recipient.isBlocked) {
+            customPref(
+              LargeIconClickPreference.Model(
+                title = DSLSettingsText.from(R.string.ConversationSettingsFragment__add_to_a_group),
+                icon = DSLSettingsIcon.from(R.drawable.add_to_a_group, NO_TINT),
+                onClick = {
+                  viewModel.onAddToGroup()
+                }
+              )
+            )
+          }
+
+          for (group in recipientSettingsState.groupsInCommon) {
+            customPref(
+              RecipientPreference.Model(
+                recipient = group,
+                onClick = {
+                  CommunicationActions.startConversation(requireActivity(), group, null)
+                  requireActivity().finish()
+                }
+              )
+            )
+          }
+
+          if (recipientSettingsState.canShowMoreGroupsInCommon) {
+            customPref(
+              LargeIconClickPreference.Model(
+                title = DSLSettingsText.from(R.string.ConversationSettingsFragment__see_all),
+                icon = DSLSettingsIcon.from(R.drawable.show_more, NO_TINT),
+                onClick = {
+                  viewModel.revealAllMembers()
+                }
+              )
+            )
+          }
+        }
+      }
+
+      state.withGroupSettingsState { groupState ->
+        val memberCount = groupState.allMembers.size
+
+        if (groupState.canAddToGroup || memberCount > 0) {
+
+          sectionHeaderPref(DSLSettingsText.from(resources.getQuantityString(R.plurals.ContactSelectionListFragment_d_members, memberCount, memberCount)))
+        }
+
+        if (groupState.canAddToGroup) {
+          clickPref(
+            title = DSLSettingsText.from(R.string.ConversationSettingsFragment__add_members),
+            summary = DSLSettingsText.from(if (groupState.groupLinkEnabled) R.string.preferences_on else R.string.preferences_off),
+            onClick = {
+              viewModel.onAddToGroup()
+            }
+          )
+        }
+
+        for (member in groupState.members) {
+          customPref(
+            RecipientPreference.Model(
+              recipient = member.member,
+              isAdmin = member.isAdmin,
+              onClick = {
+                RecipientBottomSheetDialogFragment.create(member.member.id, groupState.groupId).show(parentFragmentManager, "BOTTOM")
+              }
+            )
+          )
+        }
+
+        if (groupState.canShowMoreGroupMembers) {
+          clickPref(
+            title = DSLSettingsText.from(R.string.ConversationSettingsFragment__see_all),
+            onClick = {
+              viewModel.revealAllMembers()
+            }
+          )
+        }
+
+        if (state.recipient.isPushV2Group) {
+
+          clickPref(
+            title = DSLSettingsText.from(R.string.ConversationSettingsFragment__group_link),
+            summary = DSLSettingsText.from(if (groupState.groupLinkEnabled) R.string.preferences_on else R.string.preferences_off),
+            icon = DSLSettingsIcon.from(R.drawable.ic_link_16),
+            onClick = {
+              navController.safeNavigate(ConversationSettingsFragmentDirections.actionConversationSettingsFragmentToShareableGroupLinkFragment(groupState.groupId.requireV2().toString()))
+            }
+          )
+
+//          clickPref(
+//            title = DSLSettingsText.from(R.string.ConversationSettingsFragment__requests_and_invites),
+//            icon = DSLSettingsIcon.from(R.drawable.ic_update_group_add_16),
+//            onClick = {
+//              startActivity(ManagePendingAndRequestingMembersActivity.newIntent(requireContext(), groupState.groupId.requireV2()))
+//            }
+//          )
+
+          if (groupState.isSelfAdmin) {
+            clickPref(
+              title = DSLSettingsText.from(R.string.ConversationSettingsFragment__permissions),
+              icon = DSLSettingsIcon.from(R.drawable.ic_lock_24),
+              onClick = {
+                val action = ConversationSettingsFragmentDirections.actionConversationSettingsFragmentToPermissionsSettingsFragment(ParcelableGroupId.from(groupState.groupId))
+                navController.safeNavigate(action)
+              }
+            )
+          }
+        }
+
+        if (groupState.canLeave) {
+
+          clickPref(
+            title = DSLSettingsText.from(R.string.conversation__menu_leave_group, alertTint),
+            icon = DSLSettingsIcon.from(leaveIcon),
+            onClick = {
+              LeaveGroupDialog.handleLeavePushGroup(requireActivity(), groupState.groupId.requirePush(), null)
+            }
+          )
+        }
+      }
+
+      if (state.canModifyBlockedState) {
+
+        val isBlocked = state.recipient.isBlocked
+        val isGroup = state.recipient.isPushGroup
+
+        val title = when {
+          isBlocked && isGroup -> R.string.ConversationSettingsFragment__unblock_group
+          isBlocked -> R.string.ConversationSettingsFragment__unblock
+          isGroup -> R.string.ConversationSettingsFragment__block_group
+          else -> R.string.ConversationSettingsFragment__block
+        }
+
+        val titleTint = if (isBlocked) null else alertTint
+        val blockUnblockIcon = if (isBlocked) unblockIcon else blockIcon
+
+        clickPref(
+          title = if (titleTint != null) DSLSettingsText.from(title, titleTint) else DSLSettingsText.from(title),
+          icon = DSLSettingsIcon.from(blockUnblockIcon),
+          onClick = {
+            if (state.recipient.isBlocked) {
+              BlockUnblockDialog.showUnblockFor(requireContext(), viewLifecycleOwner.lifecycle, state.recipient) {
+                viewModel.unblock()
+              }
+            } else {
+              BlockUnblockDialog.showBlockFor(requireContext(), viewLifecycleOwner.lifecycle, state.recipient) {
+                viewModel.block()
+              }
+            }
+          }
+        )
+      }
+    }
+  }
+
 
   private fun formatDisappearingMessagesLifespan(disappearingMessagesLifespan: Int): String {
     return if (disappearingMessagesLifespan <= 0) {
