@@ -66,6 +66,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static pigeon.extensions.KotilinExtensionsKt.focusOnLeft;
+
 public class WebRtcCallView extends ConstraintLayout {
 
   private static final long TRANSITION_DURATION_MILLIS          = 250;
@@ -250,7 +252,18 @@ public class WebRtcCallView extends ConstraintLayout {
     adjustableMarginsSet.add(videoToggle);
     adjustableMarginsSet.add(audioToggle);
 
+    focusOnLeft(audioToggleLabel);
+    focusOnLeft(micToggleLabel);
+    focusOnLeft(ringToggleLabel);
+    focusOnLeft(answerLabel);
+    focusOnLeft(declineLabel);
+    focusOnLeft(startCall);
+    focusOnLeft(hangupLabel);
+
+    audioToggleLabel.setText(audioToggle.getOutputMode().getLabelRes());
+
     audioToggle.setOnAudioOutputChangedListener(outputMode -> {
+      audioToggleLabel.setText(outputMode.getLabelRes());
       runIfNonNull(controlsListener, listener -> listener.onAudioOutputChanged(outputMode));
     });
 
