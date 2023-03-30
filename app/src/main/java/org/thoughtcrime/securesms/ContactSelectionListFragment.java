@@ -142,7 +142,6 @@ public final class ContactSelectionListFragment extends LoggingFragment
   private LifecycleDisposable                         lifecycleDisposable;
   private HeaderActionProvider                        headerActionProvider;
   private TextView              headerActionView;
-  private MaterialButton        refresh;
   private ContactSearchMediator contactSearchMediator;
 
   @Nullable private ListCallback            listCallback;
@@ -251,16 +250,6 @@ public final class ContactSelectionListFragment extends LoggingFragment
     chipRecycler             = view.findViewById(R.id.chipRecycler);
     constraintLayout         = view.findViewById(R.id.container);
     headerActionView         = view.findViewById(R.id.header_action);
-    refresh                  = view.findViewById(R.id.refresh_action);
-
-    KotilinExtensionsKt.focusOnLeft(refresh);
-
-    refresh.setOnClickListener(v-> {
-      swipeRefresh.post(() -> {
-        swipeRefresh.setRefreshing(true);
-        ((ContactSelectionActivity) requireActivity()).onRefresh();
-      });
-    });
 
     final LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
 
@@ -803,6 +792,13 @@ public final class ContactSelectionListFragment extends LoggingFragment
 
   public void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener onRefreshListener) {
     this.swipeRefresh.setOnRefreshListener(onRefreshListener);
+  }
+
+  public void handleSwipe() {
+    swipeRefresh.post(() -> {
+      swipeRefresh.setRefreshing(true);
+      ((ContactSelectionActivity) requireActivity()).onRefresh();
+    });
   }
 
   private void smoothScrollChipsToEnd() {
