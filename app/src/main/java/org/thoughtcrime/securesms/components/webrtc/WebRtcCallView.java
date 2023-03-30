@@ -277,6 +277,7 @@ public class WebRtcCallView extends ConstraintLayout {
     focusOnLeft(startCall);
     focusOnLeft(hangupLabel);
     focusOnLeft(errorButton);
+    focusOnLeft(volumeToggle);
 
     setAudioLabelName(audioToggle.getOutputMode());
 
