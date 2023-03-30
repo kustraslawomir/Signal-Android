@@ -350,7 +350,9 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
                                viewModel.getEphemeralState(),
                                (s, o, e) -> new CallParticipantsViewState(s, e, o.first == PORTRAIT_BOTTOM_EDGE, o.second))
                 .observe(this, p -> callScreen.updateCallParticipants(p));
-    viewModel.getCallParticipantListUpdate().observe(this, participantUpdateWindow::addCallParticipantListUpdate);
+    if (isSignalVersion()) {
+      viewModel.getCallParticipantListUpdate().observe(this, participantUpdateWindow::addCallParticipantListUpdate);
+    }
     viewModel.getSafetyNumberChangeEvent().observe(this, this::handleSafetyNumberChangeEvent);
     viewModel.getGroupMembersChanged().observe(this, unused -> updateGroupMembersForGroupCall());
     viewModel.getGroupMemberCount().observe(this, this::handleGroupMemberCountChange);

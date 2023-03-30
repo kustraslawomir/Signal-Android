@@ -1,10 +1,14 @@
 package org.thoughtcrime.securesms.components.webrtc.participantslist;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.annimon.stream.OptionalLong;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import org.thoughtcrime.securesms.R;
@@ -51,6 +57,36 @@ public class CallParticipantsListDialog extends BottomSheetDialogFragment {
   public void show(@NonNull FragmentManager manager, @Nullable String tag) {
     BottomSheetUtil.show(manager, tag, this);
   }
+
+  @NonNull @Override public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+    Dialog dialog = super.onCreateDialog(savedInstanceState);
+    dialog.setOnShowListener(dialogInterface -> {
+      BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) dialogInterface;
+      setupFullHeight(bottomSheetDialog);
+    });
+    return dialog;
+  }
+
+  private void setupFullHeight(BottomSheetDialog bottomSheetDialog) {
+    FrameLayout            bottomSheet  = (FrameLayout) bottomSheetDialog.findViewById(R.id.design_bottom_sheet);
+    BottomSheetBehavior    behavior     = BottomSheetBehavior.from(bottomSheet);
+    ViewGroup.LayoutParams layoutParams = bottomSheet.getLayoutParams();
+
+    int windowHeight = getWindowHeight();
+    if (layoutParams != null) {
+      layoutParams.height = windowHeight;
+    }
+    bottomSheet.setLayoutParams(layoutParams);
+    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+  }
+
+  private int getWindowHeight() {
+    // Calculate window height for fullscreen use
+    DisplayMetrics displayMetrics = new DisplayMetrics();
+    ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+    return displayMetrics.heightPixels;
+  }
+
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
