@@ -119,6 +119,12 @@ Updated May 25, 2018\n
     <string name="WebRtcCallControls_volume_button_description">Volume</string>
     <string name="mute">Mute</string>
     <string name="unmute">Unmute</string>
+    <string name="Pigeon_WebRtcCallView__signal_call">Pigeon Call</string>
+    <string name="Pigeon_WebRtcCallView__signal_video_call">Pigeon Call</string>
+    <string name="Pigeon_WebRtcCallActivity__signal_s">Calling time: %1$s</string>
+
+    <string name="RedPhone_connected">Connected</string>
+    <string name="RedPhone_connecting">Connecting...</string>
 
     <string name="PIN_screen_lock">To use the function, set a pin code in the PUNKT settings</string>
     <string name="PIN_screen_lock_timeout">To use the function, set a pin code in the PUNKT settings and turn on screen lock</string>

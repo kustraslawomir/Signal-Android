@@ -427,8 +427,11 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
     if (ellapsedTimeFormatter == null) {
       return;
     }
-
-    callScreen.setStatus(getString(R.string.WebRtcCallActivity__signal_s, ellapsedTimeFormatter.toString()));
+    if (isSignalVersion()) {
+      callScreen.setStatus(getString(R.string.WebRtcCallActivity__signal_s, ellapsedTimeFormatter.toString()));
+    } else {
+      callScreen.setStatus(getString(R.string.Pigeon_WebRtcCallActivity__signal_s, ellapsedTimeFormatter.toString()));
+    }
   }
 
   private void handleSetAudioHandset() {
