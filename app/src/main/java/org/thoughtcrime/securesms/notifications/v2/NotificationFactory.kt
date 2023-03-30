@@ -124,6 +124,14 @@ object NotificationFactory {
     return threadsThatNewlyAlerted
   }
 
+  private fun notifylauncher3(context: Context, state: NotificationState) {
+    val intent = Intent()
+    intent.action = "new.msg.from.signal"
+    intent.putExtra("thread_count", state.threadCount)
+    intent.putExtra("msg_count", state.messageCount)
+    context.sendBroadcast(intent)
+  }
+
   @TargetApi(24)
   private fun notify24(
     context: Context,
@@ -149,6 +157,7 @@ object NotificationFactory {
         }
 
         try {
+          notifylauncher3(context = context, state = state.copy(conversations = state.getNonVisibleConversation(visibleThread)))
           notifyForConversation(
             context = context,
             conversation = conversation,
