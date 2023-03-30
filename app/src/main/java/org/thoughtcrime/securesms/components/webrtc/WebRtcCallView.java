@@ -624,10 +624,11 @@ public class WebRtcCallView extends ConstraintLayout {
 
     recipientName.setText(recipient.getDisplayName(getContext()));
     pigeonName.setText(recipient.getDisplayName(getContext()));
-    pigeonPhone.setText(PhoneNumberFormatter.prettyPrint(recipient.requireE164()));
-    if (recipient.isGroup()){
+    if (!recipient.hasE164()){
       pigeonPhone.setVisibility(GONE);
     }
+    String number = PhoneNumberFormatter.prettyPrint(recipient.requireE164());
+    pigeonPhone.setText(number);
   }
 
   public void setStatus(@NonNull String status) {

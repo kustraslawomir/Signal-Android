@@ -95,7 +95,6 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.Disposable;
 import pigeon.activity.WebRtcCallVolumeActivity;
-import pigeon.extensions.BuildExtensionsKt;
 
 import static org.thoughtcrime.securesms.components.sensors.Orientation.PORTRAIT_BOTTOM_EDGE;
 import static pigeon.extensions.BuildExtensionsKt.isPigeonVersion;

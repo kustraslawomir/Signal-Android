@@ -46,6 +46,8 @@ import org.whispersystems.signalservice.api.push.ServiceId;
 import java.io.IOException;
 import java.util.Optional;
 
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
+
 public class CommunicationActions {
 
   private static final String TAG = Log.tag(CommunicationActions.class);
@@ -80,12 +82,16 @@ public class CommunicationActions {
           if (resultCode == 1) {
             startCallInternal(callContext, recipient, false);
           } else {
-            new MaterialAlertDialogBuilder(callContext.getContext())
-                .setMessage(R.string.CommunicationActions_start_voice_call)
-                .setPositiveButton(R.string.CommunicationActions_call, (d, w) -> startCallInternal(callContext, recipient, false))
-                .setNegativeButton(R.string.CommunicationActions_cancel, (d, w) -> d.dismiss())
-                .setCancelable(true)
-                .show();
+            if (isSignalVersion()) {
+              new MaterialAlertDialogBuilder(callContext.getContext())
+                  .setMessage(R.string.CommunicationActions_start_voice_call)
+                  .setPositiveButton(R.string.CommunicationActions_call, (d, w) -> startCallInternal(callContext, recipient, false))
+                  .setNegativeButton(R.string.CommunicationActions_cancel, (d, w) -> d.dismiss())
+                  .setCancelable(true)
+                  .show();
+            } else {
+              startCallInternal(callContext, recipient, false);
+            }
           }
         }
       });
