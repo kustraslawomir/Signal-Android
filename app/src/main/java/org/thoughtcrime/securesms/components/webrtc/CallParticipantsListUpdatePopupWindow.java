@@ -24,6 +24,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
+
 public class CallParticipantsListUpdatePopupWindow extends PopupWindow {
 
   private static final long DURATION = TimeUnit.SECONDS.toMillis(2);
@@ -53,14 +55,16 @@ public class CallParticipantsListUpdatePopupWindow extends PopupWindow {
   }
 
   public void addCallParticipantListUpdate(@NonNull CallParticipantListUpdate update) {
-    pendingAdditions.addAll(update.getAdded());
-    pendingAdditions.removeAll(update.getRemoved());
+    if (isSignalVersion()) {
+      pendingAdditions.addAll(update.getAdded());
+      pendingAdditions.removeAll(update.getRemoved());
 
-    pendingRemovals.addAll(update.getRemoved());
-    pendingRemovals.removeAll(update.getAdded());
+      pendingRemovals.addAll(update.getRemoved());
+      pendingRemovals.removeAll(update.getAdded());
 
-    if (!isShowing()) {
-      showPending();
+      if (!isShowing()) {
+        showPending();
+      }
     }
   }
 

@@ -1,5 +1,6 @@
 package org.thoughtcrime.securesms.components.webrtc;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
@@ -49,6 +50,7 @@ import org.thoughtcrime.securesms.events.CallParticipant;
 import org.thoughtcrime.securesms.events.WebRtcViewModel;
 import org.thoughtcrime.securesms.mediasend.SimpleAnimationListener;
 import org.thoughtcrime.securesms.mms.GlideApp;
+import org.thoughtcrime.securesms.phonenumbers.PhoneNumberFormatter;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.recipients.RecipientId;
 import org.thoughtcrime.securesms.ringrtc.CameraState;
@@ -65,6 +67,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.thoughtcrime.securesms.components.webrtc.WebRtcAudioOutput.HANDSET;
+import static org.thoughtcrime.securesms.components.webrtc.WebRtcAudioOutput.SPEAKER;
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
+import static pigeon.extensions.KotilinExtensionsKt.focusOnLeft;
+
 public class WebRtcCallView extends ConstraintLayout {
 
   private static final long TRANSITION_DURATION_MILLIS          = 250;
@@ -77,6 +84,7 @@ public class WebRtcCallView extends ConstraintLayout {
 
   private WebRtcAudioOutputToggleButton audioToggle;
   private TextView                      audioToggleLabel;
+  private TextView                      volumeToggle;
   private AccessibleToggleButton        videoToggle;
   private TextView                      videoToggleLabel;
   private AccessibleToggleButton        micToggle;
@@ -88,8 +96,12 @@ public class WebRtcCallView extends ConstraintLayout {
   private View                          largeLocalRenderNoVideo;
   private ImageView                     largeLocalRenderNoVideoAvatar;
   private TextView                      recipientName;
+  private TextView                      pigeonName;
+  private TextView                      pigeonPhone;
   private TextView                      status;
+  private TextView                      pigeonStatus;
   private TextView                      incomingRingStatus;
+  private TextView                      pigeonIncomingRingStatus;
   private ConstraintLayout              parent;
   private ConstraintLayout              participantsParent;
   private ControlsListener              controlsListener;
@@ -167,6 +179,7 @@ public class WebRtcCallView extends ConstraintLayout {
 
     audioToggle                   = findViewById(R.id.call_screen_speaker_toggle);
     audioToggleLabel              = findViewById(R.id.call_screen_speaker_toggle_label);
+    volumeToggle                  = findViewById(R.id.call_screen_volume_toggle);
     videoToggle                   = findViewById(R.id.call_screen_video_toggle);
     videoToggleLabel              = findViewById(R.id.call_screen_video_toggle_label);
     micToggle                     = findViewById(R.id.call_screen_audio_mic_toggle);
@@ -178,8 +191,12 @@ public class WebRtcCallView extends ConstraintLayout {
     largeLocalRenderNoVideo       = findViewById(R.id.call_screen_large_local_video_off);
     largeLocalRenderNoVideoAvatar = findViewById(R.id.call_screen_large_local_video_off_avatar);
     recipientName                 = findViewById(R.id.call_screen_recipient_name);
+    pigeonName                    = findViewById(R.id.pigeon_name);
+    pigeonPhone                   = findViewById(R.id.pigeon_phone);
     status                        = findViewById(R.id.call_screen_status);
+    pigeonStatus                  = findViewById(R.id.pigeon_call_screen_status);
     incomingRingStatus            = findViewById(R.id.call_screen_incoming_ring_status);
+    pigeonIncomingRingStatus      = findViewById(R.id.pigeon_call_screen_incoming_ring_status);
     parent                        = findViewById(R.id.call_screen);
     participantsParent            = findViewById(R.id.call_screen_participants_parent);
     answer                        = findViewById(R.id.call_screen_answer_call);
@@ -211,9 +228,11 @@ public class WebRtcCallView extends ConstraintLayout {
     navigationBarGuideline        = findViewById(R.id.call_screen_navigation_bar_guideline);
     fullScreenShade               = findViewById(R.id.call_screen_full_shade);
 
-    View      decline                = findViewById(R.id.call_screen_decline_call);
-    View      answerLabel            = findViewById(R.id.call_screen_answer_call_label);
-    View      declineLabel           = findViewById(R.id.call_screen_decline_call_label);
+    View decline      = findViewById(R.id.call_screen_decline_call);
+    View answerLabel  = findViewById(R.id.call_screen_answer_call_label);
+    View declineLabel = findViewById(R.id.call_screen_decline_call_label);
+
+    volumeToggle.setOnClickListener(v -> runIfNonNull(controlsListener, ControlsListener::onVolumePressed));
 
     callParticipantsPager.setPageTransformer(new MarginPageTransformer(ViewUtil.dpToPx(4)));
 
@@ -243,13 +262,27 @@ public class WebRtcCallView extends ConstraintLayout {
     incomingCallViews.add(declineLabel);
     incomingCallViews.add(footerGradient);
     incomingCallViews.add(incomingRingStatus);
+    incomingCallViews.add(pigeonIncomingRingStatus);
 
     adjustableMarginsSet.add(micToggle);
     adjustableMarginsSet.add(cameraDirectionToggle);
     adjustableMarginsSet.add(videoToggle);
     adjustableMarginsSet.add(audioToggle);
 
+    focusOnLeft(audioToggleLabel);
+    focusOnLeft(micToggleLabel);
+    focusOnLeft(ringToggleLabel);
+    focusOnLeft(answerLabel);
+    focusOnLeft(declineLabel);
+    focusOnLeft(startCall);
+    focusOnLeft(hangupLabel);
+    focusOnLeft(errorButton);
+    focusOnLeft(volumeToggle);
+
+    setAudioLabelName(audioToggle.getOutputMode());
+
     audioToggle.setOnAudioOutputChangedListener(outputMode -> {
+      setAudioLabelName(outputMode);
       runIfNonNull(controlsListener, listener -> listener.onAudioOutputChanged(outputMode));
     });
 
@@ -260,14 +293,18 @@ public class WebRtcCallView extends ConstraintLayout {
     });
 
     micToggle.setOnCheckedChangeListener((v, isOn) -> {
+      setMicrophoneLabelName(isOn);
       runIfNonNull(controlsListener, listener -> listener.onMicChanged(isOn));
     });
 
     micToggleLabel.setOnClickListener(v -> micToggle.performClick());
 
     ringToggle.setOnCheckedChangeListener((v, isOn) -> {
+      setRingLabelName(isOn);
       runIfNonNull(controlsListener, listener -> listener.onRingGroupChanged(isOn, ringToggle.isActivated()));
     });
+
+    ringToggleLabel.setOnClickListener(v -> ringToggle.performClick());
 
     cameraDirectionToggle.setOnClickListener(v -> runIfNonNull(controlsListener, ControlsListener::onCameraDirectionChanged));
 
@@ -324,11 +361,46 @@ public class WebRtcCallView extends ConstraintLayout {
     rotatableControls.add(smallLocalAudioIndicator);
     rotatableControls.add(ringToggle);
 
-    largeHeaderConstraints = new ConstraintSet();
-    largeHeaderConstraints.clone(getContext(), R.layout.webrtc_call_view_header_large);
+    if (isSignalVersion()) {
+      largeHeaderConstraints = new ConstraintSet();
+      largeHeaderConstraints.clone(getContext(), R.layout.webrtc_call_view_header_large);
 
-    smallHeaderConstraints = new ConstraintSet();
-    smallHeaderConstraints.clone(getContext(), R.layout.webrtc_call_view_header_small);
+      smallHeaderConstraints = new ConstraintSet();
+      smallHeaderConstraints.clone(getContext(), R.layout.webrtc_call_view_header_small);
+    }
+  }
+
+  private void setAudioLabelName(WebRtcAudioOutput outputMode) {
+    String label;
+    if (outputMode == HANDSET) {
+      label = getContext().getString(R.string.turn_speaker_on);
+    } else if (outputMode == SPEAKER) {
+      label = getContext().getString(R.string.turn_speaker_off);
+    } else {
+      label = getContext().getString(outputMode.getLabelRes());
+    }
+    audioToggleLabel.setText(label);
+  }
+
+  private void setMicrophoneLabelName(Boolean isMicrophoneEnabled) {
+    String label;
+    if (!isMicrophoneEnabled) {
+      label = getContext().getString(R.string.unmute);
+    } else {
+      label = getContext().getString(R.string.mute);
+    }
+    micToggleLabel.setText(label);
+  }
+
+  @SuppressLint("SetTextI18n")
+  private void setRingLabelName(Boolean isRingEnabled) {
+    String label;
+    if (!isRingEnabled) {
+      label = getContext().getString(R.string.preferences_off);
+    } else {
+      label = getContext().getString(R.string.preferences_on);
+    }
+    ringToggleLabel.setText(getContext().getString(R.string.WebRtcCallView__ring) + ":" + label);
   }
 
   @Override
@@ -398,6 +470,7 @@ public class WebRtcCallView extends ConstraintLayout {
 
   public void setMicEnabled(boolean isMicEnabled) {
     micToggle.setChecked(isMicEnabled, false);
+    setMicrophoneLabelName(isMicEnabled);
   }
 
   public void updateCallParticipants(@NonNull CallParticipantsViewState callParticipantsViewState) {
@@ -419,16 +492,19 @@ public class WebRtcCallView extends ConstraintLayout {
     if (state.getGroupCallState().isNotIdle()) {
       if (state.getCallState() == WebRtcViewModel.State.CALL_PRE_JOIN) {
         status.setText(state.getPreJoinGroupDescription(getContext()));
+        pigeonStatus.setText(state.getPreJoinGroupDescription(getContext()));
       } else if (state.getCallState() == WebRtcViewModel.State.CALL_CONNECTED && state.isInOutgoingRingingMode()) {
         status.setText(state.getOutgoingRingingGroupDescription(getContext()));
+        pigeonStatus.setText(state.getOutgoingRingingGroupDescription(getContext()));
       } else if (state.getGroupCallState().isRinging()) {
         status.setText(state.getIncomingRingingGroupDescription(getContext()));
+        pigeonStatus.setText(state.getIncomingRingingGroupDescription(getContext()));
       }
     }
 
     if (state.getGroupCallState().isNotIdle()) {
-      String  text    = state.getParticipantCount()
-                             .mapToObj(String::valueOf).orElse("\u2014");
+      String text = state.getParticipantCount()
+                         .mapToObj(String::valueOf).orElse("\u2014");
       boolean enabled = state.getParticipantCount().isPresent();
 
       foldParticipantCount.setText(text);
@@ -465,7 +541,9 @@ public class WebRtcCallView extends ConstraintLayout {
 
 
     videoToggle.setChecked(localCallParticipant.isVideoEnabled(), false);
-    smallLocalRender.setRenderInPip(true);
+    if (isSignalVersion()) {
+      smallLocalRender.setRenderInPip(true);
+    }
 
     if (state == WebRtcLocalRenderState.EXPANDED) {
       expandPip(localCallParticipant, focusedParticipant);
@@ -546,10 +624,17 @@ public class WebRtcCallView extends ConstraintLayout {
     }
 
     recipientName.setText(recipient.getDisplayName(getContext()));
+    pigeonName.setText(recipient.getDisplayName(getContext()));
+    if (!recipient.hasE164()){
+      pigeonPhone.setVisibility(GONE);
+    }
+    String number = PhoneNumberFormatter.prettyPrint(recipient.requireE164());
+    pigeonPhone.setText(number);
   }
 
   public void setStatus(@NonNull String status) {
     this.status.setText(status);
+    this.pigeonStatus.setText(status);
   }
 
   public void setStatusFromHangupType(@NonNull HangupMessage.Type hangupType) {
@@ -557,42 +642,78 @@ public class WebRtcCallView extends ConstraintLayout {
       case NORMAL:
       case NEED_PERMISSION:
         status.setText(R.string.RedPhone_ending_call);
+        pigeonStatus.setText(R.string.RedPhone_ending_call);
         break;
       case ACCEPTED:
         status.setText(R.string.WebRtcCallActivity__answered_on_a_linked_device);
+        pigeonStatus.setText(R.string.WebRtcCallActivity__answered_on_a_linked_device);
         break;
       case DECLINED:
         status.setText(R.string.WebRtcCallActivity__declined_on_a_linked_device);
+        pigeonStatus.setText(R.string.WebRtcCallActivity__declined_on_a_linked_device);
         break;
       case BUSY:
         status.setText(R.string.WebRtcCallActivity__busy_on_a_linked_device);
+        pigeonStatus.setText(R.string.WebRtcCallActivity__busy_on_a_linked_device);
         break;
       default:
         throw new IllegalStateException("Unknown hangup type: " + hangupType);
     }
   }
 
+  @SuppressLint("SetTextI18n") public void sePigeonStatusFromHangupType(@NonNull HangupMessage.Type hangupType, String time) {
+    int statusesInt;
+    switch (hangupType) {
+      case NORMAL:
+      case NEED_PERMISSION:
+        statusesInt = R.string.RedPhone_ending_call;
+        break;
+      case ACCEPTED:
+        statusesInt = R.string.WebRtcCallActivity__answered_on_a_linked_device;
+        break;
+      case DECLINED:
+        statusesInt = R.string.WebRtcCallActivity__declined_on_a_linked_device;
+        break;
+      case BUSY:
+        statusesInt = R.string.WebRtcCallActivity__busy_on_a_linked_device;
+        break;
+      default:
+        throw new IllegalStateException("Unknown hangup type: " + hangupType);
+    }
+    pigeonStatus.setText(getContext().getString(statusesInt) + " "+ time);
+  }
+
+
   public void setStatusFromGroupCallState(@NonNull WebRtcViewModel.GroupCallState groupCallState) {
     switch (groupCallState) {
       case DISCONNECTED:
         status.setText(R.string.WebRtcCallView__disconnected);
+        pigeonStatus.setText(R.string.WebRtcCallView__disconnected);
         break;
       case RECONNECTING:
         status.setText(R.string.WebRtcCallView__reconnecting);
+        pigeonStatus.setText(R.string.WebRtcCallView__reconnecting);
+        break;
+      case CONNECTING:
+        status.setText("");
+        pigeonStatus.setText(R.string.RedPhone_connecting);
         break;
       case CONNECTED_AND_JOINING:
         status.setText(R.string.WebRtcCallView__joining);
+        pigeonStatus.setText(R.string.WebRtcCallView__joining);
         break;
-      case CONNECTING:
       case CONNECTED_AND_JOINED:
       case CONNECTED:
         status.setText("");
+        pigeonStatus.setText(R.string.RedPhone_connected);
         break;
     }
   }
 
   public void setWebRtcControls(@NonNull WebRtcControls webRtcControls) {
     Set<View> lastVisibleSet = new HashSet<>(visibleViewSet);
+
+    pigeonIncomingRingStatus.setText(webRtcControls.displayAnswerWithoutVideo() ? R.string.Pigeon_WebRtcCallView__signal_video_call : R.string.Pigeon_WebRtcCallView__signal_call);
 
     visibleViewSet.clear();
 
@@ -640,7 +761,7 @@ public class WebRtcCallView extends ConstraintLayout {
     if (webRtcControls.displayIncomingCallButtons()) {
       visibleViewSet.addAll(incomingCallViews);
 
-      incomingRingStatus.setText(webRtcControls.displayAnswerWithoutVideo() ? R.string.WebRtcCallView__signal_video_call: R.string.WebRtcCallView__signal_call);
+      incomingRingStatus.setText(webRtcControls.displayAnswerWithoutVideo() ? R.string.WebRtcCallView__signal_video_call : R.string.WebRtcCallView__signal_call);
 
       answer.setImageDrawable(AppCompatResources.getDrawable(getContext(), R.drawable.webrtc_call_screen_answer));
     }
@@ -652,8 +773,9 @@ public class WebRtcCallView extends ConstraintLayout {
       answer.setImageDrawable(AppCompatResources.getDrawable(getContext(), R.drawable.webrtc_call_screen_answer_with_video));
     }
 
-    if (!webRtcControls.displayIncomingCallButtons()){
+    if (!webRtcControls.displayIncomingCallButtons()) {
       incomingRingStatus.setVisibility(GONE);
+//      pigeonIncomingRingStatus.setVisibility(GONE);
     }
 
     if (webRtcControls.displayAudioToggle()) {
@@ -974,6 +1096,7 @@ public class WebRtcCallView extends ConstraintLayout {
     ConstraintSet constraintSet = new ConstraintSet();
     constraintSet.clone(parent);
 
+
     for (View view : SetUtil.difference(allTimeVisibleViews, visibleViewSet)) {
       constraintSet.setVisibility(view.getId(), ConstraintSet.GONE);
     }
@@ -993,23 +1116,28 @@ public class WebRtcCallView extends ConstraintLayout {
 
     constraintSet.applyTo(parent);
 
-    if (showSmallHeader) {
-      smallHeaderConstraints.setVisibility(incomingRingStatus.getId(), visibleViewSet.contains(incomingRingStatus) ? View.VISIBLE : View.GONE);
-      smallHeaderConstraints.applyTo(toolbar);
-    } else {
-      largeHeaderConstraints.setVisibility(incomingRingStatus.getId(), visibleViewSet.contains(incomingRingStatus) ? View.VISIBLE : View.GONE);
-      largeHeaderConstraints.applyTo(toolbar);
+    if (isSignalVersion()) {
+      if (showSmallHeader) {
+        smallHeaderConstraints.setVisibility(incomingRingStatus.getId(), visibleViewSet.contains(incomingRingStatus) ? View.VISIBLE : View.GONE);
+        smallHeaderConstraints.applyTo(toolbar);
+      } else {
+        largeHeaderConstraints.setVisibility(incomingRingStatus.getId(), visibleViewSet.contains(incomingRingStatus) ? View.VISIBLE : View.GONE);
+        largeHeaderConstraints.applyTo(toolbar);
+      }
+
     }
   }
 
   private void adjustParticipantsRecycler(@NonNull ConstraintSet constraintSet) {
-    if (controlsVisible || controls.adjustForFold()) {
-      constraintSet.connect(R.id.call_screen_participants_recycler, ConstraintSet.BOTTOM, R.id.call_screen_video_toggle, ConstraintSet.TOP);
-    } else {
-      constraintSet.connect(R.id.call_screen_participants_recycler, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
-    }
+    if (isSignalVersion()) {
+      if (controlsVisible || controls.adjustForFold()) {
+        constraintSet.connect(R.id.call_screen_participants_recycler, ConstraintSet.BOTTOM, R.id.call_screen_video_toggle, ConstraintSet.TOP);
+      } else {
+        constraintSet.connect(R.id.call_screen_participants_recycler, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+      }
 
-    constraintSet.setHorizontalBias(R.id.call_screen_participants_recycler, controls.adjustForFold() ? 0.5f : 1f);
+      constraintSet.setHorizontalBias(R.id.call_screen_participants_recycler, controls.adjustForFold() ? 0.5f : 1f);
+    }
   }
 
   private void scheduleFadeOut() {
@@ -1061,6 +1189,7 @@ public class WebRtcCallView extends ConstraintLayout {
 
   public void setRingGroup(boolean shouldRingGroup) {
     ringToggle.setChecked(shouldRingGroup, false);
+    setRingLabelName(shouldRingGroup);
   }
 
   public void enableRingGroup(boolean enabled) {
@@ -1068,22 +1197,39 @@ public class WebRtcCallView extends ConstraintLayout {
   }
 
   public interface ControlsListener {
+    void onVolumePressed();
     void onStartCall(boolean isVideoCall);
+
     void onCancelStartCall();
+
     void onControlsFadeOut();
+
     void showSystemUI();
+
     void hideSystemUI();
+
     void onAudioOutputChanged(@NonNull WebRtcAudioOutput audioOutput);
+
     void onVideoChanged(boolean isVideoEnabled);
+
     void onMicChanged(boolean isMicEnabled);
+
     void onCameraDirectionChanged();
+
     void onEndCallPressed();
+
     void onDenyCallPressed();
+
     void onAcceptCallWithVoiceOnlyPressed();
+
     void onAcceptCallPressed();
+
     void onShowParticipantsList();
+
     void onPageChanged(@NonNull CallParticipantsState.SelectedPage page);
+
     void onLocalPictureInPictureClicked();
+
     void onRingGroupChanged(boolean ringGroup, boolean ringingAllowed);
   }
 }

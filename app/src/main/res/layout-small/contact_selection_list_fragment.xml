@@ -169,23 +169,4 @@
             tools:visibility="visible" />
     </FrameLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/refresh_action"
-        style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:ellipsize="end"
-        android:layout_marginStart="@dimen/pigeon_start_margin"
-        android:maxLines="1"
-        android:nextFocusDown="@id/swipe_refresh"
-        android:nextFocusUp="@id/recycler_view"
-        android:text="@string/new_conversation_activity__refresh"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:visibility="visible"
-        tools:visibility="visible" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

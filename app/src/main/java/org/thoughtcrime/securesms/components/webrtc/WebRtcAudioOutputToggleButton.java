@@ -22,10 +22,10 @@ import java.util.List;
 
 public class WebRtcAudioOutputToggleButton extends AppCompatImageView {
 
-  private static final String STATE_OUTPUT_INDEX      = "audio.output.toggle.state.output.index";
-  private static final String STATE_HEADSET_ENABLED   = "audio.output.toggle.state.headset.enabled";
-  private static final String STATE_HANDSET_ENABLED   = "audio.output.toggle.state.handset.enabled";
-  private static final String STATE_PARENT            = "audio.output.toggle.state.parent";
+  private static final String STATE_OUTPUT_INDEX    = "audio.output.toggle.state.output.index";
+  private static final String STATE_HEADSET_ENABLED = "audio.output.toggle.state.headset.enabled";
+  private static final String STATE_HANDSET_ENABLED = "audio.output.toggle.state.handset.enabled";
+  private static final String STATE_PARENT          = "audio.output.toggle.state.parent";
 
   private static final int[]                   SPEAKER_OFF    = { R.attr.state_speaker_off };
   private static final int[]                   SPEAKER_ON     = { R.attr.state_speaker_on };
@@ -56,7 +56,8 @@ public class WebRtcAudioOutputToggleButton extends AppCompatImageView {
       List<WebRtcAudioOutput> availableModes = buildOutputModeList(isHeadsetAvailable, isHandsetAvailable);
 
       if (availableModes.size() > 2 || !isHandsetAvailable) showPicker(availableModes);
-      else                                                  setAudioOutput(OUTPUT_MODES.get((outputIndex + 1) % OUTPUT_MODES.size()), true);
+      else setAudioOutput(OUTPUT_MODES.get((outputIndex + 1) % OUTPUT_MODES.size()), true);
+
     });
   }
 
@@ -73,6 +74,7 @@ public class WebRtcAudioOutputToggleButton extends AppCompatImageView {
     mergeDrawableStates(drawableState, extra);
     return drawableState;
   }
+
 
   @Override
   public void setOnClickListener(@Nullable OnClickListener l) {
@@ -102,11 +104,11 @@ public class WebRtcAudioOutputToggleButton extends AppCompatImageView {
   }
 
   private void showPicker(@NonNull List<WebRtcAudioOutput> availableModes) {
-    RecyclerView       rv      = new RecyclerView(getContext());
+    RecyclerView rv = new RecyclerView(getContext());
     AudioOutputAdapter adapter = new AudioOutputAdapter(audioOutput -> {
-                                                          setAudioOutput(audioOutput, true);
-                                                          hidePicker();
-                                                        },
+      setAudioOutput(audioOutput, true);
+      hidePicker();
+    },
                                                         availableModes);
 
     adapter.setSelectedOutput(OUTPUT_MODES.get(outputIndex));
@@ -115,10 +117,10 @@ public class WebRtcAudioOutputToggleButton extends AppCompatImageView {
     rv.setAdapter(adapter);
 
     picker = new MaterialAlertDialogBuilder(getContext())
-                            .setTitle(R.string.WebRtcAudioOutputToggle__audio_output)
-                            .setView(rv)
-                            .setCancelable(true)
-                            .show();
+        .setTitle(R.string.WebRtcAudioOutputToggle__audio_output)
+        .setView(rv)
+        .setCancelable(true)
+        .show();
   }
 
   @Override
@@ -142,8 +144,8 @@ public class WebRtcAudioOutputToggleButton extends AppCompatImageView {
       isHandsetAvailable = savedState.getBoolean(STATE_HANDSET_ENABLED);
 
       setAudioOutput(OUTPUT_MODES.get(
-          resolveAudioOutputIndex(savedState.getInt(STATE_OUTPUT_INDEX))),
-          false
+                         resolveAudioOutputIndex(savedState.getInt(STATE_OUTPUT_INDEX))),
+                     false
       );
 
       super.onRestoreInstanceState(savedState.getParcelable(STATE_PARENT));
@@ -165,6 +167,10 @@ public class WebRtcAudioOutputToggleButton extends AppCompatImageView {
     audioOutputChangedListener.audioOutputChanged(OUTPUT_MODES.get(outputIndex));
   }
 
+  WebRtcAudioOutput getOutputMode(){
+    return OUTPUT_MODES.get(outputIndex);
+  }
+
   private static List<WebRtcAudioOutput> buildOutputModeList(boolean isHeadsetAvailable, boolean isHandsetAvailable) {
     List<WebRtcAudioOutput> modes = new ArrayList(3);
 
@@ -179,7 +185,9 @@ public class WebRtcAudioOutputToggleButton extends AppCompatImageView {
     }
 
     return modes;
-  };
+  }
+
+  ;
 
   private int resolveAudioOutputIndex(int desiredAudioOutputIndex) {
     if (isIllegalAudioOutputIndex(desiredAudioOutputIndex)) {

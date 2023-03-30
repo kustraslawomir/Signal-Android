@@ -94,9 +94,10 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.Disposable;
-import pigeon.extensions.BuildExtensionsKt;
+import pigeon.activity.WebRtcCallVolumeActivity;
 
 import static org.thoughtcrime.securesms.components.sensors.Orientation.PORTRAIT_BOTTOM_EDGE;
+import static pigeon.extensions.BuildExtensionsKt.isPigeonVersion;
 import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
 
 public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChangeDialog.Callback {
@@ -157,6 +158,10 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
 
     initializeResources();
     initializeViewModel(isLandscapeEnabled);
+
+    if (isPigeonVersion()){
+      participantUpdateWindow.setEnabled(true);
+    }
 
     processIntent(getIntent());
 
@@ -275,6 +280,10 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
     }
   }
 
+  private void handleVolumePressed() {
+    startActivity(new Intent(this, WebRtcCallVolumeActivity.class));
+  }
+
   private boolean enterPipModeIfPossible() {
     if (viewModel.canEnterPipMode() && isSystemPipEnabledAndAvailable()) {
       PictureInPictureParams params = new PictureInPictureParams.Builder()
@@ -289,7 +298,11 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
   }
 
   private boolean isInPipMode() {
-    return isSystemPipEnabledAndAvailable() && isInPictureInPictureMode();
+    if (isSignalVersion()) {
+      return isSystemPipEnabledAndAvailable() && isInPictureInPictureMode();
+    } else  {
+      return false;
+    }
   }
 
   private void processIntent(@NonNull Intent intent) {
@@ -356,8 +369,12 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
     viewModel.getControlsRotation().observe(this, callScreen::rotateControls);
 
     addOnPictureInPictureModeChangedListener(info -> {
-      viewModel.setIsInPipMode(info.isInPictureInPictureMode());
-      participantUpdateWindow.setEnabled(!info.isInPictureInPictureMode());
+      if (isSignalVersion()) {
+        viewModel.setIsInPipMode(info.isInPictureInPictureMode());
+        participantUpdateWindow.setEnabled(!info.isInPictureInPictureMode());
+      } else {
+        participantUpdateWindow.setEnabled(true);
+      }
     });
   }
 
@@ -409,8 +426,11 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
     if (ellapsedTimeFormatter == null) {
       return;
     }
-
-    callScreen.setStatus(getString(R.string.WebRtcCallActivity__signal_s, ellapsedTimeFormatter.toString()));
+    if (isSignalVersion()) {
+      callScreen.setStatus(getString(R.string.WebRtcCallActivity__signal_s, ellapsedTimeFormatter.toString()));
+    } else {
+      callScreen.setStatus(getString(R.string.Pigeon_WebRtcCallActivity__signal_s, ellapsedTimeFormatter.toString()));
+    }
   }
 
   private void handleSetAudioHandset() {
@@ -754,6 +774,10 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
   }
 
   private final class ControlsListener implements WebRtcCallView.ControlsListener {
+
+    @Override public void onVolumePressed() {
+      handleVolumePressed();
+    }
 
     @Override
     public void onStartCall(boolean isVideoCall) {
