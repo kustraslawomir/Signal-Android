@@ -61,10 +61,11 @@ public class CallParticipantsListUpdatePopupWindow extends PopupWindow {
 
       pendingRemovals.addAll(update.getRemoved());
       pendingRemovals.removeAll(update.getAdded());
-    }
+
       if (!isShowing()) {
         showPending();
       }
+    }
   }
 
   public void setEnabled(boolean isEnabled) {

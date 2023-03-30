@@ -126,7 +126,10 @@
     <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
     <meta-data android:name="firebase_messaging_auto_init_enabled" android:value="false" />
 
-    <activity android:name=".WebRtcCallActivity"
+        <activity android:name="pigeon.activity.WebRtcCallVolumeActivity"
+            android:theme="@style/TextSecure.DarkTheme.WebRTCCall"/>
+
+        <activity android:name=".WebRtcCallActivity"
               android:theme="@style/TextSecure.DarkTheme.WebRTCCall"
               android:excludeFromRecents="true"
               android:screenOrientation="landscape"

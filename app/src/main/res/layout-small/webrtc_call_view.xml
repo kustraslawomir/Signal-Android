@@ -12,38 +12,17 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-        <LinearLayout
-            android:id="@+id/fold_show_participants_menu_counter_wrapper"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
-            android:background="?attr/selectableItemBackground"
-            android:gravity="center"
-            android:minWidth="48dp"
-            android:orientation="horizontal"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:visibility="gone"
+        <FrameLayout
+            android:id="@+id/call_screen_large_local_renderer_frame"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/call_screen_show_participants_guideline"
-            tools:visibility="visible">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="gone">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                app:srcCompat="@drawable/ic_group_solid_24"
-                app:tint="@color/core_white" />
-
-            <TextView
-                android:id="@+id/fold_show_participants_menu_counter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/core_white"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                tools:text="0" />
-
-        </LinearLayout>
+        </FrameLayout>
 
         <ViewStub
             android:id="@+id/group_call_call_full_view"
@@ -463,24 +442,130 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <FrameLayout
-        android:id="@+id/call_screen_large_local_renderer_frame"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:visibility="gone">
-
-    </FrameLayout>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/call_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
+
+        <LinearLayout
+            android:id="@+id/fold_show_participants_menu_counter_wrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:minWidth="48dp"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="visible">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                app:srcCompat="@drawable/ic_group_solid_24"
+                app:tint="@color/core_white" />
+
+            <TextView
+                android:id="@+id/fold_show_participants_menu_counter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/core_white"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                tools:text="0" />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/header"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/pigeon_start_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/pigeon_call_screen_incoming_ring_status"
+                style="@style/Mp02.Signal.Text.SmallTextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:drawablePadding="4dp"
+                android:gravity="center"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Signal video call" />
+
+            <TextView
+                android:id="@+id/pigeon_call_screen_status"
+                style="@style/Mp02.Signal.Text.SmallTextButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/pigeon_call_screen_incoming_ring_status"
+                app:layout_constraintTop_toTopOf="@+id/pigeon_call_screen_incoming_ring_status"
+                tools:text="Signal Calling..." />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/pigeon_name"
+            style="@style/Mp02.Signal.Text.CommonTextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/pigeon_start_margin"
+            android:layout_marginTop="8dp"
+            android:focusable="false"
+            android:enabled="false"
+            android:clickable="false"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/header"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/pigeon_phone"
+            style="@style/Mp02.Signal.Text.CommonTextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/pigeon_start_margin"
+            android:layout_marginTop="8dp"
+            android:focusable="false"
+            android:enabled="false"
+            android:clickable="false"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pigeon_name"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/call_screen_volume_toggle"
+            style="@style/Mp02.Signal.Text.CommonTextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/pigeon_start_margin"
+            android:layout_marginTop="8dp"
+            android:clickable="false"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:text="@string/WebRtcCallControls_volume_button_description"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pigeon_phone"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/call_screen_speaker_toggle_label"
@@ -495,7 +580,7 @@
             android:text="@string/WebRtcCallView__speaker"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/call_screen_volume_toggle"
             tools:visibility="visible" />
 
         <TextView
