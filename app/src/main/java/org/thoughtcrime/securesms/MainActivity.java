@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.view.ViewTreeObserver;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.signal.core.util.logging.Log;
 import org.thoughtcrime.securesms.components.voice.VoiceNoteMediaController;
 import org.thoughtcrime.securesms.components.voice.VoiceNoteMediaControllerOwner;
+import org.thoughtcrime.securesms.conversationlist.RelinkDevicesReminderBottomSheetFragment;
 import org.thoughtcrime.securesms.devicetransfer.olddevice.OldDeviceTransferLockedDialog;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.main.MainActivityListHostFragment;
@@ -29,6 +31,7 @@ import org.thoughtcrime.securesms.util.CachedInflater;
 import org.thoughtcrime.securesms.util.CommunicationActions;
 import org.thoughtcrime.securesms.util.DynamicNoActionBarTheme;
 import org.thoughtcrime.securesms.util.DynamicTheme;
+import org.thoughtcrime.securesms.util.FeatureFlags;
 import org.thoughtcrime.securesms.util.SplashScreenUtil;
 import org.thoughtcrime.securesms.util.WindowUtil;
 
@@ -43,6 +46,8 @@ public class MainActivity extends PassphraseRequiredActivity implements VoiceNot
 
   private VoiceNoteMediaController      mediaController;
   private ConversationListTabsViewModel conversationListTabsViewModel;
+
+  private boolean onFirstRender = false;
 
   public static @NonNull Intent clearTop(@NonNull Context context) {
     Intent intent = new Intent(context, MainActivity.class);
@@ -66,8 +71,23 @@ public class MainActivity extends PassphraseRequiredActivity implements VoiceNot
     super.onCreate(savedInstanceState, ready);
 
     setContentView(R.layout.main_activity);
+    final View content = findViewById(android.R.id.content);
+    content.getViewTreeObserver().addOnPreDrawListener(
+        new ViewTreeObserver.OnPreDrawListener() {
+          @Override
+          public boolean onPreDraw() {
+            // Use pre draw listener to delay drawing frames till conversation list is ready
+            if (onFirstRender) {
+              content.getViewTreeObserver().removeOnPreDrawListener(this);
+              return true;
+            } else {
+              return false;
+            }
+          }
+        });
 
-    mediaController = new VoiceNoteMediaController(this);
+
+    mediaController = new VoiceNoteMediaController(this, true);
 
     ConversationListTabRepository         repository = new ConversationListTabRepository();
     ConversationListTabsViewModel.Factory factory    = new ConversationListTabsViewModel.Factory(repository);
@@ -89,6 +109,11 @@ public class MainActivity extends PassphraseRequiredActivity implements VoiceNot
     dynamicTheme.onResume(this);
     if (SignalStore.misc().isOldDeviceTransferLocked()) {
       OldDeviceTransferLockedDialog.show(getSupportFragmentManager());
+    }
+
+    if (SignalStore.misc().getShouldShowLinkedDevicesReminder()) {
+      SignalStore.misc().setShouldShowLinkedDevicesReminder(false);
+      RelinkDevicesReminderBottomSheetFragment.show(getSupportFragmentManager());
     }
 
     updateTabVisibility();
@@ -196,8 +221,44 @@ public class MainActivity extends PassphraseRequiredActivity implements VoiceNot
     }
   }
 
+  private void updateTabVisibility() {
+    if (Stories.isFeatureEnabled() || FeatureFlags.callsTab()) {
+      findViewById(R.id.conversation_list_tabs).setVisibility(View.VISIBLE);
+      WindowUtil.setNavigationBarColor(this, ContextCompat.getColor(this, R.color.signal_colorSurface2));
+    } else {
+      findViewById(R.id.conversation_list_tabs).setVisibility(View.GONE);
+      WindowUtil.setNavigationBarColor(this, ContextCompat.getColor(this, R.color.signal_colorBackground));
+      conversationListTabsViewModel.onChatsSelected();
+    }
+  }
+
   public @NonNull MainNavigator getNavigator() {
     return navigator;
+  }
+
+  private void handleGroupLinkInIntent(Intent intent) {
+    Uri data = intent.getData();
+    if (data != null) {
+      CommunicationActions.handlePotentialGroupLinkUrl(this, data.toString());
+    }
+  }
+
+  private void handleProxyInIntent(Intent intent) {
+    Uri data = intent.getData();
+    if (data != null) {
+      CommunicationActions.handlePotentialProxyLinkUrl(this, data.toString());
+    }
+  }
+
+  private void handleSignalMeIntent(Intent intent) {
+    Uri data = intent.getData();
+    if (data != null) {
+      CommunicationActions.handlePotentialSignalMeUrl(this, data.toString());
+    }
+  }
+
+  public void onFirstRender() {
+    onFirstRender = true;
   }
 
   @Override

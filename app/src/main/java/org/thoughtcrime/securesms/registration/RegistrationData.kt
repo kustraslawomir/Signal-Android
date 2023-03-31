@@ -12,6 +12,6 @@ data class RegistrationData(
   val pniRegistrationId: Int,
   val recoveryPassword: String?
 ) {
-  val isFcm: Boolean = false
-  val isNotFcm: Boolean = true
+  val isNotFcm: Boolean = fcmToken.isNullOrBlank()
+  val isFcm: Boolean = !isNotFcm
 }

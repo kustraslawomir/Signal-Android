@@ -42,6 +42,7 @@ import org.thoughtcrime.securesms.profiles.manage.EditProfileNameFragment;
 import org.thoughtcrime.securesms.providers.BlobProvider;
 import org.thoughtcrime.securesms.util.CommunicationActions;
 import org.thoughtcrime.securesms.util.FeatureFlags;
+import org.thoughtcrime.securesms.util.ViewUtil;
 import org.thoughtcrime.securesms.util.navigation.SafeNavigation;
 import org.thoughtcrime.securesms.util.text.AfterTextChanged;
 
@@ -330,6 +331,7 @@ public class EditProfileFragment extends LoggingFragment {
   }
 
   private void handleFinishedLegacy() {
+    ViewUtil.hideKeyboard(requireContext(), binding.finishButton);
     binding.finishButton.cancelSpinning();
     if (nextIntent != null) startActivity(nextIntent);
 
@@ -357,6 +359,7 @@ public class EditProfileFragment extends LoggingFragment {
 
       @Override
       public void onAnimationEnd(Animator animation) {
+        ViewUtil.hideKeyboard(requireContext(), binding.finishButton);
         binding.finishButton.cancelSpinning();
         if (nextIntent != null && getActivity() != null) {
           startActivity(nextIntent);

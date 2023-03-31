@@ -11,7 +11,7 @@ import org.thoughtcrime.securesms.database.SignalDatabase;
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
 import org.thoughtcrime.securesms.groups.GroupChangeBusyException;
 import org.thoughtcrime.securesms.groups.GroupId;
-import org.thoughtcrime.securesms.jobmanager.Data;
+import org.thoughtcrime.securesms.jobmanager.JsonJobData;
 import org.thoughtcrime.securesms.jobmanager.Job;
 import org.thoughtcrime.securesms.jobmanager.impl.NetworkConstraint;
 import org.thoughtcrime.securesms.messages.MessageContentProcessor;
@@ -50,31 +50,6 @@ public final class PushProcessMessageJob extends BaseJob {
   @Nullable private final ExceptionMetadata    exceptionMetadata;
             private final long                 smsMessageId;
             private final long                 timestamp;
-
-  @WorkerThread
-  PushProcessMessageJob(@NonNull SignalServiceContent content,
-                        long smsMessageId,
-                        long timestamp)
-  {
-    this(MessageState.DECRYPTED_OK,
-         content,
-         null,
-         smsMessageId,
-         timestamp);
-  }
-
-  @WorkerThread
-  PushProcessMessageJob(@NonNull MessageState messageState,
-                        @NonNull ExceptionMetadata exceptionMetadata,
-                        long smsMessageId,
-                        long timestamp)
-  {
-    this(messageState,
-         null,
-         exceptionMetadata,
-         smsMessageId,
-         timestamp);
-  }
 
   @WorkerThread
   public PushProcessMessageJob(@NonNull MessageState messageState,
@@ -159,8 +134,8 @@ public final class PushProcessMessageJob extends BaseJob {
   }
 
   @Override
-  public @NonNull Data serialize() {
-    Data.Builder dataBuilder = new Data.Builder()
+  public @Nullable byte[] serialize() {
+    JsonJobData.Builder dataBuilder = new JsonJobData.Builder()
                                        .putInt(KEY_MESSAGE_STATE, messageState.ordinal())
                                        .putLong(KEY_SMS_MESSAGE_ID, smsMessageId)
                                        .putLong(KEY_TIMESTAMP, timestamp);
@@ -174,7 +149,7 @@ public final class PushProcessMessageJob extends BaseJob {
                  .putString(KEY_EXCEPTION_GROUP_ID, exceptionMetadata.getGroupId() == null ? null : exceptionMetadata.getGroupId().toString());
     }
 
-    return dataBuilder.build();
+    return dataBuilder.serialize();
   }
 
   @Override
@@ -201,7 +176,9 @@ public final class PushProcessMessageJob extends BaseJob {
 
   public static final class Factory implements Job.Factory<PushProcessMessageJob> {
     @Override
-    public @NonNull PushProcessMessageJob create(@NonNull Parameters parameters, @NonNull Data data) {
+    public @NonNull PushProcessMessageJob create(@NonNull Parameters parameters, @Nullable byte[] serializedData) {
+      JsonJobData data = JsonJobData.deserialize(serializedData);
+
       try {
         MessageState state = MessageState.values()[data.getInt(KEY_MESSAGE_STATE)];
 

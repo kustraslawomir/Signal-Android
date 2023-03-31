@@ -384,6 +384,15 @@
     <!-- Snackbar message shown after dismissing the full screen sms export megaphone indicating we\'ll do it again soon -->
     <string name="ConversationActivity__you_will_be_reminded_again_soon">Hamarosan ismét kapsz egy emlékeztetőt.</string>
 
+    <!-- Title for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_title">Formázott szöveg küldése</string>
+    <!-- Message for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_message">Előfordulhat, hogy egyesek a Signal olyan verzióját használják, amely nem támogatja a formázott szöveget. Nem fogják látni az üzeneten végzett formázási módosításokat.</string>
+    <!-- Button text for confirming they\'d like to send the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_send_anyway_button">Küldés így is</string>
+    <!-- Button text for canceling sending the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_cancel_send_button">Mégse</string>
+
     <!-- ConversationAdapter -->
     <plurals name="ConversationAdapter_n_unread_messages">
         <item quantity="one">%1$d olvasatlan üzenet</item>
@@ -489,12 +498,12 @@
         <item quantity="other">Olvasatlan</item>
     </plurals>
     <plurals name="ConversationListFragment_pin_plural">
-        <item quantity="one">Rögzít</item>
+        <item quantity="one">Rögzítés</item>
         <item quantity="other">Rögzítés</item>
     </plurals>
     <plurals name="ConversationListFragment_unpin_plural">
-        <item quantity="one">Felold</item>
-        <item quantity="other">Feloldás</item>
+        <item quantity="one">Rögzítés feloldása</item>
+        <item quantity="other">Rögzítés feloldása</item>
     </plurals>
     <plurals name="ConversationListFragment_mute_plural">
         <item quantity="one">Némítás</item>
@@ -510,8 +519,8 @@
         <item quantity="other">Archiválás</item>
     </plurals>
     <plurals name="ConversationListFragment_unarchive_plural">
-        <item quantity="one">Archívumból ki</item>
-        <item quantity="other">Archívumból ki</item>
+        <item quantity="one">Archiválás feloldása</item>
+        <item quantity="other">Archiválás feloldása</item>
     </plurals>
     <plurals name="ConversationListFragment_delete_plural">
         <item quantity="one">Törlés</item>
@@ -542,6 +551,15 @@
 
     <!-- ConversationTypingView -->
     <string name="ConversationTypingView__plus_d">+%1$d</string>
+
+    <!-- Title for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__relink_your_devices">Csatlakoztasd újra az eszközeidet</string>
+    <!-- Description for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__the_devices_you_added_were_unlinked">A hozzáadott eszközök leválasztásra kerültek az eszköz regisztrációjának törlésekor. Lépj a Beállításokba az eszközök újracsatlakoztatásához.</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to navigate to the Devices page in the settings. -->
+    <string name="RelinkDevicesReminderFragment__open_settings">Beállítok megnyitása</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to dismiss the pop up. -->
+    <string name="RelinkDevicesReminderFragment__later">Később</string>
 
     <!-- CreateGroupActivity -->
     <string name="CreateGroupActivity__select_members">Tagok kiválasztása</string>
@@ -1167,8 +1185,8 @@
     <string name="Megaphones_new_group">Új csoport</string>
     <string name="Megaphones_invite_friends">Barátok meghívása</string>
     <string name="Megaphones_use_sms">SMS használata</string>
-    <string name="Megaphones_appearance">Megjelenés</string>
-    <string name="Megaphones_add_photo">Fotó hozzáadása</string>
+    <string name="Megaphones_chat_colors">Csevegés színe</string>
+    <string name="Megaphones_add_a_profile_photo">Profilkép hozzáadása</string>
 
     <!-- Title of a bottom sheet to render messages that all quote a specific message -->
     <string name="MessageQuotesBottomSheet_replies">Válaszok</string>
@@ -1726,19 +1744,17 @@
         <item quantity="other">%1$s, %2$s és még %3$d másik személy van ebben a hívásban</item>
     </plurals>
 
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__flip">Átvált</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__speaker">Kihangosító</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__camera">Kamera</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__unmute">Némítás feloldása</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__mute">Némítás</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__ring">Csörög</string>
-    <!-- Label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
+    <!-- Toggle content description for toggling camera direction  -->
+    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <!-- Toggle content description for toggling audio output  -->
+    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <!-- Toggle content description for toggling camera state  -->
+    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <!-- Toggle content description for toggling mute state  -->
+    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <!-- Toggle content description for toggling group ring state  -->
+    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">Hívás befejezése</string>
 
     <!-- CallParticipantsListDialog -->
@@ -1990,9 +2006,9 @@
     <!-- Displayed in the notification when the user has opened a received gift -->
     <string name="ThreadRecord__you_redeemed_a_badge">Beváltottál egy jelvényt</string>
     <!-- Displayed in the conversation list when someone reacted to your story -->
-    <string name="ThreadRecord__reacted_s_to_your_story">Reakció a Történetedre: %1$s</string>
+    <string name="ThreadRecord__reacted_s_to_your_story">Reagált a Történetedre: %1$s</string>
     <!-- Displayed in the conversation list when you reacted to someone\'s story -->
-    <string name="ThreadRecord__reacted_s_to_their_story">Reakció a Történetére: %1$s</string>
+    <string name="ThreadRecord__reacted_s_to_their_story">Reagált a Történetére: %1$s</string>
     <!-- Displayed in the conversation list when your most recent message is a payment to or from the person the conversation is with -->
     <string name="ThreadRecord_payment">Fizetés</string>
     <!-- Displayed in the conversation list when your only message in a conversation is a scheduled send. -->
@@ -2116,6 +2132,10 @@
     <string name="MessageNotifier_most_recent_from_s">Legutóbb tőle: %1$s</string>
     <string name="MessageNotifier_locked_message">Zárolt üzenet</string>
     <string name="MessageNotifier_message_delivery_failed">Üzenet kézbesítése sikertelen.</string>
+    <!-- Shown in a notification when a story the user tries to send fails to be sent -->
+    <string name="MessageNotifier_story_delivery_failed">A Történetet nem sikerült elküldeni</string>
+    <!-- Shown as notification title for when a notification about a story sent to a group story %1$s replaced with the group name -->
+    <string name="MessageNotifier_group_story_title">Tőled %1$s számára</string>
     <string name="MessageNotifier_failed_to_deliver_message">Nem sikerült az üzenet kézbesítése.</string>
     <string name="MessageNotifier_error_delivering_message">Hiba történt az üzenet kézbesítése során.</string>
     <string name="MessageNotifier_message_delivery_paused">Üzenetek kézbesítése felfüggesztve</string>
@@ -2130,14 +2150,16 @@
     <string name="MessageNotifier_unsecured_sms">Titkosítatlan SMS</string>
     <string name="MessageNotifier_contact_message">%1$s %2$s</string>
     <string name="MessageNotifier_unknown_contact_message">Névjegy</string>
-    <string name="MessageNotifier_reacted_s_to_s">%1$s reakció erre: \"%2$s\"</string>
-    <string name="MessageNotifier_reacted_s_to_your_video">Reakció a videódra: %1$s</string>
-    <string name="MessageNotifier_reacted_s_to_your_image">Reakció a képedre: %1$s</string>
-    <string name="MessageNotifier_reacted_s_to_your_gif">Reakció a GIF képedre: %1$s</string>
-    <string name="MessageNotifier_reacted_s_to_your_file">Reakció a fájlodra: %1$s</string>
-    <string name="MessageNotifier_reacted_s_to_your_audio">Reakció a hangfájlodra: %1$s</string>
-    <string name="MessageNotifier_reacted_s_to_your_view_once_media">Reakció az egyszer megtekinthető videódra: %1$s</string>
-    <string name="MessageNotifier_reacted_s_to_your_sticker">Reakció a matricádra: %1$s</string>
+    <string name="MessageNotifier_reacted_s_to_s">%1$s reagált erre: „%2$s”.</string>
+    <string name="MessageNotifier_reacted_s_to_your_video">Reagált a videódra: %1$s.</string>
+    <string name="MessageNotifier_reacted_s_to_your_image">Reagált a képedre: %1$s.</string>
+    <string name="MessageNotifier_reacted_s_to_your_gif">Reagált a GIF-edre: %1$s.</string>
+    <string name="MessageNotifier_reacted_s_to_your_file">Reagált a fájlodra: %1$s.</string>
+    <string name="MessageNotifier_reacted_s_to_your_audio">Reagált a hangfájlodra: %1$s.</string>
+    <string name="MessageNotifier_reacted_s_to_your_view_once_media">Reagált az egyszer megtekinthető videódra: %1$s.</string>
+    <!-- Body of notification shown to user when someone they sent a payment to reacts to it. Placeholder is the emoji used in the reaction. -->
+    <string name="MessageNotifier_reacted_s_to_your_payment">Reagált a fizetésedre: %1$s.</string>
+    <string name="MessageNotifier_reacted_s_to_your_sticker">Reagált a matricádra: %1$s.</string>
     <string name="MessageNotifier_this_message_was_deleted">Ez az üzenet ki lett törölve.</string>
 
     <string name="TurnOffContactJoinedNotificationsActivity__turn_off_contact_joined_signal">Kikapcsolod az új kontakt érhető el Signalon értesítést? Újra engedélyezheted a Signal &gt; Beállítások &gt; Értesítések menüpontban.</string>
@@ -2253,6 +2275,12 @@
     <!-- contact_selection_activity -->
     <string name="contact_selection_activity__invite_to_signal">Meghívás a Signalra</string>
     <string name="contact_selection_activity__new_group">Új csoport</string>
+    <!-- Row item title for refreshing contacts -->
+    <string name="contact_selection_activity__refresh_contacts">Névjegyek frissítése</string>
+    <!-- Row item description for refreshing contacts -->
+    <string name="contact_selection_activity__missing_someone">Hiányzik valaki? Próbáld meg frissíteni</string>
+    <!-- Row header title for more section -->
+    <string name="contact_selection_activity__more">Továbbiak</string>
 
     <!-- contact_filter_toolbar -->
     <string name="contact_filter_toolbar__clear_entered_text_description">Beírt szöveg törlése</string>
@@ -2530,8 +2558,8 @@
 
     <!-- BadDecryptLearnMoreDialog -->
     <string name="BadDecryptLearnMoreDialog_delivery_issue">Kézbesítési probléma</string>
-    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">Egy üzenet, matrica, reakció emoji, kézbesítési nyugta, vagy média küldése %1$s kontakttól nem érkezett meg hozzád. A küldési kísérlet történhetett egyéni, vagy csoportüzenetben is.</string>
-    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">Egy üzenet, matrica, reakció emoji, kézbesítési nyugta, vagy média küldése %1$s kontakttól nem érkezett meg hozzád.</string>
+    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">%1$s üzenete, matricája, reakciója vagy olvasási értesítése nem érkezett meg hozzád. A küldési kísérlet történhetett egyéni, vagy csoportüzenetben is.</string>
+    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">%1$s üzenete, matricája, reakciója vagy olvasási értesítése nem érkezett meg hozzád.</string>
 
     <!-- profile_create_activity -->
     <string name="CreateProfileActivity_first_name_required">Keresztnév (kötelező)</string>
@@ -3058,6 +3086,8 @@
 
     <!-- EditNoteFragment -->
     <string name="EditNoteFragment_note">Megjegyzés</string>
+    <!-- Content descriptor explaining the use of the save note FAB for Android accessibility settings-->
+    <string name="EditNoteFragment__content_description_save_note">Save note</string>
 
     <!-- ConfirmPaymentFragment -->
     <string name="ConfirmPayment__confirm_payment">Fizetés megerősítése</string>
@@ -3098,6 +3128,8 @@
     <!-- **************************************** -->
 
     <!-- contact_selection_list -->
+    <!-- Displayed in a row on the new call screen when searching by phone number. -->
+    <string name="contact_selection_list__new_call">Új hívás…</string>
     <string name="contact_selection_list__unknown_contact">Új üzenet…</string>
     <string name="contact_selection_list__unknown_contact_block">Felhasználó letiltása</string>
     <string name="contact_selection_list__unknown_contact_add_to_group">Hozzáadás a csoporthoz</string>
@@ -3454,6 +3486,18 @@
     <string name="BackupUtil_unknown">Ismeretlen</string>
     <string name="preferences_app_protection__see_my_phone_number">Megtekinteni telefonszámom</string>
     <string name="preferences_app_protection__find_me_by_phone_number">Megtalálni telefonszám alapján</string>
+    <!-- Phone number heading displayed as a screen title -->
+    <string name="preferences_app_protection__phone_number">Telefonszám</string>
+    <!-- Subtext below option to launch into phone number privacy settings screen -->
+    <string name="preferences_app_protection__choose_who_can_see">Válaszd ki, hogy ki láthatja a telefonszámod, és ki léphet kapcsolatba veled a Signalon keresztül.</string>
+    <!-- Section title above two radio buttons for enabling and disabling phone number display -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_see_my_number">Ki láthatja a telefonszámomat?</string>
+    <!-- Subtext below radio buttons when who can see my number is set to nobody -->
+    <string name="PhoneNumberPrivacySettingsFragment__nobody_will_see">A Signalon senki nem láthatja a telefonszámod</string>
+    <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_find_me_by_number">Ki találhat meg a telefonszámom szerint?</string>
+    <!-- Subtext below radio buttons when who can see my number is set to everyone -->
+    <string name="PhoneNumberPrivacySettingsFragment__your_phone_number">Telefonszámod látható lesz az ismerősök és csoportok számára, akikkel üzenetet váltasz. Azoknál, akinél szerepelsz készülékük kontaktlistájában, megjelensz Signal kontakjaik között is.</string>
     <string name="PhoneNumberPrivacy_everyone">Mindenki</string>
     <string name="PhoneNumberPrivacy_my_contacts">A kontaktjaim</string>
     <string name="PhoneNumberPrivacy_nobody">Senki</string>
@@ -3832,7 +3876,7 @@
     <!-- DeactivateWalletFragment -->
     <string name="DeactivateWalletFragment__deactivate_wallet">Tárca kikapcsolása</string>
     <string name="DeactivateWalletFragment__your_balance">Egyenleged</string>
-    <string name="DeactivateWalletFragment__its_recommended_that_you">A fizetések kikapcsolása előtt javasolt alaptőkédet egy másik tárca címére átutalni. Ha mégis úgy döntesz, hogy most nem utalod át egyenlegedet, akkor az továbbra is a Signalhoz kapcsolt tárcádban lesz. A fizetések újraaktiválásakor az egyenleg újra elérhető lesz.</string>
+    <string name="DeactivateWalletFragment__its_recommended_that_you">A fizetések kikapcsolása előtt javasolt a pénzösszegeidet egy másik tárca címére átutalni. Ha mégis úgy döntesz, hogy most nem utalod át az egyenleged, az továbbra is a Signalhoz kapcsolt tárcádban lesz. A fizetések újraaktiválásakor az egyenleg újra elérhető lesz.</string>
     <string name="DeactivateWalletFragment__transfer_remaining_balance">Maradék egyenleg átutalása</string>
     <string name="DeactivateWalletFragment__deactivate_without_transferring">Kikapcsolás átutalás nélkül</string>
     <string name="DeactivateWalletFragment__deactivate">Kikapcsolás</string>
@@ -3949,6 +3993,60 @@
     <string name="AccountSettingsFragment__youll_be_asked_less_frequently">Idővel egyre ritkábban kérünk meg rá</string>
     <string name="AccountSettingsFragment__require_your_signal_pin">Telefonszámod újraregisztrációját Signal PIN kódod megadásához kötheted</string>
     <string name="AccountSettingsFragment__change_phone_number">Telefonszám cseréje</string>
+    <!-- Account setting that allows user to request and export their signal account data -->
+    <string name="AccountSettingsFragment__request_account_data">Request account data</string>
+
+    <!-- ExportAccountDataFragment -->
+    <!-- Part of requesting account data flow, this is the section title for requesting that account data -->
+    <string name="ExportAccountDataFragment__your_account_data">Your account data</string>
+    <!-- Explanation of account data the user can request. %1$s is replaced with Learn more with a link -->
+    <string name="ExportAccountDataFragment__export_explanation">Download and export a report of your Signal account data. This report does not include any messages or media. %1$s</string>
+    <!-- Learn more link to more information about requesting account data -->
+    <string name="ExportAccountDataFragment__learn_more">Learn more</string>
+    <!-- Button action to download the report data -->
+    <string name="ExportAccountDataFragment__download_report">Download report</string>
+    <!-- Button action to export the report data to another app (e.g. email) -->
+    <string name="ExportAccountDataFragment__export_report">Export report</string>
+    <!-- Button action to delete the requested account data -->
+    <string name="ExportAccountDataFragment__delete_report">Delete report</string>
+
+    <!-- Radio option to export the data as a text file .txt -->
+    <string name="ExportAccountDataFragment__export_as_txt">Export as TXT</string>
+    <!-- Label for the text file option -->
+    <string name="ExportAccountDataFragment__export_as_txt_label">Easy-to-read text file</string>
+    <!-- Radio option to export the data as a json (java script object notation) file .json -->
+    <string name="ExportAccountDataFragment__export_as_json">Export as JSON</string>
+    <!-- Label for the json file option, the account data in a machine readable file format -->
+    <string name="ExportAccountDataFragment__export_as_json_label">Machine-readable file</string>
+
+    <!-- Action to cancel (in a dialog) -->
+    <string name="ExportAccountDataFragment__cancel_action">Cancel</string>
+
+    <!-- Acknowledgement for download failure -->
+    <string name="ExportAccountDataFragment__ok_action">OK</string>
+    <!-- Message shown when report download fails -->
+    <string name="ExportAccountDataFragment__report_download_failed">Your report could not be downloaded due to a network error. Check your connection and try again.</string>
+
+    <!-- Title for export confirmation dialog -->
+    <string name="ExportAccountDataFragment__export_report_confirmation">Export data?</string>
+    <!-- Message for export confirmation dialog -->
+    <string name="ExportAccountDataFragment__export_report_confirmation_message">Only share your Signal account data with people or apps you trust.</string>
+    <!-- Action to export in for export confirmation dialog -->
+    <string name="ExportAccountDataFragment__export_report_action">Export</string>
+
+    <!-- Action to delete report in confirmation dialog -->
+    <string name="ExportAccountDataFragment__delete_report_action">Delete</string>
+    <!-- Title for delete report confirmation dialog -->
+    <string name="ExportAccountDataFragment__delete_report_confirmation">Delete report?</string>
+    <!-- Message for delete report confirmation dialog -->
+    <string name="ExportAccountDataFragment__delete_report_confirmation_message">This will not delete any data from your account.</string>
+
+    <!-- Shown as a snackbar letting the user know the report was deleted -->
+    <string name="ExportAccountDataFragment__delete_report_snackbar">Report deleted</string>
+    <!-- Shown in a dialog with a spinner while the report is downloading -->
+    <string name="ExportAccountDataFragment__download_progress">Downloading report…</string>
+    <!-- Explanation that the downloaded report will be available for 30 days before it is deleted -->
+    <string name="ExportAccountDataFragment__report_deletion_disclaimer">Your report will be available for export for 30 days and will then be automatically deleted.</string>
 
     <!-- ChangeNumberFragment -->
     <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">Itt a Signal által regisztrált, aktuálisan használt telefonszámodat változtathatod meg egy másikra. Ez a művelet nem vonható vissza.\n\nKezdés előtt győződj meg róla, hogy az új számon tudsz SMS-t, vagy hívást fogadni!</string>
@@ -4556,7 +4654,7 @@
     <string name="DonationsErrors__your_donation_could_not_be_sent">Adományod hálózati hiba miatt nem küldhető el. Ellenőrizd az internetkapcsolatod, és próbáld újra!</string>
 
     <!-- Gift message view title -->
-    <string name="GiftMessageView__donation_to_s">Adomány %1$s számára</string>
+    <string name="GiftMessageView__donation_on_behalf_of_s">Adomány %1$s nevében</string>
     <!-- Gift message view title for incoming donations -->
     <string name="GiftMessageView__s_donated_to_signal_on">%1$s adományozott a Signalnak a nevedben</string>
     <!-- Gift badge redeem action label -->
@@ -4795,6 +4893,8 @@
 
     <!-- Label for Chats tab in home app screen -->
     <string name="ConversationListTabs__chats">Beszélgetések</string>
+    <!-- Label for Calls tab in home app screen -->
+    <string name="ConversationListTabs__calls">Hívások</string>
     <!-- Label for Stories tab in home app screen -->
     <string name="ConversationListTabs__stories">Történetek</string>
     <!-- String for counts above 99 in conversation list tabs -->
@@ -4901,13 +5001,13 @@
     <!-- Displayed when no longer a group member -->
     <string name="StoryGroupReplyFragment__you_cant_reply">Nem válaszolhatsz erre a Történetre, mert már nem vagy tagja ennek a csoportnak.</string>
     <!-- Displayed for each user that reacted to a story when viewing replies -->
-    <string name="StoryGroupReactionReplyItem__reacted_to_the_story">Reakció elküldve a Történetre</string>
+    <string name="StoryGroupReactionReplyItem__reacted_to_the_story">Reagált a Történetre</string>
     <!-- Label for story views tab -->
     <string name="StoryViewsAndRepliesDialogFragment__views">Megtekintések</string>
     <!-- Label for story replies tab -->
     <string name="StoryViewsAndRepliesDialogFragment__replies">Válaszok</string>
     <!-- Description of action for reaction button -->
-    <string name="StoryReplyComposer__react_to_this_story">Reagálás a Történetre</string>
+    <string name="StoryReplyComposer__react_to_this_story">Reakció a Történetre</string>
     <!-- Displayed when the user is replying privately to someone who replied to one of their stories -->
     <string name="StoryReplyComposer__replying_privately_to_s">Privát válasz küldése %1$s részére</string>
     <!-- Displayed when the user is replying privately to someone who replied to one of their stories -->
@@ -5636,12 +5736,20 @@
     <string name="TextFormatting_strikethrough">Áthúzott</string>
     <!-- Popup menu label for applying monospace font style -->
     <string name="TextFormatting_monospace">Monospace</string>
+    <!-- Popup menu label for applying spoiler style -->
+    <string name="TextFormatting_spoiler">Spoiler</string>
 
     <!-- UsernameEducationFragment -->
     <!-- Continue button which takes the user to the add a username screen -->
     <string name="UsernameEducationFragment__continue">Tovább</string>
     <!-- Displayed as a title on the username education screen -->
     <string name="UsernameEducationFragment__set_up_your_signal_username">Állítsd be a Signal-felhasználóneved</string>
+    <!-- Displayed as body text in the username education screen -->
+    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">Usernames are paired with a set of digits and aren\'t shared on your profile</string>
+    <!-- Displayed as body text in the username education screen -->
+    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">Each username has a unique QR code and link you can share with friends to start a chat with you</string>
+    <!-- Displayed as body text in the username education screen. The string references the names of settings, so they should match our translations for those settings. -->
+    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">Turn off phone number discovery under Settings &gt; Privacy &gt; Phone number &gt; Who can find my number, to use your username as the primary way others can contact you</string>
 
     <!-- Username edit dialog -->
     <!-- Option to open username editor displayed as a list item in a dialog -->
@@ -5658,6 +5766,91 @@
     <string name="TimeDurationPickerDialog_positive_button">Beállít</string>
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, helper text indicating minimum allowable duration -->
     <string name="TimeDurationPickerDialog_minimum_duration_warning">A képernyőzár alkalmazásának minimális ideje 1 perc.</string>
+
+    <!-- Call Log -->
+    <!-- Displayed below the user\'s name in row items on the call log. First placeholder is the call status, second is when it occurred -->
+    <string name="CallLogAdapter__s_dot_s">%1$s · %2$s</string>
+    <!-- Displayed for incoming calls -->
+    <string name="CallLogAdapter__incoming">Bejövő</string>
+    <!-- Displayed for outgoing calls -->
+    <string name="CallLogAdapter__outgoing">Kimenő</string>
+    <!-- Displayed for missed calls -->
+    <string name="CallLogAdapter__missed">Nem fogadott</string>
+
+    <!-- Call Log context menu -->
+    <!-- Displayed as a context menu item to start a video call -->
+    <string name="CallContextMenu__video_call">Videóhívás</string>
+    <!-- Displayed as a context menu item to join an ongoing group call -->
+    <string name="CallContextMenu__join_call">Belépés a hívásba</string>
+    <!-- Displayed as a context menu item to return to active call -->
+    <string name="CallContextMenu__return_to_call">Vissza a híváshoz</string>
+    <!-- Displayed as a context menu item to start an audio call -->
+    <string name="CallContextMenu__audio_call">Hanghívás</string>
+    <!-- Displayed as a context menu item to go to chat -->
+    <string name="CallContextMenu__go_to_chat">Ugrás a beszélgetéshez</string>
+    <!-- Displayed as a context menu item to see call info -->
+    <string name="CallContextMenu__info">Részletek</string>
+    <!-- Displayed as a context menu item to select multiple calls -->
+    <string name="CallContextMenu__select">Kiválasztás</string>
+    <!-- Displayed as a context menu item to delete this call -->
+    <string name="CallContextMenu__delete">Törlés</string>
+
+    <!-- Call Log Fragment -->
+    <!-- Action bar menu item to only display missed calls -->
+    <string name="CallLogFragment__filter_missed_calls">Nem fogadott hívások szűrése</string>
+    <!-- Action bar menu item to clear missed call filter -->
+    <string name="CallLogFragment__clear_filter">Szűrő törlése</string>
+    <!-- Action bar menu item to open settings -->
+    <string name="CallLogFragment__settings">Beállítások</string>
+    <!-- Action bar menu item to open notification profile settings -->
+    <string name="CallLogFragment__notification_profile">Értesítési profilok</string>
+    <!-- Call log new call content description -->
+    <string name="CallLogFragment__start_a_new_call">Új hívás indítása</string>
+    <!-- Filter pull text when pulled -->
+    <string name="CallLogFragment__filtered_by_missed">Szűrve nem fogadott hívás szerint</string>
+    <!-- Bottom bar option to select all call entries -->
+    <string name="CallLogFragment__select_all">Összes kiválasztása</string>
+    <!-- Bottom bar option to delete all selected call entries -->
+    <string name="CallLogFragment__delete">Törlés</string>
+    <!-- Title on multi-delete protection dialog (TODO - final terminology) -->
+  <!-- Removed by excludeNonTranslatables <plurals name="CallLogFragment__delete_d_calls" translatable="false">
+        <item quantity="one">Delete %1$d call?</item>
+        <item quantity="other">Delete %1$d calls?</item>
+    </plurals> -->
+    <!-- Positive action on multi-delete protection dialog -->
+    <string name="CallLogFragment__delete_for_me">Törlés számomra</string>
+    <!-- Snackbar label after deleting call logs -->
+    <plurals name="CallLogFragment__d_calls_deleted">
+        <item quantity="one">%1$d hívás törölve</item>
+        <item quantity="other">%1$d hívás törölve</item>
+    </plurals>
+    <!-- Undo action for deletion snackbar -->
+    <string name="CallLogFragment__undo">Visszavonás</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__no_calls">Nincs hívás.</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__get_started_by_calling_a_friend">Először hívd fel egy ismerősöd.</string>
+
+    <!-- New call activity -->
+    <!-- Activity title in title bar -->
+    <string name="NewCallActivity__new_call">Új hívás</string>
+
+    <!-- Call state update popups -->
+    <!-- Displayed when the user enables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_on">Csengés be</string>
+    <!-- Displayed when the user disables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_off">Csengés ki</string>
+    <!-- Displayed when the user cannot enable group call ringing -->
+    <string name="CallStateUpdatePopupWindow__group_is_too_large">A csoport túl nagy ahhoz, hogy minden tagot fel lehessen hívni</string>
+    <!-- Displayed when the user turns on their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_on">Mikrofon be</string>
+    <!-- Displayed when the user turns off their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_off">Mikrofon ki</string>
+
+    <!-- Accessibility label describing the capture button on the camera screen -->
+    <string name="CameraControls_capture_button_accessibility_label">Capture Button</string>
+    <!-- Accessibility label describing the continue button on the camera screen -->
+    <string name="CameraControls_continue_button_accessibility_label">Continue Button</string>
 
     <!-- EOF -->
 </resources>

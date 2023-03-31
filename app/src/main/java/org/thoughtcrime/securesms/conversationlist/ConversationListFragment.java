@@ -112,6 +112,7 @@ import org.thoughtcrime.securesms.components.reminder.UnauthorizedReminder;
 import org.thoughtcrime.securesms.components.reminder.UsernameOutOfSyncReminder;
 import org.thoughtcrime.securesms.components.settings.app.notifications.manual.NotificationProfileSelectionFragment;
 import org.thoughtcrime.securesms.components.settings.app.subscription.errors.UnexpectedSubscriptionCancellation;
+import org.thoughtcrime.securesms.components.spoiler.SpoilerAnnotation;
 import org.thoughtcrime.securesms.components.voice.VoiceNoteMediaControllerOwner;
 import org.thoughtcrime.securesms.components.voice.VoiceNotePlayerView;
 import org.thoughtcrime.securesms.contacts.paged.ContactSearchAdapter;
@@ -301,31 +302,33 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     contactSearchMediator = new ContactSearchMediator(this,
                                                       Collections.emptySet(),
                                                       SelectionLimits.NO_LIMITS,
-                                                      false,
-                                                      ContactSearchAdapter.DisplaySmsTag.DEFAULT,
-                                                      ContactSearchAdapter.DisplaySecondaryInformation.NEVER,
+                                                      new ContactSearchAdapter.DisplayOptions(
+                                                          false,
+                                                          ContactSearchAdapter.DisplaySmsTag.DEFAULT,
+                                                          ContactSearchAdapter.DisplaySecondaryInformation.NEVER,
+                                                          false,
+                                                          false
+                                                      ),
                                                       this::mapSearchStateToConfiguration,
                                                       new ContactSearchMediator.SimpleCallbacks(),
                                                       false,
                                                       (context,
                                                        fixedContacts,
-                                                       displayCheckBox,
-                                                       displaySmsTag,
-                                                       displaySecondaryInformation,
+                                                       displayOptions,
                                                        callbacks,
                                                        longClickCallbacks,
-                                                       storyContextMenuCallbacks
+                                                       storyContextMenuCallbacks,
+                                                       callButtonClickCallbacks
                                                       ) -> {
                                                         //noinspection CodeBlock2Expr
                                                         return new ConversationListSearchAdapter(
                                                             context,
                                                             fixedContacts,
-                                                            displayCheckBox,
-                                                            displaySmsTag,
-                                                            displaySecondaryInformation,
+                                                            displayOptions,
                                                             new ContactSearchClickCallbacks(callbacks),
                                                             longClickCallbacks,
                                                             storyContextMenuCallbacks,
+                                                            callButtonClickCallbacks,
                                                             getViewLifecycleOwner(),
                                                             GlideApp.with(this)
                                                         );
@@ -476,6 +479,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     updateReminders();
     EventBus.getDefault().register(this);
     itemAnimator.disable();
+    SpoilerAnnotation.resetRevealedSpoilers();
 
     if (Util.isDefaultSmsProvider(requireContext())) {
       InsightsLauncher.showInsightsModal(requireContext(), requireFragmentManager());
@@ -580,28 +584,38 @@ public class ConversationListFragment extends MainFragment implements ActionMode
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
     super.onOptionsItemSelected(item);
 
-    switch (item.getItemId()) {
-      case R.id.menu_new_group:
-        handleCreateGroup(); return true;
-      case R.id.menu_settings:
-        handleDisplaySettings(); return true;
-      case R.id.menu_clear_passphrase:
-        handleClearPassphrase(); return true;
-      case R.id.menu_mark_all_read:
-        handleMarkAllRead(); return true;
-      case R.id.menu_invite:
-        handleInvite(); return true;
-      case R.id.menu_insights:
-        handleInsights(); return true;
-      case R.id.menu_notification_profile:
-        handleNotificationProfile(); return true;
-      case R.id.menu_filter_unread_chats:
-        handleFilterUnreadChats(); return true;
-      case R.id.menu_clear_unread_filter:
-        onClearFilterClick(); return true;
-    }
+    int itemId = item.getItemId();
 
-    return false;
+    if (itemId == R.id.menu_new_group) {
+      handleCreateGroup();
+      return true;
+    } else if (itemId == R.id.menu_settings) {
+      handleDisplaySettings();
+      return true;
+    } else if (itemId == R.id.menu_clear_passphrase) {
+      handleClearPassphrase();
+      return true;
+    } else if (itemId == R.id.menu_mark_all_read) {
+      handleMarkAllRead();
+      return true;
+    } else if (itemId == R.id.menu_invite) {
+      handleInvite();
+      return true;
+    } else if (itemId == R.id.menu_insights) {
+      handleInsights();
+      return true;
+    } else if (itemId == R.id.menu_notification_profile) {
+      handleNotificationProfile();
+      return true;
+    } else if (itemId == R.id.menu_filter_unread_chats) {
+      handleFilterUnreadChats();
+      return true;
+    } else if (itemId == R.id.menu_clear_unread_filter) {
+      onClearFilterClick();
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @Override
@@ -650,7 +664,10 @@ public class ConversationListFragment extends MainFragment implements ActionMode
               null
           ));
 
-          builder.setHasEmptyState(true);
+          builder.withEmptyState(emptyStateBuilder -> {
+            emptyStateBuilder.addSection(ContactSearchConfiguration.Section.Empty.INSTANCE);
+            return Unit.INSTANCE;
+          });
         } else {
           builder.arbitrary(
               conversationFilterRequest.getSource() == ConversationFilterSource.DRAG
@@ -854,7 +871,11 @@ public class ConversationListFragment extends MainFragment implements ActionMode
   }
 
   private void updateSearchToolbarHint(@NonNull ConversationFilterRequest conversationFilterRequest) {
-    requireCallback().getSearchToolbar().get().setSearchInputHint(
+    Stub<Material3SearchToolbar> searchToolbar = requireCallback().getSearchToolbar();
+    if (!searchToolbar.resolved()) {
+      return;
+    }
+    searchToolbar.get().setSearchInputHint(
         conversationFilterRequest.getFilter() == ConversationFilter.OFF ? R.string.SearchToolbar_search : R.string.SearchToolbar_search_unread_chats
     );
   }
@@ -891,13 +912,14 @@ public class ConversationListFragment extends MainFragment implements ActionMode
         startupStopwatch.split("data-set");
         SignalLocalMetrics.ColdStart.onConversationListDataLoaded();
         defaultAdapter.unregisterAdapterDataObserver(this);
-        list.post(() -> {
-          AppStartup.getInstance().onCriticalRenderEventEnd();
-          startupStopwatch.split("first-render");
-          startupStopwatch.stop(TAG);
-
-          if (getContext() != null) {
-            ConversationFragment.prepare(getContext());
+        if (requireActivity() instanceof MainActivity) {
+          ((MainActivity) requireActivity()).onFirstRender();
+        }
+        list.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+          @Override
+          public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+            list.removeOnLayoutChangeListener(this);
+            list.post(ConversationListFragment.this::onFirstRender);
           }
           showMainContent();
         });
@@ -971,6 +993,21 @@ public class ConversationListFragment extends MainFragment implements ActionMode
       defaultAdapter.setSelectedConversations(conversations);
       updateMultiSelectState();
     });
+  }
+
+  private void onFirstRender() {
+    AppStartup.getInstance().onCriticalRenderEventEnd();
+    startupStopwatch.split("first-render");
+    startupStopwatch.stop(TAG);
+    mediaControllerOwner.getVoiceNoteMediaController().finishPostpone();
+
+    if (getParentFragment() != null) {
+      requireCallback().getSearchToolbar().get();
+    }
+
+    if (getContext() != null) {
+      ConversationFragment.prepare(getContext());
+    }
   }
 
   private void onConversationListChanged(@NonNull List<Conversation> conversations) {

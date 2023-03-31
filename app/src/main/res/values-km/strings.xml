@@ -21,7 +21,7 @@
     <string name="delete">លុប</string>
     <string name="please_wait">សូមរង់ចាំ…</string>
     <string name="save">រក្សាទុក</string>
-    <string name="note_to_self">កំណត់ចំណាំខ្លួនឯង</string>
+    <string name="note_to_self">កំណត់ចំណាំផ្ទាល់ខ្លួន</string>
 
     <!-- AlbumThumbnailView -->
   <!-- Removed by excludeNonTranslatables <string name="AlbumThumbnailView_plus" translatable="false">\+%d</string> -->
@@ -384,6 +384,15 @@
     <!-- Snackbar message shown after dismissing the full screen sms export megaphone indicating we\'ll do it again soon -->
     <string name="ConversationActivity__you_will_be_reminded_again_soon">អ្នកនឹងត្រូវបានរំលឹកម្តងទៀតក្នុងពេលឆាប់ៗនេះ។</string>
 
+    <!-- Title for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_title">កំពុងផ្ញើអត្ថបទដែលមានទម្រង់ជាក់លាក់</string>
+    <!-- Message for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_message">មនុស្សមួយចំនួនប្រហែលជាកំពុងប្រើកំណែ Signal ដែលមិនស្គាល់អត្ថបទដែលមានទម្រង់ជាក់លាក់ទេ។ ពួកគេនឹងមិនអាចមើលឃើញការផ្លាស់ប្តូរទម្រង់នេះដែលអ្នកបានធ្វើឡើងចំពោះសាររបស់អ្នកទេ។</string>
+    <!-- Button text for confirming they\'d like to send the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_send_anyway_button">ផ្ញើចុះ</string>
+    <!-- Button text for canceling sending the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_cancel_send_button">បោះបង់</string>
+
     <!-- ConversationAdapter -->
     <plurals name="ConversationAdapter_n_unread_messages">
         <item quantity="other">%1$d សារមិនទាន់អាន</item>
@@ -490,10 +499,10 @@
     </plurals>
     <string name="ConversationListFragment_select">ជ្រើសរើស</string>
     <plurals name="ConversationListFragment_archive_plural">
-        <item quantity="other">បណ្ណសារ</item>
+        <item quantity="other">ទុកក្នុងបណ្ណសារ</item>
     </plurals>
     <plurals name="ConversationListFragment_unarchive_plural">
-        <item quantity="other">បិទបណ្ណសារ</item>
+        <item quantity="other">ឈប់ទុកក្នុងបណ្ណសារ</item>
     </plurals>
     <plurals name="ConversationListFragment_delete_plural">
         <item quantity="other">លុប</item>
@@ -522,6 +531,15 @@
 
     <!-- ConversationTypingView -->
     <string name="ConversationTypingView__plus_d">+%1$d</string>
+
+    <!-- Title for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__relink_your_devices">ភ្ជាប់ឧបករណ៍របស់អ្នកឡើងវិញ</string>
+    <!-- Description for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__the_devices_you_added_were_unlinked">ឧបករណ៍ដែលអ្នកបានបញ្ចូលត្រូវបានផ្តាច់នៅពេលដែលឧបករណ៍របស់អ្នកមិនត្រូវបានចុះឈ្មោះ។ ចូលទៅកាន់ការកំណត់ ដើម្បីភ្ជាប់ឧបករណ៍ណាមួយឡើងវិញ។</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to navigate to the Devices page in the settings. -->
+    <string name="RelinkDevicesReminderFragment__open_settings">បើកការកំណត់</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to dismiss the pop up. -->
+    <string name="RelinkDevicesReminderFragment__later">ពេលក្រោយ</string>
 
     <!-- CreateGroupActivity -->
     <string name="CreateGroupActivity__select_members">ជ្រើសរើសសមាជិក</string>
@@ -1119,8 +1137,8 @@
     <string name="Megaphones_new_group">ក្រុមថ្មី</string>
     <string name="Megaphones_invite_friends">អញ្ជើញមិត្តភក្តិ</string>
     <string name="Megaphones_use_sms">ប្រើប្រាស់ SMS</string>
-    <string name="Megaphones_appearance">រូបរាង</string>
-    <string name="Megaphones_add_photo">បន្ថែមរូបភាព</string>
+    <string name="Megaphones_chat_colors">ពណ៌ការជជែក</string>
+    <string name="Megaphones_add_a_profile_photo">បញ្ចូលរូបថតប្រូហ្វាល់</string>
 
     <!-- Title of a bottom sheet to render messages that all quote a specific message -->
     <string name="MessageQuotesBottomSheet_replies">ការឆ្លើយតប</string>
@@ -1657,19 +1675,17 @@
         <item quantity="other">%1$s, %2$s, និង %3$d នៅក្នុងការហៅ</item>
     </plurals>
 
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__flip">ត្រឡប់</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__speaker">បំពងសំឡេង</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__camera">កាមេរ៉ា</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__unmute">បើកសំឡេង</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__mute">បិទសំឡេង</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__ring">រោទិ៍</string>
-    <!-- Label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
+    <!-- Toggle content description for toggling camera direction  -->
+    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <!-- Toggle content description for toggling audio output  -->
+    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <!-- Toggle content description for toggling camera state  -->
+    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <!-- Toggle content description for toggling mute state  -->
+    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <!-- Toggle content description for toggling group ring state  -->
+    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">បិទការហៅ</string>
 
     <!-- CallParticipantsListDialog -->
@@ -2044,6 +2060,10 @@
     <string name="MessageNotifier_most_recent_from_s">ថ្មីៗភាគច្រើនមកពី៖ %1$s</string>
     <string name="MessageNotifier_locked_message">សារចាក់សោរ</string>
     <string name="MessageNotifier_message_delivery_failed">សារបញ្ជូនបរាជ័យ។</string>
+    <!-- Shown in a notification when a story the user tries to send fails to be sent -->
+    <string name="MessageNotifier_story_delivery_failed">មិនអាចផ្ញើរឿងរ៉ាវបានទេ</string>
+    <!-- Shown as notification title for when a notification about a story sent to a group story %1$s replaced with the group name -->
+    <string name="MessageNotifier_group_story_title">អ្នកទៅ %1$s</string>
     <string name="MessageNotifier_failed_to_deliver_message">ការបញ្ជូនសារបរាជ័យ។</string>
     <string name="MessageNotifier_error_delivering_message">ការបញ្ជូនសារមានបញ្ហា។</string>
     <string name="MessageNotifier_message_delivery_paused">ការបញ្ជូនសារត្រូវបានផ្អាក។</string>
@@ -2058,14 +2078,16 @@
     <string name="MessageNotifier_unsecured_sms">SMS គ្មានសុវត្ថិភាព</string>
     <string name="MessageNotifier_contact_message">%1$s %2$s</string>
     <string name="MessageNotifier_unknown_contact_message">ទំនាក់ទំនង</string>
-    <string name="MessageNotifier_reacted_s_to_s">ប្រតិកម្ម %1$s ទៅ៖ \"%2$s\"។</string>
-    <string name="MessageNotifier_reacted_s_to_your_video">ប្រតិកម្ម %1$s ទៅវីដេអូអ្នក។</string>
-    <string name="MessageNotifier_reacted_s_to_your_image">ប្រតិកម្ម %1$s ទៅរូបភាពអ្នក។</string>
-    <string name="MessageNotifier_reacted_s_to_your_gif">ប្រតិកម្ម %1$s ទៅ GIF របស់អ្នក។</string>
-    <string name="MessageNotifier_reacted_s_to_your_file">ប្រតិកម្ម %1$s ទៅឯកសារអ្នក។</string>
-    <string name="MessageNotifier_reacted_s_to_your_audio">ប្រតិកម្ម %1$s ទៅសំឡេងអ្នក។</string>
-    <string name="MessageNotifier_reacted_s_to_your_view_once_media">ប្រតិកម្ម%1$s ទៅឯកសារមេឌៀមើលម្តងរបស់អ្នក។</string>
-    <string name="MessageNotifier_reacted_s_to_your_sticker">ប្រតិកម្ម %1$s ទៅស្ទីកគ័រអ្នក។</string>
+    <string name="MessageNotifier_reacted_s_to_s">បានប្រតិកម្ម %1$s ទៅនឹង៖ \"%2$s\"។</string>
+    <string name="MessageNotifier_reacted_s_to_your_video">បានប្រតិកម្ម %1$s ទៅនឹងវីដេអូរបស់អ្នក។</string>
+    <string name="MessageNotifier_reacted_s_to_your_image">បានប្រតិកម្ម %1$s ទៅនឹងរូបភាពរបស់អ្នក។</string>
+    <string name="MessageNotifier_reacted_s_to_your_gif">បានប្រតិកម្ម %1$s ទៅនឹងរូបចលនារបស់អ្នក។</string>
+    <string name="MessageNotifier_reacted_s_to_your_file">បានប្រតិកម្ម %1$s ទៅនឹងឯកសាររបស់អ្នក។</string>
+    <string name="MessageNotifier_reacted_s_to_your_audio">បានប្រតិកម្ម %1$s ទៅនឹងសំឡេងរបស់អ្នក។</string>
+    <string name="MessageNotifier_reacted_s_to_your_view_once_media">បានប្រតិកម្ម %1$s ទៅនឹងមេឌៀដែលមើលបានតែម្តងរបស់អ្នក។</string>
+    <!-- Body of notification shown to user when someone they sent a payment to reacts to it. Placeholder is the emoji used in the reaction. -->
+    <string name="MessageNotifier_reacted_s_to_your_payment">បានប្រតិកម្ម %1$s ទៅនឹងការបង់ប្រាក់របស់អ្នក។</string>
+    <string name="MessageNotifier_reacted_s_to_your_sticker">បានប្រតិកម្ម %1$s ទៅនឹងស្ទីគ័ររបស់អ្នក។</string>
     <string name="MessageNotifier_this_message_was_deleted">សារនេះត្រូវបានលុប។</string>
 
     <string name="TurnOffContactJoinedNotificationsActivity__turn_off_contact_joined_signal">បិទសារជូនដំណឹងលេខទំនាក់ទំនងចូលរួម Signal? អ្នកអាចបើកវាម្តងទៀតក្នុង Signal &gt; ការកំណត់ &gt; សារជូនដំណឹង។</string>
@@ -2180,6 +2202,12 @@
     <!-- contact_selection_activity -->
     <string name="contact_selection_activity__invite_to_signal">អញ្ជើញចូលប្រើSignal</string>
     <string name="contact_selection_activity__new_group">ក្រុមថ្មី</string>
+    <!-- Row item title for refreshing contacts -->
+    <string name="contact_selection_activity__refresh_contacts">ផ្ទុកឈ្មោះទំនាក់ទំនងឡើងវិញ</string>
+    <!-- Row item description for refreshing contacts -->
+    <string name="contact_selection_activity__missing_someone">បាត់នរណាម្នាក់ឬ? សាកល្បងផ្ទុកឡើងវិញ</string>
+    <!-- Row header title for more section -->
+    <string name="contact_selection_activity__more">ច្រើនទៀត</string>
 
     <!-- contact_filter_toolbar -->
     <string name="contact_filter_toolbar__clear_entered_text_description">លុបអក្សរដែលបានបញ្ចូល</string>
@@ -2447,8 +2475,8 @@
 
     <!-- BadDecryptLearnMoreDialog -->
     <string name="BadDecryptLearnMoreDialog_delivery_issue">បញ្ហាការបញ្ជូន</string>
-    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">សារ រូបស្ទីកគ័រ ប្រតិកម្ម និងការទទួលការអាន មិនអាចបញ្ជូនទៅអ្នកពី %1$s ទេ។​ ពួកគេអាចព្យាយាមបញ្ជូនវាទៅអ្នកផ្ទាល់ ឬនៅក្នុងក្រុម។</string>
-    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">សារ រូបស្ទីកគ័រ ប្រតិកម្ម និងការទទួលការអាន មិនអាចបញ្ជូនទៅអ្នកពី %1$s។</string>
+    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">សារ ស្ទីគ័រ ប្រតិកម្ម ឬមុខងារអានសារមិនអាចបញ្ជូនពី %1$s ទៅអ្នកបានទេ។ គេប្រហែលជាបានសាកល្បងផ្ញើវាទៅអ្នកដោយផ្ទាល់ ឬនៅក្នុងក្រុម។</string>
+    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">សារ ស្ទីគ័រ ប្រតិកម្ម ឬមុខងារអានសារមិនអាចបញ្ជូនពី %1$s ទៅអ្នកបានទេ។</string>
 
     <!-- profile_create_activity -->
     <string name="CreateProfileActivity_first_name_required">ឈ្មោះ (ចាំបាច់)</string>
@@ -2974,6 +3002,8 @@
 
     <!-- EditNoteFragment -->
     <string name="EditNoteFragment_note">កំណត់ត្រា</string>
+    <!-- Content descriptor explaining the use of the save note FAB for Android accessibility settings-->
+    <string name="EditNoteFragment__content_description_save_note">Save note</string>
 
     <!-- ConfirmPaymentFragment -->
     <string name="ConfirmPayment__confirm_payment">បញ្ជាក់ការទូទាត់</string>
@@ -3014,6 +3044,8 @@
     <!-- **************************************** -->
 
     <!-- contact_selection_list -->
+    <!-- Displayed in a row on the new call screen when searching by phone number. -->
+    <string name="contact_selection_list__new_call">ការហៅថ្មីទៅកាន់…</string>
     <string name="contact_selection_list__unknown_contact">ផ្ញើសារថ្មីទៅកាន់…</string>
     <string name="contact_selection_list__unknown_contact_block">ទប់ស្កាត់អ្នកប្រើ</string>
     <string name="contact_selection_list__unknown_contact_add_to_group">បន្ថែមចូលក្រុម</string>
@@ -3361,6 +3393,18 @@
     <string name="BackupUtil_unknown">មិនស្គាល់</string>
     <string name="preferences_app_protection__see_my_phone_number">មើលលេខទូរស័ព្ទរបស់ខ្ញុំ</string>
     <string name="preferences_app_protection__find_me_by_phone_number">ស្វែងរកលេខទូរស័ព្ទរបស់ខ្ញុំ</string>
+    <!-- Phone number heading displayed as a screen title -->
+    <string name="preferences_app_protection__phone_number">លេខទូរសព្ទ</string>
+    <!-- Subtext below option to launch into phone number privacy settings screen -->
+    <string name="preferences_app_protection__choose_who_can_see">ជ្រើសរើសអ្នកដែលអាចមើលឃើញលេខទូរសព្ទរបស់អ្នក និងអ្នកណាដែលអាចប្រើវាទាក់ទងអ្នកបាននៅលើ Signal។</string>
+    <!-- Section title above two radio buttons for enabling and disabling phone number display -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_see_my_number">អ្នកដែលអាចមើលឃើញលេខរបស់ខ្ញុំ</string>
+    <!-- Subtext below radio buttons when who can see my number is set to nobody -->
+    <string name="PhoneNumberPrivacySettingsFragment__nobody_will_see">គ្មាននរណាម្នាក់មើលឃើញលេខទូរសព្ទរបស់អ្នកនៅលើ Signal ទេ</string>
+    <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_find_me_by_number">អ្នកដែលអាចរកខ្ញុំឃើញតាមលេខរបស់ខ្ញុំ</string>
+    <!-- Subtext below radio buttons when who can see my number is set to everyone -->
+    <string name="PhoneNumberPrivacySettingsFragment__your_phone_number">មនុស្ស និងក្រុមទាំងឡាយដែលអ្នកផ្ញើសារទៅនឹងអាចមើលឃើញលេខទូរសព្ទរបស់អ្នក។ អ្នកទាំងឡាយដែលមានលេខទូរសព្ទរបស់អ្នកនៅក្នុងបញ្ជីទំនាក់ទំនងរបស់ពួកគេក៏នឹងអាចមើលវាឃើញនៅលើ Signal ដែរ។</string>
     <string name="PhoneNumberPrivacy_everyone">អ្នករាល់គ្នា</string>
     <string name="PhoneNumberPrivacy_my_contacts">បញ្ជីទំនាក់ទំនងរបស់ខ្ញុំ</string>
     <string name="PhoneNumberPrivacy_nobody">គ្មាននរណា</string>
@@ -3736,12 +3780,12 @@
     <!-- DeactivateWalletFragment -->
     <string name="DeactivateWalletFragment__deactivate_wallet">បិទដំណើរការ Wallet</string>
     <string name="DeactivateWalletFragment__your_balance">សមតុល្យរបស់អ្នក</string>
-    <string name="DeactivateWalletFragment__its_recommended_that_you">អ្នកគួរតែផ្ទេរប្រាក់របស់អ្នកទៅកាន់អាសយដ្ឋានកាបូបមួយផ្សេងទៀត មុនពេលអ្នកបិទដំណើរការការទូទាត់ប្រាក់។ ប្រសិនបើអ្នកជ្រើសរើសមិនផ្ទេរប្រាក់របស់អ្នកឥឡូវនេះ ប្រាក់នឹងនៅតែមាននៅក្នុងកាបូបរបស់អ្នកដែលភ្ជាប់ទៅ Signal ប្រសិនបើអ្នកដំណើរការការទូទាត់ឡើងវិញ។</string>
+    <string name="DeactivateWalletFragment__its_recommended_that_you">អ្នកគួរតែផ្ទេរប្រាក់របស់អ្នកទៅកាន់អាសយដ្ឋានកាបូបមួយផ្សេងទៀត មុនពេលបិទដំណើរការការបង់ប្រាក់។ ប្រសិនបើអ្នកជ្រើសរើសមិនផ្ទេរប្រាក់របស់អ្នកឥឡូវនេះទេ ប្រាក់នោះនឹងនៅតែមាននៅក្នុងកាបូបរបស់អ្នកដែលបានភ្ជាប់ជាមួយ Signal ប្រសិនបើអ្នកសម្រេចឲ្យការបង់ប្រាក់បើកដំណើរការឡើងវិញ។</string>
     <string name="DeactivateWalletFragment__transfer_remaining_balance">ផ្ទេរសមតុល្យដែលនៅសល់</string>
     <string name="DeactivateWalletFragment__deactivate_without_transferring">បិទដំណើរការដោយមិនចាំបាច់ផ្ទេរ</string>
     <string name="DeactivateWalletFragment__deactivate">បិទ</string>
     <string name="DeactivateWalletFragment__deactivate_without_transferring_question">បិទដំណើរការដោយមិនចាំបាច់ផ្ទេរ?</string>
-    <string name="DeactivateWalletFragment__your_balance_will_remain">សមតុល្យរបស់អ្នកនឹងនៅក្នុងកាបូបលុយដែលអ្នកភ្ជាប់ជាមួយ Signal ប្រសិនបើអ្នកសម្រេចអោយការទូទាត់ប្រាក់ដំណើរការឡើងវិញ។</string>
+    <string name="DeactivateWalletFragment__your_balance_will_remain">សមតុល្យរបស់អ្នកនឹងនៅតែមាននៅក្នុងកាបូបរបស់អ្នកដែលបានភ្ជាប់ជាមួយ Signal ប្រសិនបើអ្នកសម្រេចឲ្យការបង់ប្រាក់បើកដំណើរការឡើងវិញ។</string>
     <string name="DeactivateWalletFragment__error_deactivating_wallet">មានបញ្ហាក្នុងការបិទកាបូបលុយ</string>
   <!-- Removed by excludeNonTranslatables <string name="DeactivateWalletFragment__learn_more__we_recommend_transferring_your_funds" translatable="false">https://support.signal.org/hc/articles/360057625692#payments_deactivate</string> -->
 
@@ -3852,6 +3896,60 @@
     <string name="AccountSettingsFragment__youll_be_asked_less_frequently">បន្តិចទៀតអ្នកនឹងត្រូវបានសួរកាន់តែតិចទៅ។</string>
     <string name="AccountSettingsFragment__require_your_signal_pin">ទាមទារលេខកូដ Signal របស់អ្នកដើម្បីចុះឈ្មោះលេខទូរស័ព្ទរបស់អ្នកជាមួយ Signal ម្ដងទៀត</string>
     <string name="AccountSettingsFragment__change_phone_number">ប្ដូរលេខទូរស័ព្ទ</string>
+    <!-- Account setting that allows user to request and export their signal account data -->
+    <string name="AccountSettingsFragment__request_account_data">Request account data</string>
+
+    <!-- ExportAccountDataFragment -->
+    <!-- Part of requesting account data flow, this is the section title for requesting that account data -->
+    <string name="ExportAccountDataFragment__your_account_data">Your account data</string>
+    <!-- Explanation of account data the user can request. %1$s is replaced with Learn more with a link -->
+    <string name="ExportAccountDataFragment__export_explanation">Download and export a report of your Signal account data. This report does not include any messages or media. %1$s</string>
+    <!-- Learn more link to more information about requesting account data -->
+    <string name="ExportAccountDataFragment__learn_more">Learn more</string>
+    <!-- Button action to download the report data -->
+    <string name="ExportAccountDataFragment__download_report">Download report</string>
+    <!-- Button action to export the report data to another app (e.g. email) -->
+    <string name="ExportAccountDataFragment__export_report">Export report</string>
+    <!-- Button action to delete the requested account data -->
+    <string name="ExportAccountDataFragment__delete_report">Delete report</string>
+
+    <!-- Radio option to export the data as a text file .txt -->
+    <string name="ExportAccountDataFragment__export_as_txt">Export as TXT</string>
+    <!-- Label for the text file option -->
+    <string name="ExportAccountDataFragment__export_as_txt_label">Easy-to-read text file</string>
+    <!-- Radio option to export the data as a json (java script object notation) file .json -->
+    <string name="ExportAccountDataFragment__export_as_json">Export as JSON</string>
+    <!-- Label for the json file option, the account data in a machine readable file format -->
+    <string name="ExportAccountDataFragment__export_as_json_label">Machine-readable file</string>
+
+    <!-- Action to cancel (in a dialog) -->
+    <string name="ExportAccountDataFragment__cancel_action">Cancel</string>
+
+    <!-- Acknowledgement for download failure -->
+    <string name="ExportAccountDataFragment__ok_action">OK</string>
+    <!-- Message shown when report download fails -->
+    <string name="ExportAccountDataFragment__report_download_failed">Your report could not be downloaded due to a network error. Check your connection and try again.</string>
+
+    <!-- Title for export confirmation dialog -->
+    <string name="ExportAccountDataFragment__export_report_confirmation">Export data?</string>
+    <!-- Message for export confirmation dialog -->
+    <string name="ExportAccountDataFragment__export_report_confirmation_message">Only share your Signal account data with people or apps you trust.</string>
+    <!-- Action to export in for export confirmation dialog -->
+    <string name="ExportAccountDataFragment__export_report_action">Export</string>
+
+    <!-- Action to delete report in confirmation dialog -->
+    <string name="ExportAccountDataFragment__delete_report_action">Delete</string>
+    <!-- Title for delete report confirmation dialog -->
+    <string name="ExportAccountDataFragment__delete_report_confirmation">Delete report?</string>
+    <!-- Message for delete report confirmation dialog -->
+    <string name="ExportAccountDataFragment__delete_report_confirmation_message">This will not delete any data from your account.</string>
+
+    <!-- Shown as a snackbar letting the user know the report was deleted -->
+    <string name="ExportAccountDataFragment__delete_report_snackbar">Report deleted</string>
+    <!-- Shown in a dialog with a spinner while the report is downloading -->
+    <string name="ExportAccountDataFragment__download_progress">Downloading report…</string>
+    <!-- Explanation that the downloaded report will be available for 30 days before it is deleted -->
+    <string name="ExportAccountDataFragment__report_deletion_disclaimer">Your report will be available for export for 30 days and will then be automatically deleted.</string>
 
     <!-- ChangeNumberFragment -->
     <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">ប្រើការផ្លាស់ប្ដូរនេះ ដើម្បីប្ដូរលេខទូរស័ព្ទបច្ចុប្បន្នទៅលេខទូរស័ព្ទថ្មី។ អ្នកមិនអាចត្រឡប់ការប្ដូរនេះបានទេ។\n\nមុនពេលបន្ត អ្នកត្រូវប្រាកដថាលេខទូរស័ព្ទថ្មីរបស់អ្នកអាចទទួលសារ និងការហៅចូលបាន។</string>
@@ -4055,7 +4153,7 @@
     <string name="Donate2022Q2Megaphone_not_now">ពេលក្រោយ</string>
 
     <!-- EditReactionsFragment -->
-    <string name="EditReactionsFragment__customize_reactions">ដាក់រូបប្រតិកម្មតាមចំនូលចិត្ត</string>
+    <string name="EditReactionsFragment__customize_reactions">ដាក់រូបប្រតិកម្មតាមបំណង</string>
     <string name="EditReactionsFragment__tap_to_replace_an_emoji">ចុចដើម្បីដាក់រូបតំណាងអារម្មណ៍ជំនួស</string>
     <string name="EditReactionsFragment__reset">កំណត់ឡើងវិញ</string>
     <string name="EditReactionsFragment_save">រក្សាទុក</string>
@@ -4453,7 +4551,7 @@
     <string name="DonationsErrors__your_donation_could_not_be_sent">ការបរិច្ចាគរបស់អ្នកមិនអាចផ្ញើបានទេ ដោយសារមានបញ្ហាបណ្តាញ។ សូមពិនិត្យមើលសេវាអ៊ីនធឺណិតរបស់អ្នក រួចព្យាយាមម្តងទៀត។</string>
 
     <!-- Gift message view title -->
-    <string name="GiftMessageView__donation_to_s">ការបរិច្ចាគទៅ %1$s</string>
+    <string name="GiftMessageView__donation_on_behalf_of_s">ការបរិច្ចាគតាងនាមឲ្យ %1$s</string>
     <!-- Gift message view title for incoming donations -->
     <string name="GiftMessageView__s_donated_to_signal_on">%1$s បានបរិច្ចាគទៅ Signal ជំនួសឲ្យអ្នក</string>
     <!-- Gift badge redeem action label -->
@@ -4692,6 +4790,8 @@
 
     <!-- Label for Chats tab in home app screen -->
     <string name="ConversationListTabs__chats">ការសន្ទនា</string>
+    <!-- Label for Calls tab in home app screen -->
+    <string name="ConversationListTabs__calls">ការហៅ</string>
     <!-- Label for Stories tab in home app screen -->
     <string name="ConversationListTabs__stories">រឿងរ៉ាវ</string>
     <!-- String for counts above 99 in conversation list tabs -->
@@ -4844,9 +4944,9 @@
     <!-- My story privacy fine print about what the privacy settings are for -->
     <string name="MyStorySettingsFragment__choose_who_can_view_your_story">ជ្រើសរើសអ្នកដែលអាចមើលរឿងរ៉ាវរបស់អ្នកបាន។ ការផ្លាស់ប្តូរនានានឹងមិនប៉ះពាល់ដល់រឿងរ៉ាវដែលអ្នកបានផ្ញើហើយនោះទេ។</string>
     <!-- Section header for options related to replies and reactions -->
-    <string name="MyStorySettingsFragment__replies_amp_reactions">ការឆ្លើយតប និងការប្រតិកម្ម</string>
+    <string name="MyStorySettingsFragment__replies_amp_reactions">ការឆ្លើយតប និងប្រតិកម្ម</string>
     <!-- Switchable option for allowing replies and reactions on your stories -->
-    <string name="MyStorySettingsFragment__allow_replies_amp_reactions">អនុញ្ញាតការឆ្លើយតប និងការប្រតិកម្ម</string>
+    <string name="MyStorySettingsFragment__allow_replies_amp_reactions">អនុញ្ញាតការឆ្លើយតប និងប្រតិកម្ម</string>
     <!-- Summary for switchable option allowing replies and reactions on your story -->
     <string name="MyStorySettingsFragment__let_people_who_can_view_your_story_react_and_reply">អនុញ្ញាតឲ្យមនុស្សដែលអាចមើលរឿងរ៉ាវរបស់អ្នក ប្រតិកម្ម និងឆ្លើយតបបាន</string>
     <!-- Signal connections bolded text in the Signal Connections sheet -->
@@ -5249,7 +5349,7 @@
     <!-- Title of the screen -->
     <string name="ExportingSmsMessagesFragment__exporting_sms_messages">ការនាំចេញសារជាអក្សរ</string>
     <!-- Message of the screen when exporting sms messages -->
-    <string name="ExportingSmsMessagesFragment__this_may_take_awhile">វាអាចចំណាយពេលបន្តិច</string>
+    <string name="ExportingSmsMessagesFragment__this_may_take_awhile">វាអាចនឹងចំណាយពេលបន្តិច</string>
     <!-- Progress indicator for export -->
     <plurals name="ExportingSmsMessagesFragment__exporting_d_of_d">
         <item quantity="other">កំពុងនាំចេញ %1$d នៃ %2$d …</item>
@@ -5511,12 +5611,20 @@
     <string name="TextFormatting_strikethrough">គូសឆ្នូត</string>
     <!-- Popup menu label for applying monospace font style -->
     <string name="TextFormatting_monospace">Monospace</string>
+    <!-- Popup menu label for applying spoiler style -->
+    <string name="TextFormatting_spoiler">Spoiler</string>
 
     <!-- UsernameEducationFragment -->
     <!-- Continue button which takes the user to the add a username screen -->
     <string name="UsernameEducationFragment__continue">បន្ត</string>
     <!-- Displayed as a title on the username education screen -->
     <string name="UsernameEducationFragment__set_up_your_signal_username">បង្កើតឈ្មោះអ្នកប្រើ Signal របស់អ្នក</string>
+    <!-- Displayed as body text in the username education screen -->
+    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">Usernames are paired with a set of digits and aren\'t shared on your profile</string>
+    <!-- Displayed as body text in the username education screen -->
+    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">Each username has a unique QR code and link you can share with friends to start a chat with you</string>
+    <!-- Displayed as body text in the username education screen. The string references the names of settings, so they should match our translations for those settings. -->
+    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">Turn off phone number discovery under Settings &gt; Privacy &gt; Phone number &gt; Who can find my number, to use your username as the primary way others can contact you</string>
 
     <!-- Username edit dialog -->
     <!-- Option to open username editor displayed as a list item in a dialog -->
@@ -5533,6 +5641,90 @@
     <string name="TimeDurationPickerDialog_positive_button">កំណត់</string>
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, helper text indicating minimum allowable duration -->
     <string name="TimeDurationPickerDialog_minimum_duration_warning">រយៈពេលអប្បបរមាមុនពេលចាក់សោអេក្រង់ គឺ 1 នាទី។</string>
+
+    <!-- Call Log -->
+    <!-- Displayed below the user\'s name in row items on the call log. First placeholder is the call status, second is when it occurred -->
+    <string name="CallLogAdapter__s_dot_s">%1$s · %2$s</string>
+    <!-- Displayed for incoming calls -->
+    <string name="CallLogAdapter__incoming">ហៅចូល</string>
+    <!-- Displayed for outgoing calls -->
+    <string name="CallLogAdapter__outgoing">ហៅចេញ</string>
+    <!-- Displayed for missed calls -->
+    <string name="CallLogAdapter__missed">ខកមិនបានទទួល</string>
+
+    <!-- Call Log context menu -->
+    <!-- Displayed as a context menu item to start a video call -->
+    <string name="CallContextMenu__video_call">ការហៅជាវីដេអូ</string>
+    <!-- Displayed as a context menu item to join an ongoing group call -->
+    <string name="CallContextMenu__join_call">ចូលរួមការហៅ</string>
+    <!-- Displayed as a context menu item to return to active call -->
+    <string name="CallContextMenu__return_to_call">ត្រឡប់ទៅការហៅ</string>
+    <!-- Displayed as a context menu item to start an audio call -->
+    <string name="CallContextMenu__audio_call">ការហៅជាសំឡេង</string>
+    <!-- Displayed as a context menu item to go to chat -->
+    <string name="CallContextMenu__go_to_chat">ចូលទៅការជជែក</string>
+    <!-- Displayed as a context menu item to see call info -->
+    <string name="CallContextMenu__info">ព័ត៌មាន</string>
+    <!-- Displayed as a context menu item to select multiple calls -->
+    <string name="CallContextMenu__select">ជ្រើសរើស</string>
+    <!-- Displayed as a context menu item to delete this call -->
+    <string name="CallContextMenu__delete">លុប</string>
+
+    <!-- Call Log Fragment -->
+    <!-- Action bar menu item to only display missed calls -->
+    <string name="CallLogFragment__filter_missed_calls">ត្រងយកការហៅដែលខកមិនបានទទួល</string>
+    <!-- Action bar menu item to clear missed call filter -->
+    <string name="CallLogFragment__clear_filter">សម្អាតតម្រង</string>
+    <!-- Action bar menu item to open settings -->
+    <string name="CallLogFragment__settings">ការកំណត់</string>
+    <!-- Action bar menu item to open notification profile settings -->
+    <string name="CallLogFragment__notification_profile">ប្រូហ្វាល់កំណត់ការជូនដំណឹង</string>
+    <!-- Call log new call content description -->
+    <string name="CallLogFragment__start_a_new_call">ចាប់ផ្តើមការហៅថ្មី</string>
+    <!-- Filter pull text when pulled -->
+    <string name="CallLogFragment__filtered_by_missed">បានត្រងតាមការខកមិនបានទទួល</string>
+    <!-- Bottom bar option to select all call entries -->
+    <string name="CallLogFragment__select_all">ជ្រើសរើសទាំងអស់</string>
+    <!-- Bottom bar option to delete all selected call entries -->
+    <string name="CallLogFragment__delete">លុប</string>
+    <!-- Title on multi-delete protection dialog (TODO - final terminology) -->
+  <!-- Removed by excludeNonTranslatables <plurals name="CallLogFragment__delete_d_calls" translatable="false">
+        <item quantity="one">Delete %1$d call?</item>
+        <item quantity="other">Delete %1$d calls?</item>
+    </plurals> -->
+    <!-- Positive action on multi-delete protection dialog -->
+    <string name="CallLogFragment__delete_for_me">លុបសម្រាប់ខ្ញុំ</string>
+    <!-- Snackbar label after deleting call logs -->
+    <plurals name="CallLogFragment__d_calls_deleted">
+        <item quantity="other">បានលុបការហៅ %1$d</item>
+    </plurals>
+    <!-- Undo action for deletion snackbar -->
+    <string name="CallLogFragment__undo">មិនធ្វើវិញ</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__no_calls">មិនមានការហៅទេ។</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__get_started_by_calling_a_friend">ចាប់ផ្តើមដោយហៅមិត្តភក្តិម្នាក់។</string>
+
+    <!-- New call activity -->
+    <!-- Activity title in title bar -->
+    <string name="NewCallActivity__new_call">ការហៅថ្មី</string>
+
+    <!-- Call state update popups -->
+    <!-- Displayed when the user enables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_on">បានបើកសំឡេងរោទ៍</string>
+    <!-- Displayed when the user disables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_off">បានបិទសំឡេងរោទ៍</string>
+    <!-- Displayed when the user cannot enable group call ringing -->
+    <string name="CallStateUpdatePopupWindow__group_is_too_large">ក្រុមធំពេកមិនអាចបើកសំឡេងរោទ៍ពេលហៅទៅអ្នកចូលរួមបានទេ</string>
+    <!-- Displayed when the user turns on their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_on">បានបើកមីក្រូហ្វូន</string>
+    <!-- Displayed when the user turns off their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_off">បានបិទមីក្រូហ្វូន</string>
+
+    <!-- Accessibility label describing the capture button on the camera screen -->
+    <string name="CameraControls_capture_button_accessibility_label">Capture Button</string>
+    <!-- Accessibility label describing the continue button on the camera screen -->
+    <string name="CameraControls_continue_button_accessibility_label">Continue Button</string>
 
     <!-- EOF -->
 </resources>

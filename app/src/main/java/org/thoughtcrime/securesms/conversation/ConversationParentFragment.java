@@ -18,7 +18,6 @@ package org.thoughtcrime.securesms.conversation;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
@@ -49,7 +48,6 @@ import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -146,6 +144,7 @@ import org.thoughtcrime.securesms.components.reminder.ReminderView;
 import org.thoughtcrime.securesms.components.reminder.ServiceOutageReminder;
 import org.thoughtcrime.securesms.components.reminder.UnauthorizedReminder;
 import org.thoughtcrime.securesms.components.settings.conversation.ConversationSettingsActivity;
+import org.thoughtcrime.securesms.components.spoiler.SpoilerAnnotation;
 import org.thoughtcrime.securesms.components.voice.VoiceNoteDraft;
 import org.thoughtcrime.securesms.components.voice.VoiceNoteMediaController;
 import org.thoughtcrime.securesms.components.voice.VoiceNotePlaybackState;
@@ -158,8 +157,6 @@ import org.thoughtcrime.securesms.contactshare.Contact;
 import org.thoughtcrime.securesms.contactshare.ContactShareEditActivity;
 import org.thoughtcrime.securesms.contactshare.ContactUtil;
 import org.thoughtcrime.securesms.contactshare.SimpleTextWatcher;
-import org.thoughtcrime.securesms.conversation.ConversationGroupViewModel.GroupActiveState;
-import org.thoughtcrime.securesms.conversation.ConversationMessage.ConversationMessageFactory;
 import org.thoughtcrime.securesms.conversation.drafts.DraftViewModel;
 import org.thoughtcrime.securesms.conversation.ui.groupcall.GroupCallViewModel;
 import org.thoughtcrime.securesms.conversation.ui.inlinequery.InlineQuery;
@@ -181,7 +178,6 @@ import org.thoughtcrime.securesms.database.ThreadTable;
 import org.thoughtcrime.securesms.database.identity.IdentityRecordList;
 import org.thoughtcrime.securesms.database.model.GroupRecord;
 import org.thoughtcrime.securesms.database.model.IdentityRecord;
-import org.thoughtcrime.securesms.database.model.MediaMmsMessageRecord;
 import org.thoughtcrime.securesms.database.model.Mention;
 import org.thoughtcrime.securesms.database.model.MessageId;
 import org.thoughtcrime.securesms.database.model.MessageRecord;
@@ -243,7 +239,6 @@ import org.thoughtcrime.securesms.mms.ImageSlide;
 import org.thoughtcrime.securesms.mms.MediaConstraints;
 import org.thoughtcrime.securesms.mms.MmsException;
 import org.thoughtcrime.securesms.mms.OutgoingMessage;
-import org.thoughtcrime.securesms.mms.QuoteId;
 import org.thoughtcrime.securesms.mms.QuoteModel;
 import org.thoughtcrime.securesms.mms.Slide;
 import org.thoughtcrime.securesms.mms.SlideDeck;
@@ -287,6 +282,7 @@ import org.thoughtcrime.securesms.util.CommunicationActions;
 import org.thoughtcrime.securesms.util.ContextUtil;
 import org.thoughtcrime.securesms.util.ConversationUtil;
 import org.thoughtcrime.securesms.util.Debouncer;
+import org.thoughtcrime.securesms.util.Dialogs;
 import org.thoughtcrime.securesms.util.DrawableUtil;
 import org.thoughtcrime.securesms.util.FullscreenHelper;
 import org.thoughtcrime.securesms.util.IdentityUtil;
@@ -372,7 +368,9 @@ public class ConversationParentFragment extends Fragment
                MessageDetailsFragment.Callback,
                ScheduleMessageTimePickerBottomSheet.ScheduleCallback,
                ConversationBottomSheetCallback,
-               ScheduleMessageDialogCallback
+               ScheduleMessageDialogCallback,
+               ConversationOptionsMenu.Callback,
+               ConversationOptionsMenu.Dependencies
 {
 
   private static final int SHORTCUT_ICON_SIZE = Build.VERSION.SDK_INT >= 26 ? ViewUtil.dpToPx(72) : ViewUtil.dpToPx(48 + 16 * 2);
@@ -488,6 +486,8 @@ public class ConversationParentFragment extends Fragment
   private Callback             callback;
   private RecentEmojiPageModel recentEmojis;
 
+  private ConversationOptionsMenu.Provider menuProvider;
+
   private MaterialButton pigeonGroupCall;
   private MaterialButton pigeonCall;
   private MaterialButton pigeonSettings;
@@ -517,6 +517,8 @@ public class ConversationParentFragment extends Fragment
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     disposables.bindTo(getViewLifecycleOwner());
+    menuProvider = new ConversationOptionsMenu.Provider(this, this, disposables);
+    SpoilerAnnotation.resetRevealedSpoilers();
 
     if (requireActivity() instanceof Callback) {
       callback = (Callback) requireActivity();
@@ -596,7 +598,7 @@ public class ConversationParentFragment extends Fragment
     requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), backPressedCallback);
 
     if (isSearchRequested && savedInstanceState == null) {
-      onCreateOptionsMenu(toolbar.getMenu(), requireActivity().getMenuInflater());
+      menuProvider.onCreateMenu(toolbar.getMenu(), requireActivity().getMenuInflater());
     }
 
     sendButton.post(() -> sendButton.triggerSelectedChangedEvent());
@@ -937,132 +939,7 @@ public class ConversationParentFragment extends Fragment
   }
 
   @Override
-  public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    menu.clear();
-
-    GroupActiveState groupActiveState = groupViewModel.getGroupActiveState().getValue();
-    boolean          isActiveGroup    = groupActiveState != null && groupActiveState.isActiveGroup();
-    boolean          isActiveV2Group  = groupActiveState != null && groupActiveState.isActiveV2Group();
-    boolean          isInActiveGroup  = groupActiveState != null && !groupActiveState.isActiveGroup();
-
-    if (isInMessageRequest() && recipient != null && !recipient.get().isBlocked()) {
-      if (isActiveGroup) {
-        inflater.inflate(R.menu.conversation_message_requests_group, menu);
-      }
-
-      super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    if (viewModel.isPushAvailable()) {
-      if (recipient.get().getExpiresInSeconds() > 0) {
-        if (!isInActiveGroup) {
-          inflater.inflate(R.menu.conversation_expiring_on, menu);
-        }
-        titleView.showExpiring(recipient);
-      } else {
-        if (!isInActiveGroup) {
-          inflater.inflate(R.menu.conversation_expiring_off, menu);
-        }
-        titleView.clearExpiring();
-      }
-    }
-
-    if (isSingleConversation()) {
-      if (viewModel.isPushAvailable()) {
-        inflater.inflate(R.menu.conversation_callable_secure, menu);
-      } else if (!recipient.get().isReleaseNotes() && SignalStore.misc().getSmsExportPhase().allowSmsFeatures()) {
-        inflater.inflate(R.menu.conversation_callable_insecure, menu);
-      }
-    } else if (isGroupConversation()) {
-      if (isActiveV2Group && Build.VERSION.SDK_INT > 19) {
-        inflater.inflate(R.menu.conversation_callable_groupv2, menu);
-        if (groupCallViewModel != null && Boolean.TRUE.equals(groupCallViewModel.hasActiveGroupCall().getValue())) {
-          hideMenuItem(menu, R.id.menu_video_secure);
-        }
-        showGroupCallingTooltip();
-      }
-
-      inflater.inflate(R.menu.conversation_group_options, menu);
-
-      if (!isPushGroupConversation()) {
-        inflater.inflate(R.menu.conversation_mms_group_options, menu);
-        if (distributionType == ThreadTable.DistributionTypes.BROADCAST) {
-          menu.findItem(R.id.menu_distribution_broadcast).setChecked(true);
-        } else {
-          menu.findItem(R.id.menu_distribution_conversation).setChecked(true);
-        }
-      }
-
-      inflater.inflate(R.menu.conversation_active_group_options, menu);
-    }
-
-    inflater.inflate(R.menu.conversation, menu);
-
-    if (isInMessageRequest() && !recipient.get().isBlocked()) {
-      hideMenuItem(menu, R.id.menu_conversation_settings);
-    }
-
-    if (isSingleConversation() && !viewModel.isPushAvailable() && !recipient.get().isReleaseNotes()) {
-      inflater.inflate(R.menu.conversation_insecure, menu);
-    }
-
-    if (recipient != null && recipient.get().isMuted()) inflater.inflate(R.menu.conversation_muted, menu);
-    else inflater.inflate(R.menu.conversation_unmuted, menu);
-
-    if (isSingleConversation() && getRecipient().getContactUri() == null && !recipient.get().isReleaseNotes() && !recipient.get().isSelf() && recipient.get().hasE164()) {
-      inflater.inflate(R.menu.conversation_add_to_contacts, menu);
-    }
-
-    if (recipient != null && recipient.get().isSelf()) {
-      if (viewModel.isPushAvailable()) {
-        hideMenuItem(menu, R.id.menu_call_secure);
-        hideMenuItem(menu, R.id.menu_video_secure);
-      } else {
-        hideMenuItem(menu, R.id.menu_call_insecure);
-      }
-
-      hideMenuItem(menu, R.id.menu_mute_notifications);
-    }
-
-    if (recipient != null && recipient.get().isBlocked()) {
-      if (viewModel.isPushAvailable()) {
-        hideMenuItem(menu, R.id.menu_call_secure);
-        hideMenuItem(menu, R.id.menu_video_secure);
-        hideMenuItem(menu, R.id.menu_expiring_messages);
-        hideMenuItem(menu, R.id.menu_expiring_messages_off);
-      } else {
-        hideMenuItem(menu, R.id.menu_call_insecure);
-      }
-
-      hideMenuItem(menu, R.id.menu_mute_notifications);
-    }
-
-    if (recipient != null && recipient.get().isReleaseNotes()) {
-      hideMenuItem(menu, R.id.menu_add_shortcut);
-    }
-
-    hideMenuItem(menu, R.id.menu_group_recipients);
-
-    if (isActiveV2Group) {
-      hideMenuItem(menu, R.id.menu_mute_notifications);
-      hideMenuItem(menu, R.id.menu_conversation_settings);
-    } else if (isGroupConversation()) {
-      hideMenuItem(menu, R.id.menu_conversation_settings);
-    }
-
-    hideMenuItem(menu, R.id.menu_create_bubble);
-    disposables.add(viewModel.canShowAsBubble().subscribe(canShowAsBubble -> {
-      MenuItem item = menu.findItem(R.id.menu_create_bubble);
-
-      if (item != null) {
-        item.setVisible(canShowAsBubble && !isInBubble());
-      }
-    }));
-
-    if (threadId == -1L) {
-      hideMenuItem(menu, R.id.menu_view_media);
-    }
-
+  public void onOptionsMenuCreated(@NonNull Menu menu) {
     searchViewItem = menu.findItem(R.id.menu_search);
 
     SearchView searchView = (SearchView) searchViewItem.getActionView();
@@ -1124,8 +1001,6 @@ public class ConversationParentFragment extends Fragment
       }
     }
 
-    super.onCreateOptionsMenu(menu, inflater);
-
     int toolbarTextAndIconColor = getResources().getColor(wallpaper.getDrawable() != null ? R.color.signal_colorNeutralInverse : R.color.signal_colorOnSurface);
     setToolbarActionItemTint(toolbar, toolbarTextAndIconColor);
   }
@@ -1134,60 +1009,10 @@ public class ConversationParentFragment extends Fragment
     if (!isSearchRequested && getActivity() != null) {
       optionsMenuDebouncer.publish(() -> {
         if (getActivity() != null) {
-          onCreateOptionsMenu(toolbar.getMenu(), requireActivity().getMenuInflater());
+          menuProvider.onCreateMenu(toolbar.getMenu(), requireActivity().getMenuInflater());
         }
       });
     }
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-    super.onOptionsItemSelected(item);
-    int itemId = item.getItemId();
-
-    if (itemId == R.id.menu_call_secure) {
-      handleDial(getRecipient(), true);
-    } else if (itemId == R.id.menu_video_secure) {
-      handleVideo(getRecipient());
-    } else if (itemId == R.id.menu_call_insecure) {
-      handleDial(getRecipient(), false);
-    } else if (itemId == R.id.menu_view_media) {
-      handleViewMedia();
-    } else if (itemId == R.id.menu_add_shortcut) {
-      handleAddShortcut();
-    } else if (itemId == R.id.menu_search) {
-      handleSearch();
-    } else if (itemId == R.id.menu_add_to_contacts) {
-      handleAddToContacts();
-    } else if (itemId == R.id.menu_group_recipients) {
-      handleDisplayGroupRecipients();
-    } else if (itemId == R.id.menu_distribution_broadcast) {
-      handleDistributionBroadcastEnabled(item);
-    } else if (itemId == R.id.menu_distribution_conversation) {
-      handleDistributionConversationEnabled(item);
-    } else if (itemId == R.id.menu_group_settings) {
-      handleManageGroup();
-    } else if (itemId == R.id.menu_leave) {
-      handleLeavePushGroup();
-    } else if (itemId == R.id.menu_invite) {
-      handleInviteLink();
-    } else if (itemId == R.id.menu_mute_notifications) {
-      handleMuteNotifications();
-    } else if (itemId == R.id.menu_unmute_notifications) {
-      handleUnmuteNotifications();
-    } else if (itemId == R.id.menu_conversation_settings) {
-      handleConversationSettings();
-    } else if (itemId == R.id.menu_expiring_messages_off || itemId == R.id.menu_expiring_messages) {
-      handleSelectMessageExpiration();
-    } else if (itemId == R.id.menu_create_bubble) {
-      handleCreateBubble();
-    } else if (itemId == android.R.id.home) {
-      requireActivity().finish();
-    } else {
-      return false;
-    }
-
-    return true;
   }
 
   public void onBackPressed() {
@@ -1278,7 +1103,8 @@ public class ConversationParentFragment extends Fragment
 
 //////// Event Handlers
 
-  private void handleSelectMessageExpiration() {
+  @Override
+  public void handleSelectMessageExpiration() {
     if (isPushGroupConversation() && !isActiveGroup()) {
       return;
     }
@@ -1286,17 +1112,9 @@ public class ConversationParentFragment extends Fragment
     startActivity(RecipientDisappearingMessagesActivity.forRecipient(requireContext(), recipient.getId()));
   }
 
-  private void handleMuteNotifications() {
-    MuteDialog.show(requireActivity(), until -> {
-      new AsyncTask<Void, Void, Void>() {
-        @Override
-        protected Void doInBackground(Void... params) {
-          SignalDatabase.recipients().setMuted(recipient.getId(), until);
-
-          return null;
-        }
-      }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    });
+  @Override
+  public void handleMuteNotifications() {
+    MuteDialog.show(requireActivity(), viewModel::muteConversation);
   }
 
   private void handleStoryRingClick() {
@@ -1307,7 +1125,8 @@ public class ConversationParentFragment extends Fragment
             .build()));
   }
 
-  private void handleConversationSettings() {
+  @Override
+  public void handleConversationSettings() {
     if (isGroupConversation()) {
       handleManageGroup();
       return;
@@ -1321,7 +1140,8 @@ public class ConversationParentFragment extends Fragment
     ActivityCompat.startActivity(requireActivity(), intent, bundle);
   }
 
-  private void handleUnmuteNotifications() {
+  @Override
+  public void handleUnmuteNotifications() {
     new AsyncTask<Void, Void, Void>() {
       @Override
       protected Void doInBackground(Void... params) {
@@ -1340,7 +1160,6 @@ public class ConversationParentFragment extends Fragment
     });
   }
 
-  @TargetApi(Build.VERSION_CODES.KITKAT)
   private void handleMakeDefaultSms() {
     startActivityForResult(SmsUtil.getSmsRoleIntent(requireContext()), SMS_DEFAULT);
   }
@@ -1349,7 +1168,8 @@ public class ConversationParentFragment extends Fragment
     startActivity(RegistrationNavigationActivity.newIntentForReRegistration(requireContext()));
   }
 
-  private void handleInviteLink() {
+  @Override
+  public void handleInviteLink() {
     String inviteText = getString(R.string.ConversationActivity_lets_switch_to_signal, getString(R.string.install_url));
 
     if (viewModel.isDefaultSmsApplication() && SignalStore.misc().getSmsExportPhase().isSmsSupported()) {
@@ -1373,11 +1193,13 @@ public class ConversationParentFragment extends Fragment
     }
   }
 
-  private void handleViewMedia() {
+  @Override
+  public void handleViewMedia() {
     startActivity(MediaOverviewActivity.forThread(requireContext(), threadId));
   }
 
-  private void handleAddShortcut() {
+  @Override
+  public void handleAddShortcut() {
     Log.i(TAG, "Creating home screen shortcut for recipient " + recipient.get().getId());
 
     final Context   context   = requireContext().getApplicationContext();
@@ -1422,7 +1244,8 @@ public class ConversationParentFragment extends Fragment
 
   }
 
-  private void handleCreateBubble() {
+  @Override
+  public void handleCreateBubble() {
     ConversationIntents.Args args = viewModel.getArgs();
 
     BubbleUtil.displayAsBubble(requireContext(), args.getRecipientId(), args.getThreadId());
@@ -1451,11 +1274,13 @@ public class ConversationParentFragment extends Fragment
     bitmap.recycle();
   }
 
-  private void handleSearch() {
+  @Override
+  public void handleSearch() {
     searchViewModel.onSearchOpened();
   }
 
-  private void handleLeavePushGroup() {
+  @Override
+  public void handleLeavePushGroup() {
     if (getRecipient() == null) {
       Toast.makeText(requireContext(), getString(R.string.ConversationActivity_invalid_recipient),
                      Toast.LENGTH_LONG).show();
@@ -1465,46 +1290,32 @@ public class ConversationParentFragment extends Fragment
     LeaveGroupDialog.handleLeavePushGroup(requireActivity(), getRecipient().requireGroupId().requirePush(), () -> requireActivity().finish());
   }
 
-  private void handleManageGroup() {
+  @Override
+  public void handleManageGroup() {
     Intent intent = ConversationSettingsActivity.forGroup(requireContext(), recipient.get().requireGroupId());
     Bundle bundle = ConversationSettingsActivity.createTransitionBundle(requireContext(), titleView.findViewById(R.id.contact_photo_image), toolbar);
 
     ActivityCompat.startActivity(requireContext(), intent, bundle);
   }
 
-  private void handleDistributionBroadcastEnabled(MenuItem item) {
+  @Override
+  public void handleDistributionBroadcastEnabled(MenuItem item) {
     distributionType = ThreadTable.DistributionTypes.BROADCAST;
     draftViewModel.setDistributionType(distributionType);
+    viewModel.setDistributionType(distributionType);
     item.setChecked(true);
-
-    if (threadId != -1) {
-      new AsyncTask<Void, Void, Void>() {
-        @Override
-        protected Void doInBackground(Void... params) {
-          SignalDatabase.threads().setDistributionType(threadId, ThreadTable.DistributionTypes.BROADCAST);
-          return null;
-        }
-      }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
   }
 
-  private void handleDistributionConversationEnabled(MenuItem item) {
+  @Override
+  public void handleDistributionConversationEnabled(MenuItem item) {
     distributionType = ThreadTable.DistributionTypes.CONVERSATION;
     draftViewModel.setDistributionType(distributionType);
+    viewModel.setDistributionType(distributionType);
     item.setChecked(true);
-
-    if (threadId != -1) {
-      new AsyncTask<Void, Void, Void>() {
-        @Override
-        protected Void doInBackground(Void... params) {
-          SignalDatabase.threads().setDistributionType(threadId, ThreadTable.DistributionTypes.CONVERSATION);
-          return null;
-        }
-      }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
   }
 
-  private void handleDial(final Recipient recipient, boolean isSecure) {
+  @Override
+  public void handleDial(final Recipient recipient, boolean isSecure) {
     if (recipient == null) return;
 
     if (isSecure) {
@@ -1514,7 +1325,8 @@ public class ConversationParentFragment extends Fragment
     }
   }
 
-  private void handleVideo(final Recipient recipient) {
+  @Override
+  public void handleVideo(final Recipient recipient) {
     if (recipient == null) return;
 
     if (recipient.isPushV2Group() && groupCallViewModel.hasActiveGroupCall().getValue() == Boolean.FALSE && groupViewModel.isNonAdminInAnnouncementGroup()) {
@@ -1527,11 +1339,13 @@ public class ConversationParentFragment extends Fragment
     }
   }
 
-  private void handleDisplayGroupRecipients() {
+  @Override
+  public void handleDisplayGroupRecipients() {
     new GroupMembersDialog(requireActivity(), getRecipient()).display();
   }
 
-  private void handleAddToContacts() {
+  @Override
+  public void handleAddToContacts() {
     if (recipient.get().isGroup()) return;
 
     try {
@@ -1875,7 +1689,21 @@ public class ConversationParentFragment extends Fragment
                   break;
                 case Draft.QUOTE:
                   SettableFuture<Boolean> quoteResult = new SettableFuture<>();
-                  new QuoteRestorationTask(draft.getValue(), quoteResult).execute();
+                  disposables.add(draftViewModel.loadDraftQuote(draft.getValue()).subscribe(
+                      conversationMessage -> {
+                        handleReplyMessage(conversationMessage);
+                        quoteResult.set(true);
+                      },
+                      err -> {
+                        Log.e(TAG, "Failed to restore a quote from a draft.", err);
+                        quoteResult.set(false);
+                      },
+                      () -> {
+                        Log.e(TAG, "Failed to restore a quote from a draft. No matching message record.");
+                        quoteResult.set(false);
+                      }
+                  ));
+
                   quoteResult.addListener(listener);
                   break;
                 case Draft.VOICE_NOTE:
@@ -2403,7 +2231,7 @@ public class ConversationParentFragment extends Fragment
 
   protected void initializeActionBar() {
     invalidateOptionsMenu();
-    toolbar.setOnMenuItemClickListener(this::onOptionsItemSelected);
+    toolbar.setOnMenuItemClickListener(menuProvider::onMenuItemSelected);
 
     if (isInBubble()) {
       toolbar.setNavigationIcon(DrawableUtil.tint(ContextUtil.requireDrawable(requireContext(), R.drawable.ic_notification),
@@ -2651,7 +2479,8 @@ public class ConversationParentFragment extends Fragment
     );
   }
 
-  private void showGroupCallingTooltip() {
+  @Override
+  public void showGroupCallingTooltip() {
     if (!SignalStore.tooltips().shouldShowGroupCallingTooltip() || callingTooltipShown) {
       return;
     }
@@ -3022,7 +2851,8 @@ public class ConversationParentFragment extends Fragment
     }
   }
 
-  private boolean isInMessageRequest() {
+  @Override
+  public boolean isInMessageRequest() {
     return messageRequestBottomView.getVisibility() == View.VISIBLE;
   }
 
@@ -3053,11 +2883,17 @@ public class ConversationParentFragment extends Fragment
     return sendButton.isManualSelection() && sendButton.getSelectedSendType().usesSmsTransport();
   }
 
+  @Override
+  public @Nullable LiveRecipient getLiveRecipient() {
+    return recipient;
+  }
+
   protected Recipient getRecipient() {
     return this.recipient.get();
   }
 
-  protected long getThreadId() {
+  @Override
+  public long getThreadId() {
     return this.threadId;
   }
 
@@ -3183,6 +3019,11 @@ public class ConversationParentFragment extends Fragment
       return;
     }
 
+    if (SignalStore.uiHints().hasNotSeenTextFormattingAlert() && result.getBodyRanges() != null && result.getBodyRanges().getRangesCount() > 0) {
+      Dialogs.showFormattedTextDialog(requireContext(), () -> sendMediaMessage(result));
+      return;
+    }
+
     long          thread    = this.threadId;
     long          expiresIn = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
     QuoteModel    quote     = result.isViewOnce() ? null : inputPanel.getQuote().orElse(null);
@@ -3292,6 +3133,12 @@ public class ConversationParentFragment extends Fragment
 
     if (!viewModel.isDefaultSmsApplication() && sendType.usesSmsTransport() && recipient.get().hasSmsAddress()) {
       showDefaultSmsPrompt();
+      return new SettableFuture<>(null);
+    }
+
+    if (SignalStore.uiHints().hasNotSeenTextFormattingAlert() && styling != null && styling.getRangesCount() > 0) {
+      final String finalBody = body;
+      Dialogs.showFormattedTextDialog(requireContext(), () -> sendMediaMessage(recipientId, sendType, finalBody, slideDeck, quote, contacts, previews, mentions, styling, expiresIn, viewOnce, initiating, clearComposeBox, metricId, scheduledDate));
       return new SettableFuture<>(null);
     }
 
@@ -3544,13 +3391,8 @@ public class ConversationParentFragment extends Fragment
     requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
 
     voiceNoteMediaController.pausePlayback();
-    try {
-      recordingSession = new RecordingSession(audioRecorder.startRecording());
-      disposables.add(recordingSession);
-    } catch (AssertionError err) {
-      Log.e(TAG, "Could not start audio recording.", err);
-      Toast.makeText(requireContext(), R.string.ConversationActivity_unable_to_record_audio, Toast.LENGTH_SHORT).show();
-    }
+    recordingSession = new RecordingSession(audioRecorder.startRecording());
+    disposables.add(recordingSession);
   }
 
   @Override
@@ -3865,6 +3707,36 @@ public class ConversationParentFragment extends Fragment
   @Override
   public void onSchedulePermissionsGranted(@Nullable String metricId, long scheduledDate) {
     sendMessage(metricId, scheduledDate);
+  }
+
+  @Override
+  public void handleGoHome() {
+    requireActivity().finish();
+  }
+
+  @Override
+  public @NonNull  ConversationViewModel getViewModel() {
+    return viewModel;
+  }
+
+  @Override
+  public @NonNull ConversationGroupViewModel getGroupViewModel() {
+    return groupViewModel;
+  }
+
+  @Override
+  public @Nullable GroupCallViewModel getGroupCallViewModel() {
+    return groupCallViewModel;
+  }
+
+  @Override
+  public @NonNull ConversationTitleView getTitleView() {
+    return titleView;
+  }
+
+  @Override
+  public int getDistributionType() {
+    return distributionType;
   }
 
   // Listeners
@@ -4456,12 +4328,6 @@ public class ConversationParentFragment extends Fragment
     BlockUnblockDialog.showUnblockFor(requireContext(), getLifecycle(), recipient, requestModel::onUnblock);
   }
 
-  private static void hideMenuItem(@NonNull Menu menu, @IdRes int menuItem) {
-    if (menu.findItem(menuItem) != null) {
-      menu.findItem(menuItem).setVisible(false);
-    }
-  }
-
   @WorkerThread
   private @Nullable KeyboardImageDetails getKeyboardImageDetails(@NonNull Uri uri) {
     try {
@@ -4548,50 +4414,6 @@ public class ConversationParentFragment extends Fragment
           startActivity(VerifyIdentityActivity.newIntent(requireContext(), unverifiedIdentities.get(which), false));
         });
         builder.show();
-      }
-    }
-  }
-
-  private class QuoteRestorationTask extends AsyncTask<Void, Void, ConversationMessage> {
-
-    private final String                  serialized;
-    private final SettableFuture<Boolean> future;
-
-    QuoteRestorationTask(@NonNull String serialized, @NonNull SettableFuture<Boolean> future) {
-      this.serialized = serialized;
-      this.future     = future;
-    }
-
-    @Override
-    protected ConversationMessage doInBackground(Void... voids) {
-      QuoteId quoteId = QuoteId.deserialize(ApplicationDependencies.getApplication(), serialized);
-
-      if (quoteId == null) {
-        return null;
-      }
-
-      Context context = ApplicationDependencies.getApplication();
-
-      MessageRecord messageRecord = SignalDatabase.messages().getMessageFor(quoteId.getId(), quoteId.getAuthor());
-      if (messageRecord == null) {
-        return null;
-      }
-
-      if (messageRecord instanceof MediaMmsMessageRecord) {
-        messageRecord = ((MediaMmsMessageRecord) messageRecord).withAttachments(context, SignalDatabase.attachments().getAttachmentsForMessage(messageRecord.getId()));
-      }
-
-      return ConversationMessageFactory.createWithUnresolvedData(context, messageRecord);
-    }
-
-    @Override
-    protected void onPostExecute(ConversationMessage conversationMessage) {
-      if (conversationMessage != null) {
-        handleReplyMessage(conversationMessage);
-        future.set(true);
-      } else {
-        Log.e(TAG, "Failed to restore a quote from a draft. No matching message record.");
-        future.set(false);
       }
     }
   }

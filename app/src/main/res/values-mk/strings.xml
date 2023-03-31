@@ -384,6 +384,15 @@
     <!-- Snackbar message shown after dismissing the full screen sms export megaphone indicating we\'ll do it again soon -->
     <string name="ConversationActivity__you_will_be_reminded_again_soon">Ќе ве потсетиме повторно наскоро.</string>
 
+    <!-- Title for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_title">Се испраќа форматираниот текст</string>
+    <!-- Message for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_message">Некои лица можеби користат верзија на Signal која не поддржува форматиран текст. Тие нема да можат да ги видат промените кои ги направивте во форматот на вашата порака.</string>
+    <!-- Button text for confirming they\'d like to send the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_send_anyway_button">Испрати сепак</string>
+    <!-- Button text for canceling sending the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_cancel_send_button">Откажи</string>
+
     <!-- ConversationAdapter -->
     <plurals name="ConversationAdapter_n_unread_messages">
         <item quantity="one">%1$d непрочитана порака</item>
@@ -482,19 +491,19 @@
     </plurals>
     <plurals name="ConversationListFragment_read_plural">
         <item quantity="one">Прочитано</item>
-        <item quantity="other">Прочитано</item>
+        <item quantity="other">Прочитани</item>
     </plurals>
     <plurals name="ConversationListFragment_unread_plural">
         <item quantity="one">Непрочитано</item>
-        <item quantity="other">Непрочитано</item>
+        <item quantity="other">Непрочитани</item>
     </plurals>
     <plurals name="ConversationListFragment_pin_plural">
-        <item quantity="one">Закачи</item>
-        <item quantity="other">Закачи</item>
+        <item quantity="one">Приковај на врвот</item>
+        <item quantity="other">Приковај на врвот</item>
     </plurals>
     <plurals name="ConversationListFragment_unpin_plural">
-        <item quantity="one">Откачи</item>
-        <item quantity="other">Откачи</item>
+        <item quantity="one">Отстрани од врвот</item>
+        <item quantity="other">Отстрани од врвот</item>
     </plurals>
     <plurals name="ConversationListFragment_mute_plural">
         <item quantity="one">Исклучи известувања</item>
@@ -542,6 +551,15 @@
 
     <!-- ConversationTypingView -->
     <string name="ConversationTypingView__plus_d">+%1$d</string>
+
+    <!-- Title for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__relink_your_devices">Повторно поврзете ги вашите уреди</string>
+    <!-- Description for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__the_devices_you_added_were_unlinked">Се прекина поврзаноста со уредите кои ги додадовте кога се отстрани регистрацијата на вашиот уред. Одете во поставувања за повторно да ги поврзете уредите.</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to navigate to the Devices page in the settings. -->
+    <string name="RelinkDevicesReminderFragment__open_settings">Отвори поставувања</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to dismiss the pop up. -->
+    <string name="RelinkDevicesReminderFragment__later">Подоцна</string>
 
     <!-- CreateGroupActivity -->
     <string name="CreateGroupActivity__select_members">Изберете членови</string>
@@ -1167,8 +1185,8 @@
     <string name="Megaphones_new_group">Нова група</string>
     <string name="Megaphones_invite_friends">Покани пријатели</string>
     <string name="Megaphones_use_sms">Користи SMS</string>
-    <string name="Megaphones_appearance">Изглед</string>
-    <string name="Megaphones_add_photo">Додај слика</string>
+    <string name="Megaphones_chat_colors">Боја на разговор</string>
+    <string name="Megaphones_add_a_profile_photo">Додајте слика на профилот</string>
 
     <!-- Title of a bottom sheet to render messages that all quote a specific message -->
     <string name="MessageQuotesBottomSheet_replies">Одговори</string>
@@ -1726,19 +1744,17 @@
         <item quantity="other">%1$s, %2$s, и %3$d други се на овој повик</item>
     </plurals>
 
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__flip">Сврти</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__speaker">Звучник</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__camera">Камера</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__unmute">Вклучи известувања</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__mute">Исклучи известувања</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__ring">Ѕвони</string>
-    <!-- Label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
+    <!-- Toggle content description for toggling camera direction  -->
+    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <!-- Toggle content description for toggling audio output  -->
+    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <!-- Toggle content description for toggling camera state  -->
+    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <!-- Toggle content description for toggling mute state  -->
+    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <!-- Toggle content description for toggling group ring state  -->
+    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">Заврши повик</string>
 
     <!-- CallParticipantsListDialog -->
@@ -2116,6 +2132,10 @@
     <string name="MessageNotifier_most_recent_from_s">Најнови од: %1$s</string>
     <string name="MessageNotifier_locked_message">Заклучена порака</string>
     <string name="MessageNotifier_message_delivery_failed">Испораката на пораката не успеа.</string>
+    <!-- Shown in a notification when a story the user tries to send fails to be sent -->
+    <string name="MessageNotifier_story_delivery_failed">Испраќањето на приказната е неуспешно</string>
+    <!-- Shown as notification title for when a notification about a story sent to a group story %1$s replaced with the group name -->
+    <string name="MessageNotifier_group_story_title">Вие до %1$s</string>
     <string name="MessageNotifier_failed_to_deliver_message">Неуспешно доставување на пораката.</string>
     <string name="MessageNotifier_error_delivering_message">Грешка при доставувањето на пораката.</string>
     <string name="MessageNotifier_message_delivery_paused">Испораката на пораката е паузирана.</string>
@@ -2131,13 +2151,15 @@
     <string name="MessageNotifier_contact_message">%1$s %2$s</string>
     <string name="MessageNotifier_unknown_contact_message">Контакт</string>
     <string name="MessageNotifier_reacted_s_to_s">Реагираше со %1$s на „%2$s“.</string>
-    <string name="MessageNotifier_reacted_s_to_your_video">Реагираше со %1$s на Вашето видео.</string>
-    <string name="MessageNotifier_reacted_s_to_your_image">Реагираше со %1$s на Вашата слика.</string>
-    <string name="MessageNotifier_reacted_s_to_your_gif">Реагираше со %1$s на Вашиот GIF.</string>
-    <string name="MessageNotifier_reacted_s_to_your_file">Реагираше со %1$s на Вашата датотека.</string>
-    <string name="MessageNotifier_reacted_s_to_your_audio">Реагираше со %1$s на Вашето аудио.</string>
-    <string name="MessageNotifier_reacted_s_to_your_view_once_media">Реагираше со %1$s на Вашата еднократно видлива медиумска датотека.</string>
-    <string name="MessageNotifier_reacted_s_to_your_sticker">Реагираше со %1$s на Вашиот стикер.</string>
+    <string name="MessageNotifier_reacted_s_to_your_video">Реагираше со %1$s на вашето видео.</string>
+    <string name="MessageNotifier_reacted_s_to_your_image">Реагираше со %1$s на вашата слика.</string>
+    <string name="MessageNotifier_reacted_s_to_your_gif">Реагираше со %1$s на вашиот GIF.</string>
+    <string name="MessageNotifier_reacted_s_to_your_file">Реагираше со %1$s на вашата датотека.</string>
+    <string name="MessageNotifier_reacted_s_to_your_audio">Реагираше со %1$s на вашето аудио.</string>
+    <string name="MessageNotifier_reacted_s_to_your_view_once_media">Реагираше со %1$s на вашата еднократно видлива медиумска датотека.</string>
+    <!-- Body of notification shown to user when someone they sent a payment to reacts to it. Placeholder is the emoji used in the reaction. -->
+    <string name="MessageNotifier_reacted_s_to_your_payment">Реагираше со %1$s на вашето плаќање.</string>
+    <string name="MessageNotifier_reacted_s_to_your_sticker">Реагираше со %1$s на вашата налепница.</string>
     <string name="MessageNotifier_this_message_was_deleted">Оваа порака е избришана.</string>
 
     <string name="TurnOffContactJoinedNotificationsActivity__turn_off_contact_joined_signal">Дали да се исклучат известувања кога контакт ќе се приклучи на Signal? Можете да ги вклучите повторно во Signal &gt; Поставувања &gt; Известувања.</string>
@@ -2253,6 +2275,12 @@
     <!-- contact_selection_activity -->
     <string name="contact_selection_activity__invite_to_signal">Испрати покана за Signal</string>
     <string name="contact_selection_activity__new_group">Нова група</string>
+    <!-- Row item title for refreshing contacts -->
+    <string name="contact_selection_activity__refresh_contacts">Освежете ги контактите</string>
+    <!-- Row item description for refreshing contacts -->
+    <string name="contact_selection_activity__missing_someone">Ви недостига некој? Пробајте да ги освежите контактите</string>
+    <!-- Row header title for more section -->
+    <string name="contact_selection_activity__more">Повеќе</string>
 
     <!-- contact_filter_toolbar -->
     <string name="contact_filter_toolbar__clear_entered_text_description">Исчисти го внесениот текст</string>
@@ -2530,8 +2558,8 @@
 
     <!-- BadDecryptLearnMoreDialog -->
     <string name="BadDecryptLearnMoreDialog_delivery_issue">Проблем со испорака</string>
-    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">Порака, налепница, реакција или потврда за прочитани пораки не може да Ви се достави од %1$s. Можеби се обиделе да Ви испратат директно или во група.</string>
-    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">Порака, налепница, реакција или потврда за прочитани пораки не може да Ви се достави од %1$s.</string>
+    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">Не можеше да се испрати до вас порака, налепница, реакција или потврда за прочитана порака од %1$s. Или се обиделе да ви ја испратат директно или во група.</string>
+    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">Не можеше да се испрати до вас порака, налепница, реакција или потврда за прочитана порака од %1$s.</string>
 
     <!-- profile_create_activity -->
     <string name="CreateProfileActivity_first_name_required">Име (задолжително)</string>
@@ -3058,6 +3086,8 @@
 
     <!-- EditNoteFragment -->
     <string name="EditNoteFragment_note">Белешка</string>
+    <!-- Content descriptor explaining the use of the save note FAB for Android accessibility settings-->
+    <string name="EditNoteFragment__content_description_save_note">Save note</string>
 
     <!-- ConfirmPaymentFragment -->
     <string name="ConfirmPayment__confirm_payment">Потврдете го плаќањето</string>
@@ -3098,6 +3128,8 @@
     <!-- **************************************** -->
 
     <!-- contact_selection_list -->
+    <!-- Displayed in a row on the new call screen when searching by phone number. -->
+    <string name="contact_selection_list__new_call">Нов повик до…</string>
     <string name="contact_selection_list__unknown_contact">Нова порака за…</string>
     <string name="contact_selection_list__unknown_contact_block">Блокирај го корисникот</string>
     <string name="contact_selection_list__unknown_contact_add_to_group">Додај во група</string>
@@ -3454,6 +3486,18 @@
     <string name="BackupUtil_unknown">Непознато</string>
     <string name="preferences_app_protection__see_my_phone_number">Да го видат мојот телефонски број</string>
     <string name="preferences_app_protection__find_me_by_phone_number">Да ме најдат преку мојот телефонски број</string>
+    <!-- Phone number heading displayed as a screen title -->
+    <string name="preferences_app_protection__phone_number">Телефонски број</string>
+    <!-- Subtext below option to launch into phone number privacy settings screen -->
+    <string name="preferences_app_protection__choose_who_can_see">Одберете кој може да го види вашиот телефонски број и да ве контактира на Signal со тој број.</string>
+    <!-- Section title above two radio buttons for enabling and disabling phone number display -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_see_my_number">Кој може да го види мојот број</string>
+    <!-- Subtext below radio buttons when who can see my number is set to nobody -->
+    <string name="PhoneNumberPrivacySettingsFragment__nobody_will_see">Никој нема да го види вашиот телефонски број на Signal</string>
+    <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_find_me_by_number">Кој може да ме пронајде со мојот телефонски број</string>
+    <!-- Subtext below radio buttons when who can see my number is set to everyone -->
+    <string name="PhoneNumberPrivacySettingsFragment__your_phone_number">Вашиот телефонски број ќе биде видлив за луѓето и групите со кои се допишувате. Лицата кои го имаат вашиот број во контакти исто така ќе можат да го видат на Signal.</string>
     <string name="PhoneNumberPrivacy_everyone">Сите</string>
     <string name="PhoneNumberPrivacy_my_contacts">Мои контакти</string>
     <string name="PhoneNumberPrivacy_nobody">Никој</string>
@@ -3832,12 +3876,12 @@
     <!-- DeactivateWalletFragment -->
     <string name="DeactivateWalletFragment__deactivate_wallet">Деактивирај го паричникот</string>
     <string name="DeactivateWalletFragment__your_balance">Вашиот баланс</string>
-    <string name="DeactivateWalletFragment__its_recommended_that_you">Препорачливо е да ги префрлите Вашите средства на адресата на друг паричник пред да ги деактивирате плаќањата. Ако изберете да не ги префлите Вашите средства сега, тие ќе останат на Вашиот паричник врзан со Signal, во случај да ги реактивирате плаќањата пак.</string>
+    <string name="DeactivateWalletFragment__its_recommended_that_you">Се препорачува да ги префрлите средствата до друга адреса на паричник пред да ги деактивирате плаќањата. Ако решите да не ги префрлите средствата сега, тие ќе останат во вашиот паричник кој е поврзан за Signal ако ги реактивирате плаќањата.</string>
     <string name="DeactivateWalletFragment__transfer_remaining_balance">Префли го преостанатиот баланс</string>
     <string name="DeactivateWalletFragment__deactivate_without_transferring">Деактивирај без пренос</string>
     <string name="DeactivateWalletFragment__deactivate">Деактивирај</string>
     <string name="DeactivateWalletFragment__deactivate_without_transferring_question">Да деактивирам без пренос?</string>
-    <string name="DeactivateWalletFragment__your_balance_will_remain">Вашата состјоба ќе остане на Вашиот паричник врзан со Signal ако изберете да ги реактивирате плаќањата.</string>
+    <string name="DeactivateWalletFragment__your_balance_will_remain">Средствата на вашатата сметка ќе останат во вашиот паричник врзан со Signal ако изберете да ги реактивирате плаќањата.</string>
     <string name="DeactivateWalletFragment__error_deactivating_wallet">Грешка при деактивирање на паричникот.</string>
   <!-- Removed by excludeNonTranslatables <string name="DeactivateWalletFragment__learn_more__we_recommend_transferring_your_funds" translatable="false">https://support.signal.org/hc/articles/360057625692#payments_deactivate</string> -->
 
@@ -3949,6 +3993,60 @@
     <string name="AccountSettingsFragment__youll_be_asked_less_frequently">Со тек на време ќе Ве потсетуваме се поретко.</string>
     <string name="AccountSettingsFragment__require_your_signal_pin">Барај го Signal PIN-от за повторна регистрација на Вашиот телефонски број на Signal</string>
     <string name="AccountSettingsFragment__change_phone_number">Промени телефонски број</string>
+    <!-- Account setting that allows user to request and export their signal account data -->
+    <string name="AccountSettingsFragment__request_account_data">Request account data</string>
+
+    <!-- ExportAccountDataFragment -->
+    <!-- Part of requesting account data flow, this is the section title for requesting that account data -->
+    <string name="ExportAccountDataFragment__your_account_data">Your account data</string>
+    <!-- Explanation of account data the user can request. %1$s is replaced with Learn more with a link -->
+    <string name="ExportAccountDataFragment__export_explanation">Download and export a report of your Signal account data. This report does not include any messages or media. %1$s</string>
+    <!-- Learn more link to more information about requesting account data -->
+    <string name="ExportAccountDataFragment__learn_more">Learn more</string>
+    <!-- Button action to download the report data -->
+    <string name="ExportAccountDataFragment__download_report">Download report</string>
+    <!-- Button action to export the report data to another app (e.g. email) -->
+    <string name="ExportAccountDataFragment__export_report">Export report</string>
+    <!-- Button action to delete the requested account data -->
+    <string name="ExportAccountDataFragment__delete_report">Delete report</string>
+
+    <!-- Radio option to export the data as a text file .txt -->
+    <string name="ExportAccountDataFragment__export_as_txt">Export as TXT</string>
+    <!-- Label for the text file option -->
+    <string name="ExportAccountDataFragment__export_as_txt_label">Easy-to-read text file</string>
+    <!-- Radio option to export the data as a json (java script object notation) file .json -->
+    <string name="ExportAccountDataFragment__export_as_json">Export as JSON</string>
+    <!-- Label for the json file option, the account data in a machine readable file format -->
+    <string name="ExportAccountDataFragment__export_as_json_label">Machine-readable file</string>
+
+    <!-- Action to cancel (in a dialog) -->
+    <string name="ExportAccountDataFragment__cancel_action">Cancel</string>
+
+    <!-- Acknowledgement for download failure -->
+    <string name="ExportAccountDataFragment__ok_action">OK</string>
+    <!-- Message shown when report download fails -->
+    <string name="ExportAccountDataFragment__report_download_failed">Your report could not be downloaded due to a network error. Check your connection and try again.</string>
+
+    <!-- Title for export confirmation dialog -->
+    <string name="ExportAccountDataFragment__export_report_confirmation">Export data?</string>
+    <!-- Message for export confirmation dialog -->
+    <string name="ExportAccountDataFragment__export_report_confirmation_message">Only share your Signal account data with people or apps you trust.</string>
+    <!-- Action to export in for export confirmation dialog -->
+    <string name="ExportAccountDataFragment__export_report_action">Export</string>
+
+    <!-- Action to delete report in confirmation dialog -->
+    <string name="ExportAccountDataFragment__delete_report_action">Delete</string>
+    <!-- Title for delete report confirmation dialog -->
+    <string name="ExportAccountDataFragment__delete_report_confirmation">Delete report?</string>
+    <!-- Message for delete report confirmation dialog -->
+    <string name="ExportAccountDataFragment__delete_report_confirmation_message">This will not delete any data from your account.</string>
+
+    <!-- Shown as a snackbar letting the user know the report was deleted -->
+    <string name="ExportAccountDataFragment__delete_report_snackbar">Report deleted</string>
+    <!-- Shown in a dialog with a spinner while the report is downloading -->
+    <string name="ExportAccountDataFragment__download_progress">Downloading report…</string>
+    <!-- Explanation that the downloaded report will be available for 30 days before it is deleted -->
+    <string name="ExportAccountDataFragment__report_deletion_disclaimer">Your report will be available for export for 30 days and will then be automatically deleted.</string>
 
     <!-- ChangeNumberFragment -->
     <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">Користете го ова за да го промените сегашниот телефонски број во нов телефонски број. Не можете да ја поништите оваа промена.\n\nПред да продолжите, проверете дали Вашиот нов број може да прима SMS или повици.</string>
@@ -4556,7 +4654,7 @@
     <string name="DonationsErrors__your_donation_could_not_be_sent">Вашата донација не можеше да се испрати поради мрежна грешка. Проверете ја интернет врската и обидете се повторно.</string>
 
     <!-- Gift message view title -->
-    <string name="GiftMessageView__donation_to_s">Донација за %1$s</string>
+    <string name="GiftMessageView__donation_on_behalf_of_s">Донација во име на %1$s</string>
     <!-- Gift message view title for incoming donations -->
     <string name="GiftMessageView__s_donated_to_signal_on">%1$s донираше на Signal во ваше име</string>
     <!-- Gift badge redeem action label -->
@@ -4795,6 +4893,8 @@
 
     <!-- Label for Chats tab in home app screen -->
     <string name="ConversationListTabs__chats">Разговори</string>
+    <!-- Label for Calls tab in home app screen -->
+    <string name="ConversationListTabs__calls">Повици</string>
     <!-- Label for Stories tab in home app screen -->
     <string name="ConversationListTabs__stories">Приказни</string>
     <!-- String for counts above 99 in conversation list tabs -->
@@ -5636,12 +5736,20 @@
     <string name="TextFormatting_strikethrough">Пречкртај</string>
     <!-- Popup menu label for applying monospace font style -->
     <string name="TextFormatting_monospace">Букви со еднаква ширина</string>
+    <!-- Popup menu label for applying spoiler style -->
+    <string name="TextFormatting_spoiler">Spoiler</string>
 
     <!-- UsernameEducationFragment -->
     <!-- Continue button which takes the user to the add a username screen -->
     <string name="UsernameEducationFragment__continue">Продолжи</string>
     <!-- Displayed as a title on the username education screen -->
     <string name="UsernameEducationFragment__set_up_your_signal_username">Поставете го вашето корисничко име на Signal</string>
+    <!-- Displayed as body text in the username education screen -->
+    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">Usernames are paired with a set of digits and aren\'t shared on your profile</string>
+    <!-- Displayed as body text in the username education screen -->
+    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">Each username has a unique QR code and link you can share with friends to start a chat with you</string>
+    <!-- Displayed as body text in the username education screen. The string references the names of settings, so they should match our translations for those settings. -->
+    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">Turn off phone number discovery under Settings &gt; Privacy &gt; Phone number &gt; Who can find my number, to use your username as the primary way others can contact you</string>
 
     <!-- Username edit dialog -->
     <!-- Option to open username editor displayed as a list item in a dialog -->
@@ -5658,6 +5766,91 @@
     <string name="TimeDurationPickerDialog_positive_button">Постави</string>
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, helper text indicating minimum allowable duration -->
     <string name="TimeDurationPickerDialog_minimum_duration_warning">Минималното време кое треба да помине пред да се примени заклучувањето на екранот е 1 минута.</string>
+
+    <!-- Call Log -->
+    <!-- Displayed below the user\'s name in row items on the call log. First placeholder is the call status, second is when it occurred -->
+    <string name="CallLogAdapter__s_dot_s">%1$s · %2$s</string>
+    <!-- Displayed for incoming calls -->
+    <string name="CallLogAdapter__incoming">Дојдовен</string>
+    <!-- Displayed for outgoing calls -->
+    <string name="CallLogAdapter__outgoing">Појдовен</string>
+    <!-- Displayed for missed calls -->
+    <string name="CallLogAdapter__missed">Пропуштен</string>
+
+    <!-- Call Log context menu -->
+    <!-- Displayed as a context menu item to start a video call -->
+    <string name="CallContextMenu__video_call">Видео повик</string>
+    <!-- Displayed as a context menu item to join an ongoing group call -->
+    <string name="CallContextMenu__join_call">Приклучи се на повикот</string>
+    <!-- Displayed as a context menu item to return to active call -->
+    <string name="CallContextMenu__return_to_call">Врати се на повикот</string>
+    <!-- Displayed as a context menu item to start an audio call -->
+    <string name="CallContextMenu__audio_call">Аудио повик</string>
+    <!-- Displayed as a context menu item to go to chat -->
+    <string name="CallContextMenu__go_to_chat">Оди до разговорот</string>
+    <!-- Displayed as a context menu item to see call info -->
+    <string name="CallContextMenu__info">Информации</string>
+    <!-- Displayed as a context menu item to select multiple calls -->
+    <string name="CallContextMenu__select">Избери</string>
+    <!-- Displayed as a context menu item to delete this call -->
+    <string name="CallContextMenu__delete">Избриши</string>
+
+    <!-- Call Log Fragment -->
+    <!-- Action bar menu item to only display missed calls -->
+    <string name="CallLogFragment__filter_missed_calls">Филтрирај ги пропуштените повици</string>
+    <!-- Action bar menu item to clear missed call filter -->
+    <string name="CallLogFragment__clear_filter">Отстрани го филтерот</string>
+    <!-- Action bar menu item to open settings -->
+    <string name="CallLogFragment__settings">Поставувања</string>
+    <!-- Action bar menu item to open notification profile settings -->
+    <string name="CallLogFragment__notification_profile">Профил за известување</string>
+    <!-- Call log new call content description -->
+    <string name="CallLogFragment__start_a_new_call">Започни нов повик</string>
+    <!-- Filter pull text when pulled -->
+    <string name="CallLogFragment__filtered_by_missed">Филтрирани се пропуштените</string>
+    <!-- Bottom bar option to select all call entries -->
+    <string name="CallLogFragment__select_all">Избери сѐ</string>
+    <!-- Bottom bar option to delete all selected call entries -->
+    <string name="CallLogFragment__delete">Избриши</string>
+    <!-- Title on multi-delete protection dialog (TODO - final terminology) -->
+  <!-- Removed by excludeNonTranslatables <plurals name="CallLogFragment__delete_d_calls" translatable="false">
+        <item quantity="one">Delete %1$d call?</item>
+        <item quantity="other">Delete %1$d calls?</item>
+    </plurals> -->
+    <!-- Positive action on multi-delete protection dialog -->
+    <string name="CallLogFragment__delete_for_me">Избриши за мене</string>
+    <!-- Snackbar label after deleting call logs -->
+    <plurals name="CallLogFragment__d_calls_deleted">
+        <item quantity="one">%1$d повик избришан</item>
+        <item quantity="other">%1$d повици избришани</item>
+    </plurals>
+    <!-- Undo action for deletion snackbar -->
+    <string name="CallLogFragment__undo">Врати</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__no_calls">Нема повици.</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__get_started_by_calling_a_friend">Започнете со јавување на пријател.</string>
+
+    <!-- New call activity -->
+    <!-- Activity title in title bar -->
+    <string name="NewCallActivity__new_call">Нов повик</string>
+
+    <!-- Call state update popups -->
+    <!-- Displayed when the user enables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_on">Ѕвонењето е овозможено</string>
+    <!-- Displayed when the user disables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_off">Ѕвонењето е оневозможено</string>
+    <!-- Displayed when the user cannot enable group call ringing -->
+    <string name="CallStateUpdatePopupWindow__group_is_too_large">Групата е преголема за да се јавите на учесниците</string>
+    <!-- Displayed when the user turns on their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_on">Микрофонот е вклучен</string>
+    <!-- Displayed when the user turns off their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_off">Микрофонот е исклучен</string>
+
+    <!-- Accessibility label describing the capture button on the camera screen -->
+    <string name="CameraControls_capture_button_accessibility_label">Capture Button</string>
+    <!-- Accessibility label describing the continue button on the camera screen -->
+    <string name="CameraControls_continue_button_accessibility_label">Continue Button</string>
 
     <!-- EOF -->
 </resources>

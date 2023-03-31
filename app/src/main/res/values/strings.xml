@@ -384,6 +384,15 @@
     <!-- Snackbar message shown after dismissing the full screen sms export megaphone indicating we\'ll do it again soon -->
     <string name="ConversationActivity__you_will_be_reminded_again_soon">You will be reminded again soon.</string>
 
+    <!-- Title for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_title">Sending formatted text</string>
+    <!-- Message for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_message">Some people may be using a version of Signal that doesn\'t support formatted text. They will not be able to see the formatting changes you\'ve made to your message.</string>
+    <!-- Button text for confirming they\'d like to send the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_send_anyway_button">Send anyway</string>
+    <!-- Button text for canceling sending the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_cancel_send_button">Cancel</string>
+
     <!-- ConversationAdapter -->
     <plurals name="ConversationAdapter_n_unread_messages">
         <item quantity="one">%d unread message</item>
@@ -542,6 +551,15 @@
 
     <!-- ConversationTypingView -->
     <string name="ConversationTypingView__plus_d">+%1$d</string>
+
+    <!-- Title for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__relink_your_devices">Re-link your devices</string>
+    <!-- Description for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__the_devices_you_added_were_unlinked">The devices you added were unlinked when your device was unregistered. Go to Settings to re-link any devices.</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to navigate to the Devices page in the settings. -->
+    <string name="RelinkDevicesReminderFragment__open_settings">Open settings</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to dismiss the pop up. -->
+    <string name="RelinkDevicesReminderFragment__later">Later</string>
 
     <!-- CreateGroupActivity -->
     <string name="CreateGroupActivity__select_members">Select members</string>
@@ -1167,8 +1185,8 @@
     <string name="Megaphones_new_group">New group</string>
     <string name="Megaphones_invite_friends">Invite friends</string>
     <string name="Megaphones_use_sms">Use SMS</string>
-    <string name="Megaphones_appearance">Appearance</string>
-    <string name="Megaphones_add_photo">Add photo</string>
+    <string name="Megaphones_chat_colors">Chat colors</string>
+    <string name="Megaphones_add_a_profile_photo">Add a profile photo</string>
 
     <!-- Title of a bottom sheet to render messages that all quote a specific message -->
     <string name="MessageQuotesBottomSheet_replies">Replies</string>
@@ -1727,19 +1745,17 @@
         <item quantity="other">%1$s, %2$s, and %3$d others are in this call</item>
     </plurals>
 
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__flip">Flip</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__speaker">Speaker</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__camera">Camera</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__unmute">Unmute</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__mute">Mute</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__ring">Ring</string>
-    <!-- Label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
+    <!-- Toggle content description for toggling camera direction  -->
+    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <!-- Toggle content description for toggling audio output  -->
+    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <!-- Toggle content description for toggling camera state  -->
+    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <!-- Toggle content description for toggling mute state  -->
+    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <!-- Toggle content description for toggling group ring state  -->
+    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">End call</string>
 
     <!-- CallParticipantsListDialog -->
@@ -2120,6 +2136,10 @@
     <string name="MessageNotifier_most_recent_from_s">Most recent from: %1$s</string>
     <string name="MessageNotifier_locked_message">Locked message</string>
     <string name="MessageNotifier_message_delivery_failed">Message delivery failed.</string>
+    <!-- Shown in a notification when a story the user tries to send fails to be sent -->
+    <string name="MessageNotifier_story_delivery_failed">Story failed to send</string>
+    <!-- Shown as notification title for when a notification about a story sent to a group story %1$s replaced with the group name -->
+    <string name="MessageNotifier_group_story_title">You to %1$s</string>
     <string name="MessageNotifier_failed_to_deliver_message">Failed to deliver message.</string>
     <string name="MessageNotifier_error_delivering_message">Error delivering message.</string>
     <string name="MessageNotifier_message_delivery_paused">Message delivery paused.</string>
@@ -2141,6 +2161,8 @@
     <string name="MessageNotifier_reacted_s_to_your_file">Reacted %1$s to your file.</string>
     <string name="MessageNotifier_reacted_s_to_your_audio">Reacted %1$s to your audio.</string>
     <string name="MessageNotifier_reacted_s_to_your_view_once_media">Reacted %1$s to your view-once media.</string>
+    <!-- Body of notification shown to user when someone they sent a payment to reacts to it. Placeholder is the emoji used in the reaction. -->
+    <string name="MessageNotifier_reacted_s_to_your_payment">Reacted %1$s to your payment.</string>
     <string name="MessageNotifier_reacted_s_to_your_sticker">Reacted %1$s to your sticker.</string>
     <string name="MessageNotifier_this_message_was_deleted">This message was deleted.</string>
 
@@ -2257,6 +2279,12 @@
     <!-- contact_selection_activity -->
     <string name="contact_selection_activity__invite_to_signal">Invite to Signal</string>
     <string name="contact_selection_activity__new_group">New group</string>
+    <!-- Row item title for refreshing contacts -->
+    <string name="contact_selection_activity__refresh_contacts">Refresh contacts</string>
+    <!-- Row item description for refreshing contacts -->
+    <string name="contact_selection_activity__missing_someone">Missing someone? Try refreshing</string>
+    <!-- Row header title for more section -->
+    <string name="contact_selection_activity__more">More</string>
 
     <!-- contact_filter_toolbar -->
     <string name="contact_filter_toolbar__clear_entered_text_description">Clear entered text</string>
@@ -3062,6 +3090,8 @@
 
     <!-- EditNoteFragment -->
     <string name="EditNoteFragment_note">Note</string>
+    <!-- Content descriptor explaining the use of the save note FAB for Android accessibility settings-->
+    <string name="EditNoteFragment__content_description_save_note">Save note</string>
 
     <!-- ConfirmPaymentFragment -->
     <string name="ConfirmPayment__confirm_payment">Confirm payment</string>
@@ -3102,6 +3132,8 @@
     <!-- **************************************** -->
 
     <!-- contact_selection_list -->
+    <!-- Displayed in a row on the new call screen when searching by phone number. -->
+    <string name="contact_selection_list__new_call">New call to…</string>
     <string name="contact_selection_list__unknown_contact">New message to…</string>
     <string name="contact_selection_list__unknown_contact_block">Block user</string>
     <string name="contact_selection_list__unknown_contact_add_to_group">Add to group</string>
@@ -3458,6 +3490,18 @@
     <string name="BackupUtil_unknown">Unknown</string>
     <string name="preferences_app_protection__see_my_phone_number">See my phone number</string>
     <string name="preferences_app_protection__find_me_by_phone_number">Find me by phone number</string>
+    <!-- Phone number heading displayed as a screen title -->
+    <string name="preferences_app_protection__phone_number">Phone number</string>
+    <!-- Subtext below option to launch into phone number privacy settings screen -->
+    <string name="preferences_app_protection__choose_who_can_see">Choose who can see your phone number and who can contact you on Signal with it.</string>
+    <!-- Section title above two radio buttons for enabling and disabling phone number display -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_see_my_number">Who can see my number</string>
+    <!-- Subtext below radio buttons when who can see my number is set to nobody -->
+    <string name="PhoneNumberPrivacySettingsFragment__nobody_will_see">Nobody will see your phone number on Signal</string>
+    <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_find_me_by_number">Who can find me by number</string>
+    <!-- Subtext below radio buttons when who can see my number is set to everyone -->
+    <string name="PhoneNumberPrivacySettingsFragment__your_phone_number">Your phone number will be visible to people and groups you message. People who have your number in their phone contacts will also see it on Signal.</string>
     <string name="PhoneNumberPrivacy_everyone">Everyone</string>
     <string name="PhoneNumberPrivacy_my_contacts">My contacts</string>
     <string name="PhoneNumberPrivacy_nobody">Nobody</string>
@@ -3953,6 +3997,60 @@
     <string name="AccountSettingsFragment__youll_be_asked_less_frequently">You\'ll be asked less frequently over time</string>
     <string name="AccountSettingsFragment__require_your_signal_pin">Require your Signal PIN to register your phone number with Signal again</string>
     <string name="AccountSettingsFragment__change_phone_number">Change phone number</string>
+    <!-- Account setting that allows user to request and export their signal account data -->
+    <string name="AccountSettingsFragment__request_account_data">Request account data</string>
+
+    <!-- ExportAccountDataFragment -->
+    <!-- Part of requesting account data flow, this is the section title for requesting that account data -->
+    <string name="ExportAccountDataFragment__your_account_data">Your account data</string>
+    <!-- Explanation of account data the user can request. %1$s is replaced with Learn more with a link -->
+    <string name="ExportAccountDataFragment__export_explanation">Download and export a report of your Signal account data. This report does not include any messages or media. %1$s</string>
+    <!-- Learn more link to more information about requesting account data -->
+    <string name="ExportAccountDataFragment__learn_more">Learn more</string>
+    <!-- Button action to download the report data -->
+    <string name="ExportAccountDataFragment__download_report">Download report</string>
+    <!-- Button action to export the report data to another app (e.g. email) -->
+    <string name="ExportAccountDataFragment__export_report">Export report</string>
+    <!-- Button action to delete the requested account data -->
+    <string name="ExportAccountDataFragment__delete_report">Delete report</string>
+
+    <!-- Radio option to export the data as a text file .txt -->
+    <string name="ExportAccountDataFragment__export_as_txt">Export as TXT</string>
+    <!-- Label for the text file option -->
+    <string name="ExportAccountDataFragment__export_as_txt_label">Easy-to-read text file</string>
+    <!-- Radio option to export the data as a json (java script object notation) file .json -->
+    <string name="ExportAccountDataFragment__export_as_json">Export as JSON</string>
+    <!-- Label for the json file option, the account data in a machine readable file format -->
+    <string name="ExportAccountDataFragment__export_as_json_label">Machine-readable file</string>
+
+    <!-- Action to cancel (in a dialog) -->
+    <string name="ExportAccountDataFragment__cancel_action">Cancel</string>
+
+    <!-- Acknowledgement for download failure -->
+    <string name="ExportAccountDataFragment__ok_action">OK</string>
+    <!-- Message shown when report download fails -->
+    <string name="ExportAccountDataFragment__report_download_failed">Your report could not be downloaded due to a network error. Check your connection and try again.</string>
+
+    <!-- Title for export confirmation dialog -->
+    <string name="ExportAccountDataFragment__export_report_confirmation">Export data?</string>
+    <!-- Message for export confirmation dialog -->
+    <string name="ExportAccountDataFragment__export_report_confirmation_message">Only share your Signal account data with people or apps you trust.</string>
+    <!-- Action to export in for export confirmation dialog -->
+    <string name="ExportAccountDataFragment__export_report_action">Export</string>
+
+    <!-- Action to delete report in confirmation dialog -->
+    <string name="ExportAccountDataFragment__delete_report_action">Delete</string>
+    <!-- Title for delete report confirmation dialog -->
+    <string name="ExportAccountDataFragment__delete_report_confirmation">Delete report?</string>
+    <!-- Message for delete report confirmation dialog -->
+    <string name="ExportAccountDataFragment__delete_report_confirmation_message">This will not delete any data from your account.</string>
+
+    <!-- Shown as a snackbar letting the user know the report was deleted -->
+    <string name="ExportAccountDataFragment__delete_report_snackbar">Report deleted</string>
+    <!-- Shown in a dialog with a spinner while the report is downloading -->
+    <string name="ExportAccountDataFragment__download_progress">Downloading report…</string>
+    <!-- Explanation that the downloaded report will be available for 30 days before it is deleted -->
+    <string name="ExportAccountDataFragment__report_deletion_disclaimer">Your report will be available for export for 30 days and will then be automatically deleted.</string>
 
     <!-- ChangeNumberFragment -->
     <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">Use this to change your current phone number to a new phone number. You can’t undo this change.\n\nBefore continuing, make sure your new number can receive SMS or calls.</string>
@@ -4560,7 +4658,7 @@
     <string name="DonationsErrors__your_donation_could_not_be_sent">Your donation could not be sent because of a network error. Check your connection and try again.</string>
 
     <!-- Gift message view title -->
-    <string name="GiftMessageView__donation_to_s">Donation to %1$s</string>
+    <string name="GiftMessageView__donation_on_behalf_of_s">Donation on behalf of %1$s</string>
     <!-- Gift message view title for incoming donations -->
     <string name="GiftMessageView__s_donated_to_signal_on">%1$s donated to Signal on your behalf</string>
     <!-- Gift badge redeem action label -->
@@ -4799,6 +4897,8 @@
 
     <!-- Label for Chats tab in home app screen -->
     <string name="ConversationListTabs__chats">Chats</string>
+    <!-- Label for Calls tab in home app screen -->
+    <string name="ConversationListTabs__calls">Calls</string>
     <!-- Label for Stories tab in home app screen -->
     <string name="ConversationListTabs__stories">Stories</string>
     <!-- String for counts above 99 in conversation list tabs -->
@@ -5374,7 +5474,7 @@
     <!-- Title of the screen -->
     <string name="ExportingSmsMessagesFragment__exporting_sms_messages">Exporting SMS messages</string>
     <!-- Message of the screen when exporting sms messages -->
-    <string name="ExportingSmsMessagesFragment__this_may_take_awhile">This may take awhile</string>
+    <string name="ExportingSmsMessagesFragment__this_may_take_awhile">This may take a while</string>
     <!-- Progress indicator for export -->
     <plurals name="ExportingSmsMessagesFragment__exporting_d_of_d">
         <item quantity="one">Exporting %1$d of %2$d…</item>
@@ -5640,12 +5740,20 @@
     <string name="TextFormatting_strikethrough">Strikethrough</string>
     <!-- Popup menu label for applying monospace font style -->
     <string name="TextFormatting_monospace">Monospace</string>
+    <!-- Popup menu label for applying spoiler style -->
+    <string name="TextFormatting_spoiler">Spoiler</string>
 
     <!-- UsernameEducationFragment -->
     <!-- Continue button which takes the user to the add a username screen -->
     <string name="UsernameEducationFragment__continue">Continue</string>
     <!-- Displayed as a title on the username education screen -->
     <string name="UsernameEducationFragment__set_up_your_signal_username">Set up your Signal username</string>
+    <!-- Displayed as body text in the username education screen -->
+    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">Usernames are paired with a set of digits and aren\'t shared on your profile</string>
+    <!-- Displayed as body text in the username education screen -->
+    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">Each username has a unique QR code and link you can share with friends to start a chat with you</string>
+    <!-- Displayed as body text in the username education screen. The string references the names of settings, so they should match our translations for those settings. -->
+    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">Turn off phone number discovery under Settings > Privacy > Phone number > Who can find my number, to use your username as the primary way others can contact you</string>
 
     <!-- Username edit dialog -->
     <!-- Option to open username editor displayed as a list item in a dialog -->
@@ -5662,6 +5770,91 @@
     <string name="TimeDurationPickerDialog_positive_button">Set</string>
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, helper text indicating minimum allowable duration -->
     <string name="TimeDurationPickerDialog_minimum_duration_warning">Minimum time before screen lock applies is 1 minute.</string>
+
+    <!-- Call Log -->
+    <!-- Displayed below the user\'s name in row items on the call log. First placeholder is the call status, second is when it occurred -->
+    <string name="CallLogAdapter__s_dot_s">%s &#183; %s</string>
+    <!-- Displayed for incoming calls -->
+    <string name="CallLogAdapter__incoming">Incoming</string>
+    <!-- Displayed for outgoing calls -->
+    <string name="CallLogAdapter__outgoing">Outgoing</string>
+    <!-- Displayed for missed calls -->
+    <string name="CallLogAdapter__missed">Missed</string>
+
+    <!-- Call Log context menu -->
+    <!-- Displayed as a context menu item to start a video call -->
+    <string name="CallContextMenu__video_call">Video call</string>
+    <!-- Displayed as a context menu item to join an ongoing group call -->
+    <string name="CallContextMenu__join_call">Join call</string>
+    <!-- Displayed as a context menu item to return to active call -->
+    <string name="CallContextMenu__return_to_call">Return to call</string>
+    <!-- Displayed as a context menu item to start an audio call -->
+    <string name="CallContextMenu__audio_call">Audio call</string>
+    <!-- Displayed as a context menu item to go to chat -->
+    <string name="CallContextMenu__go_to_chat">Go to chat</string>
+    <!-- Displayed as a context menu item to see call info -->
+    <string name="CallContextMenu__info">Info</string>
+    <!-- Displayed as a context menu item to select multiple calls -->
+    <string name="CallContextMenu__select">Select</string>
+    <!-- Displayed as a context menu item to delete this call -->
+    <string name="CallContextMenu__delete">Delete</string>
+
+    <!-- Call Log Fragment -->
+    <!-- Action bar menu item to only display missed calls -->
+    <string name="CallLogFragment__filter_missed_calls">Filter missed calls</string>
+    <!-- Action bar menu item to clear missed call filter -->
+    <string name="CallLogFragment__clear_filter">Clear filter</string>
+    <!-- Action bar menu item to open settings -->
+    <string name="CallLogFragment__settings">Settings</string>
+    <!-- Action bar menu item to open notification profile settings -->
+    <string name="CallLogFragment__notification_profile">Notification Profile</string>
+    <!-- Call log new call content description -->
+    <string name="CallLogFragment__start_a_new_call">Start a new call</string>
+    <!-- Filter pull text when pulled -->
+    <string name="CallLogFragment__filtered_by_missed">Filtered by missed</string>
+    <!-- Bottom bar option to select all call entries -->
+    <string name="CallLogFragment__select_all">Select all</string>
+    <!-- Bottom bar option to delete all selected call entries -->
+    <string name="CallLogFragment__delete">Delete</string>
+    <!-- Title on multi-delete protection dialog (TODO - final terminology) -->
+    <plurals name="CallLogFragment__delete_d_calls" translatable="false">
+        <item quantity="one">Delete %1$d call?</item>
+        <item quantity="other">Delete %1$d calls?</item>
+    </plurals>
+    <!-- Positive action on multi-delete protection dialog -->
+    <string name="CallLogFragment__delete_for_me">Delete for me</string>
+    <!-- Snackbar label after deleting call logs -->
+    <plurals name="CallLogFragment__d_calls_deleted">
+        <item quantity="one">%1$d call deleted</item>
+        <item quantity="other">%1$d calls deleted</item>
+    </plurals>
+    <!-- Undo action for deletion snackbar -->
+    <string name="CallLogFragment__undo">Undo</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__no_calls">No calls.</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__get_started_by_calling_a_friend">Get started by calling a friend.</string>
+
+    <!-- New call activity -->
+    <!-- Activity title in title bar -->
+    <string name="NewCallActivity__new_call">New call</string>
+
+    <!-- Call state update popups -->
+    <!-- Displayed when the user enables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_on">Ringing on</string>
+    <!-- Displayed when the user disables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_off">Ringing off</string>
+    <!-- Displayed when the user cannot enable group call ringing -->
+    <string name="CallStateUpdatePopupWindow__group_is_too_large">Group is too large to ring the participants</string>
+    <!-- Displayed when the user turns on their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_on">Mic on</string>
+    <!-- Displayed when the user turns off their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_off">Mic off</string>
+
+    <!-- Accessibility label describing the capture button on the camera screen -->
+    <string name="CameraControls_capture_button_accessibility_label">Capture Button</string>
+    <!-- Accessibility label describing the continue button on the camera screen -->
+    <string name="CameraControls_continue_button_accessibility_label">Continue Button</string>
 
     <!-- EOF -->
 </resources>

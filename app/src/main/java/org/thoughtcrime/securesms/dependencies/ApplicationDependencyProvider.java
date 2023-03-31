@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 
 import org.signal.core.util.Hex;
+import org.signal.core.util.ThreadUtil;
 import org.signal.core.util.concurrent.DeadlockDetector;
 import org.signal.core.util.concurrent.SignalExecutors;
 import org.signal.libsignal.zkgroup.profiles.ClientZkProfileOperations;
@@ -31,7 +32,6 @@ import org.thoughtcrime.securesms.database.PendingRetryReceiptCache;
 import org.thoughtcrime.securesms.jobmanager.JobManager;
 import org.thoughtcrime.securesms.jobmanager.JobMigrator;
 import org.thoughtcrime.securesms.jobmanager.impl.FactoryJobPredicate;
-import org.thoughtcrime.securesms.jobmanager.impl.JsonDataSerializer;
 import org.thoughtcrime.securesms.jobs.FastJobStorage;
 import org.thoughtcrime.securesms.jobs.GroupCallUpdateSendJob;
 import org.thoughtcrime.securesms.jobs.JobManagerFactories;
@@ -47,7 +47,6 @@ import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.megaphone.MegaphoneRepository;
 import org.thoughtcrime.securesms.messages.BackgroundMessageRetriever;
 import org.thoughtcrime.securesms.messages.IncomingMessageObserver;
-import org.thoughtcrime.securesms.messages.IncomingMessageProcessor;
 import org.thoughtcrime.securesms.net.SignalWebSocketHealthMonitor;
 import org.thoughtcrime.securesms.notifications.MessageNotifier;
 import org.thoughtcrime.securesms.notifications.OptimizedMessageNotifier;
@@ -138,7 +137,7 @@ public class ApplicationDependencyProvider implements ApplicationDependencies.Pr
                                             signalWebSocket,
                                             Optional.of(new SecurityEventListener(context)),
                                             provideGroupsV2Operations(signalServiceConfiguration).getProfileOperations(),
-                                            SignalExecutors.newCachedBoundedExecutor("signal-messages", 1, 16, 30),
+                                            SignalExecutors.newCachedBoundedExecutor("signal-messages", ThreadUtil.PRIORITY_IMPORTANT_BACKGROUND_THREAD, 1, 16, 30),
                                             ByteUnit.KILOBYTES.toBytes(256),
                                             FeatureFlags.okHttpAutomaticRetry());
   }
@@ -158,11 +157,6 @@ public class ApplicationDependencyProvider implements ApplicationDependencies.Pr
   }
 
   @Override
-  public @NonNull IncomingMessageProcessor provideIncomingMessageProcessor() {
-    return new IncomingMessageProcessor(context);
-  }
-
-  @Override
   public @NonNull BackgroundMessageRetriever provideBackgroundMessageRetriever() {
     return new BackgroundMessageRetriever();
   }
@@ -175,7 +169,6 @@ public class ApplicationDependencyProvider implements ApplicationDependencies.Pr
   @Override
   public @NonNull JobManager provideJobManager() {
     JobManager.Configuration config = new JobManager.Configuration.Builder()
-                                                                  .setDataSerializer(new JsonDataSerializer())
                                                                   .setJobFactories(JobManagerFactories.getJobFactories(context))
                                                                   .setConstraintFactories(JobManagerFactories.getConstraintFactories(context))
                                                                   .setConstraintObservers(JobManagerFactories.getConstraintObservers(context))
@@ -379,7 +372,7 @@ public class ApplicationDependencyProvider implements ApplicationDependencies.Pr
 
   @Override
   public @NonNull DeadlockDetector provideDeadlockDetector() {
-    HandlerThread handlerThread = new HandlerThread("signal-DeadlockDetector");
+    HandlerThread handlerThread = new HandlerThread("signal-DeadlockDetector", ThreadUtil.PRIORITY_BACKGROUND_THREAD);
     handlerThread.start();
     return new DeadlockDetector(new Handler(handlerThread.getLooper()), TimeUnit.SECONDS.toMillis(5));
   }
