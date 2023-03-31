@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.signal.core.util.DimensionUnit;
@@ -34,6 +35,8 @@ public class AddMembersActivity extends PushContactSelectionActivity {
 
   private View                done;
   private AddMembersViewModel viewModel;
+
+  private MaterialButton refresh = null;
 
   public static @NonNull Intent createIntent(@NonNull Context context,
                                              @NonNull GroupId groupId,
@@ -63,11 +66,18 @@ public class AddMembersActivity extends PushContactSelectionActivity {
     AddMembersViewModel.Factory factory = new AddMembersViewModel.Factory(getGroupId());
 
     done      = findViewById(R.id.done);
+    refresh    = findViewById(R.id.refresh_action);
     viewModel = new ViewModelProvider(this, factory).get(AddMembersViewModel.class);
 
     done.setOnClickListener(v ->
       viewModel.getDialogStateForSelectedContacts(contactsFragment.getSelectedContacts(), this::displayAlertMessage)
     );
+
+    refresh.setOnClickListener(v-> {
+      contactsFragment = (ContactSelectionListFragment) getSupportFragmentManager().findFragmentById(R.id.contact_selection_list_fragment);
+      assert contactsFragment != null;
+      contactsFragment.handleSwipe();
+    });
 
     disableDone();
   }
