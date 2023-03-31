@@ -86,6 +86,7 @@ import org.thoughtcrime.securesms.badges.gifts.OpenableGiftItemDecoration;
 import org.thoughtcrime.securesms.badges.gifts.flow.GiftFlowActivity;
 import org.thoughtcrime.securesms.badges.gifts.viewgift.received.ViewReceivedGiftBottomSheet;
 import org.thoughtcrime.securesms.badges.gifts.viewgift.sent.ViewSentGiftBottomSheet;
+import org.thoughtcrime.securesms.components.AudioView;
 import org.thoughtcrime.securesms.components.ConversationScrollToView;
 import org.thoughtcrime.securesms.components.ConversationTypingView;
 import org.thoughtcrime.securesms.components.TypingStatusRepository;
@@ -194,6 +195,7 @@ import org.thoughtcrime.securesms.util.ViewUtil;
 import org.thoughtcrime.securesms.util.WindowUtil;
 import org.thoughtcrime.securesms.util.concurrent.ListenableFuture;
 import org.thoughtcrime.securesms.util.task.ProgressDialogAsyncTask;
+import org.thoughtcrime.securesms.util.views.Stub;
 import org.thoughtcrime.securesms.verify.VerifyIdentityActivity;
 import org.thoughtcrime.securesms.wallpaper.ChatWallpaper;
 
@@ -298,7 +300,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
-    this.locale = Locale.getDefault();
+    this.locale      = Locale.getDefault();
     startupStopwatch = new Stopwatch("conversation-open");
     SignalLocalMetrics.ConversationOpen.start();
   }
@@ -1279,7 +1281,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
       ApplicationDependencies.getJobManager().add(new DirectoryRefreshJob(false));
     }
 
-    Log.w("PIGEON", ""+requestCode +" | "+ resultCode);
+    Log.w("PIGEON", "" + requestCode + " | " + resultCode);
     if (selectedConversationMessage == null || requestCode != HANDLE_SUBMENU) {
 
       return;
@@ -1752,17 +1754,22 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
   private class ConversationFragmentItemClickListener implements ItemClickListener {
 
     @Override
-    public void onItemClick(MultiselectPart item) {
+    public void onItemClick(View itemView, MultiselectPart item) {
+      Stub<AudioView>  itemAudio = new Stub<>(itemView.findViewById(R.id.audio_view_stub));
+      if (itemAudio.resolved()) {
+        itemAudio.get().playVoice();
+      }
+      if (isSignalVersion()) {
+        if (actionMode != null) {
+          ((ConversationAdapter) list.getAdapter()).toggleSelection(item);
+          list.invalidateItemDecorations();
 
-      if (actionMode != null) {
-        ((ConversationAdapter) list.getAdapter()).toggleSelection(item);
-        list.invalidateItemDecorations();
-
-        if (getListAdapter().getSelectedItems().size() == 0) {
-          actionMode.finish();
-        } else {
-          setCorrectActionModeMenuVisibility();
-          actionMode.setTitle(calculateSelectedItemCount());
+          if (getListAdapter().getSelectedItems().size() == 0) {
+            actionMode.finish();
+          } else {
+            setCorrectActionModeMenuVisibility();
+            actionMode.setTitle(calculateSelectedItemCount());
+          }
         }
       }
     }
@@ -2518,8 +2525,6 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
       listener.onMessageActionToolbarClosed();
     }
   }
-
-
 
 
 }

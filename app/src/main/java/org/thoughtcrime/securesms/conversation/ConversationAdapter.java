@@ -196,7 +196,7 @@ public class ConversationAdapter
 
         itemView.setOnClickListener((v) -> {
           if (clickListener != null) {
-            clickListener.onItemClick(bindable.getMultiselectPartForLatestTouch());
+            clickListener.onItemClick(itemView, bindable.getMultiselectPartForLatestTouch());
           }
         });
 
@@ -826,7 +826,7 @@ public class ConversationAdapter
   }
 
   public interface ItemClickListener extends BindableConversationItem.EventListener {
-    void onItemClick(MultiselectPart item);
+    void onItemClick(View itemView, MultiselectPart item);
     void onItemLongClick(View itemView, MultiselectPart item);
   }
 }

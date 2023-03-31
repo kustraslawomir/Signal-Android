@@ -139,6 +139,8 @@ public final class AudioView extends FrameLayout {
         DrawableCompat.setTint(getBackground(), backgroundTintColor);
       }
 
+      this.setOnClickListener(v-> playVoice());
+
       this.waveFormPlayedBarsColor   = typedArray.getColor(R.styleable.AudioView_waveformPlayedBarsColor, Color.WHITE);
       this.waveFormUnplayedBarsColor = typedArray.getColor(R.styleable.AudioView_waveformUnplayedBarsColor, Color.WHITE);
       this.waveFormThumbTint         = typedArray.getColor(R.styleable.AudioView_waveformThumbTint, Color.WHITE);
@@ -149,11 +151,10 @@ public final class AudioView extends FrameLayout {
         typedArray.recycle();
       }
     }
-    playVoiceListener();
   }
 
-  public void playVoiceListener(){
-    this.setOnClickListener(v -> playPauseButton.performClick());
+  public void playVoice(){
+    playPauseButton.performClick();
   }
 
   @Override

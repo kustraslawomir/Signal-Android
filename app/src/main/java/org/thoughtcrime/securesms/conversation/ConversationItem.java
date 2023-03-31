@@ -410,6 +410,10 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     setHasBeenScheduled(conversationMessage);
 
     if (audioViewStub.resolved()) {
+      audioViewStub.get().setOnClickListener(v-> {
+
+                                             }
+      );
       audioViewStub.get().setOnLongClickListener(passthroughClickListener);
     }
   }
@@ -911,9 +915,9 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
    * Today this is only {@link org.thoughtcrime.securesms.conversation.quotes.MessageQuotesBottomSheet}.
    */
   private boolean isCondensedMode() {
-    if(isPigeonVersion()){
-      return true;
-    }
+//    if(isPigeonVersion()){
+//      return true;
+//    }
     return displayMode == ConversationItemDisplayMode.CONDENSED;
   }
 
@@ -922,9 +926,9 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
    * Today, we only want to do this for the first message when we're in condensed mode.
    */
   private boolean isContentCondensed() {
-    if(isPigeonVersion()){
-      return true;
-    }
+//    if(isPigeonVersion()){
+//      return true;
+//    }
     return isCondensedMode() && !previousMessage.isPresent();
   }
 
@@ -1181,6 +1185,9 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       paymentViewStub.setVisibility(View.GONE);
 
       audioViewStub.get().setAudio(Objects.requireNonNull(((MediaMmsMessageRecord) messageRecord).getSlideDeck().getAudioSlide()), new AudioViewCallbacks(), showControls, true);
+      audioViewStub.get().setOnClickListener(v -> {
+        audioViewStub.get().playVoice();
+      });
       audioViewStub.get().setDownloadClickListener(singleDownloadClickListener);
       audioViewStub.get().setOnLongClickListener(passthroughClickListener);
 
