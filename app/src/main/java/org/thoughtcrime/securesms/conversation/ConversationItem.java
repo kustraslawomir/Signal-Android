@@ -2492,6 +2492,11 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       if (eventListener != null && bodyText.getText().toString().contains(getResources().getString(R.string.ConversationItem_read_more))) {
         eventListener.onMoreTextClicked(conversationRecipient.getId(), messageRecord.getId(), messageRecord.isMms());
       }
+
+      if (audioViewStub.resolved()) {
+        audioViewStub.get().play();
+      }
+
       if (!shouldInterceptClicks(messageRecord) && parent != null) {
         parent.onClick(v);
       } else if (messageRecord.isFailed()) {

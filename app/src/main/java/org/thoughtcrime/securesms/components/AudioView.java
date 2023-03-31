@@ -152,6 +152,10 @@ public final class AudioView extends FrameLayout {
     playVoiceListener();
   }
 
+  public void play(){
+    this.playPauseButton.performClick();
+  }
+
   public void playVoiceListener(){
     this.setOnClickListener(v -> playPauseButton.performClick());
   }
