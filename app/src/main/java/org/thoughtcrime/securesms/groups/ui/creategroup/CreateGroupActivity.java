@@ -34,6 +34,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import pigeon.extensions.KotilinExtensionsKt;
+
 import static pigeon.extensions.KotilinExtensionsKt.focusOnLeft;
 
 public class CreateGroupActivity extends ContactSelectionActivity {
@@ -46,6 +49,8 @@ public class CreateGroupActivity extends ContactSelectionActivity {
   private FloatingActionButton next;
 
   private MaterialButton       nextPigeon;
+
+  private MaterialButton    refresh = null;
 
   public static Intent newIntent(@NonNull Context context) {
     Intent intent = new Intent(context, CreateGroupActivity.class);
@@ -69,17 +74,28 @@ public class CreateGroupActivity extends ContactSelectionActivity {
     assert getSupportActionBar() != null;
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    skip = findViewById(R.id.skip);
-    next = findViewById(R.id.next);
+    skip       = findViewById(R.id.skip);
+    next       = findViewById(R.id.next);
     nextPigeon = findViewById(R.id.next_pigeon);
+    refresh    = findViewById(R.id.refresh_action);
+
     extendSkip();
 
     focusOnLeft(skip);
     focusOnLeft(nextPigeon);
+    if (refresh != null)
+      KotilinExtensionsKt.focusOnLeft(refresh);
 
     skip.setOnClickListener(v -> handleNextPressed());
     next.setOnClickListener(v -> handleNextPressed());
     nextPigeon.setOnClickListener(v -> handleNextPressed());
+
+
+    refresh.setOnClickListener(v-> {
+      contactsFragment = (ContactSelectionListFragment) getSupportFragmentManager().findFragmentById(R.id.contact_selection_list_fragment);
+      assert contactsFragment != null;
+      contactsFragment.handleSwipe();
+    });
   }
 
   @Override
