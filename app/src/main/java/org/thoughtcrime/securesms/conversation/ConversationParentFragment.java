@@ -2280,17 +2280,19 @@ public class ConversationParentFragment extends Fragment
 
               SecurityEvent.broadcastSecurityUpdateEvent(context);
 
-              long messageId = 0;
-              try {
-                messageId = database.insertMessageOutbox(endMessage,
-                                                              threadId,
-                                                              false,
-                                                              null);
-              } catch (MmsException e) {
-                throw new RuntimeException(e);
-              }
-              database.markAsSent(messageId, true);
-              SignalDatabase.threads().update(threadId, true);
+              Toast.makeText(context, R.string.conversation_secure_verified__menu_reset_secure_session, Toast.LENGTH_SHORT).show();
+
+//              long messageId = 0;
+//              try {
+//                messageId = database.insertMessageOutbox(endMessage,
+//                                                              threadId,
+//                                                              false,
+//                                                              null);
+//              } catch (MmsException e) {
+//                throw new RuntimeException(e);
+//              }
+//              database.markAsSent(messageId, true);
+//              SignalDatabase.threads().update(threadId, true);
             }
           }
         },
