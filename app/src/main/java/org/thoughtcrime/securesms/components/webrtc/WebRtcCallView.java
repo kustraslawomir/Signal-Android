@@ -717,17 +717,22 @@ public class WebRtcCallView extends ConstraintLayout {
 
     visibleViewSet.clear();
 
-    if (webRtcControls.adjustForFold()) {
-      showParticipantsGuideline.setGuidelineBegin(-1);
-      showParticipantsGuideline.setGuidelineEnd(webRtcControls.getFold());
-      topFoldGuideline.setGuidelineEnd(webRtcControls.getFold());
-      callScreenTopFoldGuideline.setGuidelineEnd(webRtcControls.getFold());
-    } else {
-      showParticipantsGuideline.setGuidelineBegin(((LayoutParams) statusBarGuideline.getLayoutParams()).guideBegin);
-      showParticipantsGuideline.setGuidelineEnd(-1);
-      topFoldGuideline.setGuidelineEnd(0);
-      callScreenTopFoldGuideline.setGuidelineEnd(0);
+    if (isSignalVersion()) {
+
+      if (webRtcControls.adjustForFold()) {
+        showParticipantsGuideline.setGuidelineBegin(-1);
+        showParticipantsGuideline.setGuidelineEnd(webRtcControls.getFold());
+        topFoldGuideline.setGuidelineEnd(webRtcControls.getFold());
+        callScreenTopFoldGuideline.setGuidelineEnd(webRtcControls.getFold());
+      } else {
+        showParticipantsGuideline.setGuidelineBegin(((LayoutParams) statusBarGuideline.getLayoutParams()).guideBegin);
+        showParticipantsGuideline.setGuidelineEnd(-1);
+        topFoldGuideline.setGuidelineEnd(0);
+        callScreenTopFoldGuideline.setGuidelineEnd(0);
+      }
     }
+
+    visibleViewSet.add(volumeToggle);
 
     if (webRtcControls.displayGroupMembersButton()) {
       visibleViewSet.add(foldParticipantCountWrapper);
@@ -777,6 +782,8 @@ public class WebRtcCallView extends ConstraintLayout {
       incomingRingStatus.setVisibility(GONE);
 //      pigeonIncomingRingStatus.setVisibility(GONE);
     }
+
+    visibleViewSet.add(videoToggleLabel);
 
     if (webRtcControls.displayAudioToggle()) {
       visibleViewSet.add(audioToggle);
@@ -1032,20 +1039,22 @@ public class WebRtcCallView extends ConstraintLayout {
   }
 
   private void layoutParticipants() {
-    int desiredMargin = ViewUtil.dpToPx(withControlsHeight(pagerBottomMarginDp));
-    if (ViewKt.getMarginBottom(callParticipantsPager) == desiredMargin) {
-      return;
+    if (isSignalVersion()) {
+      int desiredMargin = ViewUtil.dpToPx(withControlsHeight(pagerBottomMarginDp));
+      if (ViewKt.getMarginBottom(callParticipantsPager) == desiredMargin) {
+        return;
+      }
+
+      Transition transition = new AutoTransition().setDuration(TRANSITION_DURATION_MILLIS);
+
+      TransitionManager.beginDelayedTransition(participantsParent, transition);
+
+      ConstraintSet constraintSet = new ConstraintSet();
+      constraintSet.clone(participantsParent);
+
+      constraintSet.setMargin(R.id.call_screen_participants_pager, ConstraintSet.BOTTOM, desiredMargin);
+      constraintSet.applyTo(participantsParent);
     }
-
-    Transition transition = new AutoTransition().setDuration(TRANSITION_DURATION_MILLIS);
-
-    TransitionManager.beginDelayedTransition(participantsParent, transition);
-
-    ConstraintSet constraintSet = new ConstraintSet();
-    constraintSet.clone(participantsParent);
-
-    constraintSet.setMargin(R.id.call_screen_participants_pager, ConstraintSet.BOTTOM, desiredMargin);
-    constraintSet.applyTo(participantsParent);
   }
 
   private void fadeControls(int visibility) {

@@ -30,16 +30,31 @@
         android:background="@color/black"
         app:layout_constraintTop_toBottomOf="@+id/next_pigeon" />
 
-        <fragment
-            android:id="@+id/contact_selection_list_fragment"
-            android:name="org.thoughtcrime.securesms.ContactSelectionListFragment"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/contact_filter_edit_text" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/refresh_action"
+        style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/pigeon_start_margin"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/new_conversation_activity__refresh"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contact_filter_edit_text"
+        tools:visibility="visible" />
+
+    <fragment
+        android:id="@+id/contact_selection_list_fragment"
+        android:name="org.thoughtcrime.securesms.ContactSelectionListFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/refresh_action" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/skip"
@@ -58,8 +73,8 @@
         style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/AccountLockedFragment__next"
         android:layout_marginStart="@dimen/pigeon_start_margin"
+        android:text="@string/AccountLockedFragment__next"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/skip" />
 
@@ -68,11 +83,11 @@
         style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:focusable="false"
-        android:clickable="false"
-        android:focusableInTouchMode="false"
         android:layout_marginStart="@dimen/pigeon_start_margin"
+        android:clickable="false"
         android:contentDescription="@string/AccountLockedFragment__next"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/skip" />
 
