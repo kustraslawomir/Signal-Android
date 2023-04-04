@@ -125,6 +125,7 @@ Updated May 25, 2018\n
 
     <string name="RedPhone_connected">Connected</string>
     <string name="RedPhone_connecting">Connecting...</string>
+    <string name="Pigeon_WebRtcCallView__ring">Ring</string>
 
     <string name="PIN_screen_lock">To use the function, set a pin code in the PUNKT settings</string>
     <string name="PIN_screen_lock_timeout">To use the function, set a pin code in the PUNKT settings and turn on screen lock</string>
