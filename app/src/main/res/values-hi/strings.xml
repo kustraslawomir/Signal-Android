@@ -384,6 +384,15 @@
     <!-- Snackbar message shown after dismissing the full screen sms export megaphone indicating we\'ll do it again soon -->
     <string name="ConversationActivity__you_will_be_reminded_again_soon">आपको जल्द ही फिर से याद दिलाया जाएगा।</string>
 
+    <!-- Title for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_title">Sending formatted text</string>
+    <!-- Message for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_message">Some people may be using a version of Signal that doesn\'t support formatted text. They will not be able to see the formatting changes you\'ve made to your message.</string>
+    <!-- Button text for confirming they\'d like to send the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_send_anyway_button">फिर भी भेजें</string>
+    <!-- Button text for canceling sending the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_cancel_send_button">रद्द करें</string>
+
     <!-- ConversationAdapter -->
     <plurals name="ConversationAdapter_n_unread_messages">
         <item quantity="one">%1$d अपठित मेसेज</item>
@@ -481,16 +490,16 @@
         <item quantity="other">%1$d बातचीत इनबॉक्स में पहुंचाई गई</item>
     </plurals>
     <plurals name="ConversationListFragment_read_plural">
-        <item quantity="one">पढ़ें</item>
-        <item quantity="other">पढ़ें</item>
+        <item quantity="one">पढ़ा हुआ</item>
+        <item quantity="other">पढ़े हुए</item>
     </plurals>
     <plurals name="ConversationListFragment_unread_plural">
-        <item quantity="one">नहीं पढ़ा हुआ</item>
-        <item quantity="other">नहीं पढ़ा हुआ</item>
+        <item quantity="one">अपठित</item>
+        <item quantity="other">अपठित</item>
     </plurals>
     <plurals name="ConversationListFragment_pin_plural">
-        <item quantity="one">पिन</item>
-        <item quantity="other">पिन</item>
+        <item quantity="one">पिन करें</item>
+        <item quantity="other">पिन करें</item>
     </plurals>
     <plurals name="ConversationListFragment_unpin_plural">
         <item quantity="one">अनपिन करें</item>
@@ -542,6 +551,15 @@
 
     <!-- ConversationTypingView -->
     <string name="ConversationTypingView__plus_d">+%1$d</string>
+
+    <!-- Title for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__relink_your_devices">अपने डिवाइस को फिर से लिंक करें</string>
+    <!-- Description for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__the_devices_you_added_were_unlinked">जब आपका डिवाइस अपंजीकृत था तब आपके द्वारा जोड़े गए डिवाइस अनलिंक हो गए थे। किसी भी डिवाइस को फिर से लिंक करने के लिए सेटिंग्स में जाएं।</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to navigate to the Devices page in the settings. -->
+    <string name="RelinkDevicesReminderFragment__open_settings">सेटिंग्स खोलें</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to dismiss the pop up. -->
+    <string name="RelinkDevicesReminderFragment__later">बाद में</string>
 
     <!-- CreateGroupActivity -->
     <string name="CreateGroupActivity__select_members">सदस्य चुनें</string>
@@ -1167,8 +1185,8 @@
     <string name="Megaphones_new_group">नया समूह</string>
     <string name="Megaphones_invite_friends">मित्रों को आमंत्रित करें</string>
     <string name="Megaphones_use_sms">SMS का उपयोग करें</string>
-    <string name="Megaphones_appearance">दिखावट</string>
-    <string name="Megaphones_add_photo">तस्वीर लगाएं</string>
+    <string name="Megaphones_chat_colors">चैट का रंग</string>
+    <string name="Megaphones_add_a_profile_photo">एक प्रोफ़ाइल फ़ोटो जोड़ें</string>
 
     <!-- Title of a bottom sheet to render messages that all quote a specific message -->
     <string name="MessageQuotesBottomSheet_replies">जवाब</string>
@@ -1726,19 +1744,17 @@
         <item quantity="other">%1$s, %2$s, और %3$d अन्य लोग इस कॉल में हैं</item>
     </plurals>
 
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__flip">फ़्लिप</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__speaker">स्पीकर</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__camera">कैमरा</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__unmute">अनम्यूट करें</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__mute">म्युट करें</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__ring">रिंग करें</string>
-    <!-- Label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
+    <!-- Toggle content description for toggling camera direction  -->
+    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <!-- Toggle content description for toggling audio output  -->
+    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <!-- Toggle content description for toggling camera state  -->
+    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <!-- Toggle content description for toggling mute state  -->
+    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <!-- Toggle content description for toggling group ring state  -->
+    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">कॉल बंद</string>
 
     <!-- CallParticipantsListDialog -->
@@ -2116,6 +2132,10 @@
     <string name="MessageNotifier_most_recent_from_s">%1$s से हाल ही में</string>
     <string name="MessageNotifier_locked_message">लॉक मेसेज</string>
     <string name="MessageNotifier_message_delivery_failed">मेसेज प्रेषण असफल हुआ</string>
+    <!-- Shown in a notification when a story the user tries to send fails to be sent -->
+    <string name="MessageNotifier_story_delivery_failed">स्टोरी भेजने में विफल</string>
+    <!-- Shown as notification title for when a notification about a story sent to a group story %1$s replaced with the group name -->
+    <string name="MessageNotifier_group_story_title">आपसे %1$s को</string>
     <string name="MessageNotifier_failed_to_deliver_message">मेसेज देने में विफल रहा</string>
     <string name="MessageNotifier_error_delivering_message">मेसेज देने में त्रुटि</string>
     <string name="MessageNotifier_message_delivery_paused">संदेश प्रेषण रोका गया</string>
@@ -2131,12 +2151,14 @@
     <string name="MessageNotifier_contact_message">%1$s%2$s</string>
     <string name="MessageNotifier_unknown_contact_message">संपर्क</string>
     <string name="MessageNotifier_reacted_s_to_s">प्रतिक्रिया की गई %1$s से: \"%2$s\".</string>
-    <string name="MessageNotifier_reacted_s_to_your_video">आपके वीडियो पर %1$s ने प्रतिक्रिया व्यक्त की गई</string>
-    <string name="MessageNotifier_reacted_s_to_your_image">आपकी तस्वीर पर %1$s ने प्रतिक्रिया व्यक्त की.</string>
-    <string name="MessageNotifier_reacted_s_to_your_gif">आपके GIF पर %1$s ने प्रतिक्रिया दी.</string>
-    <string name="MessageNotifier_reacted_s_to_your_file">आपकी फ़ाइल पर %1$sने प्रतिक्रिया व्यक्त की|</string>
-    <string name="MessageNotifier_reacted_s_to_your_audio">आपके ऑडियो के लिए %1$sप्रतिक्रिया व्यक्त की।</string>
-    <string name="MessageNotifier_reacted_s_to_your_view_once_media">आपके एक-बार-देखने-योग्य वीडियो पर %1$s प्रतिक्रिया की।</string>
+    <string name="MessageNotifier_reacted_s_to_your_video">आपके वीडियो पर %1$s ने प्रतिक्रिया दी।</string>
+    <string name="MessageNotifier_reacted_s_to_your_image">आपकी तस्वीर पर %1$s ने प्रतिक्रिया दी।</string>
+    <string name="MessageNotifier_reacted_s_to_your_gif">आपके GIF पर %1$s ने प्रतिक्रिया दी।</string>
+    <string name="MessageNotifier_reacted_s_to_your_file">आपकी फ़ाइल पर %1$sने प्रतिक्रिया व्यक्त दी।</string>
+    <string name="MessageNotifier_reacted_s_to_your_audio">आपके ऑडियो के लिए %1$sप्रतिक्रिया व्यक्त दी।</string>
+    <string name="MessageNotifier_reacted_s_to_your_view_once_media">आपके एक-बार-देखने-योग्य वीडियो पर %1$s प्रतिक्रिया दी।</string>
+    <!-- Body of notification shown to user when someone they sent a payment to reacts to it. Placeholder is the emoji used in the reaction. -->
+    <string name="MessageNotifier_reacted_s_to_your_payment">आपके भुगतान पर %1$s ने प्रतिक्रिया दी।</string>
     <string name="MessageNotifier_reacted_s_to_your_sticker">आपके स्टिकर पर %1$sको पुन: सक्रिय किया।</string>
     <string name="MessageNotifier_this_message_was_deleted">यह मेसेज डिलीट कर दिया गया है।</string>
 
@@ -2253,6 +2275,12 @@
     <!-- contact_selection_activity -->
     <string name="contact_selection_activity__invite_to_signal">Signal का उपयोग करने के लिए आमंत्रित करें</string>
     <string name="contact_selection_activity__new_group">नया समूह</string>
+    <!-- Row item title for refreshing contacts -->
+    <string name="contact_selection_activity__refresh_contacts">Refresh contacts</string>
+    <!-- Row item description for refreshing contacts -->
+    <string name="contact_selection_activity__missing_someone">Missing someone? Try refreshing</string>
+    <!-- Row header title for more section -->
+    <string name="contact_selection_activity__more">अधिक</string>
 
     <!-- contact_filter_toolbar -->
     <string name="contact_filter_toolbar__clear_entered_text_description">लिखे गये शब्दों को मिटा दें</string>
@@ -3098,6 +3126,8 @@
     <!-- **************************************** -->
 
     <!-- contact_selection_list -->
+    <!-- Displayed in a row on the new call screen when searching by phone number. -->
+    <string name="contact_selection_list__new_call">New call to…</string>
     <string name="contact_selection_list__unknown_contact">नया मेसेज</string>
     <string name="contact_selection_list__unknown_contact_block">यूज़र को ब्लॉक करें</string>
     <string name="contact_selection_list__unknown_contact_add_to_group">समूह में शामिल करें</string>
@@ -3454,6 +3484,18 @@
     <string name="BackupUtil_unknown">अनजान</string>
     <string name="preferences_app_protection__see_my_phone_number">मेरा फ़ोन नंबर देखना</string>
     <string name="preferences_app_protection__find_me_by_phone_number">मुझे फ़ोन नंबर के ज़रिये ढूंढना</string>
+    <!-- Phone number heading displayed as a screen title -->
+    <string name="preferences_app_protection__phone_number">फोन नंबर</string>
+    <!-- Subtext below option to launch into phone number privacy settings screen -->
+    <string name="preferences_app_protection__choose_who_can_see">चुनें कि कौन आपका फोन नंबर देख सकता है और कौन इसके साथ Signal पर आपसे संपर्क कर सकता है।</string>
+    <!-- Section title above two radio buttons for enabling and disabling phone number display -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_see_my_number">मेरा नंबर कौन देख सकता है</string>
+    <!-- Subtext below radio buttons when who can see my number is set to nobody -->
+    <string name="PhoneNumberPrivacySettingsFragment__nobody_will_see">कोई भी Signal पर आपका फोन नंबर नहीं देखेगा</string>
+    <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_find_me_by_number">मुझे नंबर से कौन ढूंढ सकता है</string>
+    <!-- Subtext below radio buttons when who can see my number is set to everyone -->
+    <string name="PhoneNumberPrivacySettingsFragment__your_phone_number">आपका फ़ोन नंबर उन लोगों और ग्रुप्स को दिखेगा जिन्हें आप मेसेज भेजेंगे। वे लोग जिनके फोन संपर्कों में आपका नंबर है, वे भी Signal पर इसे देख पाएँगे।</string>
     <string name="PhoneNumberPrivacy_everyone">सभी</string>
     <string name="PhoneNumberPrivacy_my_contacts">मेरे संपर्क</string>
     <string name="PhoneNumberPrivacy_nobody">कोई नहीं</string>
@@ -4556,7 +4598,7 @@
     <string name="DonationsErrors__your_donation_could_not_be_sent">आपका दान किसी नेटवर्क दोष के कारण नहीं भेजा जा सका। अपना कनेक्शन जाँचें और फिर से प्रयास करें।</string>
 
     <!-- Gift message view title -->
-    <string name="GiftMessageView__donation_to_s">%1$s को दान</string>
+    <string name="GiftMessageView__donation_on_behalf_of_s">%1$s की ओर से दान</string>
     <!-- Gift message view title for incoming donations -->
     <string name="GiftMessageView__s_donated_to_signal_on">%1$s ने आपकी ओर से Signal को दान दिया</string>
     <!-- Gift badge redeem action label -->
@@ -4795,6 +4837,8 @@
 
     <!-- Label for Chats tab in home app screen -->
     <string name="ConversationListTabs__chats">चैट</string>
+    <!-- Label for Calls tab in home app screen -->
+    <string name="ConversationListTabs__calls">कॉल</string>
     <!-- Label for Stories tab in home app screen -->
     <string name="ConversationListTabs__stories">स्टोरीज़</string>
     <!-- String for counts above 99 in conversation list tabs -->
@@ -5105,7 +5149,7 @@
     <!-- Label for a button in a notification at the bottom of the chat list to turn off censorship circumvention -->
 
     <!-- Conversation Item label for when you react to someone else\'s story -->
-    <string name="ConversationItem__you_reacted_to_s_story">आपने %1$s की स्टोरी पर प्रतिक्रिया दी।</string>
+    <string name="ConversationItem__you_reacted_to_s_story">आपने %1$s की स्टोरी पर प्रतिक्रिया दी</string>
     <!-- Conversation Item label for reactions to your story -->
     <string name="ConversationItem__reacted_to_your_story">आपकी स्टोरी पर प्रतिक्रिया दी</string>
     <!-- Conversation Item label for reactions to an unavailable story -->
@@ -5658,6 +5702,86 @@
     <string name="TimeDurationPickerDialog_positive_button">सेट</string>
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, helper text indicating minimum allowable duration -->
     <string name="TimeDurationPickerDialog_minimum_duration_warning">स्क्रीन लॉक लागू होने से पहले न्यूनतम समय 1 मिनट है।</string>
+
+    <!-- Call Log -->
+    <!-- Displayed below the user\'s name in row items on the call log. First placeholder is the call status, second is when it occurred -->
+    <string name="CallLogAdapter__s_dot_s">%1$s · %2$s</string>
+    <!-- Displayed for incoming calls -->
+    <string name="CallLogAdapter__incoming">Incoming</string>
+    <!-- Displayed for outgoing calls -->
+    <string name="CallLogAdapter__outgoing">Outgoing</string>
+    <!-- Displayed for missed calls -->
+    <string name="CallLogAdapter__missed">Missed</string>
+
+    <!-- Call Log context menu -->
+    <!-- Displayed as a context menu item to start a video call -->
+    <string name="CallContextMenu__video_call">वीडियो कॉल</string>
+    <!-- Displayed as a context menu item to join an ongoing group call -->
+    <string name="CallContextMenu__join_call">कॉल से जुड़ें</string>
+    <!-- Displayed as a context menu item to return to active call -->
+    <string name="CallContextMenu__return_to_call">कॉल पर वापस जाएँ</string>
+    <!-- Displayed as a context menu item to start an audio call -->
+    <string name="CallContextMenu__audio_call">ऑडियो कॉल</string>
+    <!-- Displayed as a context menu item to go to chat -->
+    <string name="CallContextMenu__go_to_chat">चैट पर जाएँ</string>
+    <!-- Displayed as a context menu item to see call info -->
+    <string name="CallContextMenu__info">जानकारी</string>
+    <!-- Displayed as a context menu item to select multiple calls -->
+    <string name="CallContextMenu__select">चुनिए</string>
+    <!-- Displayed as a context menu item to delete this call -->
+    <string name="CallContextMenu__delete">डिलीट करें</string>
+
+    <!-- Call Log Fragment -->
+    <!-- Action bar menu item to only display missed calls -->
+    <string name="CallLogFragment__filter_missed_calls">Filter missed calls</string>
+    <!-- Action bar menu item to clear missed call filter -->
+    <string name="CallLogFragment__clear_filter">फ़िल्टर हटाएँ</string>
+    <!-- Action bar menu item to open settings -->
+    <string name="CallLogFragment__settings">सेटिंग्स</string>
+    <!-- Action bar menu item to open notification profile settings -->
+    <string name="CallLogFragment__notification_profile">नोटिफ़िकेशन प्रोफ़ाइल</string>
+    <!-- Call log new call content description -->
+    <string name="CallLogFragment__start_a_new_call">Start a new call</string>
+    <!-- Filter pull text when pulled -->
+    <string name="CallLogFragment__filtered_by_missed">Filtered by missed</string>
+    <!-- Bottom bar option to select all call entries -->
+    <string name="CallLogFragment__select_all">सभी को चुन लो</string>
+    <!-- Bottom bar option to delete all selected call entries -->
+    <string name="CallLogFragment__delete">डिलीट करें</string>
+    <!-- Title on multi-delete protection dialog (TODO - final terminology) -->
+  <!-- Removed by excludeNonTranslatables <plurals name="CallLogFragment__delete_d_calls" translatable="false">
+        <item quantity="one">Delete %1$d call?</item>
+        <item quantity="other">Delete %1$d calls?</item>
+    </plurals> -->
+    <!-- Positive action on multi-delete protection dialog -->
+    <string name="CallLogFragment__delete_for_me">मेरे लिये डिलीट करें</string>
+    <!-- Snackbar label after deleting call logs -->
+    <plurals name="CallLogFragment__d_calls_deleted">
+        <item quantity="one">%1$d call deleted</item>
+        <item quantity="other">%1$d calls deleted</item>
+    </plurals>
+    <!-- Undo action for deletion snackbar -->
+    <string name="CallLogFragment__undo">पूर्ववत</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__no_calls">No calls.</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__get_started_by_calling_a_friend">Get started by calling a friend.</string>
+
+    <!-- New call activity -->
+    <!-- Activity title in title bar -->
+    <string name="NewCallActivity__new_call">New call</string>
+
+    <!-- Call state update popups -->
+    <!-- Displayed when the user enables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_on">Ringing on</string>
+    <!-- Displayed when the user disables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_off">Ringing off</string>
+    <!-- Displayed when the user cannot enable group call ringing -->
+    <string name="CallStateUpdatePopupWindow__group_is_too_large">Group is too large to ring the participants</string>
+    <!-- Displayed when the user turns on their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_on">Mic on</string>
+    <!-- Displayed when the user turns off their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_off">Mic off</string>
 
     <!-- EOF -->
 </resources>

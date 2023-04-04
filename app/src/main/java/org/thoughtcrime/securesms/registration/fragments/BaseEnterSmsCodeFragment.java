@@ -179,124 +179,6 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
     });
   }
 
-  @Override
-  public void onResume() {
-    super.onResume();
-    String sessionE164 = viewModel.getSessionE164();
-    if (sessionE164 == null) {
-      returnToPhoneEntryScreen();
-      return;
-    }
-
-    subheader.setText(requireContext().getString(R.string.RegistrationActivity_enter_the_code_we_sent_to_s, viewModel.getNumber().getFullFormattedNumber()));
-
-    MccMncProducer mccMncProducer = new MccMncProducer(requireContext());
-    Disposable request = viewModel.validateSession(sessionE164, mccMncProducer.getMcc(), mccMncProducer.getMnc())
-                                  .observeOn(AndroidSchedulers.mainThread())
-                                  .subscribe(processor -> {
-                                    if (!processor.hasResult()) {
-                                      returnToPhoneEntryScreen();
-                                    } else if (processor.isInvalidSession()) {
-                                      returnToPhoneEntryScreen();
-                                    } else if (processor.cannotSubmitVerificationAttempt()) {
-                                      returnToPhoneEntryScreen();
-                                    } else if (!processor.canSubmitProofImmediately()) {
-                                      handleRateLimited();
-                                    }
-                                    // else session state is valid and server is ready to accept code
-                                  });
-
-    disposables.add(request);
-    viewModel.getCanCallAtTime().observe(getViewLifecycleOwner(), callAtTime -> {
-      if (callAtTime > 0) {
-        callMeCountDown.setVisibility(View.VISIBLE);
-        callMeCountDown.startCountDownTo(callAtTime);
-      } else {
-        callMeCountDown.setVisibility(View.INVISIBLE);
-      }
-    });
-    viewModel.getCanSmsAtTime().observe(getViewLifecycleOwner(), smsAtTime -> {
-      if (smsAtTime > 0) {
-        resendSmsCountDown.setVisibility(View.VISIBLE);
-        resendSmsCountDown.startCountDownTo(smsAtTime);
-      } else {
-        resendSmsCountDown.setVisibility(View.INVISIBLE);
-      }
-    });
-  }
-
-  @Override public void onDestroyView() {
-    super.onDestroyView();
-      requireContext().getContentResolver().unregisterContentObserver(pigeonSmsObserver);
-      pigeonSmsObserver = null;
-  }
-
-  private void initPigeonObserver(){
-    CodeHandler handler = new CodeHandler(this);
-    pigeonSmsObserver = new VerificationCodeObserver(requireContext(), handler, MSG_RECEIVED_CODE);
-    Uri uri = Uri.parse("content://sms");
-    requireContext().getContentResolver().registerContentObserver(uri, true, pigeonSmsObserver);
-  }
-
-  private static class CodeHandler extends Handler {
-    private WeakReference<BaseEnterSmsCodeFragment> mRef;
-
-    CodeHandler(BaseEnterSmsCodeFragment fragment) {
-      mRef = new WeakReference<>(fragment);
-    }
-
-    @Override
-    public void handleMessage(Message msg) {
-      super.handleMessage(msg);
-      if (msg.what == MSG_RECEIVED_CODE) {
-        String code = (String) msg.obj;
-        EditText view = mRef.get().pigeonCodeView;
-        view.setText(code);
-        view.setSelection(code.length());
-      }
-    }
-  }
-
-  private void returnToPhoneEntryScreen() {
-    viewModel.resetSession();
-    Navigation.findNavController(requireView()).navigateUp();
-  }
-
-  protected void handleRateLimited() {
-    keyboard.displayFailure().addListener(new AssertedSuccessListener<Boolean>() {
-      @Override
-      public void onSuccess(Boolean r) {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-
-        builder.setTitle(R.string.RegistrationActivity_too_many_attempts)
-               .setMessage(R.string.RegistrationActivity_you_have_made_too_many_attempts_please_try_again_later)
-               .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                 callMeCountDown.setVisibility(View.VISIBLE);
-                 resendSmsCountDown.setVisibility(View.VISIBLE);
-                 wrongNumber.setVisibility(View.VISIBLE);
-                 verificationCodeView.clear();
-                 keyboard.displayKeyboard();
-               })
-               .show();
-      }
-    });
-  }
-
-  private void showBottomSheet() {
-    ContactSupportBottomSheetFragment bottomSheet = new ContactSupportBottomSheetFragment();
-    bottomSheet.show(getChildFragmentManager(), "support_bottom_sheet");
-  }
-
-  @Override
-  public void onNoCellSignalPresent() {
-    // TODO animate in bottom sheet
-  }
-
-  @Override
-  public void onCellSignalPresent() {
-    // TODO animate away bottom sheet
-  }
-
   protected abstract ViewModel getViewModel();
 
   protected abstract void handleSuccessfulVerify();
@@ -526,7 +408,7 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
                                   .subscribe(processor -> {
                                     if (processor.hasResult()) {
                                       Toast.makeText(requireContext(), getCodeRequestedToastText(mode), Toast.LENGTH_LONG).show();
-                                    } else if (processor.captchaRequired()) {
+                                    } else if (processor.captchaRequired(viewModel.getExcludedChallenges())) {
                                       navigateToCaptcha();
                                     } else if (processor.rateLimit()) {
                                       handleRateLimited();
@@ -562,5 +444,67 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
         }
       }
     });
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    String sessionE164 = viewModel.getSessionE164();
+    if (sessionE164 == null) {
+      returnToPhoneEntryScreen();
+      return;
+    }
+
+    subheader.setText(requireContext().getString(R.string.RegistrationActivity_enter_the_code_we_sent_to_s, viewModel.getNumber().getFullFormattedNumber()));
+
+    Disposable request = viewModel.validateSession(sessionE164)
+                                  .observeOn(AndroidSchedulers.mainThread())
+                                  .subscribe(processor -> {
+                                    if (!processor.hasResult()) {
+                                      returnToPhoneEntryScreen();
+                                    } else if (processor.isInvalidSession()) {
+                                      returnToPhoneEntryScreen();
+                                    } else if (processor.cannotSubmitVerificationAttempt()) {
+                                      returnToPhoneEntryScreen();
+                                    } else if (!processor.canSubmitProofImmediately()) {
+                                      handleRateLimited();
+                                    }
+                                    // else session state is valid and server is ready to accept code
+                                  });
+
+    disposables.add(request);
+
+    viewModel.getCanCallAtTime().observe(getViewLifecycleOwner(), callAtTime -> {
+      if (callAtTime > 0) {
+        callMeCountDown.setVisibility(View.VISIBLE);
+        callMeCountDown.startCountDownTo(callAtTime);
+      } else {
+        callMeCountDown.setVisibility(View.INVISIBLE);
+      }
+    });
+    viewModel.getCanSmsAtTime().observe(getViewLifecycleOwner(), smsAtTime -> {
+      if (smsAtTime > 0) {
+        resendSmsCountDown.setVisibility(View.VISIBLE);
+        resendSmsCountDown.startCountDownTo(smsAtTime);
+      } else {
+        resendSmsCountDown.setVisibility(View.INVISIBLE);
+      }
+    });
+  }
+
+
+  private void showBottomSheet() {
+    ContactSupportBottomSheetFragment bottomSheet = new ContactSupportBottomSheetFragment();
+    bottomSheet.show(getChildFragmentManager(), "support_bottom_sheet");
+  }
+
+  @Override
+  public void onNoCellSignalPresent() {
+    // TODO animate in bottom sheet
+  }
+
+  @Override
+  public void onCellSignalPresent() {
+    // TODO animate away bottom sheet
   }
 }

@@ -69,7 +69,7 @@ import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
 public final class EnterPhoneNumberFragment extends LoggingFragment implements RegistrationNumberInputController.Callbacks {
 
   private static final String TAG = Log.tag(EnterPhoneNumberFragment.class);
-  private final LifecycleDisposable disposables = new LifecycleDisposable();
+
   private TextInputLayout                countryCode;
   private TextInputLayout                number;
   private CircularProgressMaterialButton register;
@@ -77,40 +77,12 @@ public final class EnterPhoneNumberFragment extends LoggingFragment implements R
   private ScrollView                     scrollView;
   private RegistrationViewModel          viewModel;
 
+  private final LifecycleDisposable disposables = new LifecycleDisposable();
+
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setHasOptionsMenu(true);
-  }
-
-  @Override
-  public void onStart() {
-    super.onStart();
-    String sessionE164 = viewModel.getSessionE164();
-    if (sessionE164 != null && viewModel.getSessionId() != null) {
-      checkIfSessionIsInProgressAndAdvance(sessionE164);
-    }
-  }
-
-  private void checkIfSessionIsInProgressAndAdvance(@NonNull String sessionE164) {
-    NavController  navController  = NavHostFragment.findNavController(this);
-    MccMncProducer mccMncProducer = new MccMncProducer(requireContext());
-    Disposable request = viewModel.validateSession(sessionE164, mccMncProducer.getMcc(), mccMncProducer.getMnc())
-                                  .observeOn(AndroidSchedulers.mainThread())
-                                  .subscribe(processor -> {
-                                    if (processor.hasResult() && processor.canSubmitProofImmediately()) {
-                                      try {
-                                        viewModel.restorePhoneNumberStateFromE164(sessionE164);
-                                        SafeNavigation.safeNavigate(navController, EnterPhoneNumberFragmentDirections.actionEnterVerificationCode());
-                                      } catch (NumberParseException numberParseException) {
-                                        viewModel.resetSession();
-                                      }
-                                    } else {
-                                      viewModel.resetSession();
-                                    }
-                                  });
-
-    disposables.add(request);
   }
 
   @Override
@@ -141,7 +113,7 @@ public final class EnterPhoneNumberFragment extends LoggingFragment implements R
 
     if (viewModel.isReregister()) {
       cancel.setVisibility(View.VISIBLE);
-      cancel.setOnClickListener(v -> Navigation.findNavController(v).navigateUp());
+      cancel.setOnClickListener(v -> requireActivity().finish());
     } else {
       cancel.setVisibility(View.GONE);
     }
@@ -173,6 +145,12 @@ public final class EnterPhoneNumberFragment extends LoggingFragment implements R
     }
   }
 
+  private void showKeyboard(View viewToFocus) {
+    viewToFocus.requestFocus();
+    InputMethodManager imm = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm.showSoftInput(viewToFocus, InputMethodManager.SHOW_IMPLICIT);
+  }
+
   @Override
   public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
     inflater.inflate(R.menu.enter_phone_number, menu);
@@ -186,12 +164,6 @@ public final class EnterPhoneNumberFragment extends LoggingFragment implements R
     } else {
       return false;
     }
-  }
-
-  private void showKeyboard(View viewToFocus) {
-    viewToFocus.requestFocus();
-    InputMethodManager imm = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-    imm.showSoftInput(viewToFocus, InputMethodManager.SHOW_IMPLICIT);
   }
 
   private void handleRegister(@NonNull Context context) {
@@ -221,6 +193,7 @@ public final class EnterPhoneNumberFragment extends LoggingFragment implements R
     }
 
     PlayServicesUtil.PlayServicesStatus fcmStatus = PlayServicesUtil.getPlayServicesStatus(context);
+
     if (fcmStatus == PlayServicesUtil.PlayServicesStatus.SUCCESS) {
       confirmNumberPrompt(context, e164number, () -> onE164EnteredSuccessfully(context, true));
     } else if (fcmStatus == PlayServicesUtil.PlayServicesStatus.MISSING) {
@@ -316,7 +289,7 @@ public final class EnterPhoneNumberFragment extends LoggingFragment implements R
                                     if (processor.verificationCodeRequestSuccess()) {
                                       disposables.add(updateFcmTokenValue());
                                       SafeNavigation.safeNavigate(navController, EnterPhoneNumberFragmentDirections.actionEnterVerificationCode());
-                                    } else if (processor.captchaRequired()) {
+                                    } else if (processor.captchaRequired(viewModel.getExcludedChallenges())) {
                                       Log.i(TAG, "Unable to request sms code due to captcha required");
                                       SafeNavigation.safeNavigate(navController, EnterPhoneNumberFragmentDirections.actionRequestCaptcha());
                                     } else if (processor.exhaustedVerificationCodeAttempts()) {
@@ -353,9 +326,9 @@ public final class EnterPhoneNumberFragment extends LoggingFragment implements R
 
   private String formatMillisecondsToString(long milliseconds) {
     long totalSeconds = milliseconds / 1000;
-    long HH           = totalSeconds / 3600;
-    long MM           = (totalSeconds % 3600) / 60;
-    long SS           = totalSeconds % 60;
+    long HH = totalSeconds / 3600;
+    long MM = (totalSeconds % 3600) / 60;
+    long SS = totalSeconds % 60;
     return String.format(Locale.getDefault(), "%02d:%02d:%02d", HH, MM, SS);
   }
 
@@ -382,6 +355,35 @@ public final class EnterPhoneNumberFragment extends LoggingFragment implements R
   @Override
   public void setCountry(int countryCode) {
     viewModel.onCountrySelected(null, countryCode);
+  }
+
+  @Override
+  public void onStart() {
+    super.onStart();
+    String sessionE164 = viewModel.getSessionE164();
+    if (sessionE164 != null && viewModel.getSessionId() != null && viewModel.getCaptchaToken() == null) {
+      checkIfSessionIsInProgressAndAdvance(sessionE164);
+    }
+  }
+
+  private void checkIfSessionIsInProgressAndAdvance(@NonNull String sessionE164) {
+    NavController  navController  = NavHostFragment.findNavController(this);
+    Disposable request = viewModel.validateSession(sessionE164)
+                                  .observeOn(AndroidSchedulers.mainThread())
+                                  .subscribe(processor -> {
+                                    if (processor.hasResult() && processor.canSubmitProofImmediately()) {
+                                      try {
+                                        viewModel.restorePhoneNumberStateFromE164(sessionE164);
+                                        SafeNavigation.safeNavigate(navController, EnterPhoneNumberFragmentDirections.actionEnterVerificationCode());
+                                      } catch (NumberParseException numberParseException) {
+                                        viewModel.resetSession();
+                                      }
+                                    } else {
+                                      viewModel.resetSession();
+                                    }
+                                  });
+
+    disposables.add(request);
   }
 
   private void handleNonNormalizedNumberError(@NonNull String originalNumber, @NonNull String normalizedNumber, @NonNull Mode mode) {

@@ -87,7 +87,7 @@ public final class FeatureFlags {
   private static final String USE_AEC3                          = "android.calling.useAec3";
   private static final String PAYMENTS_COUNTRY_BLOCKLIST        = "global.payments.disabledRegions";
   public  static final String PHONE_NUMBER_PRIVACY              = "android.pnp";
-  private static final String USE_FCM_FOREGROUND_SERVICE        = "android.useFcmForegroundService.3";
+  private static final String USE_FCM_FOREGROUND_SERVICE        = "android.useFcmForegroundService.4";
   private static final String STORIES_AUTO_DOWNLOAD_MAXIMUM     = "android.stories.autoDownloadMaximum";
   private static final String TELECOM_MANUFACTURER_ALLOWLIST    = "android.calling.telecomAllowList";
   private static final String TELECOM_MODEL_BLOCKLIST           = "android.calling.telecomModelBlockList";
@@ -106,6 +106,7 @@ public final class FeatureFlags {
   private static final String PAYPAL_RECURRING_DONATIONS        = "android.recurringPayPalDonations.3";
   private static final String TEXT_FORMATTING                   = "android.textFormatting";
   private static final String ANY_ADDRESS_PORTS_KILL_SWITCH     = "android.calling.fieldTrial.anyAddressPortsKillSwitch";
+  private static final String CALLS_TAB                         = "android.calls.tab";
 
   /**
    * We will only store remote values for flags in this set. If you want a flag to be controllable
@@ -162,7 +163,8 @@ public final class FeatureFlags {
       PAYPAL_ONE_TIME_DONATIONS,
       PAYPAL_RECURRING_DONATIONS,
       TEXT_FORMATTING,
-      ANY_ADDRESS_PORTS_KILL_SWITCH
+      ANY_ADDRESS_PORTS_KILL_SWITCH,
+      CALLS_TAB
   );
 
   @VisibleForTesting
@@ -487,6 +489,7 @@ public final class FeatureFlags {
     return getBoolean(USE_AEC3, true);
   }
 
+  /** Whether or not we show a foreground service on every high-priority FCM push. */
   public static boolean useFcmForegroundService() {
     return getBoolean(USE_FCM_FOREGROUND_SERVICE, false);
   }
@@ -581,6 +584,13 @@ public final class FeatureFlags {
    */
   public static boolean callingFieldTrialAnyAddressPortsKillSwitch() {
     return getBoolean(ANY_ADDRESS_PORTS_KILL_SWITCH, false);
+  }
+
+  /**
+   * Whether or not the calls tab is enabled
+   */
+  public static boolean callsTab() {
+    return getBoolean(CALLS_TAB, false);
   }
 
   /** Only for rendering debug info. */

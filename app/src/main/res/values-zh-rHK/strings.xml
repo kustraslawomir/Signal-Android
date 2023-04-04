@@ -384,6 +384,15 @@
     <!-- Snackbar message shown after dismissing the full screen sms export megaphone indicating we\'ll do it again soon -->
     <string name="ConversationActivity__you_will_be_reminded_again_soon">我們稍後會再次提醒你。</string>
 
+    <!-- Title for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_title">Sending formatted text</string>
+    <!-- Message for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_message">Some people may be using a version of Signal that doesn\'t support formatted text. They will not be able to see the formatting changes you\'ve made to your message.</string>
+    <!-- Button text for confirming they\'d like to send the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_send_anyway_button">仍要傳送</string>
+    <!-- Button text for canceling sending the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_cancel_send_button">取消</string>
+
     <!-- ConversationAdapter -->
     <plurals name="ConversationAdapter_n_unread_messages">
         <item quantity="other">%1$d 則未讀訊息</item>
@@ -522,6 +531,15 @@
 
     <!-- ConversationTypingView -->
     <string name="ConversationTypingView__plus_d">+%1$d</string>
+
+    <!-- Title for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__relink_your_devices">重新連結裝置</string>
+    <!-- Description for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__the_devices_you_added_were_unlinked">取消註冊裝置時，你新增的裝置已解除連結。請前往「設定」重新連結裝置。</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to navigate to the Devices page in the settings. -->
+    <string name="RelinkDevicesReminderFragment__open_settings">開啟設定</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to dismiss the pop up. -->
+    <string name="RelinkDevicesReminderFragment__later">稍後再說</string>
 
     <!-- CreateGroupActivity -->
     <string name="CreateGroupActivity__select_members">選擇成員</string>
@@ -1119,8 +1137,8 @@
     <string name="Megaphones_new_group">建立新群組</string>
     <string name="Megaphones_invite_friends">邀請好友</string>
     <string name="Megaphones_use_sms">使用短訊</string>
-    <string name="Megaphones_appearance">外觀</string>
-    <string name="Megaphones_add_photo">新增照片</string>
+    <string name="Megaphones_chat_colors">聊天顏色</string>
+    <string name="Megaphones_add_a_profile_photo">新增個人檔案相片</string>
 
     <!-- Title of a bottom sheet to render messages that all quote a specific message -->
     <string name="MessageQuotesBottomSheet_replies">回覆</string>
@@ -1657,19 +1675,17 @@
         <item quantity="other">%1$s、%2$s 和另 %3$d 人現已在此通話中</item>
     </plurals>
 
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__flip">翻轉</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__speaker">揚聲器</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__camera">相機</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__unmute">取消靜音</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__mute">靜音</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__ring">響鈴</string>
-    <!-- Label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
+    <!-- Toggle content description for toggling camera direction  -->
+    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <!-- Toggle content description for toggling audio output  -->
+    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <!-- Toggle content description for toggling camera state  -->
+    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <!-- Toggle content description for toggling mute state  -->
+    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <!-- Toggle content description for toggling group ring state  -->
+    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">結束通話</string>
 
     <!-- CallParticipantsListDialog -->
@@ -2044,6 +2060,10 @@
     <string name="MessageNotifier_most_recent_from_s">最新來自：%1$s</string>
     <string name="MessageNotifier_locked_message">訊息已鎖定</string>
     <string name="MessageNotifier_message_delivery_failed">訊息送遞失敗。</string>
+    <!-- Shown in a notification when a story the user tries to send fails to be sent -->
+    <string name="MessageNotifier_story_delivery_failed">限時動態發送失敗</string>
+    <!-- Shown as notification title for when a notification about a story sent to a group story %1$s replaced with the group name -->
+    <string name="MessageNotifier_group_story_title">您給 %1$s</string>
     <string name="MessageNotifier_failed_to_deliver_message">送遞訊息失敗。</string>
     <string name="MessageNotifier_error_delivering_message">送遞訊息時發生錯誤。</string>
     <string name="MessageNotifier_message_delivery_paused">訊息送遞已暫止。</string>
@@ -2059,13 +2079,15 @@
     <string name="MessageNotifier_contact_message">%1$s %2$s</string>
     <string name="MessageNotifier_unknown_contact_message">聯絡人</string>
     <string name="MessageNotifier_reacted_s_to_s">對「%2$s」表達了 %1$s 心情。</string>
-    <string name="MessageNotifier_reacted_s_to_your_video">對您的影片表達了 %1$s 心情。</string>
-    <string name="MessageNotifier_reacted_s_to_your_image">對您的圖片表達了 %1$s 心情。</string>
-    <string name="MessageNotifier_reacted_s_to_your_gif">對您的 GIF 表達了 %1$s 心情。</string>
-    <string name="MessageNotifier_reacted_s_to_your_file">對您的檔案表達了 %1$s 心情。</string>
-    <string name="MessageNotifier_reacted_s_to_your_audio">對您的音訊表達了 %1$s 心情。</string>
-    <string name="MessageNotifier_reacted_s_to_your_view_once_media">對您的閱後即焚媒體表達了 %1$s 心情。</string>
-    <string name="MessageNotifier_reacted_s_to_your_sticker">對您的貼圖表達了 %1$s 心情。</string>
+    <string name="MessageNotifier_reacted_s_to_your_video">對你的影片表達了 %1$s 心情。</string>
+    <string name="MessageNotifier_reacted_s_to_your_image">對你的圖片表達了 %1$s 心情。</string>
+    <string name="MessageNotifier_reacted_s_to_your_gif">對你的 GIF 表達了 %1$s 心情。</string>
+    <string name="MessageNotifier_reacted_s_to_your_file">對你的檔案表達了 %1$s 心情。</string>
+    <string name="MessageNotifier_reacted_s_to_your_audio">對你的音訊表達了 %1$s 心情。</string>
+    <string name="MessageNotifier_reacted_s_to_your_view_once_media">對你的「閱後即焚」多媒體檔案表達了 %1$s 心情。</string>
+    <!-- Body of notification shown to user when someone they sent a payment to reacts to it. Placeholder is the emoji used in the reaction. -->
+    <string name="MessageNotifier_reacted_s_to_your_payment">對你的付款傳送了 %1$s 回應。</string>
+    <string name="MessageNotifier_reacted_s_to_your_sticker">對你的貼圖表達了 %1$s 心情。</string>
     <string name="MessageNotifier_this_message_was_deleted">此訊息已被刪除。</string>
 
     <string name="TurnOffContactJoinedNotificationsActivity__turn_off_contact_joined_signal">要關閉聯絡人加入 Signal 的通知嗎？您可在 Signal &gt;「設定」&gt;「通知」中再次啟用。</string>
@@ -2180,6 +2202,12 @@
     <!-- contact_selection_activity -->
     <string name="contact_selection_activity__invite_to_signal">邀請加入 Signal</string>
     <string name="contact_selection_activity__new_group">建立新群組</string>
+    <!-- Row item title for refreshing contacts -->
+    <string name="contact_selection_activity__refresh_contacts">Refresh contacts</string>
+    <!-- Row item description for refreshing contacts -->
+    <string name="contact_selection_activity__missing_someone">Missing someone? Try refreshing</string>
+    <!-- Row header title for more section -->
+    <string name="contact_selection_activity__more">更多</string>
 
     <!-- contact_filter_toolbar -->
     <string name="contact_filter_toolbar__clear_entered_text_description">清除已輸入文字</string>
@@ -2447,8 +2475,8 @@
 
     <!-- BadDecryptLearnMoreDialog -->
     <string name="BadDecryptLearnMoreDialog_delivery_issue">送遞問題</string>
-    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">來自 %1$s 的一則訊息、貼圖、心情或已讀標記無法向您送達。未知是直接發送給您，還是發送到某個群組中。</string>
-    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">來自 %1$s 的一則訊息、貼圖、心情或已讀標記無法向您送達。</string>
+    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">系統無法將 %1$s 的訊息、貼圖、心情回應或已讀標記傳送給你。他們可能是直接或透過群組向你傳送的。</string>
+    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">系統無法將 %1$s 的訊息、貼圖、心情回應或已讀標記傳送給你。</string>
 
     <!-- profile_create_activity -->
     <string name="CreateProfileActivity_first_name_required">名字 (必填)</string>
@@ -3014,6 +3042,8 @@
     <!-- **************************************** -->
 
     <!-- contact_selection_list -->
+    <!-- Displayed in a row on the new call screen when searching by phone number. -->
+    <string name="contact_selection_list__new_call">New call to…</string>
     <string name="contact_selection_list__unknown_contact">撰寫新訊息給…</string>
     <string name="contact_selection_list__unknown_contact_block">封鎖用戶</string>
     <string name="contact_selection_list__unknown_contact_add_to_group">新增至群組</string>
@@ -3361,6 +3391,18 @@
     <string name="BackupUtil_unknown">未知</string>
     <string name="preferences_app_protection__see_my_phone_number">看見我的電話號碼</string>
     <string name="preferences_app_protection__find_me_by_phone_number">按電話號碼找到我</string>
+    <!-- Phone number heading displayed as a screen title -->
+    <string name="preferences_app_protection__phone_number">電話號碼</string>
+    <!-- Subtext below option to launch into phone number privacy settings screen -->
+    <string name="preferences_app_protection__choose_who_can_see">選擇誰可以看到你的電話號碼，以及誰可以透過電話號碼在 Signal 與你聯絡。</string>
+    <!-- Section title above two radio buttons for enabling and disabling phone number display -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_see_my_number">誰可以看到我的號碼</string>
+    <!-- Subtext below radio buttons when who can see my number is set to nobody -->
+    <string name="PhoneNumberPrivacySettingsFragment__nobody_will_see">沒有人會在 Signal 看到你的電話號碼</string>
+    <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_find_me_by_number">誰可以透過電話號碼找到我</string>
+    <!-- Subtext below radio buttons when who can see my number is set to everyone -->
+    <string name="PhoneNumberPrivacySettingsFragment__your_phone_number">與你通訊的人及群組將會看到你的電話號碼。在通訊錄中有你電話號碼的人亦可在 Signal 上看到。</string>
     <string name="PhoneNumberPrivacy_everyone">所有人</string>
     <string name="PhoneNumberPrivacy_my_contacts">我的聯絡人</string>
     <string name="PhoneNumberPrivacy_nobody">沒有人</string>
@@ -3736,12 +3778,12 @@
     <!-- DeactivateWalletFragment -->
     <string name="DeactivateWalletFragment__deactivate_wallet">停用錢包</string>
     <string name="DeactivateWalletFragment__your_balance">您的餘額</string>
-    <string name="DeactivateWalletFragment__its_recommended_that_you">建議您在停用付款之前，將您的款項轉移到另一個錢包位址。若您現在選擇不作轉移，假如您重新啟用付款，您的款項將會保留在您已連結至 Signal 的錢包中。</string>
+    <string name="DeactivateWalletFragment__its_recommended_that_you">我們建議你在停用付款之前，將你的資金轉移到另一個錢包位址。若你現在選擇不作轉移，當你重新啟用付款時，你的款項將會保留在已連結至 Signal 的錢包中。</string>
     <string name="DeactivateWalletFragment__transfer_remaining_balance">轉移尚餘款項</string>
     <string name="DeactivateWalletFragment__deactivate_without_transferring">停用而不轉移</string>
     <string name="DeactivateWalletFragment__deactivate">停用</string>
     <string name="DeactivateWalletFragment__deactivate_without_transferring_question">要停用而不作轉移嗎？</string>
-    <string name="DeactivateWalletFragment__your_balance_will_remain">若您選擇重新啟用付款，您的餘額將會保留在您已連結至 Signal 的錢包中。</string>
+    <string name="DeactivateWalletFragment__your_balance_will_remain">若你選擇重新啟用付款，你的餘額將會保留在已連結至 Signal 的錢包中。</string>
     <string name="DeactivateWalletFragment__error_deactivating_wallet">停用錢包時發生錯誤。</string>
   <!-- Removed by excludeNonTranslatables <string name="DeactivateWalletFragment__learn_more__we_recommend_transferring_your_funds" translatable="false">https://support.signal.org/hc/articles/360057625692#payments_deactivate</string> -->
 
@@ -4055,7 +4097,7 @@
     <string name="Donate2022Q2Megaphone_not_now">現在不要</string>
 
     <!-- EditReactionsFragment -->
-    <string name="EditReactionsFragment__customize_reactions">自訂心情</string>
+    <string name="EditReactionsFragment__customize_reactions">自訂心情回應</string>
     <string name="EditReactionsFragment__tap_to_replace_an_emoji">輕觸以替換表情符號</string>
     <string name="EditReactionsFragment__reset">重設</string>
     <string name="EditReactionsFragment_save">儲存</string>
@@ -4453,7 +4495,7 @@
     <string name="DonationsErrors__your_donation_could_not_be_sent">由於發生網路錯誤，系統無法發送你的捐款。請檢查你的網路連線，然後再試一次。</string>
 
     <!-- Gift message view title -->
-    <string name="GiftMessageView__donation_to_s">捐款給 %1$s</string>
+    <string name="GiftMessageView__donation_on_behalf_of_s">代表 %1$s 捐款</string>
     <!-- Gift message view title for incoming donations -->
     <string name="GiftMessageView__s_donated_to_signal_on">%1$s 已代表你捐款給 Signal</string>
     <!-- Gift badge redeem action label -->
@@ -4692,6 +4734,8 @@
 
     <!-- Label for Chats tab in home app screen -->
     <string name="ConversationListTabs__chats">聊天</string>
+    <!-- Label for Calls tab in home app screen -->
+    <string name="ConversationListTabs__calls">通話</string>
     <!-- Label for Stories tab in home app screen -->
     <string name="ConversationListTabs__stories">限時動態</string>
     <!-- String for counts above 99 in conversation list tabs -->
@@ -4844,7 +4888,7 @@
     <!-- My story privacy fine print about what the privacy settings are for -->
     <string name="MyStorySettingsFragment__choose_who_can_view_your_story">選擇誰可以瀏覽你的限時動態。這不會影響你在更改前發送的限時動態。</string>
     <!-- Section header for options related to replies and reactions -->
-    <string name="MyStorySettingsFragment__replies_amp_reactions">回覆和心情</string>
+    <string name="MyStorySettingsFragment__replies_amp_reactions">回覆和心情回應</string>
     <!-- Switchable option for allowing replies and reactions on your stories -->
     <string name="MyStorySettingsFragment__allow_replies_amp_reactions">允許回覆和表達心情</string>
     <!-- Summary for switchable option allowing replies and reactions on your story -->
@@ -5533,6 +5577,85 @@
     <string name="TimeDurationPickerDialog_positive_button">設定</string>
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, helper text indicating minimum allowable duration -->
     <string name="TimeDurationPickerDialog_minimum_duration_warning">啟用螢幕鎖定前設定的最短時間為 1 分鐘。</string>
+
+    <!-- Call Log -->
+    <!-- Displayed below the user\'s name in row items on the call log. First placeholder is the call status, second is when it occurred -->
+    <string name="CallLogAdapter__s_dot_s">%1$s · %2$s</string>
+    <!-- Displayed for incoming calls -->
+    <string name="CallLogAdapter__incoming">Incoming</string>
+    <!-- Displayed for outgoing calls -->
+    <string name="CallLogAdapter__outgoing">Outgoing</string>
+    <!-- Displayed for missed calls -->
+    <string name="CallLogAdapter__missed">Missed</string>
+
+    <!-- Call Log context menu -->
+    <!-- Displayed as a context menu item to start a video call -->
+    <string name="CallContextMenu__video_call">視像通話</string>
+    <!-- Displayed as a context menu item to join an ongoing group call -->
+    <string name="CallContextMenu__join_call">加入通話</string>
+    <!-- Displayed as a context menu item to return to active call -->
+    <string name="CallContextMenu__return_to_call">返回通話</string>
+    <!-- Displayed as a context menu item to start an audio call -->
+    <string name="CallContextMenu__audio_call">語音通話</string>
+    <!-- Displayed as a context menu item to go to chat -->
+    <string name="CallContextMenu__go_to_chat">前往聊天</string>
+    <!-- Displayed as a context menu item to see call info -->
+    <string name="CallContextMenu__info">資訊</string>
+    <!-- Displayed as a context menu item to select multiple calls -->
+    <string name="CallContextMenu__select">選取</string>
+    <!-- Displayed as a context menu item to delete this call -->
+    <string name="CallContextMenu__delete">刪除</string>
+
+    <!-- Call Log Fragment -->
+    <!-- Action bar menu item to only display missed calls -->
+    <string name="CallLogFragment__filter_missed_calls">Filter missed calls</string>
+    <!-- Action bar menu item to clear missed call filter -->
+    <string name="CallLogFragment__clear_filter">清除篩選器</string>
+    <!-- Action bar menu item to open settings -->
+    <string name="CallLogFragment__settings">設定</string>
+    <!-- Action bar menu item to open notification profile settings -->
+    <string name="CallLogFragment__notification_profile">通知設定檔</string>
+    <!-- Call log new call content description -->
+    <string name="CallLogFragment__start_a_new_call">Start a new call</string>
+    <!-- Filter pull text when pulled -->
+    <string name="CallLogFragment__filtered_by_missed">Filtered by missed</string>
+    <!-- Bottom bar option to select all call entries -->
+    <string name="CallLogFragment__select_all">全選</string>
+    <!-- Bottom bar option to delete all selected call entries -->
+    <string name="CallLogFragment__delete">刪除</string>
+    <!-- Title on multi-delete protection dialog (TODO - final terminology) -->
+  <!-- Removed by excludeNonTranslatables <plurals name="CallLogFragment__delete_d_calls" translatable="false">
+        <item quantity="one">Delete %1$d call?</item>
+        <item quantity="other">Delete %1$d calls?</item>
+    </plurals> -->
+    <!-- Positive action on multi-delete protection dialog -->
+    <string name="CallLogFragment__delete_for_me">為我刪除</string>
+    <!-- Snackbar label after deleting call logs -->
+    <plurals name="CallLogFragment__d_calls_deleted">
+        <item quantity="other">%1$d calls deleted</item>
+    </plurals>
+    <!-- Undo action for deletion snackbar -->
+    <string name="CallLogFragment__undo">復原</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__no_calls">No calls.</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__get_started_by_calling_a_friend">Get started by calling a friend.</string>
+
+    <!-- New call activity -->
+    <!-- Activity title in title bar -->
+    <string name="NewCallActivity__new_call">New call</string>
+
+    <!-- Call state update popups -->
+    <!-- Displayed when the user enables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_on">Ringing on</string>
+    <!-- Displayed when the user disables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_off">Ringing off</string>
+    <!-- Displayed when the user cannot enable group call ringing -->
+    <string name="CallStateUpdatePopupWindow__group_is_too_large">Group is too large to ring the participants</string>
+    <!-- Displayed when the user turns on their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_on">Mic on</string>
+    <!-- Displayed when the user turns off their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_off">Mic off</string>
 
     <!-- EOF -->
 </resources>

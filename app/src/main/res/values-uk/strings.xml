@@ -384,6 +384,15 @@
     <!-- Snackbar message shown after dismissing the full screen sms export megaphone indicating we\'ll do it again soon -->
     <string name="ConversationActivity__you_will_be_reminded_again_soon">Незабаром ви отримаєте нове нагадування.</string>
 
+    <!-- Title for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_title">Sending formatted text</string>
+    <!-- Message for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_message">Some people may be using a version of Signal that doesn\'t support formatted text. They will not be able to see the formatting changes you\'ve made to your message.</string>
+    <!-- Button text for confirming they\'d like to send the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_send_anyway_button">Усе одно надіслати</string>
+    <!-- Button text for canceling sending the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_cancel_send_button">Скасувати</string>
+
     <!-- ConversationAdapter -->
     <plurals name="ConversationAdapter_n_unread_messages">
         <item quantity="one">%1$d непрочитане повідомлення</item>
@@ -501,16 +510,16 @@
         <item quantity="other">%1$d розмови переміщено до вхідних</item>
     </plurals>
     <plurals name="ConversationListFragment_read_plural">
-        <item quantity="one">Прочитане</item>
-        <item quantity="few">Прочитане</item>
-        <item quantity="many">Прочитане</item>
-        <item quantity="other">Прочитане</item>
+        <item quantity="one">Прочитати</item>
+        <item quantity="few">Прочитати</item>
+        <item quantity="many">Прочитати</item>
+        <item quantity="other">Прочитати</item>
     </plurals>
     <plurals name="ConversationListFragment_unread_plural">
         <item quantity="one">Непрочитане</item>
-        <item quantity="few">Непрочитане</item>
-        <item quantity="many">Непрочитане</item>
-        <item quantity="other">Непрочитане</item>
+        <item quantity="few">Непрочитані</item>
+        <item quantity="many">Непрочитані</item>
+        <item quantity="other">Непрочитані</item>
     </plurals>
     <plurals name="ConversationListFragment_pin_plural">
         <item quantity="one">Закріпити</item>
@@ -555,7 +564,7 @@
         <item quantity="many">Видалити</item>
         <item quantity="other">Видалити</item>
     </plurals>
-    <string name="ConversationListFragment_select_all">Обрати все</string>
+    <string name="ConversationListFragment_select_all">Вибрати все</string>
     <plurals name="ConversationListFragment_s_selected">
         <item quantity="one">%1$d обрано</item>
         <item quantity="few">%1$d обрано</item>
@@ -582,6 +591,15 @@
 
     <!-- ConversationTypingView -->
     <string name="ConversationTypingView__plus_d">+%1$d</string>
+
+    <!-- Title for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__relink_your_devices">Прив\'яжіть пристрої повторно</string>
+    <!-- Description for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__the_devices_you_added_were_unlinked">Додані пристрої було відв\'язано, коли була скасована реєстрація вашого пристрою. Перейдіть у налаштування, щоб повторно прив’язати пристрої.</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to navigate to the Devices page in the settings. -->
+    <string name="RelinkDevicesReminderFragment__open_settings">До налаштувань</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to dismiss the pop up. -->
+    <string name="RelinkDevicesReminderFragment__later">Пізніше</string>
 
     <!-- CreateGroupActivity -->
     <string name="CreateGroupActivity__select_members">Виберіть учасників</string>
@@ -1263,8 +1281,8 @@
     <string name="Megaphones_new_group">Нова група</string>
     <string name="Megaphones_invite_friends">Запросити друзів</string>
     <string name="Megaphones_use_sms">Використовувати SMS</string>
-    <string name="Megaphones_appearance">Вигляд</string>
-    <string name="Megaphones_add_photo">Додати Фото</string>
+    <string name="Megaphones_chat_colors">Кольори чату</string>
+    <string name="Megaphones_add_a_profile_photo">Фото профілю</string>
 
     <!-- Title of a bottom sheet to render messages that all quote a specific message -->
     <string name="MessageQuotesBottomSheet_replies">Відповіді</string>
@@ -1864,19 +1882,17 @@
         <item quantity="other">%1$s, %2$s та інші %3$d у цьому дзвінку</item>
     </plurals>
 
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__flip">Гортати</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__speaker">Динамік</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__camera">Камера</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__unmute">Увімкнути звук</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__mute">Вимкнути звук</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__ring">Телефонувати</string>
-    <!-- Label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
+    <!-- Toggle content description for toggling camera direction  -->
+    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <!-- Toggle content description for toggling audio output  -->
+    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <!-- Toggle content description for toggling camera state  -->
+    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <!-- Toggle content description for toggling mute state  -->
+    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <!-- Toggle content description for toggling group ring state  -->
+    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">Завершити виклик</string>
 
     <!-- CallParticipantsListDialog -->
@@ -2132,9 +2148,9 @@
     <!-- Displayed in the notification when the user has opened a received gift -->
     <string name="ThreadRecord__you_redeemed_a_badge">Ви активували значок</string>
     <!-- Displayed in the conversation list when someone reacted to your story -->
-    <string name="ThreadRecord__reacted_s_to_your_story">Реакція %1$s на вашу сторі</string>
+    <string name="ThreadRecord__reacted_s_to_your_story">Реакція на вашу сторі: %1$s</string>
     <!-- Displayed in the conversation list when you reacted to someone\'s story -->
-    <string name="ThreadRecord__reacted_s_to_their_story">Реакція %1$s на сторі</string>
+    <string name="ThreadRecord__reacted_s_to_their_story">Реакція на сторі: %1$s</string>
     <!-- Displayed in the conversation list when your most recent message is a payment to or from the person the conversation is with -->
     <string name="ThreadRecord_payment">Платіж</string>
     <!-- Displayed in the conversation list when your only message in a conversation is a scheduled send. -->
@@ -2260,6 +2276,10 @@
     <string name="MessageNotifier_most_recent_from_s">Останнє від: %1$s</string>
     <string name="MessageNotifier_locked_message">Заблоковане повідомлення</string>
     <string name="MessageNotifier_message_delivery_failed">Збій доставки повідомлення.</string>
+    <!-- Shown in a notification when a story the user tries to send fails to be sent -->
+    <string name="MessageNotifier_story_delivery_failed">Не вдалося надіслати сторі</string>
+    <!-- Shown as notification title for when a notification about a story sent to a group story %1$s replaced with the group name -->
+    <string name="MessageNotifier_group_story_title">Ви надіслали %1$s</string>
     <string name="MessageNotifier_failed_to_deliver_message">Не вдалось доставити повідомлення.</string>
     <string name="MessageNotifier_error_delivering_message">Помилка доставки повідомлення.</string>
     <string name="MessageNotifier_message_delivery_paused">Доставку повідомлення призупинено.</string>
@@ -2274,14 +2294,16 @@
     <string name="MessageNotifier_unsecured_sms">Незахищене SMS</string>
     <string name="MessageNotifier_contact_message">%1$s %2$s</string>
     <string name="MessageNotifier_unknown_contact_message">Контакт</string>
-    <string name="MessageNotifier_reacted_s_to_s">Відреагував (-ла) %1$sна: \"%2$s\".</string>
-    <string name="MessageNotifier_reacted_s_to_your_video">Відреагував (-ла) %1$s на ваше відео.</string>
-    <string name="MessageNotifier_reacted_s_to_your_image">Відреагував (-ла) %1$s на ваше зображення.</string>
-    <string name="MessageNotifier_reacted_s_to_your_gif">Відреагував %1$s на вашу GIF.</string>
-    <string name="MessageNotifier_reacted_s_to_your_file">Відреагував (-ла) %1$s на ваш файл.</string>
-    <string name="MessageNotifier_reacted_s_to_your_audio">Відреагував (-ла) %1$s на ваше аудіо.</string>
-    <string name="MessageNotifier_reacted_s_to_your_view_once_media">Відреагував (-ла) %1$s на ваше одноразове медіа</string>
-    <string name="MessageNotifier_reacted_s_to_your_sticker">Відреагував (-ла) %1$s на ваш стікер.</string>
+    <string name="MessageNotifier_reacted_s_to_s">Реакція %1$s на «%2$s».</string>
+    <string name="MessageNotifier_reacted_s_to_your_video">Реакція на ваше відео: %1$s.</string>
+    <string name="MessageNotifier_reacted_s_to_your_image">Реакція на ваше зображення: %1$s.</string>
+    <string name="MessageNotifier_reacted_s_to_your_gif">Реакція на ваш GIF: %1$s.</string>
+    <string name="MessageNotifier_reacted_s_to_your_file">Реакція на ваш файл: %1$s.</string>
+    <string name="MessageNotifier_reacted_s_to_your_audio">Реакція на ваше аудіо: %1$s.</string>
+    <string name="MessageNotifier_reacted_s_to_your_view_once_media">Реакція на ваше одноразове медіа: %1$s.</string>
+    <!-- Body of notification shown to user when someone they sent a payment to reacts to it. Placeholder is the emoji used in the reaction. -->
+    <string name="MessageNotifier_reacted_s_to_your_payment">Реакція на ваш платіж: %1$s.</string>
+    <string name="MessageNotifier_reacted_s_to_your_sticker">Реакція на ваш стікер: %1$s.</string>
     <string name="MessageNotifier_this_message_was_deleted">Це повідомлення було видалено.</string>
 
     <string name="TurnOffContactJoinedNotificationsActivity__turn_off_contact_joined_signal">Вимкнути сповіщення \"Контакт приєднався до Signal\"? Ви можете заново включити їх в Signal &gt; Налаштування &gt; Сповіщення.</string>
@@ -2399,6 +2421,12 @@
     <!-- contact_selection_activity -->
     <string name="contact_selection_activity__invite_to_signal">Запросити до Signal</string>
     <string name="contact_selection_activity__new_group">Нова група</string>
+    <!-- Row item title for refreshing contacts -->
+    <string name="contact_selection_activity__refresh_contacts">Refresh contacts</string>
+    <!-- Row item description for refreshing contacts -->
+    <string name="contact_selection_activity__missing_someone">Missing someone? Try refreshing</string>
+    <!-- Row header title for more section -->
+    <string name="contact_selection_activity__more">Більше</string>
 
     <!-- contact_filter_toolbar -->
     <string name="contact_filter_toolbar__clear_entered_text_description">Стерти введений текст</string>
@@ -2696,8 +2724,8 @@
 
     <!-- BadDecryptLearnMoreDialog -->
     <string name="BadDecryptLearnMoreDialog_delivery_issue">Проблема з доставленням</string>
-    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">Не вдалось доставити повідомлення, стікер, реакцію або повідомлення про прочитання від %1$sдо вас. Ця людина могла відправити вищевказане безпосередньо вам або в яку-небудь групу.</string>
-    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">Не вдалося доставити повідомлення, стікер, реакцію або повідомлення про прочитання від %1$s вам.</string>
+    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">Не вдалося доставити повідомлення, стікер, реакцію або повідомлення про прочитання від користувача %1$s до вас. Можливо, користувач надіслав це безпосередньо вам або в групу.</string>
+    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">Не вдалося доставити повідомлення, стікер, реакцію або повідомлення про прочитання від користувача %1$s до вас.</string>
 
     <!-- profile_create_activity -->
     <string name="CreateProfileActivity_first_name_required">Ім\'я (обов\'язково)</string>
@@ -3266,6 +3294,8 @@
     <!-- **************************************** -->
 
     <!-- contact_selection_list -->
+    <!-- Displayed in a row on the new call screen when searching by phone number. -->
+    <string name="contact_selection_list__new_call">New call to…</string>
     <string name="contact_selection_list__unknown_contact">Нове повідомлення для…</string>
     <string name="contact_selection_list__unknown_contact_block">Заблокувати користувача</string>
     <string name="contact_selection_list__unknown_contact_add_to_group">Додати до групи</string>
@@ -3640,6 +3670,18 @@
     <string name="BackupUtil_unknown">Невідомо</string>
     <string name="preferences_app_protection__see_my_phone_number">Бачити мій номер телефону</string>
     <string name="preferences_app_protection__find_me_by_phone_number">Шукати мене за номером телефону</string>
+    <!-- Phone number heading displayed as a screen title -->
+    <string name="preferences_app_protection__phone_number">Номер телефону</string>
+    <!-- Subtext below option to launch into phone number privacy settings screen -->
+    <string name="preferences_app_protection__choose_who_can_see">Виберіть, хто може бачити ваш номер телефону і хто може зв\'язатися з вами в Signal через номер.</string>
+    <!-- Section title above two radio buttons for enabling and disabling phone number display -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_see_my_number">Хто може бачити мій номер</string>
+    <!-- Subtext below radio buttons when who can see my number is set to nobody -->
+    <string name="PhoneNumberPrivacySettingsFragment__nobody_will_see">Ніхто не бачитиме ваш номер телефону в Signal</string>
+    <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_find_me_by_number">Хто може знайти мене за номером телефону</string>
+    <!-- Subtext below radio buttons when who can see my number is set to everyone -->
+    <string name="PhoneNumberPrivacySettingsFragment__your_phone_number">Ваш номер телефону бачитимуть користувачі, з якими ви спілкуєтесь, та учасники груп, у яких ви спілкуєтесь. Люди, що зберегли ваш номер телефону до контактів, теж бачитимуть його в Signal.</string>
     <string name="PhoneNumberPrivacy_everyone">Всі</string>
     <string name="PhoneNumberPrivacy_my_contacts">Мої контакти</string>
     <string name="PhoneNumberPrivacy_nobody">Ніхто</string>
@@ -4024,12 +4066,12 @@
     <!-- DeactivateWalletFragment -->
     <string name="DeactivateWalletFragment__deactivate_wallet">Вимкнути гаманець</string>
     <string name="DeactivateWalletFragment__your_balance">Ваш баланс</string>
-    <string name="DeactivateWalletFragment__its_recommended_that_you">Перш ніж відключати платежі, ми рекомендуємо перевести кошти на інший гаманець. Якщо ви вирішите не передавати свої кошти зараз, вони залишаться у вашому Гаманці, прив\'язаного з Signal, якщо ви знову активуєте платежі.</string>
+    <string name="DeactivateWalletFragment__its_recommended_that_you">Перш ніж відключити платежі, ми рекомендуємо перевести кошти в інший гаманець. Інакше кошти залишаться у вашому гаманці, прив\'язаному до Signal, якщо ви знову активуєте платежі.</string>
     <string name="DeactivateWalletFragment__transfer_remaining_balance">Перевести кошти, що залишились на балансі</string>
     <string name="DeactivateWalletFragment__deactivate_without_transferring">Вимкнути без переводу коштів</string>
     <string name="DeactivateWalletFragment__deactivate">Вимкнути</string>
     <string name="DeactivateWalletFragment__deactivate_without_transferring_question">Вимкнути без переводу коштів?</string>
-    <string name="DeactivateWalletFragment__your_balance_will_remain">Баланс залишиться на рахунку, який додано до Signal, якщо ви вирішите знов увімкнути платежі.</string>
+    <string name="DeactivateWalletFragment__your_balance_will_remain">Баланс залишиться в гаманці, прив\'язаному до Signal, якщо ви вирішите знов увімкнути платежі.</string>
     <string name="DeactivateWalletFragment__error_deactivating_wallet">Помилка при вимкненні гаманця.</string>
   <!-- Removed by excludeNonTranslatables <string name="DeactivateWalletFragment__learn_more__we_recommend_transferring_your_funds" translatable="false">https://support.signal.org/hc/articles/360057625692#payments_deactivate</string> -->
 
@@ -4719,7 +4761,7 @@
     <string name="ExpiredBadgeBottomSheetDialogFragment__your_recurring_monthly_donation_was_canceled">Регулярний щомісячний донат було скасовано, тому що ми не змогли обробити ваш платіж. Ваш значок більше не відображається в профілі.</string>
     <!-- Copy displayed when badge expires after a payment failure and we have a displayable charge failure reason -->
     <string name="ExpiredBadgeBottomSheetDialogFragment__your_recurring_monthly_donation_was_canceled_s">Регулярний щомісячний донат було скасовано. %1$s Ваш значок %2$s більше не відображається в профілі.</string>
-    <string name="ExpiredBadgeBottomSheetDialogFragment__you_can">Ви можете продовжувати використовувати Signal, але щоб підтримати застосунок і повторно активувати свій значок, ви можете поновити передплату.</string>
+    <string name="ExpiredBadgeBottomSheetDialogFragment__you_can">Ви можете продовжувати використовувати Signal. Якщо ви бажаєте підтримати застосунок і повторно активувати свій значок, ви можете поновити передплату.</string>
     <string name="ExpiredBadgeBottomSheetDialogFragment__renew_subscription">Поновити передплату</string>
     <!-- Button label to send user to Google Pay website -->
     <string name="ExpiredBadgeBottomSheetDialogFragment__go_to_google_pay">До Google Pay</string>
@@ -4762,7 +4804,7 @@
     <string name="DonationsErrors__your_donation_could_not_be_sent">Не вдалося надіслати донат через помилку мережі. Перевірте з\'єднання та спробуйте ще.</string>
 
     <!-- Gift message view title -->
-    <string name="GiftMessageView__donation_to_s">Донат для користувача %1$s</string>
+    <string name="GiftMessageView__donation_on_behalf_of_s">Донат від імені користувача %1$s</string>
     <!-- Gift message view title for incoming donations -->
     <string name="GiftMessageView__s_donated_to_signal_on">%1$s підтримує Signal донатом від вашого імені</string>
     <!-- Gift badge redeem action label -->
@@ -5001,6 +5043,8 @@
 
     <!-- Label for Chats tab in home app screen -->
     <string name="ConversationListTabs__chats">Чати</string>
+    <!-- Label for Calls tab in home app screen -->
+    <string name="ConversationListTabs__calls">Виклики</string>
     <!-- Label for Stories tab in home app screen -->
     <string name="ConversationListTabs__stories">Сторіз</string>
     <!-- String for counts above 99 in conversation list tabs -->
@@ -5171,11 +5215,11 @@
     <!-- My story privacy fine print about what the privacy settings are for -->
     <string name="MyStorySettingsFragment__choose_who_can_view_your_story">Виберіть, хто може переглядати ваші сторіз. Зміни не впливатимуть на вже надіслані сторіз.</string>
     <!-- Section header for options related to replies and reactions -->
-    <string name="MyStorySettingsFragment__replies_amp_reactions">Відповіді &amp; реакції</string>
+    <string name="MyStorySettingsFragment__replies_amp_reactions">Відповіді і реакції</string>
     <!-- Switchable option for allowing replies and reactions on your stories -->
-    <string name="MyStorySettingsFragment__allow_replies_amp_reactions">Дозволити відповіді &amp; реакції</string>
+    <string name="MyStorySettingsFragment__allow_replies_amp_reactions">Дозволити відповіді і реакції</string>
     <!-- Summary for switchable option allowing replies and reactions on your story -->
-    <string name="MyStorySettingsFragment__let_people_who_can_view_your_story_react_and_reply">Дозвольте тим, хто бачить вашу сторі, реагувати та відповідати на неї</string>
+    <string name="MyStorySettingsFragment__let_people_who_can_view_your_story_react_and_reply">Дозвольте глядачам своїх сторіз реагувати і відповідати на них</string>
     <!-- Signal connections bolded text in the Signal Connections sheet -->
     <string name="SignalConnectionsBottomSheet___signal_connections">Контакти в Signal</string>
     <!-- Displayed at the top of the signal connections sheet. Please remember to insert strong tag as required. -->
@@ -5327,9 +5371,9 @@
     <!-- Conversation Item label for when you react to someone else\'s story -->
     <string name="ConversationItem__you_reacted_to_s_story">Ви відреагували на сторі користувача %1$s</string>
     <!-- Conversation Item label for reactions to your story -->
-    <string name="ConversationItem__reacted_to_your_story">Реакції на вашу сторі</string>
+    <string name="ConversationItem__reacted_to_your_story">Реакція на вашу сторі</string>
     <!-- Conversation Item label for reactions to an unavailable story -->
-    <string name="ConversationItem__reacted_to_a_story">Реакції на сторі</string>
+    <string name="ConversationItem__reacted_to_a_story">Реакція на сторі</string>
 
     <!-- endregion -->
     <!-- Content description for expand contacts chevron -->
@@ -5612,7 +5656,7 @@
     <!-- Title of the screen -->
     <string name="ExportingSmsMessagesFragment__exporting_sms_messages">Експорт SMS-повідомлень…</string>
     <!-- Message of the screen when exporting sms messages -->
-    <string name="ExportingSmsMessagesFragment__this_may_take_awhile">Це може зайняти певний час</string>
+    <string name="ExportingSmsMessagesFragment__this_may_take_awhile">Це може тривати певний час</string>
     <!-- Progress indicator for export -->
     <plurals name="ExportingSmsMessagesFragment__exporting_d_of_d">
         <item quantity="one">Експорт %1$d з %2$d…</item>
@@ -5908,6 +5952,88 @@
     <string name="TimeDurationPickerDialog_positive_button">Задати</string>
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, helper text indicating minimum allowable duration -->
     <string name="TimeDurationPickerDialog_minimum_duration_warning">Мінімальний час до застосування блокування екрана становить 1 хвилину.</string>
+
+    <!-- Call Log -->
+    <!-- Displayed below the user\'s name in row items on the call log. First placeholder is the call status, second is when it occurred -->
+    <string name="CallLogAdapter__s_dot_s">%1$s · %2$s</string>
+    <!-- Displayed for incoming calls -->
+    <string name="CallLogAdapter__incoming">Incoming</string>
+    <!-- Displayed for outgoing calls -->
+    <string name="CallLogAdapter__outgoing">Outgoing</string>
+    <!-- Displayed for missed calls -->
+    <string name="CallLogAdapter__missed">Missed</string>
+
+    <!-- Call Log context menu -->
+    <!-- Displayed as a context menu item to start a video call -->
+    <string name="CallContextMenu__video_call">Відеодзвінок</string>
+    <!-- Displayed as a context menu item to join an ongoing group call -->
+    <string name="CallContextMenu__join_call">Приєднатися до дзвінка</string>
+    <!-- Displayed as a context menu item to return to active call -->
+    <string name="CallContextMenu__return_to_call">Повернутись до виклику</string>
+    <!-- Displayed as a context menu item to start an audio call -->
+    <string name="CallContextMenu__audio_call">Голосовий виклик</string>
+    <!-- Displayed as a context menu item to go to chat -->
+    <string name="CallContextMenu__go_to_chat">До чату</string>
+    <!-- Displayed as a context menu item to see call info -->
+    <string name="CallContextMenu__info">Інформація</string>
+    <!-- Displayed as a context menu item to select multiple calls -->
+    <string name="CallContextMenu__select">Вибрати</string>
+    <!-- Displayed as a context menu item to delete this call -->
+    <string name="CallContextMenu__delete">Видалити</string>
+
+    <!-- Call Log Fragment -->
+    <!-- Action bar menu item to only display missed calls -->
+    <string name="CallLogFragment__filter_missed_calls">Filter missed calls</string>
+    <!-- Action bar menu item to clear missed call filter -->
+    <string name="CallLogFragment__clear_filter">Очистити фільтр</string>
+    <!-- Action bar menu item to open settings -->
+    <string name="CallLogFragment__settings">Налаштування</string>
+    <!-- Action bar menu item to open notification profile settings -->
+    <string name="CallLogFragment__notification_profile">Профіль сповіщень</string>
+    <!-- Call log new call content description -->
+    <string name="CallLogFragment__start_a_new_call">Start a new call</string>
+    <!-- Filter pull text when pulled -->
+    <string name="CallLogFragment__filtered_by_missed">Filtered by missed</string>
+    <!-- Bottom bar option to select all call entries -->
+    <string name="CallLogFragment__select_all">Вибрати все</string>
+    <!-- Bottom bar option to delete all selected call entries -->
+    <string name="CallLogFragment__delete">Видалити</string>
+    <!-- Title on multi-delete protection dialog (TODO - final terminology) -->
+  <!-- Removed by excludeNonTranslatables <plurals name="CallLogFragment__delete_d_calls" translatable="false">
+        <item quantity="one">Delete %1$d call?</item>
+        <item quantity="other">Delete %1$d calls?</item>
+    </plurals> -->
+    <!-- Positive action on multi-delete protection dialog -->
+    <string name="CallLogFragment__delete_for_me">Видалити для мене</string>
+    <!-- Snackbar label after deleting call logs -->
+    <plurals name="CallLogFragment__d_calls_deleted">
+        <item quantity="one">%1$d call deleted</item>
+        <item quantity="few">%1$d calls deleted</item>
+        <item quantity="many">%1$d calls deleted</item>
+        <item quantity="other">%1$d calls deleted</item>
+    </plurals>
+    <!-- Undo action for deletion snackbar -->
+    <string name="CallLogFragment__undo">Відмінити</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__no_calls">No calls.</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__get_started_by_calling_a_friend">Get started by calling a friend.</string>
+
+    <!-- New call activity -->
+    <!-- Activity title in title bar -->
+    <string name="NewCallActivity__new_call">New call</string>
+
+    <!-- Call state update popups -->
+    <!-- Displayed when the user enables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_on">Ringing on</string>
+    <!-- Displayed when the user disables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_off">Ringing off</string>
+    <!-- Displayed when the user cannot enable group call ringing -->
+    <string name="CallStateUpdatePopupWindow__group_is_too_large">Group is too large to ring the participants</string>
+    <!-- Displayed when the user turns on their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_on">Mic on</string>
+    <!-- Displayed when the user turns off their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_off">Mic off</string>
 
     <!-- EOF -->
 </resources>

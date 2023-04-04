@@ -384,6 +384,15 @@
     <!-- Snackbar message shown after dismissing the full screen sms export megaphone indicating we\'ll do it again soon -->
     <string name="ConversationActivity__you_will_be_reminded_again_soon">سنُذكّرك مرة أخرى قريبًا.</string>
 
+    <!-- Title for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_title">Sending formatted text</string>
+    <!-- Message for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_message">Some people may be using a version of Signal that doesn\'t support formatted text. They will not be able to see the formatting changes you\'ve made to your message.</string>
+    <!-- Button text for confirming they\'d like to send the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_send_anyway_button">أرسل على كل حال</string>
+    <!-- Button text for canceling sending the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_cancel_send_button">إلغاء</string>
+
     <!-- ConversationAdapter -->
     <plurals name="ConversationAdapter_n_unread_messages">
         <item quantity="zero">%1$d رسالة غير مقروءة</item>
@@ -521,28 +530,28 @@
         <item quantity="other">تم نقل %1$d رسالة إلى الوارد</item>
     </plurals>
     <plurals name="ConversationListFragment_read_plural">
-        <item quantity="zero">اقرأ</item>
-        <item quantity="one">اقرأ</item>
-        <item quantity="two">اقرأ</item>
-        <item quantity="few">اقرأ</item>
-        <item quantity="many">اقرأ</item>
-        <item quantity="other">اقرأ</item>
+        <item quantity="zero">مقروءة</item>
+        <item quantity="one">مقروء</item>
+        <item quantity="two">مقروءة</item>
+        <item quantity="few">مقروءة</item>
+        <item quantity="many">مقروءة</item>
+        <item quantity="other">مقروءة</item>
     </plurals>
     <plurals name="ConversationListFragment_unread_plural">
-        <item quantity="zero">غير مقروء</item>
+        <item quantity="zero">غير مقروءة</item>
         <item quantity="one">غير مقروء</item>
-        <item quantity="two">غير مقروءه</item>
-        <item quantity="few">غير مقروءه</item>
-        <item quantity="many">غير مقروء</item>
-        <item quantity="other">غير مقروء</item>
+        <item quantity="two">غير مقروءة</item>
+        <item quantity="few">غير مقروءة</item>
+        <item quantity="many">غير مقروءة</item>
+        <item quantity="other">غير مقروءة</item>
     </plurals>
     <plurals name="ConversationListFragment_pin_plural">
         <item quantity="zero">تثبيت</item>
         <item quantity="one">تثبيت</item>
         <item quantity="two">تثبيت</item>
-        <item quantity="few">ثبت</item>
+        <item quantity="few">تثبيت</item>
         <item quantity="many">تثبيت</item>
-        <item quantity="other">ثبت</item>
+        <item quantity="other">تثبيت</item>
     </plurals>
     <plurals name="ConversationListFragment_unpin_plural">
         <item quantity="zero">إلغاء التثبيت</item>
@@ -554,7 +563,7 @@
     </plurals>
     <plurals name="ConversationListFragment_mute_plural">
         <item quantity="zero">كتم الدردشات</item>
-        <item quantity="one">كتم الدردشات</item>
+        <item quantity="one">كتم الدردشة</item>
         <item quantity="two">كتم الدردشات</item>
         <item quantity="few">كتم الدردشات</item>
         <item quantity="many">كتم الدردشات</item>
@@ -562,28 +571,28 @@
     </plurals>
     <plurals name="ConversationListFragment_unmute_plural">
         <item quantity="zero">إلغاء كتم الدردشات</item>
-        <item quantity="one">إلغاء كتم الدردشات</item>
+        <item quantity="one">إلغاء كتم الدردشة</item>
         <item quantity="two">إلغاء كتم الدردشات</item>
         <item quantity="few">إلغاء كتم الدردشات</item>
         <item quantity="many">إلغاء كتم الدردشات</item>
         <item quantity="other">إلغاء كتم الدردشات</item>
     </plurals>
-    <string name="ConversationListFragment_select">حَدِّد</string>
+    <string name="ConversationListFragment_select">تحديد</string>
     <plurals name="ConversationListFragment_archive_plural">
-        <item quantity="zero">أرشيف</item>
-        <item quantity="one">أرشيف</item>
-        <item quantity="two">أرشيف</item>
-        <item quantity="few">أرشيف</item>
-        <item quantity="many">أرشيف</item>
-        <item quantity="other">أرشيف</item>
+        <item quantity="zero">أرشفة</item>
+        <item quantity="one">أرشفة</item>
+        <item quantity="two">أرشفة</item>
+        <item quantity="few">أرشفة</item>
+        <item quantity="many">أرشفة</item>
+        <item quantity="other">أرشفة</item>
     </plurals>
     <plurals name="ConversationListFragment_unarchive_plural">
-        <item quantity="zero">أخرج من الأرشيف</item>
-        <item quantity="one">أخرج من الأرشيف</item>
-        <item quantity="two">أخرج من الأرشيف</item>
-        <item quantity="few">أخرج من الأرشيف</item>
-        <item quantity="many">أخرج من الأرشيف</item>
-        <item quantity="other">أخرج من الأرشيف</item>
+        <item quantity="zero">إخراج من الأرشيف</item>
+        <item quantity="one">إخراج من الأرشيف</item>
+        <item quantity="two">إخراج من الأرشيف</item>
+        <item quantity="few">إخراج من الأرشيف</item>
+        <item quantity="many">إخراج من الأرشيف</item>
+        <item quantity="other">إخراج من الأرشيف</item>
     </plurals>
     <plurals name="ConversationListFragment_delete_plural">
         <item quantity="zero">حذف</item>
@@ -593,7 +602,7 @@
         <item quantity="many">حذف</item>
         <item quantity="other">حذف</item>
     </plurals>
-    <string name="ConversationListFragment_select_all">اختيار الجميع</string>
+    <string name="ConversationListFragment_select_all">تحديد الكل</string>
     <plurals name="ConversationListFragment_s_selected">
         <item quantity="zero">تم تحديد %1$d</item>
         <item quantity="one">تم تحديد %1$d</item>
@@ -622,6 +631,15 @@
 
     <!-- ConversationTypingView -->
     <string name="ConversationTypingView__plus_d">+%1$d</string>
+
+    <!-- Title for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__relink_your_devices">أعد ربط أجهزتك</string>
+    <!-- Description for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__the_devices_you_added_were_unlinked">تم إلغاء ربط الأجهزة التي أضفتها عند إلغاء تسجيل جهازك. انتقل إلى الإعدادات لتعيد ربط أي أجهزة.</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to navigate to the Devices page in the settings. -->
+    <string name="RelinkDevicesReminderFragment__open_settings">فتح الإعدادات</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to dismiss the pop up. -->
+    <string name="RelinkDevicesReminderFragment__later">لاحقًا</string>
 
     <!-- CreateGroupActivity -->
     <string name="CreateGroupActivity__select_members">حدِّد الأعضاء</string>
@@ -1359,8 +1377,8 @@
     <string name="Megaphones_new_group">مجموعة جديدة</string>
     <string name="Megaphones_invite_friends">دعوة الأصدقاء</string>
     <string name="Megaphones_use_sms">استخدام رسالة قصيرة</string>
-    <string name="Megaphones_appearance">المظهر</string>
-    <string name="Megaphones_add_photo">إضافة صورة</string>
+    <string name="Megaphones_chat_colors">لون الدردشة</string>
+    <string name="Megaphones_add_a_profile_photo">إضافة صورة للحساب الشخصي</string>
 
     <!-- Title of a bottom sheet to render messages that all quote a specific message -->
     <string name="MessageQuotesBottomSheet_replies">الإجابات</string>
@@ -2002,19 +2020,17 @@
         <item quantity="other">الأعضاء %1$s و %2$s و%3$d آخرون موجودون في هذه مكالمة جماعية</item>
     </plurals>
 
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__flip">ٱقلب</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__speaker">مكبر الصوت</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__camera">الكاميرا</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__unmute">إلغاء كتم الدردشات</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__mute">كتم</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__ring">رنين الاتصال</string>
-    <!-- Label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
+    <!-- Toggle content description for toggling camera direction  -->
+    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <!-- Toggle content description for toggling audio output  -->
+    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <!-- Toggle content description for toggling camera state  -->
+    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <!-- Toggle content description for toggling mute state  -->
+    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <!-- Toggle content description for toggling group ring state  -->
+    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">إنهاء المُكالمة</string>
 
     <!-- CallParticipantsListDialog -->
@@ -2404,6 +2420,10 @@
     <string name="MessageNotifier_most_recent_from_s">الأحدث من: %1$s</string>
     <string name="MessageNotifier_locked_message">رسالة مقفلة</string>
     <string name="MessageNotifier_message_delivery_failed">فشل توصيل الرسالة.</string>
+    <!-- Shown in a notification when a story the user tries to send fails to be sent -->
+    <string name="MessageNotifier_story_delivery_failed">تعذّر إرسال القصة</string>
+    <!-- Shown as notification title for when a notification about a story sent to a group story %1$s replaced with the group name -->
+    <string name="MessageNotifier_group_story_title">أنت إلى %1$s</string>
     <string name="MessageNotifier_failed_to_deliver_message">فشل توصيل الرسالة.</string>
     <string name="MessageNotifier_error_delivering_message">خطأ بالارسال</string>
     <string name="MessageNotifier_message_delivery_paused">إن توصيل الرسالة متوقف مؤقتا.</string>
@@ -2419,13 +2439,15 @@
     <string name="MessageNotifier_contact_message">%1$s%2$s</string>
     <string name="MessageNotifier_unknown_contact_message">جهة اتصال</string>
     <string name="MessageNotifier_reacted_s_to_s">تفاعل %1$s مع: \"%2$s\".</string>
-    <string name="MessageNotifier_reacted_s_to_your_video">تفاعل %1$s مع الفيديو الخاص بك.</string>
-    <string name="MessageNotifier_reacted_s_to_your_image">تفاعل %1$s مع الصورة الخاصة بك.</string>
-    <string name="MessageNotifier_reacted_s_to_your_gif">تفاعل %1$s على صورة GIF الخاصة بك.</string>
-    <string name="MessageNotifier_reacted_s_to_your_file">تفاعل %1$s مع الملف الخاص بك.</string>
-    <string name="MessageNotifier_reacted_s_to_your_audio">تفاعل %1$s مع التسجيل الصوتي الخاص بك.</string>
-    <string name="MessageNotifier_reacted_s_to_your_view_once_media">تفاعل %1$s مع وسائطك التي تُعرَض مرة واحدة</string>
-    <string name="MessageNotifier_reacted_s_to_your_sticker">تم تفاعل %1$s مع الملصق الخاص بك.</string>
+    <string name="MessageNotifier_reacted_s_to_your_video">تفاعل %1$s مع فيديوهاتك.</string>
+    <string name="MessageNotifier_reacted_s_to_your_image">تفاعل %1$s مع صورتك.</string>
+    <string name="MessageNotifier_reacted_s_to_your_gif">تفاعل %1$s مع صورتك الـ GIF.</string>
+    <string name="MessageNotifier_reacted_s_to_your_file">تفاعل %1$s مع ملفك الخاص.</string>
+    <string name="MessageNotifier_reacted_s_to_your_audio">تفاعل %1$s مع تسجيلك الصوتي.</string>
+    <string name="MessageNotifier_reacted_s_to_your_view_once_media">تفاعل %1$s مع وسائطك التي تُعرَض مرة واحدة.</string>
+    <!-- Body of notification shown to user when someone they sent a payment to reacts to it. Placeholder is the emoji used in the reaction. -->
+    <string name="MessageNotifier_reacted_s_to_your_payment">تفاعل %1$s مع عملية الدفع الخاصة بك.</string>
+    <string name="MessageNotifier_reacted_s_to_your_sticker">تم تفاعل %1$s مع ملصقك الخاص.</string>
     <string name="MessageNotifier_this_message_was_deleted">تم حذف هذه الرسالة.</string>
 
     <string name="TurnOffContactJoinedNotificationsActivity__turn_off_contact_joined_signal">تعطيل إشعارات انضمام شخص إلى Signal ؟ تمكنك تفعيلها مجددا في Signal &gt; الإعدادات &gt; الإشعارات.</string>
@@ -2545,6 +2567,12 @@
     <!-- contact_selection_activity -->
     <string name="contact_selection_activity__invite_to_signal">ادعُ إلى Signal</string>
     <string name="contact_selection_activity__new_group">مجموعة جديدة</string>
+    <!-- Row item title for refreshing contacts -->
+    <string name="contact_selection_activity__refresh_contacts">Refresh contacts</string>
+    <!-- Row item description for refreshing contacts -->
+    <string name="contact_selection_activity__missing_someone">Missing someone? Try refreshing</string>
+    <!-- Row header title for more section -->
+    <string name="contact_selection_activity__more">المزيد</string>
 
     <!-- contact_filter_toolbar -->
     <string name="contact_filter_toolbar__clear_entered_text_description">امسح النص الذي ادخلته</string>
@@ -2862,8 +2890,8 @@
 
     <!-- BadDecryptLearnMoreDialog -->
     <string name="BadDecryptLearnMoreDialog_delivery_issue">مشكل في التوصيل</string>
-    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">تعذر توصيل رسالة – نصية، ملصقة، رد فعل، وصل القراءة، أو وسيط – من %1$s. يُحتمَل أنها أُرسلَت إليك مباشرة أو أنها قد أُرسلَت في مجموعة.</string>
-    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">لم يتمكن %1$s من توصيل رسالة أو ملصقا أو رد فعل أو وصل القراءة إليك.</string>
+    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">لم يتمكن %1$s من توصيل رسالة نصية أو ملصقة أو رد فعل أو وصل القراءة إليك. يُحتمَل أنها أُرسلَت إليك مباشرة أو أنها قد أُرسلَت في مجموعة.</string>
+    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">لم يتمكن %1$s من توصيل رسالة أو ملصق أو رد فعل أو وصل القراءة إليك.</string>
 
     <!-- profile_create_activity -->
     <string name="CreateProfileActivity_first_name_required">الاسم الأول (مطلوب)</string>
@@ -3434,6 +3462,8 @@
     <!-- **************************************** -->
 
     <!-- contact_selection_list -->
+    <!-- Displayed in a row on the new call screen when searching by phone number. -->
+    <string name="contact_selection_list__new_call">New call to…</string>
     <string name="contact_selection_list__unknown_contact">رسالة جديدة إلى…</string>
     <string name="contact_selection_list__unknown_contact_block">حظر المستخدم</string>
     <string name="contact_selection_list__unknown_contact_add_to_group">أضف إلى محموعة</string>
@@ -3826,6 +3856,18 @@
     <string name="BackupUtil_unknown">مجهول</string>
     <string name="preferences_app_protection__see_my_phone_number">رؤية رقم هاتفي</string>
     <string name="preferences_app_protection__find_me_by_phone_number">اعثروا عليّ برقم الهاتف</string>
+    <!-- Phone number heading displayed as a screen title -->
+    <string name="preferences_app_protection__phone_number">رقم الهاتف</string>
+    <!-- Subtext below option to launch into phone number privacy settings screen -->
+    <string name="preferences_app_protection__choose_who_can_see">اختر من يُمكنه رؤية رقم هاتفك ومن يمكنه الاتصال بك على Signal باستخدامه.</string>
+    <!-- Section title above two radio buttons for enabling and disabling phone number display -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_see_my_number">من يُمكنه رؤية رقمي</string>
+    <!-- Subtext below radio buttons when who can see my number is set to nobody -->
+    <string name="PhoneNumberPrivacySettingsFragment__nobody_will_see">لن يرى أي أحد رقم هاتفك في Signal.</string>
+    <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_find_me_by_number">مَن يُمكنه العثور عليَّ باستخدام رقمي</string>
+    <!-- Subtext below radio buttons when who can see my number is set to everyone -->
+    <string name="PhoneNumberPrivacySettingsFragment__your_phone_number">سَيكون رقم هاتفك مرئيًا للأشخاص والمجموعات التي تراسلها. كما أن الأشخاص الذين لديهم رقمك في جهات اتصال هواتفهم سيرونه أيضًا على Signal.</string>
     <string name="PhoneNumberPrivacy_everyone">الكل</string>
     <string name="PhoneNumberPrivacy_my_contacts">جهات اتصالي</string>
     <string name="PhoneNumberPrivacy_nobody">لا أحد</string>
@@ -4216,12 +4258,12 @@
     <!-- DeactivateWalletFragment -->
     <string name="DeactivateWalletFragment__deactivate_wallet">تعطيل المحفظة</string>
     <string name="DeactivateWalletFragment__your_balance">رصيدك</string>
-    <string name="DeactivateWalletFragment__its_recommended_that_you">يٌوصَى بإرسال مبالغك إلى عنوان محفظة أخرى قبل تعطيل الدفوعات. إذا اخترت عدم إرسال مبالغك الآن، سوف تبقى في محفظتك مرتبطة بـ Signal إذا أعدت تفعيل الدفوعات.</string>
+    <string name="DeactivateWalletFragment__its_recommended_that_you">يُوصَى بإرسال رصيدك المالي إلى عنوان محفظة أخرى قبل تعطيل عمليات الدفع. إذا اخترت عدم إرسال رصيدك المالي الآن، ستبقى في محفظتك مرتبطة بـ Signal إذا أعدت تفعيل الدفوعات.</string>
     <string name="DeactivateWalletFragment__transfer_remaining_balance">إرسال الرصيد المتبقي</string>
     <string name="DeactivateWalletFragment__deactivate_without_transferring">تعطيل بدون أي إرسال</string>
     <string name="DeactivateWalletFragment__deactivate">تعطيل</string>
     <string name="DeactivateWalletFragment__deactivate_without_transferring_question">تعطيل بدون أي إرسال ؟</string>
-    <string name="DeactivateWalletFragment__your_balance_will_remain">سوف يبقى رصيدك في محفظتك المرتبطة بـ Signal إذا اخترت إعادة تفعيل الدفوعات.</string>
+    <string name="DeactivateWalletFragment__your_balance_will_remain">سيبقى رصيدك في محفظتك المرتبطة بـ Signal إذا اخترت إعادة تفعيل عمليات الدفع.</string>
     <string name="DeactivateWalletFragment__error_deactivating_wallet">حدث خطأ خلال تعطيل المحفظة.</string>
   <!-- Removed by excludeNonTranslatables <string name="DeactivateWalletFragment__learn_more__we_recommend_transferring_your_funds" translatable="false">https://support.signal.org/hc/articles/360057625692#payments_deactivate</string> -->
 
@@ -4968,7 +5010,7 @@
     <string name="DonationsErrors__your_donation_could_not_be_sent">تعذّر إرسال هديتك بسبب خطأ في الشبكة. تحقّق من اتصالك بالشبكة ثم حاول مجددًا.</string>
 
     <!-- Gift message view title -->
-    <string name="GiftMessageView__donation_to_s">تقديم تبرّع لـ %1$s</string>
+    <string name="GiftMessageView__donation_on_behalf_of_s">تبرّع نيابة عن %1$s</string>
     <!-- Gift message view title for incoming donations -->
     <string name="GiftMessageView__s_donated_to_signal_on">تبرّع %1$s لـ Signal نيابة عنك</string>
     <!-- Gift badge redeem action label -->
@@ -5207,6 +5249,8 @@
 
     <!-- Label for Chats tab in home app screen -->
     <string name="ConversationListTabs__chats">المُحادثات</string>
+    <!-- Label for Calls tab in home app screen -->
+    <string name="ConversationListTabs__calls">المكالمات</string>
     <!-- Label for Stories tab in home app screen -->
     <string name="ConversationListTabs__stories">القِصَص</string>
     <!-- String for counts above 99 in conversation list tabs -->
@@ -5547,9 +5591,9 @@
     <!-- Conversation Item label for when you react to someone else\'s story -->
     <string name="ConversationItem__you_reacted_to_s_story">لقد تفاعلت مع قصة %1$s</string>
     <!-- Conversation Item label for reactions to your story -->
-    <string name="ConversationItem__reacted_to_your_story">تفاعل مع قصتك</string>
+    <string name="ConversationItem__reacted_to_your_story">تفاعَلَ مع قصتك</string>
     <!-- Conversation Item label for reactions to an unavailable story -->
-    <string name="ConversationItem__reacted_to_a_story">تفاعل مع قصة</string>
+    <string name="ConversationItem__reacted_to_a_story">تفاعَلَ مع قصة</string>
 
     <!-- endregion -->
     <!-- Content description for expand contacts chevron -->
@@ -6158,6 +6202,90 @@
     <string name="TimeDurationPickerDialog_positive_button">تعيين</string>
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, helper text indicating minimum allowable duration -->
     <string name="TimeDurationPickerDialog_minimum_duration_warning">الحد الأدنى من الوقت قبل تطبيق قفل الشاشة هو 1 دقيقة.</string>
+
+    <!-- Call Log -->
+    <!-- Displayed below the user\'s name in row items on the call log. First placeholder is the call status, second is when it occurred -->
+    <string name="CallLogAdapter__s_dot_s">%1$s . %2$s</string>
+    <!-- Displayed for incoming calls -->
+    <string name="CallLogAdapter__incoming">وارد</string>
+    <!-- Displayed for outgoing calls -->
+    <string name="CallLogAdapter__outgoing">صادر</string>
+    <!-- Displayed for missed calls -->
+    <string name="CallLogAdapter__missed">Missed</string>
+
+    <!-- Call Log context menu -->
+    <!-- Displayed as a context menu item to start a video call -->
+    <string name="CallContextMenu__video_call">مكالمة بالصورة</string>
+    <!-- Displayed as a context menu item to join an ongoing group call -->
+    <string name="CallContextMenu__join_call">الانضمام للمكالمة</string>
+    <!-- Displayed as a context menu item to return to active call -->
+    <string name="CallContextMenu__return_to_call">العودة للمكالمة</string>
+    <!-- Displayed as a context menu item to start an audio call -->
+    <string name="CallContextMenu__audio_call">مكالمة صوتية</string>
+    <!-- Displayed as a context menu item to go to chat -->
+    <string name="CallContextMenu__go_to_chat">الذهاب للمحادثة</string>
+    <!-- Displayed as a context menu item to see call info -->
+    <string name="CallContextMenu__info">معلومات</string>
+    <!-- Displayed as a context menu item to select multiple calls -->
+    <string name="CallContextMenu__select">تحديد</string>
+    <!-- Displayed as a context menu item to delete this call -->
+    <string name="CallContextMenu__delete">حذف</string>
+
+    <!-- Call Log Fragment -->
+    <!-- Action bar menu item to only display missed calls -->
+    <string name="CallLogFragment__filter_missed_calls">Filter missed calls</string>
+    <!-- Action bar menu item to clear missed call filter -->
+    <string name="CallLogFragment__clear_filter">مَحوُ تصفية الدردشة</string>
+    <!-- Action bar menu item to open settings -->
+    <string name="CallLogFragment__settings">الإعدادات</string>
+    <!-- Action bar menu item to open notification profile settings -->
+    <string name="CallLogFragment__notification_profile">الملف الشخصي للإشعارات</string>
+    <!-- Call log new call content description -->
+    <string name="CallLogFragment__start_a_new_call">Start a new call</string>
+    <!-- Filter pull text when pulled -->
+    <string name="CallLogFragment__filtered_by_missed">Filtered by missed</string>
+    <!-- Bottom bar option to select all call entries -->
+    <string name="CallLogFragment__select_all">تحديد الكل</string>
+    <!-- Bottom bar option to delete all selected call entries -->
+    <string name="CallLogFragment__delete">حذف</string>
+    <!-- Title on multi-delete protection dialog (TODO - final terminology) -->
+  <!-- Removed by excludeNonTranslatables <plurals name="CallLogFragment__delete_d_calls" translatable="false">
+        <item quantity="one">Delete %1$d call?</item>
+        <item quantity="other">Delete %1$d calls?</item>
+    </plurals> -->
+    <!-- Positive action on multi-delete protection dialog -->
+    <string name="CallLogFragment__delete_for_me">احذف بالنسبة لي</string>
+    <!-- Snackbar label after deleting call logs -->
+    <plurals name="CallLogFragment__d_calls_deleted">
+        <item quantity="zero">%1$d calls deleted</item>
+        <item quantity="one">%1$d call deleted</item>
+        <item quantity="two">%1$d calls deleted</item>
+        <item quantity="few">%1$d calls deleted</item>
+        <item quantity="many">%1$d calls deleted</item>
+        <item quantity="other">%1$d calls deleted</item>
+    </plurals>
+    <!-- Undo action for deletion snackbar -->
+    <string name="CallLogFragment__undo">تراجع</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__no_calls">No calls.</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__get_started_by_calling_a_friend">Get started by calling a friend.</string>
+
+    <!-- New call activity -->
+    <!-- Activity title in title bar -->
+    <string name="NewCallActivity__new_call">New call</string>
+
+    <!-- Call state update popups -->
+    <!-- Displayed when the user enables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_on">Ringing on</string>
+    <!-- Displayed when the user disables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_off">Ringing off</string>
+    <!-- Displayed when the user cannot enable group call ringing -->
+    <string name="CallStateUpdatePopupWindow__group_is_too_large">Group is too large to ring the participants</string>
+    <!-- Displayed when the user turns on their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_on">Mic on</string>
+    <!-- Displayed when the user turns off their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_off">Mic off</string>
 
     <!-- EOF -->
 </resources>

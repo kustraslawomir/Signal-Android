@@ -384,6 +384,15 @@
     <!-- Snackbar message shown after dismissing the full screen sms export megaphone indicating we\'ll do it again soon -->
     <string name="ConversationActivity__you_will_be_reminded_again_soon">Sizə tezliklə yenidən xatırlatma bildirişi göndəriləcək.</string>
 
+    <!-- Title for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_title">Sending formatted text</string>
+    <!-- Message for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_message">Some people may be using a version of Signal that doesn\'t support formatted text. They will not be able to see the formatting changes you\'ve made to your message.</string>
+    <!-- Button text for confirming they\'d like to send the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_send_anyway_button">Yenə də göndər</string>
+    <!-- Button text for canceling sending the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_cancel_send_button">İmtina</string>
+
     <!-- ConversationAdapter -->
     <plurals name="ConversationAdapter_n_unread_messages">
         <item quantity="one">%1$d oxunmamış mesaj</item>
@@ -481,12 +490,12 @@
         <item quantity="other">%1$d söhbət gələnlər qutusuna köçürüldü</item>
     </plurals>
     <plurals name="ConversationListFragment_read_plural">
-        <item quantity="one">Oxundu</item>
-        <item quantity="other">Oxundu</item>
+        <item quantity="one">Oxunmuş</item>
+        <item quantity="other">Oxunmuş</item>
     </plurals>
     <plurals name="ConversationListFragment_unread_plural">
-        <item quantity="one">Oxunmadı</item>
-        <item quantity="other">Oxunmadı</item>
+        <item quantity="one">Oxunmamış</item>
+        <item quantity="other">Oxunmamış</item>
     </plurals>
     <plurals name="ConversationListFragment_pin_plural">
         <item quantity="one">Sancaqla</item>
@@ -497,17 +506,17 @@
         <item quantity="other">Sancağı götür</item>
     </plurals>
     <plurals name="ConversationListFragment_mute_plural">
-        <item quantity="one">Səsi bağla</item>
-        <item quantity="other">Səsi bağla</item>
+        <item quantity="one">Səssiz et</item>
+        <item quantity="other">Səssiz et</item>
     </plurals>
     <plurals name="ConversationListFragment_unmute_plural">
         <item quantity="one">Səsi aç</item>
         <item quantity="other">Səsi aç</item>
     </plurals>
-    <string name="ConversationListFragment_select">Seçin</string>
+    <string name="ConversationListFragment_select">Seç</string>
     <plurals name="ConversationListFragment_archive_plural">
-        <item quantity="one">Arxivlə</item>
-        <item quantity="other">Arxivlə</item>
+        <item quantity="one">Arxivləşdir</item>
+        <item quantity="other">Arxivləşdir</item>
     </plurals>
     <plurals name="ConversationListFragment_unarchive_plural">
         <item quantity="one">Arxivdən çıxart</item>
@@ -542,6 +551,15 @@
 
     <!-- ConversationTypingView -->
     <string name="ConversationTypingView__plus_d">+%1$d</string>
+
+    <!-- Title for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__relink_your_devices">Cihazlarınızı yenidən əlaqələndirin</string>
+    <!-- Description for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__the_devices_you_added_were_unlinked">Cihazınız qeydiyyatdan çıxarıldıqda əlavə etdiyiniz cihazlarla əlaqə kəsildi. İstənilən cihazı yenidən əlaqələndirmək üçün Parametrlərə keçin.</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to navigate to the Devices page in the settings. -->
+    <string name="RelinkDevicesReminderFragment__open_settings">Parametrləri aç</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to dismiss the pop up. -->
+    <string name="RelinkDevicesReminderFragment__later">Daha sonra</string>
 
     <!-- CreateGroupActivity -->
     <string name="CreateGroupActivity__select_members">Üzvləri seçin</string>
@@ -1167,8 +1185,8 @@
     <string name="Megaphones_new_group">Yeni qrup</string>
     <string name="Megaphones_invite_friends">Dostları dəvət et</string>
     <string name="Megaphones_use_sms">SMS istifadə et</string>
-    <string name="Megaphones_appearance">Görünüş</string>
-    <string name="Megaphones_add_photo">Foto əlavə et</string>
+    <string name="Megaphones_chat_colors">Çat rəngləri</string>
+    <string name="Megaphones_add_a_profile_photo">Bir profil fotosu əlavə et</string>
 
     <!-- Title of a bottom sheet to render messages that all quote a specific message -->
     <string name="MessageQuotesBottomSheet_replies">Cavablar</string>
@@ -1726,19 +1744,17 @@
         <item quantity="other">%1$s, %2$s və digər %3$d nəfər bu zəngdədir</item>
     </plurals>
 
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__flip">Çevir</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__speaker">Dinamik</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__camera">Kamera</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__unmute">Səsi aç</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__mute">Səsi bağla</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__ring">Zəng</string>
-    <!-- Label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
+    <!-- Toggle content description for toggling camera direction  -->
+    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <!-- Toggle content description for toggling audio output  -->
+    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <!-- Toggle content description for toggling camera state  -->
+    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <!-- Toggle content description for toggling mute state  -->
+    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <!-- Toggle content description for toggling group ring state  -->
+    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">Zəngi bitir</string>
 
     <!-- CallParticipantsListDialog -->
@@ -2116,6 +2132,10 @@
     <string name="MessageNotifier_most_recent_from_s">Ən son mesaj: %1$s</string>
     <string name="MessageNotifier_locked_message">Kilidli mesaj</string>
     <string name="MessageNotifier_message_delivery_failed">Mesajın çatdırılması uğursuz oldu.</string>
+    <!-- Shown in a notification when a story the user tries to send fails to be sent -->
+    <string name="MessageNotifier_story_delivery_failed">Hekayəni göndərmək mümkün olmadı</string>
+    <!-- Shown as notification title for when a notification about a story sent to a group story %1$s replaced with the group name -->
+    <string name="MessageNotifier_group_story_title">Göndərdiniz: %1$s</string>
     <string name="MessageNotifier_failed_to_deliver_message">Mesaj çatdırılmadı.</string>
     <string name="MessageNotifier_error_delivering_message">Mesajın çatdırılması xətası.</string>
     <string name="MessageNotifier_message_delivery_paused">Mesajın çatdırılmasına fasilə verildi.</string>
@@ -2130,14 +2150,16 @@
     <string name="MessageNotifier_unsecured_sms">Güvənli olmayan SMS</string>
     <string name="MessageNotifier_contact_message">%1$s %2$s</string>
     <string name="MessageNotifier_unknown_contact_message">Əlaqə</string>
-    <string name="MessageNotifier_reacted_s_to_s">\"%2$s\" mesajına reaksiya verdi: %1$s</string>
-    <string name="MessageNotifier_reacted_s_to_your_video">Videonuza reaksiya verdi: %1$s</string>
-    <string name="MessageNotifier_reacted_s_to_your_image">Şəklinizə reaksiya verdi: %1$s</string>
-    <string name="MessageNotifier_reacted_s_to_your_gif">GIF-inizə reaksiya verdi: %1$s</string>
-    <string name="MessageNotifier_reacted_s_to_your_file">Faylınıza reaksiya verdi: %1$s</string>
-    <string name="MessageNotifier_reacted_s_to_your_audio">Səsinizə reaksiya verdi: %1$s</string>
-    <string name="MessageNotifier_reacted_s_to_your_view_once_media">Bir dəfə baxıla bilən medianıza reaksiya verdi: %1$s</string>
-    <string name="MessageNotifier_reacted_s_to_your_sticker">Stikerinizə reaksiya verdi: %1$s</string>
+    <string name="MessageNotifier_reacted_s_to_s">\"%2$s\" mesajına reaksiya verdi: %1$s.</string>
+    <string name="MessageNotifier_reacted_s_to_your_video">Videonuza reaksiya verdi: %1$s.</string>
+    <string name="MessageNotifier_reacted_s_to_your_image">Şəklinizə reaksiya verdi: %1$s.</string>
+    <string name="MessageNotifier_reacted_s_to_your_gif">GIF-inizə reaksiya verdi: %1$s.</string>
+    <string name="MessageNotifier_reacted_s_to_your_file">Faylınıza reaksiya verdi: %1$s.</string>
+    <string name="MessageNotifier_reacted_s_to_your_audio">Səsinizə reaksiya verdi: %1$s.</string>
+    <string name="MessageNotifier_reacted_s_to_your_view_once_media">Bir dəfə baxıla bilən media faylınıza reaksiya verdi: %1$s.</string>
+    <!-- Body of notification shown to user when someone they sent a payment to reacts to it. Placeholder is the emoji used in the reaction. -->
+    <string name="MessageNotifier_reacted_s_to_your_payment">Ödənişinizə %1$s reaksiyası verdi.</string>
+    <string name="MessageNotifier_reacted_s_to_your_sticker">Stikerinizə reaksiya verdi: %1$s.</string>
     <string name="MessageNotifier_this_message_was_deleted">Mesaj silindi.</string>
 
     <string name="TurnOffContactJoinedNotificationsActivity__turn_off_contact_joined_signal">Əlaqə Signal-a qoşuldu bildirişləri söndürülsün? Bunu Signal &gt; Tənzimləmələr &gt; Bildirişlər üzərindən təkrar fəallaşdıra bilərsiniz.</string>
@@ -2253,6 +2275,12 @@
     <!-- contact_selection_activity -->
     <string name="contact_selection_activity__invite_to_signal">Signal-a dəvət edin</string>
     <string name="contact_selection_activity__new_group">Yeni qrup</string>
+    <!-- Row item title for refreshing contacts -->
+    <string name="contact_selection_activity__refresh_contacts">Refresh contacts</string>
+    <!-- Row item description for refreshing contacts -->
+    <string name="contact_selection_activity__missing_someone">Missing someone? Try refreshing</string>
+    <!-- Row header title for more section -->
+    <string name="contact_selection_activity__more">Daha çox</string>
 
     <!-- contact_filter_toolbar -->
     <string name="contact_filter_toolbar__clear_entered_text_description">Daxil edilən mətni təmizlə</string>
@@ -2530,8 +2558,8 @@
 
     <!-- BadDecryptLearnMoreDialog -->
     <string name="BadDecryptLearnMoreDialog_delivery_issue">Çatdırılma problemi</string>
-    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">%1$s tərəfindən göndərilən bir mesaj, stiker, reaksiya və ya oxundu bildirişi sizə çatdırıla bilmədi. Sizə birbaşa və ya qrup daxilindən göndərməyə çalışmış ola bilər.</string>
-    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">%1$s tərəfindən göndərilən bir mesaj, stiker, reaksiya və ya oxundu bildirişi sizə çatdırıla bilmədi.</string>
+    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">%1$s tərəfindən göndərilən bir mesaj, stiker, reaksiya və ya oxunma bildirişi sizə çatdırılmadı. O, bunu sizə birbaşa və ya qrup daxilində göndərməyə çalışmış ola bilər.</string>
+    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">%1$s tərəfindən göndərilən mesaj, stiker, reaksiya və ya oxunma bildirişi sizə çatdırılmadı.</string>
 
     <!-- profile_create_activity -->
     <string name="CreateProfileActivity_first_name_required">Ad (tələb olunur)</string>
@@ -3098,6 +3126,8 @@
     <!-- **************************************** -->
 
     <!-- contact_selection_list -->
+    <!-- Displayed in a row on the new call screen when searching by phone number. -->
+    <string name="contact_selection_list__new_call">New call to…</string>
     <string name="contact_selection_list__unknown_contact">Yeni mesaj</string>
     <string name="contact_selection_list__unknown_contact_block">İstifadəçini blokla</string>
     <string name="contact_selection_list__unknown_contact_add_to_group">Qrupa əlavə et</string>
@@ -3454,6 +3484,18 @@
     <string name="BackupUtil_unknown">Bilinmir</string>
     <string name="preferences_app_protection__see_my_phone_number">Telefon nömrəmə baxa bilər</string>
     <string name="preferences_app_protection__find_me_by_phone_number">Məni telefon nömrəmlə tapa bilər</string>
+    <!-- Phone number heading displayed as a screen title -->
+    <string name="preferences_app_protection__phone_number">Telefon nömrəsi</string>
+    <!-- Subtext below option to launch into phone number privacy settings screen -->
+    <string name="preferences_app_protection__choose_who_can_see">Telefon nömrənizi görə biləcək və nömrəniz vasitəsilə Signal-da sizinlə əlaqə saxlaya biləcək şəxsləri seçin.</string>
+    <!-- Section title above two radio buttons for enabling and disabling phone number display -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_see_my_number">Nömrəmi kim görə bilər?</string>
+    <!-- Subtext below radio buttons when who can see my number is set to nobody -->
+    <string name="PhoneNumberPrivacySettingsFragment__nobody_will_see">Telefon nömrənizi Signal-da heç kim görməyəcək</string>
+    <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_find_me_by_number">Məni nömrəmlə kim tapa bilər?</string>
+    <!-- Subtext below radio buttons when who can see my number is set to everyone -->
+    <string name="PhoneNumberPrivacySettingsFragment__your_phone_number">Telefon nömrənizi mesaj göndərdiyiniz şəxslər və qruplar görə bilər. Kontaktlar siyahısında telefon nömrəniz olan şəxslər də Signal-da bunu görə biləcək.</string>
     <string name="PhoneNumberPrivacy_everyone">Hər kəs</string>
     <string name="PhoneNumberPrivacy_my_contacts">Əlaqələrim</string>
     <string name="PhoneNumberPrivacy_nobody">Heç kim</string>
@@ -3832,12 +3874,12 @@
     <!-- DeactivateWalletFragment -->
     <string name="DeactivateWalletFragment__deactivate_wallet">Pulqabını deaktiv et</string>
     <string name="DeactivateWalletFragment__your_balance">Balansınız</string>
-    <string name="DeactivateWalletFragment__its_recommended_that_you">Ödənişləri deaktiv etməzdən əvvəl pulunuzu başqa bir pulqabı ünvanına köçürmək məsləhət görülür. Pulunuzu indi köçürməməyi seçsəniz, ödənişləri yenidən aktivləşdirdiyiniz təqdirdə, pulunuz Signal-a bağlı pulqabınızda qalacaq.</string>
+    <string name="DeactivateWalletFragment__its_recommended_that_you">Ödənişləri qeyri-aktiv etməzdən əvvəl pulunuzu başqa bir pulqabı ünvanına köçürməniz məsləhət görülür. Pulunuzu indi köçürməməyi seçsəniz, ödənişləri yenidən aktivləşdirdiyiniz təqdirdə, pulunuz Signal-la əlaqələndirilmiş pulqabınızda qalacaq.</string>
     <string name="DeactivateWalletFragment__transfer_remaining_balance">Qalan balansı köçür</string>
     <string name="DeactivateWalletFragment__deactivate_without_transferring">Köçürmə olmadan deaktiv et</string>
     <string name="DeactivateWalletFragment__deactivate">Deaktiv et</string>
     <string name="DeactivateWalletFragment__deactivate_without_transferring_question">Köçürmə olmadan deaktiv edilsin?</string>
-    <string name="DeactivateWalletFragment__your_balance_will_remain">Ödənişləri yenidən aktivləşdirməyi seçsəniz, balansınız Signal-a bağlı pulqabınızda qalacaq.</string>
+    <string name="DeactivateWalletFragment__your_balance_will_remain">Ödənişləri yenidən aktivləşdirməyi seçsəniz, balansınız Signal-a əlaqələndirilmiş pulqabınızda qalacaq.</string>
     <string name="DeactivateWalletFragment__error_deactivating_wallet">Pulqabını deaktiv edərkən xəta baş verdi.</string>
   <!-- Removed by excludeNonTranslatables <string name="DeactivateWalletFragment__learn_more__we_recommend_transferring_your_funds" translatable="false">https://support.signal.org/hc/articles/360057625692#payments_deactivate</string> -->
 
@@ -4154,7 +4196,7 @@
     <string name="Donate2022Q2Megaphone_not_now">İndi yox</string>
 
     <!-- EditReactionsFragment -->
-    <string name="EditReactionsFragment__customize_reactions">Reaksiyaları özəlləşdirin</string>
+    <string name="EditReactionsFragment__customize_reactions">Reaksiyaları fərdiləşdirin</string>
     <string name="EditReactionsFragment__tap_to_replace_an_emoji">Bir ifadəni əvəz etmək üçün toxunun</string>
     <string name="EditReactionsFragment__reset">Sıfırla</string>
     <string name="EditReactionsFragment_save">Saxla</string>
@@ -4501,7 +4543,7 @@
     <string name="ExpiredBadgeBottomSheetDialogFragment__monthly_donation_cancelled">Aylıq ianə ləğv edildi</string>
     <!-- Displayed in the bottom sheet when a boost badge expires -->
     <string name="ExpiredBadgeBottomSheetDialogFragment__your_boost_badge_has_expired_and">Stimul nişanınızın müddəti bitdi və artıq profilinizdə görünmür.</string>
-    <string name="ExpiredBadgeBottomSheetDialogFragment__you_can_reactivate">Stimul nişanını növbəti 30 gün üçün birdəfəlik ianə edərək yenidən aktivləşdirə bilərsiniz.</string>
+    <string name="ExpiredBadgeBottomSheetDialogFragment__you_can_reactivate">Boost nişanını növbəti 30 gün üçün birdəfəlik ianə ilə yenidən aktivləşdirə bilərsiniz.</string>
     <!-- Displayed when we do not think the user is a subscriber when their boost expires -->
     <string name="ExpiredBadgeBottomSheetDialogFragment__you_can_keep">Signal-dan istifadəyə davam edə bilərsiniz, ancaq sizin üçün qurulmuş texnologiyanı dəstəkləmək məqsədilə aylıq ianə verərək davamlı dəstəkçi olmağı da nəzərə ala bilərsiniz.</string>
     <string name="ExpiredBadgeBottomSheetDialogFragment__become_a_sustainer">Bir dəstəkçi olun</string>
@@ -4513,7 +4555,7 @@
     <string name="ExpiredBadgeBottomSheetDialogFragment__your_recurring_monthly_donation_was_canceled">Ödənişinizi emal edə bilmədiyimizə görə təkrarlanan aylıq ianəniz ləğv edildi. Artıq nişanınız profilinizdə görünmür.</string>
     <!-- Copy displayed when badge expires after a payment failure and we have a displayable charge failure reason -->
     <string name="ExpiredBadgeBottomSheetDialogFragment__your_recurring_monthly_donation_was_canceled_s">Təkrarlanan aylıq ianəniz ləğv edildi. %1$s Sizin %2$s nişanınız artıq profilinizdə görünmür.</string>
-    <string name="ExpiredBadgeBottomSheetDialogFragment__you_can">Signal-dan istifadəyə davam edə bilərsiniz, ancaq tətbiqi dəstəkləmək və nişanınızı təkrar aktivləşdirmək üçün abunəliyi indi yeniləyin.</string>
+    <string name="ExpiredBadgeBottomSheetDialogFragment__you_can">Signal-dan istifadəyə davam edə bilərsiniz, ancaq tətbiqi dəstəkləmək və nişanınızı təkrar aktivləşdirmək üçün indi yeniləyin.</string>
     <string name="ExpiredBadgeBottomSheetDialogFragment__renew_subscription">Abunəliyi yenilə</string>
     <!-- Button label to send user to Google Pay website -->
     <string name="ExpiredBadgeBottomSheetDialogFragment__go_to_google_pay">Google Play-ə keç</string>
@@ -4556,7 +4598,7 @@
     <string name="DonationsErrors__your_donation_could_not_be_sent">Şəbəkə xətasına görə ianənizi göndərmək mümkün olmadı. Bağlantınızı yoxlayıb yenidən cəhd edin.</string>
 
     <!-- Gift message view title -->
-    <string name="GiftMessageView__donation_to_s">%1$s üçün ianə</string>
+    <string name="GiftMessageView__donation_on_behalf_of_s">%1$s adından ianə</string>
     <!-- Gift message view title for incoming donations -->
     <string name="GiftMessageView__s_donated_to_signal_on">%1$s sizin adınızdan Signal-a ianə verdi</string>
     <!-- Gift badge redeem action label -->
@@ -4795,6 +4837,8 @@
 
     <!-- Label for Chats tab in home app screen -->
     <string name="ConversationListTabs__chats">Söhbətlər</string>
+    <!-- Label for Calls tab in home app screen -->
+    <string name="ConversationListTabs__calls">Zənglər</string>
     <!-- Label for Stories tab in home app screen -->
     <string name="ConversationListTabs__stories">Hekayələr</string>
     <!-- String for counts above 99 in conversation list tabs -->
@@ -4953,9 +4997,9 @@
     <!-- My story privacy fine print about what the privacy settings are for -->
     <string name="MyStorySettingsFragment__choose_who_can_view_your_story">Hekayənizə kimin baxa bildiyini seçin. Dəyişikliklər artıq göndərdiyiniz hekayələrə tətbiq olunmayacaq.</string>
     <!-- Section header for options related to replies and reactions -->
-    <string name="MyStorySettingsFragment__replies_amp_reactions">Cavablar &amp; reaksiyalar</string>
+    <string name="MyStorySettingsFragment__replies_amp_reactions">Cavablar və reaksiyalar</string>
     <!-- Switchable option for allowing replies and reactions on your stories -->
-    <string name="MyStorySettingsFragment__allow_replies_amp_reactions">Cavablara &amp; reaksiyalara icazə ver</string>
+    <string name="MyStorySettingsFragment__allow_replies_amp_reactions">Cavablara və reaksiyalara icazə ver</string>
     <!-- Summary for switchable option allowing replies and reactions on your story -->
     <string name="MyStorySettingsFragment__let_people_who_can_view_your_story_react_and_reply">Hekayələrinizi görən şəxslərin reaksiya və cavab verməsinə icazə verin</string>
     <!-- Signal connections bolded text in the Signal Connections sheet -->
@@ -5105,11 +5149,11 @@
     <!-- Label for a button in a notification at the bottom of the chat list to turn off censorship circumvention -->
 
     <!-- Conversation Item label for when you react to someone else\'s story -->
-    <string name="ConversationItem__you_reacted_to_s_story">%1$s paylaşan hekayəyə reaksiya verdiniz</string>
+    <string name="ConversationItem__you_reacted_to_s_story">%1$s adlı istifadəçinin hekayəsinə reaksiya verdiniz</string>
     <!-- Conversation Item label for reactions to your story -->
     <string name="ConversationItem__reacted_to_your_story">Hekayənizə reaksiya verildi</string>
     <!-- Conversation Item label for reactions to an unavailable story -->
-    <string name="ConversationItem__reacted_to_a_story">Hekayəyə reaksiya verildi</string>
+    <string name="ConversationItem__reacted_to_a_story">Bir hekayəyə reaksiya verildi</string>
 
     <!-- endregion -->
     <!-- Content description for expand contacts chevron -->
@@ -5370,7 +5414,7 @@
     <!-- Title of the screen -->
     <string name="ExportingSmsMessagesFragment__exporting_sms_messages">SMS mesajları ixrac olunur</string>
     <!-- Message of the screen when exporting sms messages -->
-    <string name="ExportingSmsMessagesFragment__this_may_take_awhile">Bu bir qədər çəkə bilər</string>
+    <string name="ExportingSmsMessagesFragment__this_may_take_awhile">Bu, bir qədər çəkə bilər</string>
     <!-- Progress indicator for export -->
     <plurals name="ExportingSmsMessagesFragment__exporting_d_of_d">
         <item quantity="one">%1$d/%2$d ixrac olunur…</item>
@@ -5658,6 +5702,86 @@
     <string name="TimeDurationPickerDialog_positive_button">Təyin et</string>
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, helper text indicating minimum allowable duration -->
     <string name="TimeDurationPickerDialog_minimum_duration_warning">Ekran kilidi aktivləşmədən əvvəlki minimal vaxt 1 dəqiqədir.</string>
+
+    <!-- Call Log -->
+    <!-- Displayed below the user\'s name in row items on the call log. First placeholder is the call status, second is when it occurred -->
+    <string name="CallLogAdapter__s_dot_s">%1$s · %2$s</string>
+    <!-- Displayed for incoming calls -->
+    <string name="CallLogAdapter__incoming">Incoming</string>
+    <!-- Displayed for outgoing calls -->
+    <string name="CallLogAdapter__outgoing">Outgoing</string>
+    <!-- Displayed for missed calls -->
+    <string name="CallLogAdapter__missed">Missed</string>
+
+    <!-- Call Log context menu -->
+    <!-- Displayed as a context menu item to start a video call -->
+    <string name="CallContextMenu__video_call">Görüntülü zəng</string>
+    <!-- Displayed as a context menu item to join an ongoing group call -->
+    <string name="CallContextMenu__join_call">Zəngə qoşul</string>
+    <!-- Displayed as a context menu item to return to active call -->
+    <string name="CallContextMenu__return_to_call">Zəngə qayıt</string>
+    <!-- Displayed as a context menu item to start an audio call -->
+    <string name="CallContextMenu__audio_call">Səsli zəng</string>
+    <!-- Displayed as a context menu item to go to chat -->
+    <string name="CallContextMenu__go_to_chat">Söhbətə get</string>
+    <!-- Displayed as a context menu item to see call info -->
+    <string name="CallContextMenu__info">Məlumat</string>
+    <!-- Displayed as a context menu item to select multiple calls -->
+    <string name="CallContextMenu__select">Seç</string>
+    <!-- Displayed as a context menu item to delete this call -->
+    <string name="CallContextMenu__delete">Sil</string>
+
+    <!-- Call Log Fragment -->
+    <!-- Action bar menu item to only display missed calls -->
+    <string name="CallLogFragment__filter_missed_calls">Filter missed calls</string>
+    <!-- Action bar menu item to clear missed call filter -->
+    <string name="CallLogFragment__clear_filter">Filtri təmizlə</string>
+    <!-- Action bar menu item to open settings -->
+    <string name="CallLogFragment__settings">Tənzimləmələr</string>
+    <!-- Action bar menu item to open notification profile settings -->
+    <string name="CallLogFragment__notification_profile">Bildiriş profili</string>
+    <!-- Call log new call content description -->
+    <string name="CallLogFragment__start_a_new_call">Start a new call</string>
+    <!-- Filter pull text when pulled -->
+    <string name="CallLogFragment__filtered_by_missed">Filtered by missed</string>
+    <!-- Bottom bar option to select all call entries -->
+    <string name="CallLogFragment__select_all">Hamısını seç</string>
+    <!-- Bottom bar option to delete all selected call entries -->
+    <string name="CallLogFragment__delete">Sil</string>
+    <!-- Title on multi-delete protection dialog (TODO - final terminology) -->
+  <!-- Removed by excludeNonTranslatables <plurals name="CallLogFragment__delete_d_calls" translatable="false">
+        <item quantity="one">Delete %1$d call?</item>
+        <item quantity="other">Delete %1$d calls?</item>
+    </plurals> -->
+    <!-- Positive action on multi-delete protection dialog -->
+    <string name="CallLogFragment__delete_for_me">Mənim üçün sil</string>
+    <!-- Snackbar label after deleting call logs -->
+    <plurals name="CallLogFragment__d_calls_deleted">
+        <item quantity="one">%1$d call deleted</item>
+        <item quantity="other">%1$d calls deleted</item>
+    </plurals>
+    <!-- Undo action for deletion snackbar -->
+    <string name="CallLogFragment__undo">Geri al</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__no_calls">No calls.</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__get_started_by_calling_a_friend">Get started by calling a friend.</string>
+
+    <!-- New call activity -->
+    <!-- Activity title in title bar -->
+    <string name="NewCallActivity__new_call">New call</string>
+
+    <!-- Call state update popups -->
+    <!-- Displayed when the user enables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_on">Ringing on</string>
+    <!-- Displayed when the user disables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_off">Ringing off</string>
+    <!-- Displayed when the user cannot enable group call ringing -->
+    <string name="CallStateUpdatePopupWindow__group_is_too_large">Group is too large to ring the participants</string>
+    <!-- Displayed when the user turns on their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_on">Mic on</string>
+    <!-- Displayed when the user turns off their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_off">Mic off</string>
 
     <!-- EOF -->
 </resources>

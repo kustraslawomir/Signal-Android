@@ -18,7 +18,6 @@ package org.thoughtcrime.securesms.conversation;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
@@ -49,7 +48,6 @@ import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -74,7 +72,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -158,8 +155,6 @@ import org.thoughtcrime.securesms.contactshare.Contact;
 import org.thoughtcrime.securesms.contactshare.ContactShareEditActivity;
 import org.thoughtcrime.securesms.contactshare.ContactUtil;
 import org.thoughtcrime.securesms.contactshare.SimpleTextWatcher;
-import org.thoughtcrime.securesms.conversation.ConversationGroupViewModel.GroupActiveState;
-import org.thoughtcrime.securesms.conversation.ConversationMessage.ConversationMessageFactory;
 import org.thoughtcrime.securesms.conversation.drafts.DraftViewModel;
 import org.thoughtcrime.securesms.conversation.ui.groupcall.GroupCallViewModel;
 import org.thoughtcrime.securesms.conversation.ui.inlinequery.InlineQuery;
@@ -173,7 +168,6 @@ import org.thoughtcrime.securesms.database.DraftTable.Draft;
 import org.thoughtcrime.securesms.database.DraftTable.Drafts;
 import org.thoughtcrime.securesms.database.GroupTable;
 import org.thoughtcrime.securesms.database.IdentityTable.VerifiedStatus;
-import org.thoughtcrime.securesms.database.MessageTable;
 import org.thoughtcrime.securesms.database.RecipientTable;
 import org.thoughtcrime.securesms.database.RecipientTable.RegisteredState;
 import org.thoughtcrime.securesms.database.SignalDatabase;
@@ -181,7 +175,6 @@ import org.thoughtcrime.securesms.database.ThreadTable;
 import org.thoughtcrime.securesms.database.identity.IdentityRecordList;
 import org.thoughtcrime.securesms.database.model.GroupRecord;
 import org.thoughtcrime.securesms.database.model.IdentityRecord;
-import org.thoughtcrime.securesms.database.model.MediaMmsMessageRecord;
 import org.thoughtcrime.securesms.database.model.Mention;
 import org.thoughtcrime.securesms.database.model.MessageId;
 import org.thoughtcrime.securesms.database.model.MessageRecord;
@@ -241,9 +234,7 @@ import org.thoughtcrime.securesms.mms.GlideApp;
 import org.thoughtcrime.securesms.mms.GlideRequests;
 import org.thoughtcrime.securesms.mms.ImageSlide;
 import org.thoughtcrime.securesms.mms.MediaConstraints;
-import org.thoughtcrime.securesms.mms.MmsException;
 import org.thoughtcrime.securesms.mms.OutgoingMessage;
-import org.thoughtcrime.securesms.mms.QuoteId;
 import org.thoughtcrime.securesms.mms.QuoteModel;
 import org.thoughtcrime.securesms.mms.Slide;
 import org.thoughtcrime.securesms.mms.SlideDeck;
@@ -287,6 +278,7 @@ import org.thoughtcrime.securesms.util.CommunicationActions;
 import org.thoughtcrime.securesms.util.ContextUtil;
 import org.thoughtcrime.securesms.util.ConversationUtil;
 import org.thoughtcrime.securesms.util.Debouncer;
+import org.thoughtcrime.securesms.util.Dialogs;
 import org.thoughtcrime.securesms.util.DrawableUtil;
 import org.thoughtcrime.securesms.util.FullscreenHelper;
 import org.thoughtcrime.securesms.util.IdentityUtil;
@@ -334,18 +326,15 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import kotlin.Unit;
-import pigeon.extensions.BuildExtensionsKt;
-import pigeon.permissions.PigeonRationaleDialog;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
-import static org.webrtc.ContextUtils.getApplicationContext;
-import static pigeon.extensions.KotilinExtensionsKt.showWhenScrolledToBottom;
 
 /**
  * Fragment for displaying a message thread, as well as
  * composing/sending a new message into that thread.
  *
  * @author Moxie Marlinspike
+ *
  */
 @SuppressLint("StaticFieldLeak")
 public class ConversationParentFragment extends Fragment
@@ -372,7 +361,9 @@ public class ConversationParentFragment extends Fragment
                MessageDetailsFragment.Callback,
                ScheduleMessageTimePickerBottomSheet.ScheduleCallback,
                ConversationBottomSheetCallback,
-               ScheduleMessageDialogCallback
+               ScheduleMessageDialogCallback,
+               ConversationOptionsMenu.Callback,
+               ConversationOptionsMenu.Dependencies
 {
 
   private static final int SHORTCUT_ICON_SIZE = Build.VERSION.SDK_INT >= 26 ? ViewUtil.dpToPx(72) : ViewUtil.dpToPx(48 + 16 * 2);
@@ -395,12 +386,12 @@ public class ConversationParentFragment extends Fragment
   private static final int TAKE_PHOTO          = 7;
   private static final int ADD_CONTACT         = 8;
   private static final int PICK_LOCATION       = 9;
-  public static final  int PICK_GIF            = 10;
+  public static  final int PICK_GIF            = 10;
   private static final int SMS_DEFAULT         = 11;
   private static final int MEDIA_SENDER        = 12;
 
-  private static final int    REQUEST_CODE_PIN_SHORTCUT = 902;
-  private static final String ACTION_PINNED_SHORTCUT    = "action_pinned_shortcut";
+  private static final int     REQUEST_CODE_PIN_SHORTCUT = 902;
+  private static final String  ACTION_PINNED_SHORTCUT    = "action_pinned_shortcut";
 
   private   GlideRequests                glideRequests;
   protected ComposeText                  composeText;
@@ -424,9 +415,6 @@ public class ConversationParentFragment extends Fragment
   private   ConversationReactionDelegate reactionDelegate;
   private   Stub<FrameLayout>            voiceNotePlayerViewStub;
   private   View                         navigationBarBackground;
-
-  private TextView       myRT;
-  private MaterialButton voice;
 
   private   AttachmentManager        attachmentManager;
   private   AudioRecorder            audioRecorder;
@@ -468,7 +456,6 @@ public class ConversationParentFragment extends Fragment
   private Material3OnScrollHelper      material3OnScrollHelper;
   private InlineQueryResultsController inlineQueryResultsController;
   private OnBackPressedCallback        backPressedCallback;
-  private SendButtonListener           sendButtonListener;
 
   private LiveRecipient recipient;
   private long          threadId;
@@ -476,9 +463,6 @@ public class ConversationParentFragment extends Fragment
   private int           reactWithAnyEmojiStartPage = -1;
   private boolean       isSearchRequested          = false;
   private boolean       reshowScheduleMessagesBar  = false;
-
-  private int record_flag = 0;
-
 
   private final LifecycleDisposable disposables            = new LifecycleDisposable();
   private final Debouncer           optionsMenuDebouncer   = new Debouncer(50);
@@ -488,16 +472,7 @@ public class ConversationParentFragment extends Fragment
   private Callback             callback;
   private RecentEmojiPageModel recentEmojis;
 
-  private MaterialButton pigeonGroupCall;
-  private MaterialButton pigeonCall;
-  private MaterialButton pigeonSettings;
-  private MaterialButton secureSession;
-
-  private LinearLayoutCompat primaryLayout;
-  private LinearLayoutCompat extraLayout;
-  private MaterialButton     send2;
-
-  private Boolean extraScreenIsShowed = false;
+  private ConversationOptionsMenu.Provider menuProvider;
 
   public static ConversationParentFragment create(Intent intent) {
     ConversationParentFragment fragment = new ConversationParentFragment();
@@ -517,6 +492,7 @@ public class ConversationParentFragment extends Fragment
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     disposables.bindTo(getViewLifecycleOwner());
+    menuProvider = new ConversationOptionsMenu.Provider(this, this, disposables);
 
     if (requireActivity() instanceof Callback) {
       callback = (Callback) requireActivity();
@@ -596,7 +572,7 @@ public class ConversationParentFragment extends Fragment
     requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), backPressedCallback);
 
     if (isSearchRequested && savedInstanceState == null) {
-      onCreateOptionsMenu(toolbar.getMenu(), requireActivity().getMenuInflater());
+      menuProvider.onCreateMenu(toolbar.getMenu(), requireActivity().getMenuInflater());
     }
 
     sendButton.post(() -> sendButton.triggerSelectedChangedEvent());
@@ -684,7 +660,7 @@ public class ConversationParentFragment extends Fragment
     }
 
     if (reactionDelegate.isShowing()) {
-      reactionDelegate.hide();
+     reactionDelegate.hide();
     }
 
     if (inlineQueryResultsController != null) {
@@ -694,8 +670,8 @@ public class ConversationParentFragment extends Fragment
 
   @Override
   public void onDestroy() {
-    if (securityUpdateReceiver != null) requireActivity().unregisterReceiver(securityUpdateReceiver);
-    if (pinnedShortcutReceiver != null) requireActivity().unregisterReceiver(pinnedShortcutReceiver);
+    if (securityUpdateReceiver != null)  requireActivity().unregisterReceiver(securityUpdateReceiver);
+    if (pinnedShortcutReceiver != null)  requireActivity().unregisterReceiver(pinnedShortcutReceiver);
     super.onDestroy();
   }
 
@@ -718,121 +694,118 @@ public class ConversationParentFragment extends Fragment
     }
 
     switch (reqCode) {
-      case PICK_DOCUMENT:
-        setMedia(data.getData(), MediaType.DOCUMENT);
-        break;
-      case PICK_AUDIO:
-        setMedia(data.getData(), MediaType.AUDIO);
-        break;
-      case PICK_CONTACT:
-        if (viewModel.isPushAvailable() && !isSmsForced()) {
-          openContactShareEditor(data.getData());
+    case PICK_DOCUMENT:
+      setMedia(data.getData(), MediaType.DOCUMENT);
+      break;
+    case PICK_AUDIO:
+      setMedia(data.getData(), MediaType.AUDIO);
+      break;
+    case PICK_CONTACT:
+      if (viewModel.isPushAvailable() && !isSmsForced()) {
+        openContactShareEditor(data.getData());
+      } else {
+        addAttachmentContactInfo(data.getData());
+      }
+      break;
+    case GET_CONTACT_DETAILS:
+      sendSharedContact(data.getParcelableArrayListExtra(ContactShareEditActivity.KEY_CONTACTS));
+      break;
+    case GROUP_EDIT:
+      Recipient recipientSnapshot = recipient.get();
+
+      onRecipientChanged(recipientSnapshot);
+      titleView.setTitle(glideRequests, recipientSnapshot);
+      NotificationChannels.getInstance().updateContactChannelName(recipientSnapshot);
+      setBlockedUserState(recipientSnapshot, viewModel.getConversationStateSnapshot().getSecurityInfo());
+      invalidateOptionsMenu();
+      break;
+    case TAKE_PHOTO:
+      handleImageFromDeviceCameraApp();
+      break;
+    case ADD_CONTACT:
+      SimpleTask.run(() -> {
+        try {
+          ContactDiscovery.refresh(requireContext(), recipient.get(), false);
+        } catch (IOException e) {
+          Log.w(TAG, "Failed to refresh user after adding to contacts.");
+        }
+        return null;
+      }, nothing -> onRecipientChanged(recipient.get()));
+      break;
+    case PICK_LOCATION:
+      SignalPlace place = new SignalPlace(PlacePickerActivity.addressFromData(data));
+      attachmentManager.setLocation(place, getCurrentMediaConstraints());
+      draftViewModel.setLocationDraft(place);
+      break;
+    case SMS_DEFAULT:
+      viewModel.updateSecurityInfo();
+      break;
+    case PICK_GIF:
+    case MEDIA_SENDER:
+      MediaSendActivityResult result = MediaSendActivityResult.fromData(data);
+
+      if (!Objects.equals(result.getRecipientId(), recipient.getId())) {
+        Log.w(TAG, "Result's recipientId did not match ours! Result: " + result.getRecipientId() + ", Activity: " + recipient.getId());
+        Toast.makeText(requireContext(), R.string.ConversationActivity_error_sending_media, Toast.LENGTH_SHORT).show();
+        return;
+      }
+
+      sendButton.setSendType(result.getMessageSendType());
+
+      if (result.isPushPreUpload()) {
+        sendMediaMessage(result);
+        return;
+      }
+
+      long          expiresIn  = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
+      boolean       initiating = threadId == -1;
+      QuoteModel    quote      = result.isViewOnce() ? null : inputPanel.getQuote().orElse(null);
+      SlideDeck     slideDeck  = new SlideDeck();
+      List<Mention> mentions   = new ArrayList<>(result.getMentions());
+      BodyRangeList bodyRanges = result.getBodyRanges();
+
+      for (Media mediaItem : result.getNonUploadedMedia()) {
+        if (MediaUtil.isVideoType(mediaItem.getMimeType())) {
+          slideDeck.addSlide(new VideoSlide(requireContext(), mediaItem.getUri(), mediaItem.getSize(), mediaItem.isVideoGif(), mediaItem.getWidth(), mediaItem.getHeight(), mediaItem.getCaption().orElse(null), mediaItem.getTransformProperties().orElse(null)));
+        } else if (MediaUtil.isGif(mediaItem.getMimeType())) {
+          slideDeck.addSlide(new GifSlide(requireContext(), mediaItem.getUri(), mediaItem.getSize(), mediaItem.getWidth(), mediaItem.getHeight(), mediaItem.isBorderless(), mediaItem.getCaption().orElse(null)));
+        } else if (MediaUtil.isImageType(mediaItem.getMimeType())) {
+          slideDeck.addSlide(new ImageSlide(requireContext(), mediaItem.getUri(), mediaItem.getMimeType(), mediaItem.getSize(), mediaItem.getWidth(), mediaItem.getHeight(), mediaItem.isBorderless(), mediaItem.getCaption().orElse(null), null, mediaItem.getTransformProperties().orElse(null)));
         } else {
-          addAttachmentContactInfo(data.getData());
+          Log.w(TAG, "Asked to send an unexpected mimeType: '" + mediaItem.getMimeType() + "'. Skipping.");
         }
-        break;
-      case GET_CONTACT_DETAILS:
-        sendSharedContact(data.getParcelableArrayListExtra(ContactShareEditActivity.KEY_CONTACTS));
-        break;
-      case GROUP_EDIT:
-        Recipient recipientSnapshot = recipient.get();
+      }
 
-        onRecipientChanged(recipientSnapshot);
-        titleView.setTitle(glideRequests, recipientSnapshot);
-        NotificationChannels.getInstance().updateContactChannelName(recipientSnapshot);
-        setBlockedUserState(recipientSnapshot, viewModel.getConversationStateSnapshot().getSecurityInfo());
-        invalidateOptionsMenu();
-        break;
-      case TAKE_PHOTO:
-        handleImageFromDeviceCameraApp();
-        break;
-      case ADD_CONTACT:
-        SimpleTask.run(() -> {
-          try {
-            ContactDiscovery.refresh(requireContext(), recipient.get(), false);
-          } catch (IOException e) {
-            Log.w(TAG, "Failed to refresh user after adding to contacts.");
-          }
-          return null;
-        }, nothing -> onRecipientChanged(recipient.get()));
-        break;
-      case PICK_LOCATION:
-        SignalPlace place = new SignalPlace(PlacePickerActivity.addressFromData(data));
-        attachmentManager.setLocation(place, getCurrentMediaConstraints());
-        draftViewModel.setLocationDraft(place);
-        break;
-      case SMS_DEFAULT:
-        viewModel.updateSecurityInfo();
-        break;
-      case PICK_GIF:
-      case MEDIA_SENDER:
-        MediaSendActivityResult result = MediaSendActivityResult.fromData(data);
+      final Context context = requireContext().getApplicationContext();
 
-        if (!Objects.equals(result.getRecipientId(), recipient.getId())) {
-          Log.w(TAG, "Result's recipientId did not match ours! Result: " + result.getRecipientId() + ", Activity: " + recipient.getId());
-          Toast.makeText(requireContext(), R.string.ConversationActivity_error_sending_media, Toast.LENGTH_SHORT).show();
-          return;
+      sendMediaMessage(result.getRecipientId(),
+                       result.getMessageSendType(),
+                       result.getBody(),
+                       slideDeck,
+                       quote,
+                       Collections.emptyList(),
+                       Collections.emptyList(),
+                       mentions,
+                       bodyRanges,
+                       expiresIn,
+                       result.isViewOnce(),
+                       initiating,
+                       true,
+                       null,
+                       result.getScheduledTime()).addListener(new AssertedSuccessListener<Void>() {
+        @Override
+        public void onSuccess(Void result) {
+          AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
+            Stream.of(slideDeck.getSlides())
+                  .map(Slide::getUri)
+                  .withoutNulls()
+                  .filter(BlobProvider::isAuthority)
+                  .forEach(uri -> BlobProvider.getInstance().delete(context, uri));
+          });
         }
+      });
 
-        sendButton.setSendType(result.getMessageSendType());
-
-        if (result.isPushPreUpload()) {
-          sendMediaMessage(result);
-          return;
-        }
-
-        long expiresIn = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
-        boolean initiating = threadId == -1;
-        QuoteModel quote = result.isViewOnce() ? null : inputPanel.getQuote().orElse(null);
-        SlideDeck slideDeck = new SlideDeck();
-        List<Mention> mentions = new ArrayList<>(result.getMentions());
-        BodyRangeList bodyRanges = result.getBodyRanges();
-
-        for (Media mediaItem : result.getNonUploadedMedia()) {
-          if (MediaUtil.isVideoType(mediaItem.getMimeType())) {
-            slideDeck.addSlide(new VideoSlide(requireContext(), mediaItem.getUri(), mediaItem.getSize(), mediaItem.isVideoGif(), mediaItem.getWidth(), mediaItem.getHeight(), mediaItem.getCaption().orElse(null), mediaItem
-                .getTransformProperties().orElse(null)));
-          } else if (MediaUtil.isGif(mediaItem.getMimeType())) {
-            slideDeck.addSlide(new GifSlide(requireContext(), mediaItem.getUri(), mediaItem.getSize(), mediaItem.getWidth(), mediaItem.getHeight(), mediaItem.isBorderless(), mediaItem.getCaption().orElse(null)));
-          } else if (MediaUtil.isImageType(mediaItem.getMimeType())) {
-            slideDeck.addSlide(new ImageSlide(requireContext(), mediaItem.getUri(), mediaItem.getMimeType(), mediaItem.getSize(), mediaItem.getWidth(), mediaItem.getHeight(), mediaItem.isBorderless(), mediaItem.getCaption()
-                                                                                                                                                                                                                  .orElse(null), null, mediaItem
-                                                  .getTransformProperties().orElse(null)));
-          } else {
-            Log.w(TAG, "Asked to send an unexpected mimeType: '" + mediaItem.getMimeType() + "'. Skipping.");
-          }
-        }
-
-        final Context context = requireContext().getApplicationContext();
-
-        sendMediaMessage(result.getRecipientId(),
-                         result.getMessageSendType(),
-                         result.getBody(),
-                         slideDeck,
-                         quote,
-                         Collections.emptyList(),
-                         Collections.emptyList(),
-                         mentions,
-                         bodyRanges,
-                         expiresIn,
-                         result.isViewOnce(),
-                         initiating,
-                         true,
-                         null,
-                         result.getScheduledTime()).addListener(new AssertedSuccessListener<Void>() {
-          @Override
-          public void onSuccess(Void result) {
-            AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
-              Stream.of(slideDeck.getSlides())
-                    .map(Slide::getUri)
-                    .withoutNulls()
-                    .filter(BlobProvider::isAuthority)
-                    .forEach(uri -> BlobProvider.getInstance().delete(context, uri));
-            });
-          }
-        });
-
-        break;
+      break;
     }
   }
 
@@ -937,135 +910,10 @@ public class ConversationParentFragment extends Fragment
   }
 
   @Override
-  public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    menu.clear();
-
-    GroupActiveState groupActiveState = groupViewModel.getGroupActiveState().getValue();
-    boolean          isActiveGroup    = groupActiveState != null && groupActiveState.isActiveGroup();
-    boolean          isActiveV2Group  = groupActiveState != null && groupActiveState.isActiveV2Group();
-    boolean          isInActiveGroup  = groupActiveState != null && !groupActiveState.isActiveGroup();
-
-    if (isInMessageRequest() && recipient != null && !recipient.get().isBlocked()) {
-      if (isActiveGroup) {
-        inflater.inflate(R.menu.conversation_message_requests_group, menu);
-      }
-
-      super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    if (viewModel.isPushAvailable()) {
-      if (recipient.get().getExpiresInSeconds() > 0) {
-        if (!isInActiveGroup) {
-          inflater.inflate(R.menu.conversation_expiring_on, menu);
-        }
-        titleView.showExpiring(recipient);
-      } else {
-        if (!isInActiveGroup) {
-          inflater.inflate(R.menu.conversation_expiring_off, menu);
-        }
-        titleView.clearExpiring();
-      }
-    }
-
-    if (isSingleConversation()) {
-      if (viewModel.isPushAvailable()) {
-        inflater.inflate(R.menu.conversation_callable_secure, menu);
-      } else if (!recipient.get().isReleaseNotes() && SignalStore.misc().getSmsExportPhase().allowSmsFeatures()) {
-        inflater.inflate(R.menu.conversation_callable_insecure, menu);
-      }
-    } else if (isGroupConversation()) {
-      if (isActiveV2Group && Build.VERSION.SDK_INT > 19) {
-        inflater.inflate(R.menu.conversation_callable_groupv2, menu);
-        if (groupCallViewModel != null && Boolean.TRUE.equals(groupCallViewModel.hasActiveGroupCall().getValue())) {
-          hideMenuItem(menu, R.id.menu_video_secure);
-        }
-        showGroupCallingTooltip();
-      }
-
-      inflater.inflate(R.menu.conversation_group_options, menu);
-
-      if (!isPushGroupConversation()) {
-        inflater.inflate(R.menu.conversation_mms_group_options, menu);
-        if (distributionType == ThreadTable.DistributionTypes.BROADCAST) {
-          menu.findItem(R.id.menu_distribution_broadcast).setChecked(true);
-        } else {
-          menu.findItem(R.id.menu_distribution_conversation).setChecked(true);
-        }
-      }
-
-      inflater.inflate(R.menu.conversation_active_group_options, menu);
-    }
-
-    inflater.inflate(R.menu.conversation, menu);
-
-    if (isInMessageRequest() && !recipient.get().isBlocked()) {
-      hideMenuItem(menu, R.id.menu_conversation_settings);
-    }
-
-    if (isSingleConversation() && !viewModel.isPushAvailable() && !recipient.get().isReleaseNotes()) {
-      inflater.inflate(R.menu.conversation_insecure, menu);
-    }
-
-    if (recipient != null && recipient.get().isMuted()) inflater.inflate(R.menu.conversation_muted, menu);
-    else inflater.inflate(R.menu.conversation_unmuted, menu);
-
-    if (isSingleConversation() && getRecipient().getContactUri() == null && !recipient.get().isReleaseNotes() && !recipient.get().isSelf() && recipient.get().hasE164()) {
-      inflater.inflate(R.menu.conversation_add_to_contacts, menu);
-    }
-
-    if (recipient != null && recipient.get().isSelf()) {
-      if (viewModel.isPushAvailable()) {
-        hideMenuItem(menu, R.id.menu_call_secure);
-        hideMenuItem(menu, R.id.menu_video_secure);
-      } else {
-        hideMenuItem(menu, R.id.menu_call_insecure);
-      }
-
-      hideMenuItem(menu, R.id.menu_mute_notifications);
-    }
-
-    if (recipient != null && recipient.get().isBlocked()) {
-      if (viewModel.isPushAvailable()) {
-        hideMenuItem(menu, R.id.menu_call_secure);
-        hideMenuItem(menu, R.id.menu_video_secure);
-        hideMenuItem(menu, R.id.menu_expiring_messages);
-        hideMenuItem(menu, R.id.menu_expiring_messages_off);
-      } else {
-        hideMenuItem(menu, R.id.menu_call_insecure);
-      }
-
-      hideMenuItem(menu, R.id.menu_mute_notifications);
-    }
-
-    if (recipient != null && recipient.get().isReleaseNotes()) {
-      hideMenuItem(menu, R.id.menu_add_shortcut);
-    }
-
-    hideMenuItem(menu, R.id.menu_group_recipients);
-
-    if (isActiveV2Group) {
-      hideMenuItem(menu, R.id.menu_mute_notifications);
-      hideMenuItem(menu, R.id.menu_conversation_settings);
-    } else if (isGroupConversation()) {
-      hideMenuItem(menu, R.id.menu_conversation_settings);
-    }
-
-    hideMenuItem(menu, R.id.menu_create_bubble);
-    disposables.add(viewModel.canShowAsBubble().subscribe(canShowAsBubble -> {
-      MenuItem item = menu.findItem(R.id.menu_create_bubble);
-
-      if (item != null) {
-        item.setVisible(canShowAsBubble && !isInBubble());
-      }
-    }));
-
-    if (threadId == -1L) {
-      hideMenuItem(menu, R.id.menu_view_media);
-    }
-
+  public void onOptionsMenuCreated(@NonNull Menu menu) {
     searchViewItem = menu.findItem(R.id.menu_search);
 
-    SearchView searchView = (SearchView) searchViewItem.getActionView();
+    SearchView                     searchView    = (SearchView) searchViewItem.getActionView();
     SearchView.OnQueryTextListener queryListener = new SearchView.OnQueryTextListener() {
       @Override
       public boolean onQueryTextSubmit(String query) {
@@ -1124,8 +972,6 @@ public class ConversationParentFragment extends Fragment
       }
     }
 
-    super.onCreateOptionsMenu(menu, inflater);
-
     int toolbarTextAndIconColor = getResources().getColor(wallpaper.getDrawable() != null ? R.color.signal_colorNeutralInverse : R.color.signal_colorOnSurface);
     setToolbarActionItemTint(toolbar, toolbarTextAndIconColor);
   }
@@ -1134,60 +980,10 @@ public class ConversationParentFragment extends Fragment
     if (!isSearchRequested && getActivity() != null) {
       optionsMenuDebouncer.publish(() -> {
         if (getActivity() != null) {
-          onCreateOptionsMenu(toolbar.getMenu(), requireActivity().getMenuInflater());
+          menuProvider.onCreateMenu(toolbar.getMenu(), requireActivity().getMenuInflater());
         }
       });
     }
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-    super.onOptionsItemSelected(item);
-    int itemId = item.getItemId();
-
-    if (itemId == R.id.menu_call_secure) {
-      handleDial(getRecipient(), true);
-    } else if (itemId == R.id.menu_video_secure) {
-      handleVideo(getRecipient());
-    } else if (itemId == R.id.menu_call_insecure) {
-      handleDial(getRecipient(), false);
-    } else if (itemId == R.id.menu_view_media) {
-      handleViewMedia();
-    } else if (itemId == R.id.menu_add_shortcut) {
-      handleAddShortcut();
-    } else if (itemId == R.id.menu_search) {
-      handleSearch();
-    } else if (itemId == R.id.menu_add_to_contacts) {
-      handleAddToContacts();
-    } else if (itemId == R.id.menu_group_recipients) {
-      handleDisplayGroupRecipients();
-    } else if (itemId == R.id.menu_distribution_broadcast) {
-      handleDistributionBroadcastEnabled(item);
-    } else if (itemId == R.id.menu_distribution_conversation) {
-      handleDistributionConversationEnabled(item);
-    } else if (itemId == R.id.menu_group_settings) {
-      handleManageGroup();
-    } else if (itemId == R.id.menu_leave) {
-      handleLeavePushGroup();
-    } else if (itemId == R.id.menu_invite) {
-      handleInviteLink();
-    } else if (itemId == R.id.menu_mute_notifications) {
-      handleMuteNotifications();
-    } else if (itemId == R.id.menu_unmute_notifications) {
-      handleUnmuteNotifications();
-    } else if (itemId == R.id.menu_conversation_settings) {
-      handleConversationSettings();
-    } else if (itemId == R.id.menu_expiring_messages_off || itemId == R.id.menu_expiring_messages) {
-      handleSelectMessageExpiration();
-    } else if (itemId == R.id.menu_create_bubble) {
-      handleCreateBubble();
-    } else if (itemId == android.R.id.home) {
-      requireActivity().finish();
-    } else {
-      return false;
-    }
-
-    return true;
   }
 
   public void onBackPressed() {
@@ -1278,7 +1074,8 @@ public class ConversationParentFragment extends Fragment
 
 //////// Event Handlers
 
-  private void handleSelectMessageExpiration() {
+  @Override
+  public void handleSelectMessageExpiration() {
     if (isPushGroupConversation() && !isActiveGroup()) {
       return;
     }
@@ -1286,28 +1083,21 @@ public class ConversationParentFragment extends Fragment
     startActivity(RecipientDisappearingMessagesActivity.forRecipient(requireContext(), recipient.getId()));
   }
 
-  private void handleMuteNotifications() {
-    MuteDialog.show(requireActivity(), until -> {
-      new AsyncTask<Void, Void, Void>() {
-        @Override
-        protected Void doInBackground(Void... params) {
-          SignalDatabase.recipients().setMuted(recipient.getId(), until);
-
-          return null;
-        }
-      }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    });
+  @Override
+  public void handleMuteNotifications() {
+    MuteDialog.show(requireActivity(), viewModel::muteConversation);
   }
 
   private void handleStoryRingClick() {
     startActivity(StoryViewerActivity.createIntent(
-        requireContext(),
-        new StoryViewerArgs.Builder(recipient.getId(), recipient.get().shouldHideStory())
-            .isFromQuote(true)
-            .build()));
+                  requireContext(),
+                  new StoryViewerArgs.Builder(recipient.getId(), recipient.get().shouldHideStory())
+                                     .isFromQuote(true)
+                                     .build()));
   }
 
-  private void handleConversationSettings() {
+  @Override
+  public void handleConversationSettings() {
     if (isGroupConversation()) {
       handleManageGroup();
       return;
@@ -1321,7 +1111,8 @@ public class ConversationParentFragment extends Fragment
     ActivityCompat.startActivity(requireActivity(), intent, bundle);
   }
 
-  private void handleUnmuteNotifications() {
+  @Override
+  public void handleUnmuteNotifications() {
     new AsyncTask<Void, Void, Void>() {
       @Override
       protected Void doInBackground(Void... params) {
@@ -1340,7 +1131,6 @@ public class ConversationParentFragment extends Fragment
     });
   }
 
-  @TargetApi(Build.VERSION_CODES.KITKAT)
   private void handleMakeDefaultSms() {
     startActivityForResult(SmsUtil.getSmsRoleIntent(requireContext()), SMS_DEFAULT);
   }
@@ -1349,7 +1139,8 @@ public class ConversationParentFragment extends Fragment
     startActivity(RegistrationNavigationActivity.newIntentForReRegistration(requireContext()));
   }
 
-  private void handleInviteLink() {
+  @Override
+  public void handleInviteLink() {
     String inviteText = getString(R.string.ConversationActivity_lets_switch_to_signal, getString(R.string.install_url));
 
     if (viewModel.isDefaultSmsApplication() && SignalStore.misc().getSmsExportPhase().isSmsSupported()) {
@@ -1373,14 +1164,16 @@ public class ConversationParentFragment extends Fragment
     }
   }
 
-  private void handleViewMedia() {
+  @Override
+  public void handleViewMedia() {
     startActivity(MediaOverviewActivity.forThread(requireContext(), threadId));
   }
 
-  private void handleAddShortcut() {
+  @Override
+  public void handleAddShortcut() {
     Log.i(TAG, "Creating home screen shortcut for recipient " + recipient.get().getId());
 
-    final Context   context   = requireContext().getApplicationContext();
+    final Context context = requireContext().getApplicationContext();
     final Recipient recipient = this.recipient.get();
 
     if (pinnedShortcutReceiver == null) {
@@ -1422,7 +1215,8 @@ public class ConversationParentFragment extends Fragment
 
   }
 
-  private void handleCreateBubble() {
+  @Override
+  public void handleCreateBubble() {
     ConversationIntents.Args args = viewModel.getArgs();
 
     BubbleUtil.displayAsBubble(requireContext(), args.getRecipientId(), args.getThreadId());
@@ -1434,16 +1228,16 @@ public class ConversationParentFragment extends Fragment
                                           @NonNull Recipient recipient)
   {
     IconCompat icon = IconCompat.createWithAdaptiveBitmap(bitmap);
-    String name = recipient.isSelf() ? context.getString(R.string.note_to_self)
-                                     : recipient.getDisplayName(context);
+    String     name = recipient.isSelf() ? context.getString(R.string.note_to_self)
+                                                  : recipient.getDisplayName(context);
 
     ShortcutInfoCompat shortcutInfoCompat = new ShortcutInfoCompat.Builder(context, recipient.getId().serialize() + '-' + System.currentTimeMillis())
-        .setShortLabel(name)
-        .setIcon(icon)
-        .setIntent(ShortcutLauncherActivity.createIntent(context, recipient.getId()))
-        .build();
+                                                                  .setShortLabel(name)
+                                                                  .setIcon(icon)
+                                                                  .setIntent(ShortcutLauncherActivity.createIntent(context, recipient.getId()))
+                                                                  .build();
 
-    Intent        callbackIntent         = new Intent(ACTION_PINNED_SHORTCUT);
+    Intent callbackIntent                = new Intent(ACTION_PINNED_SHORTCUT);
     PendingIntent shortcutPinnedCallback = PendingIntent.getBroadcast(context, REQUEST_CODE_PIN_SHORTCUT, callbackIntent, PendingIntentFlags.mutable());
 
     ShortcutManagerCompat.requestPinShortcut(context, shortcutInfoCompat, shortcutPinnedCallback.getIntentSender());
@@ -1451,11 +1245,13 @@ public class ConversationParentFragment extends Fragment
     bitmap.recycle();
   }
 
-  private void handleSearch() {
+  @Override
+  public void handleSearch() {
     searchViewModel.onSearchOpened();
   }
 
-  private void handleLeavePushGroup() {
+  @Override
+  public void handleLeavePushGroup() {
     if (getRecipient() == null) {
       Toast.makeText(requireContext(), getString(R.string.ConversationActivity_invalid_recipient),
                      Toast.LENGTH_LONG).show();
@@ -1465,46 +1261,32 @@ public class ConversationParentFragment extends Fragment
     LeaveGroupDialog.handleLeavePushGroup(requireActivity(), getRecipient().requireGroupId().requirePush(), () -> requireActivity().finish());
   }
 
-  private void handleManageGroup() {
+  @Override
+  public void handleManageGroup() {
     Intent intent = ConversationSettingsActivity.forGroup(requireContext(), recipient.get().requireGroupId());
     Bundle bundle = ConversationSettingsActivity.createTransitionBundle(requireContext(), titleView.findViewById(R.id.contact_photo_image), toolbar);
 
     ActivityCompat.startActivity(requireContext(), intent, bundle);
   }
 
-  private void handleDistributionBroadcastEnabled(MenuItem item) {
+  @Override
+  public void handleDistributionBroadcastEnabled(MenuItem item) {
     distributionType = ThreadTable.DistributionTypes.BROADCAST;
     draftViewModel.setDistributionType(distributionType);
+    viewModel.setDistributionType(distributionType);
     item.setChecked(true);
-
-    if (threadId != -1) {
-      new AsyncTask<Void, Void, Void>() {
-        @Override
-        protected Void doInBackground(Void... params) {
-          SignalDatabase.threads().setDistributionType(threadId, ThreadTable.DistributionTypes.BROADCAST);
-          return null;
-        }
-      }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
   }
 
-  private void handleDistributionConversationEnabled(MenuItem item) {
+  @Override
+  public void handleDistributionConversationEnabled(MenuItem item) {
     distributionType = ThreadTable.DistributionTypes.CONVERSATION;
     draftViewModel.setDistributionType(distributionType);
+    viewModel.setDistributionType(distributionType);
     item.setChecked(true);
-
-    if (threadId != -1) {
-      new AsyncTask<Void, Void, Void>() {
-        @Override
-        protected Void doInBackground(Void... params) {
-          SignalDatabase.threads().setDistributionType(threadId, ThreadTable.DistributionTypes.CONVERSATION);
-          return null;
-        }
-      }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
   }
 
-  private void handleDial(final Recipient recipient, boolean isSecure) {
+  @Override
+  public void handleDial(final Recipient recipient, boolean isSecure) {
     if (recipient == null) return;
 
     if (isSecure) {
@@ -1514,24 +1296,27 @@ public class ConversationParentFragment extends Fragment
     }
   }
 
-  private void handleVideo(final Recipient recipient) {
+  @Override
+  public void handleVideo(final Recipient recipient) {
     if (recipient == null) return;
 
     if (recipient.isPushV2Group() && groupCallViewModel.hasActiveGroupCall().getValue() == Boolean.FALSE && groupViewModel.isNonAdminInAnnouncementGroup()) {
       new MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.ConversationActivity_cant_start_group_call)
-                                                      .setMessage(R.string.ConversationActivity_only_admins_of_this_group_can_start_a_call)
-                                                      .setPositiveButton(android.R.string.ok, (d, w) -> d.dismiss())
-                                                      .show();
+                                          .setMessage(R.string.ConversationActivity_only_admins_of_this_group_can_start_a_call)
+                                          .setPositiveButton(android.R.string.ok, (d, w) -> d.dismiss())
+                                          .show();
     } else {
       CommunicationActions.startVideoCall(this, recipient);
     }
   }
 
-  private void handleDisplayGroupRecipients() {
+  @Override
+  public void handleDisplayGroupRecipients() {
     new GroupMembersDialog(requireActivity(), getRecipient()).display();
   }
 
-  private void handleAddToContacts() {
+  @Override
+  public void handleAddToContacts() {
     if (recipient.get().isGroup()) return;
 
     try {
@@ -1584,9 +1369,9 @@ public class ConversationParentFragment extends Fragment
     PaymentsValues paymentsValues = SignalStore.paymentsValues();
 
     if (paymentsValues.getPaymentsAvailability().isSendAllowed() &&
-        !recipient.get().isSelf() &&
-        !recipient.get().isGroup() &&
-        recipient.get().isRegistered() &&
+        !recipient.get().isSelf()                                &&
+        !recipient.get().isGroup()                               &&
+        recipient.get().isRegistered()                           &&
         !recipient.get().isForceSmsSelection())
     {
       attachmentKeyboardStub.get().filterAttachmentKeyboardButtons(null);
@@ -1621,12 +1406,12 @@ public class ConversationParentFragment extends Fragment
     Log.d(TAG, "onMessageResentAfterSafetyNumberChange");
     initializeIdentityRecords().addListener(new AssertedSuccessListener<Boolean>() {
       @Override
-      public void onSuccess(Boolean result) {}
+      public void onSuccess(Boolean result) { }
     });
   }
 
   @Override
-  public void onCanceled() {}
+  public void onCanceled() { }
 
   private void handleSecurityChange(@NonNull ConversationSecurityInfo conversationSecurityInfo) {
     Log.i(TAG, "handleSecurityChange(" + conversationSecurityInfo + ")");
@@ -1752,24 +1537,24 @@ public class ConversationParentFragment extends Fragment
       } else {
         switch (selfMembership.getMemberLevel()) {
           case NOT_A_MEMBER:
-            leftGroup = true;
-            canSendMessages = false;
+            leftGroup        = true;
+            canSendMessages  = false;
             canCancelRequest = false;
             break;
           case PENDING_MEMBER:
-            leftGroup = false;
-            canSendMessages = false;
+            leftGroup        = false;
+            canSendMessages  = false;
             canCancelRequest = false;
             break;
           case REQUESTING_MEMBER:
-            leftGroup = false;
-            canSendMessages = false;
+            leftGroup        = false;
+            canSendMessages  = false;
             canCancelRequest = true;
             break;
           case FULL_MEMBER:
           case ADMINISTRATOR:
-            leftGroup = false;
-            canSendMessages = true;
+            leftGroup        = false;
+            canSendMessages  = true;
             canCancelRequest = false;
             break;
           default:
@@ -1841,9 +1626,9 @@ public class ConversationParentFragment extends Fragment
             return;
           }
 
-          AtomicInteger draftsRemaining = new AtomicInteger(drafts.size());
-          AtomicBoolean success         = new AtomicBoolean(false);
-          ListenableFuture.Listener<Boolean> listener = new AssertedSuccessListener<Boolean>() {
+          AtomicInteger                      draftsRemaining = new AtomicInteger(drafts.size());
+          AtomicBoolean                      success         = new AtomicBoolean(false);
+          ListenableFuture.Listener<Boolean> listener        = new AssertedSuccessListener<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
               success.compareAndSet(false, result);
@@ -1875,7 +1660,21 @@ public class ConversationParentFragment extends Fragment
                   break;
                 case Draft.QUOTE:
                   SettableFuture<Boolean> quoteResult = new SettableFuture<>();
-                  new QuoteRestorationTask(draft.getValue(), quoteResult).execute();
+                  disposables.add(draftViewModel.loadDraftQuote(draft.getValue()).subscribe(
+                      conversationMessage -> {
+                        handleReplyMessage(conversationMessage);
+                        quoteResult.set(true);
+                      },
+                      err -> {
+                        Log.e(TAG, "Failed to restore a quote from a draft.", err);
+                        quoteResult.set(false);
+                      },
+                      () -> {
+                        Log.e(TAG, "Failed to restore a quote from a draft. No matching message record.");
+                        quoteResult.set(false);
+                      }
+                  ));
+
                   quoteResult.addListener(listener);
                   break;
                 case Draft.VOICE_NOTE:
@@ -1925,12 +1724,11 @@ public class ConversationParentFragment extends Fragment
     } else if (ServiceOutageReminder.isEligible(context)) {
       ApplicationDependencies.getJobManager().add(new ServiceOutageDetectionJob());
       reminderView.get().showReminder(new ServiceOutageReminder(context));
-    } else if (SignalStore.account().isRegistered() &&
+    } else if (SignalStore.account().isRegistered()                 &&
                TextSecurePreferences.isShowInviteReminders(context) &&
-               !viewModel.isPushAvailable() &&
-               inviteReminder.isPresent() &&
-               !recipient.get().isGroup())
-    {
+               !viewModel.isPushAvailable()                         &&
+               inviteReminder.isPresent()                           &&
+               !recipient.get().isGroup()) {
       reminderView.get().setOnActionClickListener(this::handleReminderAction);
       reminderView.get().setOnDismissListener(() -> inviteReminderModel.dismissReminder());
       reminderView.get().showReminder(inviteReminder.get());
@@ -2009,7 +1807,7 @@ public class ConversationParentFragment extends Fragment
           recipients = Collections.singletonList(params[0]);
         }
 
-        long               startTime          = System.currentTimeMillis();
+        long               startTime          =  System.currentTimeMillis();
         IdentityRecordList identityRecordList = ApplicationDependencies.getProtocolStore().aci().identities().getIdentityRecords(recipients);
 
         Log.i(TAG, String.format(Locale.US, "Loaded %d identities in %d ms", recipients.size(), System.currentTimeMillis() - startTime));
@@ -2091,24 +1889,8 @@ public class ConversationParentFragment extends Fragment
     releaseChannelUnmute                = ViewUtil.findStubById(view, R.id.conversation_release_notes_unmute_stub);
     joinGroupCallButton                 = view.findViewById(R.id.conversation_group_call_join);
 
-    pigeonGroupCall = view.findViewById(R.id.conversation_group_call);
-    pigeonCall      = view.findViewById(R.id.conversation_call);
-    pigeonSettings  = view.findViewById(R.id.conversation_settings);
-    secureSession   = view.findViewById(R.id.secure_session);
-    voice           = view.findViewById(R.id.voice);
-    primaryLayout   = view.findViewById(R.id.prime_buttons);
-    extraLayout     = view.findViewById(R.id.extra_buttons);
-    send2           = view.findViewById(R.id.send_text_2);
-
-    myRT = view.findViewById(R.id.record_time);
-
     sendButton.setPopupContainer((ViewGroup) view);
     sendButton.setSnackbarContainer(view.findViewById(R.id.fragment_content));
-
-    pigeonGroupCall.setOnClickListener(v -> handleVideo(getRecipient()));
-    pigeonCall.setOnClickListener(v -> handleDial(getRecipient(), true));
-    secureSession.setOnClickListener(v -> handleResetSecureSession());
-    voice.setOnClickListener(v -> sendVoiceMessage());
 
     container.setIsBubble(isInBubble());
     container.addOnKeyboardShownListener(this);
@@ -2119,47 +1901,14 @@ public class ConversationParentFragment extends Fragment
     audioRecorder     = new AudioRecorder(requireContext(), inputPanel);
     typingTextWatcher = new ComposeTextWatcher();
 
+    SendButtonListener        sendButtonListener        = new SendButtonListener();
     ComposeKeyPressedListener composeKeyPressedListener = new ComposeKeyPressedListener();
-    sendButtonListener = new SendButtonListener();
+
     composeText.setOnEditorActionListener(sendButtonListener);
     composeText.setCursorPositionChangedListener(this);
     attachButton.setOnClickListener(new AttachButtonListener());
     attachButton.setOnLongClickListener(new AttachButtonLongClickListener());
     sendButton.setOnClickListener(sendButtonListener);
-    send2.setOnClickListener(v -> {
-      view.findViewById(R.id.send_text).performClick();
-      primaryLayout.setVisibility(View.VISIBLE);
-      extraLayout.setVisibility(View.GONE);
-      extraScreenIsShowed = false;
-      composeText.requestFocus();
-    });
-
-    view.findViewById(R.id.send_text).setOnKeyListener((v, keyCode, event) -> {
-      if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-        primaryLayout.setVisibility(View.GONE);
-        extraLayout.setVisibility(View.VISIBLE);
-        extraScreenIsShowed = false;
-        send2.requestFocus();
-        return true;
-      }
-      return false;
-    });
-
-    send2.setOnKeyListener((v, keyCode, event) -> {
-      if (keyCode == KeyEvent.KEYCODE_DPAD_UP && event.getAction() == KeyEvent.ACTION_UP) {
-        if (!extraScreenIsShowed) {
-          extraScreenIsShowed = true;
-          return false;
-        }
-        primaryLayout.setVisibility(View.VISIBLE);
-        extraLayout.setVisibility(View.GONE);
-        return true;
-      } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-        extraScreenIsShowed = false;
-      }
-      return false;
-    });
-
     sendButton.setScheduledSendListener(new SendButton.ScheduledSendListener() {
       @Override
       public void onSendScheduled() {
@@ -2175,8 +1924,8 @@ public class ConversationParentFragment extends Fragment
 
       @Override
       public boolean canSchedule() {
-        return !(inputPanel.isRecordingInLockedMode() || draftViewModel.getVoiceNoteDraft() != null);
-      }
+                                   return !(inputPanel.isRecordingInLockedMode() || draftViewModel.getVoiceNoteDraft() != null);
+                                                                                                                                }
     });
     sendButton.setEnabled(true);
     sendButton.addOnSelectionChangedListener((newMessageSendType, manuallySelected) -> {
@@ -2206,20 +1955,7 @@ public class ConversationParentFragment extends Fragment
     composeText.setOnEditorActionListener(sendButtonListener);
     composeText.setOnClickListener(composeKeyPressedListener);
     composeText.setOnFocusChangeListener(composeKeyPressedListener);
-    view.findViewById(R.id.send_text).setOnClickListener(new OnClickListener() {
-      @Override public void onClick(View v) {
-        sendButtonListener.onClick(composeText);
-        composeText.requestFocus();
-      }
-    });
 
-    composeText.setOnEditorActionListener((v, actionId, event) -> {
-      if (actionId == EditorInfo.IME_ACTION_DONE) {
-        sendButtonListener.onClick(composeText);
-        return true;
-      }
-      return false;
-    });
     if (Camera.getNumberOfCameras() > 0) {
       quickCameraToggle.setVisibility(View.VISIBLE);
       quickCameraToggle.setOnClickListener(new QuickCameraToggleListener());
@@ -2257,48 +1993,6 @@ public class ConversationParentFragment extends Fragment
         return new ColorSet(getInactiveToolbarColor(wallpaper.getDrawable() != null));
       }
     };
-  }
-
-  private void handleResetSecureSession() {
-    String rationaleDialogMessage = getString(R.string.ConversationActivity_reset_secure_session_question) + getString(R.string.ConversationActivity_this_may_help_if_youre_having_encryption_problems);
-
-    android.app.AlertDialog dialog = PigeonRationaleDialog.createNonMsgDialog(
-        requireContext(),
-        rationaleDialogMessage,
-        R.string.ConversationActivity_reset,
-        android.R.string.cancel,
-        () -> {
-          if (isSingleConversation()) {
-            final Context context = getApplicationContext();
-
-            MessageTable database = SignalDatabase.messages();
-
-            OutgoingMessage endMessage = OutgoingMessage.endSessionMessage(getRecipient(), System.currentTimeMillis());
-
-            if (!recipient.get().isGroup()) {
-              ApplicationDependencies.getProtocolStore().aci().deleteAllSessions(recipient.get().requireServiceId().toString());
-
-              SecurityEvent.broadcastSecurityUpdateEvent(context);
-
-              Toast.makeText(context, R.string.conversation_secure_verified__menu_reset_secure_session, Toast.LENGTH_SHORT).show();
-
-//              long messageId = 0;
-//              try {
-//                messageId = database.insertMessageOutbox(endMessage,
-//                                                              threadId,
-//                                                              false,
-//                                                              null);
-//              } catch (MmsException e) {
-//                throw new RuntimeException(e);
-//              }
-//              database.markAsSent(messageId, true);
-//              SignalDatabase.threads().update(threadId, true);
-            }
-          }
-        },
-        null,
-        null);
-    dialog.show();
   }
 
   private void updateSendButtonColor(MessageSendType newMessageSendType) {
@@ -2387,23 +2081,9 @@ public class ConversationParentFragment extends Fragment
     }
   }
 
-  private void sendVoiceMessage() {
-    inputPanel.onRecordPressed();
-    myRT.setVisibility(View.VISIBLE);
-    voice.setText(getString(R.string.conversation__menu_voice_message_send));
-    voice.setOnClickListener(v -> stopVoiceMessage());
-  }
-
-  private void stopVoiceMessage() {
-    inputPanel.onRecordReleased();
-    voice.setText(getString(R.string.conversation__menu_voice_message));
-    voice.setOnClickListener(v -> sendVoiceMessage());
-  }
-
-
   protected void initializeActionBar() {
     invalidateOptionsMenu();
-    toolbar.setOnMenuItemClickListener(this::onOptionsItemSelected);
+    toolbar.setOnMenuItemClickListener(menuProvider::onMenuItemSelected);
 
     if (isInBubble()) {
       toolbar.setNavigationIcon(DrawableUtil.tint(ContextUtil.requireDrawable(requireContext(), R.drawable.ic_notification),
@@ -2478,7 +2158,7 @@ public class ConversationParentFragment extends Fragment
     StickerSearchRepository repository = new StickerSearchRepository(requireContext());
 
     stickerViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) new ConversationStickerViewModel.Factory(requireActivity().getApplication(), repository))
-        .get(ConversationStickerViewModel.class);
+                                         .get(ConversationStickerViewModel.class);
 
     stickerViewModel.getStickerResults().observe(getViewLifecycleOwner(), stickers -> {
       if (stickers == null) return;
@@ -2610,24 +2290,14 @@ public class ConversationParentFragment extends Fragment
 
     recipient.observe(this, r -> {
       groupCallViewModel.onRecipientChange(r);
-      pigeonSettings.setVisibility(r.isGroup() ? View.VISIBLE : View.GONE);
-      pigeonGroupCall.setVisibility(r.isGroup() ? View.VISIBLE : View.GONE);
-      pigeonCall.setVisibility(!r.isGroup() ? View.VISIBLE : View.GONE);
-      secureSession.setVisibility(!r.isGroup() ? View.VISIBLE : View.GONE);
-      pigeonSettings.setOnClickListener(v -> {
-                                          if (r.isGroup()) {
-                                            handleManageGroup();
-                                          } else {
-                                            handleConversationSettings();
-                                          }
-                                        }
-      );
     });
 
     groupCallViewModel.hasActiveGroupCall().observe(getViewLifecycleOwner(), hasActiveCall -> {
       invalidateOptionsMenu();
       joinGroupCallButton.setVisibility(hasActiveCall ? View.VISIBLE : View.GONE);
     });
+
+    groupCallViewModel.groupCallHasCapacity().observe(getViewLifecycleOwner(), hasCapacity -> joinGroupCallButton.setText(hasCapacity ? R.string.ConversationActivity_join : R.string.ConversationActivity_full));
   }
 
   public void initializeDraftViewModel() {
@@ -2651,7 +2321,8 @@ public class ConversationParentFragment extends Fragment
     );
   }
 
-  private void showGroupCallingTooltip() {
+  @Override
+  public void showGroupCallingTooltip() {
     if (!SignalStore.tooltips().shouldShowGroupCallingTooltip() || callingTooltipShown) {
       return;
     }
@@ -2665,31 +2336,27 @@ public class ConversationParentFragment extends Fragment
     callingTooltipShown = true;
 
     SignalStore.tooltips().markGroupCallSpeakerViewSeen();
-    if (BuildExtensionsKt.isSignalVersion()) {
-      TooltipPopup.forTarget(anchor)
-                  .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.signal_accent_green))
-                  .setTextColor(getResources().getColor(R.color.core_white))
-                  .setText(R.string.ConversationActivity__tap_here_to_start_a_group_call)
-                  .setOnDismissListener(() -> SignalStore.tooltips().markGroupCallingTooltipSeen())
-                  .show(TooltipPopup.POSITION_BELOW);
-    }
+    TooltipPopup.forTarget(anchor)
+                .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.signal_accent_green))
+                .setTextColor(getResources().getColor(R.color.core_white))
+                .setText(R.string.ConversationActivity__tap_here_to_start_a_group_call)
+                .setOnDismissListener(() -> SignalStore.tooltips().markGroupCallingTooltipSeen())
+                .show(TooltipPopup.POSITION_BELOW);
   }
 
   private void showStickerIntroductionTooltip() {
     TextSecurePreferences.setMediaKeyboardMode(requireContext(), MediaKeyboardMode.STICKER);
     inputPanel.setMediaKeyboardToggleMode(KeyboardPage.STICKER);
 
-    if (BuildExtensionsKt.isSignalVersion()) {
-      TooltipPopup.forTarget(inputPanel.getMediaKeyboardToggleAnchorView())
-                  .setBackgroundTint(getResources().getColor(R.color.core_ultramarine))
-                  .setTextColor(getResources().getColor(R.color.core_white))
-                  .setText(R.string.ConversationActivity_new_say_it_with_stickers)
-                  .setOnDismissListener(() -> {
-                    TextSecurePreferences.setHasSeenStickerIntroTooltip(requireContext(), true);
-                    EventBus.getDefault().removeStickyEvent(StickerPackInstallEvent.class);
-                  })
-                  .show(TooltipPopup.POSITION_ABOVE);
-    }
+    TooltipPopup.forTarget(inputPanel.getMediaKeyboardToggleAnchorView())
+                .setBackgroundTint(getResources().getColor(R.color.core_ultramarine))
+                .setTextColor(getResources().getColor(R.color.core_white))
+                .setText(R.string.ConversationActivity_new_say_it_with_stickers)
+                .setOnDismissListener(() -> {
+                  TextSecurePreferences.setHasSeenStickerIntroTooltip(requireContext(), true);
+                  EventBus.getDefault().removeStickyEvent(StickerPackInstallEvent.class);
+                })
+                .show(TooltipPopup.POSITION_ABOVE);
   }
 
   @Override
@@ -2821,19 +2488,17 @@ public class ConversationParentFragment extends Fragment
     initializeIdentityRecords();
   }
 
-  @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+  @Subscribe(threadMode =  ThreadMode.MAIN, sticky = true)
   public void onStickerPackInstalled(final StickerPackInstallEvent event) {
     if (!TextSecurePreferences.hasSeenStickerIntroTooltip(requireContext())) return;
 
     EventBus.getDefault().removeStickyEvent(event);
 
     if (!inputPanel.isStickerMode()) {
-      if (BuildExtensionsKt.isSignalVersion()) {
-        TooltipPopup.forTarget(inputPanel.getMediaKeyboardToggleAnchorView())
-                    .setText(R.string.ConversationActivity_sticker_pack_installed)
-                    .setIconGlideModel(event.getIconGlideModel())
-                    .show(TooltipPopup.POSITION_ABOVE);
-      }
+      TooltipPopup.forTarget(inputPanel.getMediaKeyboardToggleAnchorView())
+                  .setText(R.string.ConversationActivity_sticker_pack_installed)
+                  .setIconGlideModel(event.getIconGlideModel())
+                  .show(TooltipPopup.POSITION_ABOVE);
     }
   }
 
@@ -2893,15 +2558,15 @@ public class ConversationParentFragment extends Fragment
 
   private void addAttachmentContactInfo(Uri contactUri) {
     ContactAccessor contactDataList = ContactAccessor.getInstance();
-    ContactData     contactData     = contactDataList.getContactData(requireContext(), contactUri);
+    ContactData contactData = contactDataList.getContactData(requireContext(), contactUri);
 
-    if (contactData.numbers.size() == 1) composeText.append(contactData.numbers.get(0).number);
-    else if (contactData.numbers.size() > 1) selectContactInfo(contactData);
+    if      (contactData.numbers.size() == 1) composeText.append(contactData.numbers.get(0).number);
+    else if (contactData.numbers.size() > 1)  selectContactInfo(contactData);
   }
 
   private void sendSharedContact(List<Contact> contacts) {
-    long    expiresIn  = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
-    boolean initiating = threadId == -1;
+    long       expiresIn      = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
+    boolean    initiating     = threadId == -1;
 
     sendMediaMessage(recipient.getId(), sendButton.getSelectedSendType(), "", attachmentManager.buildSlideDeck(), null, contacts, Collections.emptyList(), Collections.emptyList(), null, expiresIn, false, initiating, false, null);
   }
@@ -2990,9 +2655,9 @@ public class ConversationParentFragment extends Fragment
   }
 
   private void calculateCharactersRemaining() {
-    String          messageBody    = composeText.getTextTrimmed().toString();
-    MessageSendType sendType       = sendButton.getSelectedSendType();
-    CharacterState  characterState = sendType.calculateCharacters(messageBody);
+    String          messageBody     = composeText.getTextTrimmed().toString();
+    MessageSendType sendType        = sendButton.getSelectedSendType();
+    CharacterState  characterState  = sendType.calculateCharacters(messageBody);
 
     if (characterState.charactersRemaining <= 15 || characterState.messagesSpent > 1) {
       charactersLeft.setText(String.format(Locale.getDefault(),
@@ -3022,7 +2687,8 @@ public class ConversationParentFragment extends Fragment
     }
   }
 
-  private boolean isInMessageRequest() {
+  @Override
+  public boolean isInMessageRequest() {
     return messageRequestBottomView.getVisibility() == View.VISIBLE;
   }
 
@@ -3053,11 +2719,17 @@ public class ConversationParentFragment extends Fragment
     return sendButton.isManualSelection() && sendButton.getSelectedSendType().usesSmsTransport();
   }
 
+  @Override
+  public @Nullable LiveRecipient getLiveRecipient() {
+    return recipient;
+  }
+
   protected Recipient getRecipient() {
     return this.recipient.get();
   }
 
-  protected long getThreadId() {
+  @Override
+  public long getThreadId() {
     return this.threadId;
   }
 
@@ -3140,19 +2812,19 @@ public class ConversationParentFragment extends Fragment
         throw new RecipientFormattingException("Badly formatted");
       }
 
-      String          message    = getMessage();
-      MessageSendType sendType   = sendButton.getSelectedSendType();
-      long            expiresIn  = TimeUnit.SECONDS.toMillis(recipient.getExpiresInSeconds());
-      boolean         initiating = threadId == -1;
-      boolean         needsSplit = !sendType.usesSmsTransport() && message.length() > sendType.calculateCharacters(message).maxPrimaryMessageSize;
-      boolean isMediaMessage = attachmentManager.isAttachmentPresent() ||
-                               recipient.isGroup() ||
-                               recipient.getEmail().isPresent() ||
-                               inputPanel.getQuote().isPresent() ||
-                               composeText.hasMentions() ||
-                               composeText.hasStyling() ||
-                               linkPreviewViewModel.hasLinkPreview() ||
-                               needsSplit;
+      String          message        = getMessage();
+      MessageSendType sendType       = sendButton.getSelectedSendType();
+      long            expiresIn      = TimeUnit.SECONDS.toMillis(recipient.getExpiresInSeconds());
+      boolean         initiating     = threadId == -1;
+      boolean         needsSplit     = !sendType.usesSmsTransport() && message.length() > sendType.calculateCharacters(message).maxPrimaryMessageSize;
+      boolean         isMediaMessage = attachmentManager.isAttachmentPresent() ||
+                                       recipient.isGroup()                     ||
+                                       recipient.getEmail().isPresent()        ||
+                                       inputPanel.getQuote().isPresent()       ||
+                                       composeText.hasMentions()               ||
+                                       composeText.hasStyling()                ||
+                                       linkPreviewViewModel.hasLinkPreview()   ||
+                                       needsSplit;
 
       Log.i(TAG, "[sendMessage] recipient: " + recipient.getId() + ", threadId: " + threadId + ",  sendType: " + (sendType.usesSignalTransport() ? "signal" : "sms") + ", isManual: " + sendButton.isManualSelection());
 
@@ -3183,33 +2855,38 @@ public class ConversationParentFragment extends Fragment
       return;
     }
 
-    long          thread    = this.threadId;
-    long          expiresIn = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
-    QuoteModel    quote     = result.isViewOnce() ? null : inputPanel.getQuote().orElse(null);
-    List<Mention> mentions  = new ArrayList<>(result.getMentions());
-    OutgoingMessage message = new OutgoingMessage(recipient.get(),
-                                                  result.getBody(),
-                                                  Collections.emptyList(),
-                                                  System.currentTimeMillis(),
-                                                  -1,
-                                                  expiresIn,
-                                                  result.isViewOnce(),
-                                                  distributionType,
-                                                  result.getStoryType(),
-                                                  null,
-                                                  false,
-                                                  quote,
-                                                  Collections.emptyList(),
-                                                  Collections.emptyList(),
-                                                  mentions,
-                                                  Collections.emptySet(),
-                                                  Collections.emptySet(),
-                                                  null,
-                                                  true,
-                                                  result.getBodyRanges(),
-                                                  -1);
+    if (SignalStore.uiHints().hasNotSeenTextFormattingAlert() && result.getBodyRanges() != null && result.getBodyRanges().getRangesCount() > 0) {
+      Dialogs.showFormattedTextDialog(requireContext(), () -> sendMediaMessage(result));
+      return;
+    }
 
-    final Context context = requireContext().getApplicationContext();
+    long            thread    = this.threadId;
+    long            expiresIn = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
+    QuoteModel      quote     = result.isViewOnce() ? null : inputPanel.getQuote().orElse(null);
+    List<Mention>   mentions  = new ArrayList<>(result.getMentions());
+    OutgoingMessage message   = new OutgoingMessage(recipient.get(),
+                                                    result.getBody(),
+                                                    Collections.emptyList(),
+                                                    System.currentTimeMillis(),
+                                                    -1,
+                                                    expiresIn,
+                                                    result.isViewOnce(),
+                                                    distributionType,
+                                                    result.getStoryType(),
+                                                    null,
+                                                    false,
+                                                    quote,
+                                                    Collections.emptyList(),
+                                                    Collections.emptyList(),
+                                                    mentions,
+                                                    Collections.emptySet(),
+                                                    Collections.emptySet(),
+                                                    null,
+                                                    true,
+                                                    result.getBodyRanges(),
+                                                    -1);
+
+    final Context         context      = requireContext().getApplicationContext();
 
     ApplicationDependencies.getTypingStatusSender().onTypingStopped(thread);
 
@@ -3292,6 +2969,12 @@ public class ConversationParentFragment extends Fragment
 
     if (!viewModel.isDefaultSmsApplication() && sendType.usesSmsTransport() && recipient.get().hasSmsAddress()) {
       showDefaultSmsPrompt();
+      return new SettableFuture<>(null);
+    }
+
+    if (SignalStore.uiHints().hasNotSeenTextFormattingAlert() && styling != null && styling.getRangesCount() > 0) {
+      final String finalBody = body;
+      Dialogs.showFormattedTextDialog(requireContext(), () -> sendMediaMessage(recipientId, sendType, finalBody, slideDeck, quote, contacts, previews, mentions, styling, expiresIn, viewOnce, initiating, clearComposeBox, metricId, scheduledDate));
       return new SettableFuture<>(null);
     }
 
@@ -3415,10 +3098,10 @@ public class ConversationParentFragment extends Fragment
 
   private void showDefaultSmsPrompt() {
     new MaterialAlertDialogBuilder(requireContext())
-        .setMessage(R.string.ConversationActivity_signal_cannot_sent_sms_mms_messages_because_it_is_not_your_default_sms_app)
-        .setNegativeButton(R.string.ConversationActivity_no, (dialog, which) -> dialog.dismiss())
-        .setPositiveButton(R.string.ConversationActivity_yes, (dialog, which) -> handleMakeDefaultSms())
-        .show();
+                   .setMessage(R.string.ConversationActivity_signal_cannot_sent_sms_mms_messages_because_it_is_not_your_default_sms_app)
+                   .setNegativeButton(R.string.ConversationActivity_no, (dialog, which) -> dialog.dismiss())
+                   .setPositiveButton(R.string.ConversationActivity_yes, (dialog, which) -> handleMakeDefaultSms())
+                   .show();
   }
 
   private void showExpiredDialog() {
@@ -3544,13 +3227,8 @@ public class ConversationParentFragment extends Fragment
     requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
 
     voiceNoteMediaController.pausePlayback();
-    try {
-      recordingSession = new RecordingSession(audioRecorder.startRecording());
-      disposables.add(recordingSession);
-    } catch (AssertionError err) {
-      Log.e(TAG, "Could not start audio recording.", err);
-      Toast.makeText(requireContext(), R.string.ConversationActivity_unable_to_record_audio, Toast.LENGTH_SHORT).show();
-    }
+    recordingSession = new RecordingSession(audioRecorder.startRecording());
+    disposables.add(recordingSession);
   }
 
   @Override
@@ -3687,8 +3365,8 @@ public class ConversationParentFragment extends Fragment
     sendSticker(new StickerLocator(stickerRecord.getPackId(), stickerRecord.getPackKey(), stickerRecord.getStickerId(), stickerRecord.getEmoji()), stickerRecord.getContentType(), stickerRecord.getUri(), stickerRecord.getSize(), clearCompose);
 
     SignalExecutors.BOUNDED.execute(() ->
-                                        SignalDatabase.stickers()
-                                                      .updateStickerLastUsedTime(stickerRecord.getRowId(), System.currentTimeMillis())
+     SignalDatabase.stickers()
+                    .updateStickerLastUsedTime(stickerRecord.getRowId(), System.currentTimeMillis())
     );
   }
 
@@ -3700,11 +3378,11 @@ public class ConversationParentFragment extends Fragment
       return;
     }
 
-    long            expiresIn    = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
-    boolean         initiating   = threadId == -1;
-    MessageSendType sendType     = sendButton.getSelectedSendType();
-    SlideDeck       slideDeck    = new SlideDeck();
-    Slide           stickerSlide = new StickerSlide(requireContext(), uri, size, stickerLocator, contentType);
+    long            expiresIn      = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
+    boolean         initiating     = threadId == -1;
+    MessageSendType sendType       = sendButton.getSelectedSendType();
+    SlideDeck       slideDeck      = new SlideDeck();
+    Slide           stickerSlide   = new StickerSlide(requireContext(), uri, size, stickerLocator, contentType);
 
     slideDeck.addSlide(stickerSlide);
 
@@ -3753,7 +3431,6 @@ public class ConversationParentFragment extends Fragment
       recentEmojis.onCodePointSelected(emoji);
     }
   }
-
 
   @Override
   public void onKeyEvent(KeyEvent keyEvent) {
@@ -3828,7 +3505,6 @@ public class ConversationParentFragment extends Fragment
   @Override
   public void bindScrollHelper(@NonNull RecyclerView recyclerView) {
     material3OnScrollHelper.attach(recyclerView);
-    showWhenScrolledToBottom(recyclerView, inputPanel);
   }
 
   @Override
@@ -3867,12 +3543,42 @@ public class ConversationParentFragment extends Fragment
     sendMessage(metricId, scheduledDate);
   }
 
+  @Override
+  public void handleGoHome() {
+    requireActivity().finish();
+  }
+
+  @Override
+  public @NonNull  ConversationViewModel getViewModel() {
+    return viewModel;
+  }
+
+  @Override
+  public @NonNull ConversationGroupViewModel getGroupViewModel() {
+    return groupViewModel;
+  }
+
+  @Override
+  public @Nullable GroupCallViewModel getGroupCallViewModel() {
+    return groupCallViewModel;
+  }
+
+  @Override
+  public @NonNull ConversationTitleView getTitleView() {
+    return titleView;
+  }
+
+  @Override
+  public int getDistributionType() {
+    return distributionType;
+  }
+
   // Listeners
 
   private class RecordingSession implements SingleObserver<VoiceNoteDraft>, Disposable {
 
-    private boolean    saveDraft  = true;
-    private boolean    shouldSend = false;
+    private boolean saveDraft  = true;
+    private boolean shouldSend = false;
     private Disposable disposable = Disposable.empty();
 
     RecordingSession(Single<VoiceNoteDraft> observable) {
@@ -4010,7 +3716,7 @@ public class ConversationParentFragment extends Fragment
     }
 
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    public void beforeTextChanged(CharSequence s, int start, int count,int after) {
       beforeLength = composeText.getTextTrimmed().length();
     }
 
@@ -4026,7 +3732,7 @@ public class ConversationParentFragment extends Fragment
     }
 
     @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+    public void onTextChanged(CharSequence s, int start, int before,int count) {}
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
@@ -4266,13 +3972,13 @@ public class ConversationParentFragment extends Fragment
     }
 
     SimpleTask.run(() -> {
-      //noinspection CodeBlock2Expr
-      return SignalDatabase.messages().checkMessageExists(reactionDelegate.getMessageRecord());
-    }, messageExists -> {
-      if (!messageExists) {
-        reactionDelegate.hide();
-      }
-    });
+          //noinspection CodeBlock2Expr
+          return SignalDatabase.messages().checkMessageExists(reactionDelegate.getMessageRecord());
+        }, messageExists -> {
+          if (!messageExists) {
+            reactionDelegate.hide();
+          }
+        });
   }
 
   @Override
@@ -4393,7 +4099,7 @@ public class ConversationParentFragment extends Fragment
   }
 
   @Override
-  public void onForwardClicked() {
+  public void onForwardClicked()  {
     inputPanel.clearQuote();
   }
 
@@ -4417,7 +4123,7 @@ public class ConversationParentFragment extends Fragment
     }
 
     AlertDialog.Builder builder = new MaterialAlertDialogBuilder(requireContext())
-        .setNeutralButton(R.string.ConversationActivity_cancel, (d, w) -> d.dismiss());
+                                                 .setNeutralButton(R.string.ConversationActivity_cancel, (d, w) -> d.dismiss());
 
     if (recipient.isGroup() && recipient.isBlocked()) {
       builder.setTitle(R.string.ConversationActivity_delete_conversation);
@@ -4456,12 +4162,6 @@ public class ConversationParentFragment extends Fragment
     BlockUnblockDialog.showUnblockFor(requireContext(), getLifecycle(), recipient, requestModel::onUnblock);
   }
 
-  private static void hideMenuItem(@NonNull Menu menu, @IdRes int menuItem) {
-    if (menu.findItem(menuItem) != null) {
-      menu.findItem(menuItem).setVisible(false);
-    }
-  }
-
   @WorkerThread
   private @Nullable KeyboardImageDetails getKeyboardImageDetails(@NonNull Uri uri) {
     try {
@@ -4484,9 +4184,9 @@ public class ConversationParentFragment extends Fragment
       return;
     }
 
-    long      expiresIn  = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
-    boolean   initiating = threadId == -1;
-    SlideDeck slideDeck  = new SlideDeck();
+    long       expiresIn      = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
+    boolean    initiating     = threadId == -1;
+    SlideDeck  slideDeck      = new SlideDeck();
 
     if (MediaUtil.isGif(contentType)) {
       slideDeck.addSlide(new GifSlide(requireContext(), uri, 0, details.width, details.height, details.hasTransparency, null));
@@ -4537,7 +4237,7 @@ public class ConversationParentFragment extends Fragment
       } else {
         String[] unverifiedNames = new String[unverifiedIdentities.size()];
 
-        for (int i = 0; i < unverifiedIdentities.size(); i++) {
+        for (int i=0;i<unverifiedIdentities.size();i++) {
           unverifiedNames[i] = Recipient.resolved(unverifiedIdentities.get(i).getRecipientId()).getDisplayName(requireContext());
         }
 
@@ -4548,50 +4248,6 @@ public class ConversationParentFragment extends Fragment
           startActivity(VerifyIdentityActivity.newIntent(requireContext(), unverifiedIdentities.get(which), false));
         });
         builder.show();
-      }
-    }
-  }
-
-  private class QuoteRestorationTask extends AsyncTask<Void, Void, ConversationMessage> {
-
-    private final String                  serialized;
-    private final SettableFuture<Boolean> future;
-
-    QuoteRestorationTask(@NonNull String serialized, @NonNull SettableFuture<Boolean> future) {
-      this.serialized = serialized;
-      this.future     = future;
-    }
-
-    @Override
-    protected ConversationMessage doInBackground(Void... voids) {
-      QuoteId quoteId = QuoteId.deserialize(ApplicationDependencies.getApplication(), serialized);
-
-      if (quoteId == null) {
-        return null;
-      }
-
-      Context context = ApplicationDependencies.getApplication();
-
-      MessageRecord messageRecord = SignalDatabase.messages().getMessageFor(quoteId.getId(), quoteId.getAuthor());
-      if (messageRecord == null) {
-        return null;
-      }
-
-      if (messageRecord instanceof MediaMmsMessageRecord) {
-        messageRecord = ((MediaMmsMessageRecord) messageRecord).withAttachments(context, SignalDatabase.attachments().getAttachmentsForMessage(messageRecord.getId()));
-      }
-
-      return ConversationMessageFactory.createWithUnresolvedData(context, messageRecord);
-    }
-
-    @Override
-    protected void onPostExecute(ConversationMessage conversationMessage) {
-      if (conversationMessage != null) {
-        handleReplyMessage(conversationMessage);
-        future.set(true);
-      } else {
-        Log.e(TAG, "Failed to restore a quote from a draft. No matching message record.");
-        future.set(false);
       }
     }
   }
@@ -4624,14 +4280,14 @@ public class ConversationParentFragment extends Fragment
                                          .withStartingPosition((int) messagePositionInThread)
                                          .build());
       } else {
-        fragment.jumpToMessage(senderId, messageTimestamp, () -> {});
+        fragment.jumpToMessage(senderId, messageTimestamp, () -> { });
       }
     }
   }
 
   private void presentMessageRequestState(@Nullable MessageRequestViewModel.MessageData messageData) {
     if (!Util.isEmpty(viewModel.getArgs().getDraftText()) ||
-        viewModel.getArgs().getMedia() != null ||
+        viewModel.getArgs().getMedia() != null            ||
         viewModel.getArgs().getStickerLocator() != null)
     {
       Log.d(TAG, "[presentMessageRequestState] Have extra, so ignoring provided state.");
@@ -4651,7 +4307,6 @@ public class ConversationParentFragment extends Fragment
       Log.d(TAG, "[presentMessageRequestState] " + messageData.getMessageState());
       messageRequestBottomView.setMessageData(messageData);
       messageRequestBottomView.setVisibility(View.VISIBLE);
-      messageRequestBottomView.focusAccept();
       noLongerMemberBanner.setVisibility(View.GONE);
       inputPanel.setHideForMessageRequestState(true);
     }
@@ -4692,10 +4347,5 @@ public class ConversationParentFragment extends Fragment
     default boolean isInBubble() {
       return false;
     }
-  }
-
-  public void onKeycodeCallPressed() {
-    sendButtonListener.onClick(composeText);
-    composeText.requestFocus();
   }
 }

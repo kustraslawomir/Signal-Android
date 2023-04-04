@@ -228,9 +228,9 @@ public class WebRtcCallView extends ConstraintLayout {
     navigationBarGuideline        = findViewById(R.id.call_screen_navigation_bar_guideline);
     fullScreenShade               = findViewById(R.id.call_screen_full_shade);
 
-    View decline      = findViewById(R.id.call_screen_decline_call);
-    View answerLabel  = findViewById(R.id.call_screen_answer_call_label);
-    View declineLabel = findViewById(R.id.call_screen_decline_call_label);
+    View      decline                = findViewById(R.id.call_screen_decline_call);
+    View      answerLabel            = findViewById(R.id.call_screen_answer_call_label);
+    View      declineLabel           = findViewById(R.id.call_screen_decline_call_label);
 
     volumeToggle.setOnClickListener(v -> runIfNonNull(controlsListener, ControlsListener::onVolumePressed));
 
@@ -503,8 +503,8 @@ public class WebRtcCallView extends ConstraintLayout {
     }
 
     if (state.getGroupCallState().isNotIdle()) {
-      String text = state.getParticipantCount()
-                         .mapToObj(String::valueOf).orElse("\u2014");
+      String  text    = state.getParticipantCount()
+                             .mapToObj(String::valueOf).orElse("\u2014");
       boolean enabled = state.getParticipantCount().isPresent();
 
       foldParticipantCount.setText(text);
@@ -682,7 +682,6 @@ public class WebRtcCallView extends ConstraintLayout {
     }
     pigeonStatus.setText(getContext().getString(statusesInt) + " "+ time);
   }
-
 
   public void setStatusFromGroupCallState(@NonNull WebRtcViewModel.GroupCallState groupCallState) {
     switch (groupCallState) {
@@ -1105,7 +1104,6 @@ public class WebRtcCallView extends ConstraintLayout {
     ConstraintSet constraintSet = new ConstraintSet();
     constraintSet.clone(parent);
 
-
     for (View view : SetUtil.difference(allTimeVisibleViews, visibleViewSet)) {
       constraintSet.setVisibility(view.getId(), ConstraintSet.GONE);
     }
@@ -1208,37 +1206,21 @@ public class WebRtcCallView extends ConstraintLayout {
   public interface ControlsListener {
     void onVolumePressed();
     void onStartCall(boolean isVideoCall);
-
     void onCancelStartCall();
-
     void onControlsFadeOut();
-
     void showSystemUI();
-
     void hideSystemUI();
-
     void onAudioOutputChanged(@NonNull WebRtcAudioOutput audioOutput);
-
     void onVideoChanged(boolean isVideoEnabled);
-
     void onMicChanged(boolean isMicEnabled);
-
     void onCameraDirectionChanged();
-
     void onEndCallPressed();
-
     void onDenyCallPressed();
-
     void onAcceptCallWithVoiceOnlyPressed();
-
     void onAcceptCallPressed();
-
     void onShowParticipantsList();
-
     void onPageChanged(@NonNull CallParticipantsState.SelectedPage page);
-
     void onLocalPictureInPictureClicked();
-
     void onRingGroupChanged(boolean ringGroup, boolean ringingAllowed);
   }
 }

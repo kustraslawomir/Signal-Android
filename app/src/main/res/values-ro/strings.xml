@@ -384,6 +384,15 @@
     <!-- Snackbar message shown after dismissing the full screen sms export megaphone indicating we\'ll do it again soon -->
     <string name="ConversationActivity__you_will_be_reminded_again_soon">Vei primi un mesaj de reamintire curând din nou.</string>
 
+    <!-- Title for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_title">Sending formatted text</string>
+    <!-- Message for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_message">Some people may be using a version of Signal that doesn\'t support formatted text. They will not be able to see the formatting changes you\'ve made to your message.</string>
+    <!-- Button text for confirming they\'d like to send the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_send_anyway_button">Trimite oricum</string>
+    <!-- Button text for canceling sending the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_cancel_send_button">Anulează</string>
+
     <!-- ConversationAdapter -->
     <plurals name="ConversationAdapter_n_unread_messages">
         <item quantity="one">%1$d mesaj necitit</item>
@@ -562,6 +571,15 @@
 
     <!-- ConversationTypingView -->
     <string name="ConversationTypingView__plus_d">+%1$d</string>
+
+    <!-- Title for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__relink_your_devices">Re-asociază-ți dispozitivele</string>
+    <!-- Description for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__the_devices_you_added_were_unlinked">Dispozitivele pe care le-ai adăugat au fost deconectate când dispozitivului tău i-a fost anulată înregistrarea. Mergi la Setări ca să re-asociezi dispozitive.</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to navigate to the Devices page in the settings. -->
+    <string name="RelinkDevicesReminderFragment__open_settings">Deschide setările</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to dismiss the pop up. -->
+    <string name="RelinkDevicesReminderFragment__later">Mai târziu</string>
 
     <!-- CreateGroupActivity -->
     <string name="CreateGroupActivity__select_members">Selectează membrii</string>
@@ -1215,8 +1233,8 @@
     <string name="Megaphones_new_group">Grup nou</string>
     <string name="Megaphones_invite_friends">Invită prieteni</string>
     <string name="Megaphones_use_sms">Utilizează SMS</string>
-    <string name="Megaphones_appearance">Aspect</string>
-    <string name="Megaphones_add_photo">Adăugare poză</string>
+    <string name="Megaphones_chat_colors">Culoare conversație</string>
+    <string name="Megaphones_add_a_profile_photo">Adaugă o poză de profil</string>
 
     <!-- Title of a bottom sheet to render messages that all quote a specific message -->
     <string name="MessageQuotesBottomSheet_replies">Răspunsuri</string>
@@ -1795,19 +1813,17 @@
         <item quantity="other">%1$s, %2$s și alte %3$d de persoane sunt în acest apel</item>
     </plurals>
 
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__flip">Comută</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__speaker">Difuzor</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__camera">Cameră foto</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__unmute">Microfon</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__mute">Mut</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__ring">Sună</string>
-    <!-- Label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
+    <!-- Toggle content description for toggling camera direction  -->
+    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <!-- Toggle content description for toggling audio output  -->
+    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <!-- Toggle content description for toggling camera state  -->
+    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <!-- Toggle content description for toggling mute state  -->
+    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <!-- Toggle content description for toggling group ring state  -->
+    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">Închide</string>
 
     <!-- CallParticipantsListDialog -->
@@ -2188,6 +2204,10 @@
     <string name="MessageNotifier_most_recent_from_s">Cel mai recent de la: %1$s</string>
     <string name="MessageNotifier_locked_message">Mesaj blocat</string>
     <string name="MessageNotifier_message_delivery_failed">Livrarea mesajului a eșuat.</string>
+    <!-- Shown in a notification when a story the user tries to send fails to be sent -->
+    <string name="MessageNotifier_story_delivery_failed">Nu s-a trimis povestea</string>
+    <!-- Shown as notification title for when a notification about a story sent to a group story %1$s replaced with the group name -->
+    <string name="MessageNotifier_group_story_title">Tu către %1$s</string>
     <string name="MessageNotifier_failed_to_deliver_message">Mesajul nu a putut fi trimis.</string>
     <string name="MessageNotifier_error_delivering_message">A apărut o eroare la trimiterea mesajului.</string>
     <string name="MessageNotifier_message_delivery_paused">Livrarea mesajelor a fost întreruptă.</string>
@@ -2209,6 +2229,8 @@
     <string name="MessageNotifier_reacted_s_to_your_file">A reacționat cu %1$s la fișierul tău.</string>
     <string name="MessageNotifier_reacted_s_to_your_audio">A reacționat cu %1$s la înregistrarea ta audio.</string>
     <string name="MessageNotifier_reacted_s_to_your_view_once_media">A reacționat cu %1$s la fișierul media vizibil o singură dată.</string>
+    <!-- Body of notification shown to user when someone they sent a payment to reacts to it. Placeholder is the emoji used in the reaction. -->
+    <string name="MessageNotifier_reacted_s_to_your_payment">A reacționat cu %1$s la plata ta.</string>
     <string name="MessageNotifier_reacted_s_to_your_sticker">A reacționat cu %1$s la autocolantul tău.</string>
     <string name="MessageNotifier_this_message_was_deleted">Acest mesaj a fost șters.</string>
 
@@ -2326,6 +2348,12 @@
     <!-- contact_selection_activity -->
     <string name="contact_selection_activity__invite_to_signal">Invită la Signal</string>
     <string name="contact_selection_activity__new_group">Grup nou</string>
+    <!-- Row item title for refreshing contacts -->
+    <string name="contact_selection_activity__refresh_contacts">Refresh contacts</string>
+    <!-- Row item description for refreshing contacts -->
+    <string name="contact_selection_activity__missing_someone">Missing someone? Try refreshing</string>
+    <!-- Row header title for more section -->
+    <string name="contact_selection_activity__more">Mai multe</string>
 
     <!-- contact_filter_toolbar -->
     <string name="contact_filter_toolbar__clear_entered_text_description">Șterge textul introdus</string>
@@ -3182,6 +3210,8 @@
     <!-- **************************************** -->
 
     <!-- contact_selection_list -->
+    <!-- Displayed in a row on the new call screen when searching by phone number. -->
+    <string name="contact_selection_list__new_call">New call to…</string>
     <string name="contact_selection_list__unknown_contact">Mesaj nou către…</string>
     <string name="contact_selection_list__unknown_contact_block">Blochează utilizatorul</string>
     <string name="contact_selection_list__unknown_contact_add_to_group">Adăugă la grup</string>
@@ -3547,6 +3577,18 @@
     <string name="BackupUtil_unknown">Necunoscut</string>
     <string name="preferences_app_protection__see_my_phone_number">Să-mi vadă numărul de telefon</string>
     <string name="preferences_app_protection__find_me_by_phone_number">Să mă găsească după numărul de telefon</string>
+    <!-- Phone number heading displayed as a screen title -->
+    <string name="preferences_app_protection__phone_number">Număr de telefon</string>
+    <!-- Subtext below option to launch into phone number privacy settings screen -->
+    <string name="preferences_app_protection__choose_who_can_see">Alege cine îți poate vedea numărul de telefon și cine te poate contacta pe Signal cu el.</string>
+    <!-- Section title above two radio buttons for enabling and disabling phone number display -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_see_my_number">Cine îmi poate vedea numărul</string>
+    <!-- Subtext below radio buttons when who can see my number is set to nobody -->
+    <string name="PhoneNumberPrivacySettingsFragment__nobody_will_see">Nimeni nu va vedea numărul tău de telefon pe Signal</string>
+    <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_find_me_by_number">Cine mă poate găsi după număr</string>
+    <!-- Subtext below radio buttons when who can see my number is set to everyone -->
+    <string name="PhoneNumberPrivacySettingsFragment__your_phone_number">Numărul tău de telefon va fi vizibil pentru persoanele și grupurile către care trimiți mesaje. Persoanele care au numărul tău de telefon în lista lor de contacte îl vor vedea și pe Signal.</string>
     <string name="PhoneNumberPrivacy_everyone">Toată lumea</string>
     <string name="PhoneNumberPrivacy_my_contacts">Contactele mele</string>
     <string name="PhoneNumberPrivacy_nobody">Nimeni</string>
@@ -4659,7 +4701,7 @@
     <string name="DonationsErrors__your_donation_could_not_be_sent">Donația ta nu a putut fi trimisă din cauza unei erori de rețea. Verifică-ți conexiunea și încearcă din nou.</string>
 
     <!-- Gift message view title -->
-    <string name="GiftMessageView__donation_to_s">Donație către %1$s</string>
+    <string name="GiftMessageView__donation_on_behalf_of_s">Donație în numele persoanei %1$s</string>
     <!-- Gift message view title for incoming donations -->
     <string name="GiftMessageView__s_donated_to_signal_on">%1$s donați către Signal în numele tău</string>
     <!-- Gift badge redeem action label -->
@@ -4898,6 +4940,8 @@
 
     <!-- Label for Chats tab in home app screen -->
     <string name="ConversationListTabs__chats">Conversații</string>
+    <!-- Label for Calls tab in home app screen -->
+    <string name="ConversationListTabs__calls">Apeluri</string>
     <!-- Label for Stories tab in home app screen -->
     <string name="ConversationListTabs__stories">Povești</string>
     <!-- String for counts above 99 in conversation list tabs -->
@@ -5219,7 +5263,7 @@
     <!-- Conversation Item label for reactions to your story -->
     <string name="ConversationItem__reacted_to_your_story">A reacționat la povestea ta</string>
     <!-- Conversation Item label for reactions to an unavailable story -->
-    <string name="ConversationItem__reacted_to_a_story">Ai reacționat la poveste</string>
+    <string name="ConversationItem__reacted_to_a_story">A reacționat la o poveste</string>
 
     <!-- endregion -->
     <!-- Content description for expand contacts chevron -->
@@ -5783,6 +5827,87 @@
     <string name="TimeDurationPickerDialog_positive_button">Aplicare</string>
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, helper text indicating minimum allowable duration -->
     <string name="TimeDurationPickerDialog_minimum_duration_warning">Timpul minim înainte să se aplice blocarea ecranului este de 1 minut.</string>
+
+    <!-- Call Log -->
+    <!-- Displayed below the user\'s name in row items on the call log. First placeholder is the call status, second is when it occurred -->
+    <string name="CallLogAdapter__s_dot_s">%1$s · %2$s</string>
+    <!-- Displayed for incoming calls -->
+    <string name="CallLogAdapter__incoming">Primire</string>
+    <!-- Displayed for outgoing calls -->
+    <string name="CallLogAdapter__outgoing">trimitere</string>
+    <!-- Displayed for missed calls -->
+    <string name="CallLogAdapter__missed">Missed</string>
+
+    <!-- Call Log context menu -->
+    <!-- Displayed as a context menu item to start a video call -->
+    <string name="CallContextMenu__video_call">Apel video</string>
+    <!-- Displayed as a context menu item to join an ongoing group call -->
+    <string name="CallContextMenu__join_call">Alătură-te apelului</string>
+    <!-- Displayed as a context menu item to return to active call -->
+    <string name="CallContextMenu__return_to_call">Întoarcere la apel</string>
+    <!-- Displayed as a context menu item to start an audio call -->
+    <string name="CallContextMenu__audio_call">Apel audio</string>
+    <!-- Displayed as a context menu item to go to chat -->
+    <string name="CallContextMenu__go_to_chat">Arată conversația</string>
+    <!-- Displayed as a context menu item to see call info -->
+    <string name="CallContextMenu__info">Informații</string>
+    <!-- Displayed as a context menu item to select multiple calls -->
+    <string name="CallContextMenu__select">Selectează</string>
+    <!-- Displayed as a context menu item to delete this call -->
+    <string name="CallContextMenu__delete">Șterge</string>
+
+    <!-- Call Log Fragment -->
+    <!-- Action bar menu item to only display missed calls -->
+    <string name="CallLogFragment__filter_missed_calls">Filter missed calls</string>
+    <!-- Action bar menu item to clear missed call filter -->
+    <string name="CallLogFragment__clear_filter">Șterge filtru</string>
+    <!-- Action bar menu item to open settings -->
+    <string name="CallLogFragment__settings">Setări</string>
+    <!-- Action bar menu item to open notification profile settings -->
+    <string name="CallLogFragment__notification_profile">Profil notificări</string>
+    <!-- Call log new call content description -->
+    <string name="CallLogFragment__start_a_new_call">Start a new call</string>
+    <!-- Filter pull text when pulled -->
+    <string name="CallLogFragment__filtered_by_missed">Filtered by missed</string>
+    <!-- Bottom bar option to select all call entries -->
+    <string name="CallLogFragment__select_all">Selectează tot</string>
+    <!-- Bottom bar option to delete all selected call entries -->
+    <string name="CallLogFragment__delete">Șterge</string>
+    <!-- Title on multi-delete protection dialog (TODO - final terminology) -->
+  <!-- Removed by excludeNonTranslatables <plurals name="CallLogFragment__delete_d_calls" translatable="false">
+        <item quantity="one">Delete %1$d call?</item>
+        <item quantity="other">Delete %1$d calls?</item>
+    </plurals> -->
+    <!-- Positive action on multi-delete protection dialog -->
+    <string name="CallLogFragment__delete_for_me">Șterge doar pentru mine</string>
+    <!-- Snackbar label after deleting call logs -->
+    <plurals name="CallLogFragment__d_calls_deleted">
+        <item quantity="one">%1$d call deleted</item>
+        <item quantity="few">%1$d calls deleted</item>
+        <item quantity="other">%1$d calls deleted</item>
+    </plurals>
+    <!-- Undo action for deletion snackbar -->
+    <string name="CallLogFragment__undo">Anulează</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__no_calls">No calls.</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__get_started_by_calling_a_friend">Get started by calling a friend.</string>
+
+    <!-- New call activity -->
+    <!-- Activity title in title bar -->
+    <string name="NewCallActivity__new_call">New call</string>
+
+    <!-- Call state update popups -->
+    <!-- Displayed when the user enables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_on">Ringing on</string>
+    <!-- Displayed when the user disables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_off">Ringing off</string>
+    <!-- Displayed when the user cannot enable group call ringing -->
+    <string name="CallStateUpdatePopupWindow__group_is_too_large">Group is too large to ring the participants</string>
+    <!-- Displayed when the user turns on their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_on">Mic on</string>
+    <!-- Displayed when the user turns off their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_off">Mic off</string>
 
     <!-- EOF -->
 </resources>

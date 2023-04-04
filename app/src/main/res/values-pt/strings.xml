@@ -384,6 +384,15 @@
     <!-- Snackbar message shown after dismissing the full screen sms export megaphone indicating we\'ll do it again soon -->
     <string name="ConversationActivity__you_will_be_reminded_again_soon">Receberá um lembrete em breve.</string>
 
+    <!-- Title for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_title">Sending formatted text</string>
+    <!-- Message for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_message">Some people may be using a version of Signal that doesn\'t support formatted text. They will not be able to see the formatting changes you\'ve made to your message.</string>
+    <!-- Button text for confirming they\'d like to send the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_send_anyway_button">Enviar mesmo assim</string>
+    <!-- Button text for canceling sending the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_cancel_send_button">Cancelar</string>
+
     <!-- ConversationAdapter -->
     <plurals name="ConversationAdapter_n_unread_messages">
         <item quantity="one">%1$d mensagem por ler</item>
@@ -542,6 +551,15 @@
 
     <!-- ConversationTypingView -->
     <string name="ConversationTypingView__plus_d">+%1$d</string>
+
+    <!-- Title for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__relink_your_devices">Revincule os seus dispositivos</string>
+    <!-- Description for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__the_devices_you_added_were_unlinked">Os dispositivos que adicionou foram desvinculados quando o dispositivo não estava registado. Aceda às Definições para revincular dispositivos.</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to navigate to the Devices page in the settings. -->
+    <string name="RelinkDevicesReminderFragment__open_settings">Abrir definições</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to dismiss the pop up. -->
+    <string name="RelinkDevicesReminderFragment__later">Mais tarde</string>
 
     <!-- CreateGroupActivity -->
     <string name="CreateGroupActivity__select_members">Selecionar membros</string>
@@ -1167,8 +1185,8 @@
     <string name="Megaphones_new_group">Novo grupo</string>
     <string name="Megaphones_invite_friends">Convidar amigos</string>
     <string name="Megaphones_use_sms">Utilizar SMS</string>
-    <string name="Megaphones_appearance">Aspeto</string>
-    <string name="Megaphones_add_photo">Adicionar fotografia</string>
+    <string name="Megaphones_chat_colors">Cor dos chats</string>
+    <string name="Megaphones_add_a_profile_photo">Adicionar uma fotografia de perfil</string>
 
     <!-- Title of a bottom sheet to render messages that all quote a specific message -->
     <string name="MessageQuotesBottomSheet_replies">Respostas</string>
@@ -1726,19 +1744,17 @@
         <item quantity="other">%1$s, %2$s, e outros %3$d estão nesta chamada</item>
     </plurals>
 
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__flip">Girar</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__speaker">Altifalante</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__camera">Câmara</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__unmute">Desativar o silêncio</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__mute">Silenciar</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__ring">Ligar</string>
-    <!-- Label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
+    <!-- Toggle content description for toggling camera direction  -->
+    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <!-- Toggle content description for toggling audio output  -->
+    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <!-- Toggle content description for toggling camera state  -->
+    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <!-- Toggle content description for toggling mute state  -->
+    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <!-- Toggle content description for toggling group ring state  -->
+    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">Terminar chamada</string>
 
     <!-- CallParticipantsListDialog -->
@@ -2116,6 +2132,10 @@
     <string name="MessageNotifier_most_recent_from_s">Mais recente de: %1$s</string>
     <string name="MessageNotifier_locked_message">Mensagem bloqueada</string>
     <string name="MessageNotifier_message_delivery_failed">Falha na entrega de mensagem.</string>
+    <!-- Shown in a notification when a story the user tries to send fails to be sent -->
+    <string name="MessageNotifier_story_delivery_failed">Falha ao enviar a história</string>
+    <!-- Shown as notification title for when a notification about a story sent to a group story %1$s replaced with the group name -->
+    <string name="MessageNotifier_group_story_title">De si para %1$s</string>
     <string name="MessageNotifier_failed_to_deliver_message">Falha na entrega da mensagem.</string>
     <string name="MessageNotifier_error_delivering_message">Erro ao entregar a mensagem.</string>
     <string name="MessageNotifier_message_delivery_paused">Entrega de mensagens em pausa.</string>
@@ -2137,6 +2157,8 @@
     <string name="MessageNotifier_reacted_s_to_your_file">Reagiu %1$s ao seu ficheiro.</string>
     <string name="MessageNotifier_reacted_s_to_your_audio">Reagiu %1$s ao seu áudio.</string>
     <string name="MessageNotifier_reacted_s_to_your_view_once_media">Reagiu %1$s ao seu ficheiro multimédia de visualização única</string>
+    <!-- Body of notification shown to user when someone they sent a payment to reacts to it. Placeholder is the emoji used in the reaction. -->
+    <string name="MessageNotifier_reacted_s_to_your_payment">Reagiu %1$s ao seu pagamento.</string>
     <string name="MessageNotifier_reacted_s_to_your_sticker">Reagiu %1$s ao seu autocolante.</string>
     <string name="MessageNotifier_this_message_was_deleted">Esta mensagem foi eliminada.</string>
 
@@ -2253,6 +2275,12 @@
     <!-- contact_selection_activity -->
     <string name="contact_selection_activity__invite_to_signal">Convite para o Signal</string>
     <string name="contact_selection_activity__new_group">Novo grupo</string>
+    <!-- Row item title for refreshing contacts -->
+    <string name="contact_selection_activity__refresh_contacts">Refresh contacts</string>
+    <!-- Row item description for refreshing contacts -->
+    <string name="contact_selection_activity__missing_someone">Missing someone? Try refreshing</string>
+    <!-- Row header title for more section -->
+    <string name="contact_selection_activity__more">Mais</string>
 
     <!-- contact_filter_toolbar -->
     <string name="contact_filter_toolbar__clear_entered_text_description">Limpar o texto introduzido</string>
@@ -2530,7 +2558,7 @@
 
     <!-- BadDecryptLearnMoreDialog -->
     <string name="BadDecryptLearnMoreDialog_delivery_issue">Problema na entrega</string>
-    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">Uma mensagem, autocolante, reação ou recibo de leitura enviado(a) por %1$s não pode ser entregue a si. Essa mensagem poderá ter sido tentada enviada para si diretamente ou através de um grupo.</string>
+    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">Uma mensagem, autocolante, reação ou confirmação de leitura enviado por %1$s não pôde ser entregue a si. Poderá ter sido enviado diretamente a si, ou num grupo.</string>
     <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">Não lhe foi possível entregar uma mensagem, autocolante, reação ou recibo de leitura enviado por %1$s.</string>
 
     <!-- profile_create_activity -->
@@ -3098,6 +3126,8 @@
     <!-- **************************************** -->
 
     <!-- contact_selection_list -->
+    <!-- Displayed in a row on the new call screen when searching by phone number. -->
+    <string name="contact_selection_list__new_call">New call to…</string>
     <string name="contact_selection_list__unknown_contact">Nova mensagem para…</string>
     <string name="contact_selection_list__unknown_contact_block">Bloquear utilizador</string>
     <string name="contact_selection_list__unknown_contact_add_to_group">Adicionar ao grupo</string>
@@ -3454,6 +3484,18 @@
     <string name="BackupUtil_unknown">Desconhecido</string>
     <string name="preferences_app_protection__see_my_phone_number">Ver o meu número de telefone</string>
     <string name="preferences_app_protection__find_me_by_phone_number">Encontrar-me através do número de telefone</string>
+    <!-- Phone number heading displayed as a screen title -->
+    <string name="preferences_app_protection__phone_number">Número de telefone</string>
+    <!-- Subtext below option to launch into phone number privacy settings screen -->
+    <string name="preferences_app_protection__choose_who_can_see">Escolha quem pode ver o seu número de telemóvel e quem o pode usar para o contactar no Signal.</string>
+    <!-- Section title above two radio buttons for enabling and disabling phone number display -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_see_my_number">Quem pode ver o seu número</string>
+    <!-- Subtext below radio buttons when who can see my number is set to nobody -->
+    <string name="PhoneNumberPrivacySettingsFragment__nobody_will_see">Ninguém verá o seu número de telemóvel no Signal</string>
+    <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_find_me_by_number">Quem me pode encontrar através do número</string>
+    <!-- Subtext below radio buttons when who can see my number is set to everyone -->
+    <string name="PhoneNumberPrivacySettingsFragment__your_phone_number">O seu número de telefone será visível para as pessoas e grupos com quem troca mensagens. As pessoas que tenham o seu número de telefone nos seus contactos, também o verão no Signal.</string>
     <string name="PhoneNumberPrivacy_everyone">Todos</string>
     <string name="PhoneNumberPrivacy_my_contacts">Os meus contactos</string>
     <string name="PhoneNumberPrivacy_nobody">Ninguém</string>
@@ -4556,7 +4598,7 @@
     <string name="DonationsErrors__your_donation_could_not_be_sent">A sua doação não pôde ser enviada devido a um erro de rede. Verifique a sua ligação e tente novamente.</string>
 
     <!-- Gift message view title -->
-    <string name="GiftMessageView__donation_to_s">Doação para %1$s</string>
+    <string name="GiftMessageView__donation_on_behalf_of_s">Doação em nome de %1$s</string>
     <!-- Gift message view title for incoming donations -->
     <string name="GiftMessageView__s_donated_to_signal_on">%1$s doou ao Signal em seu nome</string>
     <!-- Gift badge redeem action label -->
@@ -4795,6 +4837,8 @@
 
     <!-- Label for Chats tab in home app screen -->
     <string name="ConversationListTabs__chats">Conversas</string>
+    <!-- Label for Calls tab in home app screen -->
+    <string name="ConversationListTabs__calls">Chamadas</string>
     <!-- Label for Stories tab in home app screen -->
     <string name="ConversationListTabs__stories">Histórias</string>
     <!-- String for counts above 99 in conversation list tabs -->
@@ -5105,7 +5149,7 @@
     <!-- Label for a button in a notification at the bottom of the chat list to turn off censorship circumvention -->
 
     <!-- Conversation Item label for when you react to someone else\'s story -->
-    <string name="ConversationItem__you_reacted_to_s_story">Você reagiu à história de %1$s</string>
+    <string name="ConversationItem__you_reacted_to_s_story">Reagiu à história de %1$s</string>
     <!-- Conversation Item label for reactions to your story -->
     <string name="ConversationItem__reacted_to_your_story">Reagiu à sua história</string>
     <!-- Conversation Item label for reactions to an unavailable story -->
@@ -5658,6 +5702,86 @@
     <string name="TimeDurationPickerDialog_positive_button">Definir</string>
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, helper text indicating minimum allowable duration -->
     <string name="TimeDurationPickerDialog_minimum_duration_warning">O tempo mínimo antes do bloqueio de ecrã é de 1 minuto.</string>
+
+    <!-- Call Log -->
+    <!-- Displayed below the user\'s name in row items on the call log. First placeholder is the call status, second is when it occurred -->
+    <string name="CallLogAdapter__s_dot_s">%1$s · %2$s</string>
+    <!-- Displayed for incoming calls -->
+    <string name="CallLogAdapter__incoming">Entrada</string>
+    <!-- Displayed for outgoing calls -->
+    <string name="CallLogAdapter__outgoing">Saída</string>
+    <!-- Displayed for missed calls -->
+    <string name="CallLogAdapter__missed">Missed</string>
+
+    <!-- Call Log context menu -->
+    <!-- Displayed as a context menu item to start a video call -->
+    <string name="CallContextMenu__video_call">Videochamada</string>
+    <!-- Displayed as a context menu item to join an ongoing group call -->
+    <string name="CallContextMenu__join_call">Entrar na chamada</string>
+    <!-- Displayed as a context menu item to return to active call -->
+    <string name="CallContextMenu__return_to_call">Regressar à chamada</string>
+    <!-- Displayed as a context menu item to start an audio call -->
+    <string name="CallContextMenu__audio_call">Chamada de áudio</string>
+    <!-- Displayed as a context menu item to go to chat -->
+    <string name="CallContextMenu__go_to_chat">Ir para a conversa</string>
+    <!-- Displayed as a context menu item to see call info -->
+    <string name="CallContextMenu__info">Info</string>
+    <!-- Displayed as a context menu item to select multiple calls -->
+    <string name="CallContextMenu__select">Selecionar</string>
+    <!-- Displayed as a context menu item to delete this call -->
+    <string name="CallContextMenu__delete">Eliminar</string>
+
+    <!-- Call Log Fragment -->
+    <!-- Action bar menu item to only display missed calls -->
+    <string name="CallLogFragment__filter_missed_calls">Filter missed calls</string>
+    <!-- Action bar menu item to clear missed call filter -->
+    <string name="CallLogFragment__clear_filter">Limpar filtro</string>
+    <!-- Action bar menu item to open settings -->
+    <string name="CallLogFragment__settings">Definições</string>
+    <!-- Action bar menu item to open notification profile settings -->
+    <string name="CallLogFragment__notification_profile">Perfil de notificações</string>
+    <!-- Call log new call content description -->
+    <string name="CallLogFragment__start_a_new_call">Start a new call</string>
+    <!-- Filter pull text when pulled -->
+    <string name="CallLogFragment__filtered_by_missed">Filtered by missed</string>
+    <!-- Bottom bar option to select all call entries -->
+    <string name="CallLogFragment__select_all">Selecionar tudo</string>
+    <!-- Bottom bar option to delete all selected call entries -->
+    <string name="CallLogFragment__delete">Eliminar</string>
+    <!-- Title on multi-delete protection dialog (TODO - final terminology) -->
+  <!-- Removed by excludeNonTranslatables <plurals name="CallLogFragment__delete_d_calls" translatable="false">
+        <item quantity="one">Delete %1$d call?</item>
+        <item quantity="other">Delete %1$d calls?</item>
+    </plurals> -->
+    <!-- Positive action on multi-delete protection dialog -->
+    <string name="CallLogFragment__delete_for_me">Eliminar para mim</string>
+    <!-- Snackbar label after deleting call logs -->
+    <plurals name="CallLogFragment__d_calls_deleted">
+        <item quantity="one">%1$d call deleted</item>
+        <item quantity="other">%1$d calls deleted</item>
+    </plurals>
+    <!-- Undo action for deletion snackbar -->
+    <string name="CallLogFragment__undo">Desfazer</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__no_calls">No calls.</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__get_started_by_calling_a_friend">Get started by calling a friend.</string>
+
+    <!-- New call activity -->
+    <!-- Activity title in title bar -->
+    <string name="NewCallActivity__new_call">New call</string>
+
+    <!-- Call state update popups -->
+    <!-- Displayed when the user enables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_on">Ringing on</string>
+    <!-- Displayed when the user disables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_off">Ringing off</string>
+    <!-- Displayed when the user cannot enable group call ringing -->
+    <string name="CallStateUpdatePopupWindow__group_is_too_large">Group is too large to ring the participants</string>
+    <!-- Displayed when the user turns on their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_on">Mic on</string>
+    <!-- Displayed when the user turns off their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_off">Mic off</string>
 
     <!-- EOF -->
 </resources>

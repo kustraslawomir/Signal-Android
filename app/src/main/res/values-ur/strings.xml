@@ -21,7 +21,7 @@
     <string name="delete">حذف کریں</string>
     <string name="please_wait">برائے مہربانی انتظار کریں۔۔۔</string>
     <string name="save">محفوظ کریں</string>
-    <string name="note_to_self">اپنے لئے نوٹ کریں</string>
+    <string name="note_to_self">خود کے لیے نوٹ</string>
 
     <!-- AlbumThumbnailView -->
   <!-- Removed by excludeNonTranslatables <string name="AlbumThumbnailView_plus" translatable="false">\+%d</string> -->
@@ -384,6 +384,15 @@
     <!-- Snackbar message shown after dismissing the full screen sms export megaphone indicating we\'ll do it again soon -->
     <string name="ConversationActivity__you_will_be_reminded_again_soon">آپ کو جلد ہی دوبارہ یاد دہانی کروائی جائے گی۔</string>
 
+    <!-- Title for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_title">Sending formatted text</string>
+    <!-- Message for dialog shown when first sending formatted text -->
+    <string name="SendingFormattingTextDialog_message">Some people may be using a version of Signal that doesn\'t support formatted text. They will not be able to see the formatting changes you\'ve made to your message.</string>
+    <!-- Button text for confirming they\'d like to send the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_send_anyway_button">بہر حال بھیجیں</string>
+    <!-- Button text for canceling sending the message with formatting after seeing warning. -->
+    <string name="SendingFormattingTextDialog_cancel_send_button">منسوخ کریں</string>
+
     <!-- ConversationAdapter -->
     <plurals name="ConversationAdapter_n_unread_messages">
         <item quantity="one">%1$dنہ پڑھے ہوئے پیغامات</item>
@@ -481,20 +490,20 @@
         <item quantity="other">%1$d گفتگو ان باکس میں چلی گئیں</item>
     </plurals>
     <plurals name="ConversationListFragment_read_plural">
-        <item quantity="one">پڑھا گیا</item>
-        <item quantity="other">پڑھا گیا</item>
+        <item quantity="one">پڑھی گئی</item>
+        <item quantity="other">پڑھی گئی</item>
     </plurals>
     <plurals name="ConversationListFragment_unread_plural">
-        <item quantity="one">ناپڑھا گیا</item>
-        <item quantity="other">ناپڑھا گیا</item>
+        <item quantity="one">غیر پڑھی گئی</item>
+        <item quantity="other">غیر پڑھی گئی</item>
     </plurals>
     <plurals name="ConversationListFragment_pin_plural">
         <item quantity="one">پن کریں</item>
         <item quantity="other">پن کریں</item>
     </plurals>
     <plurals name="ConversationListFragment_unpin_plural">
-        <item quantity="one">ان پن کریں</item>
-        <item quantity="other">ان پن کریں</item>
+        <item quantity="one">ان پِن کریں</item>
+        <item quantity="other">ان پِن کریں</item>
     </plurals>
     <plurals name="ConversationListFragment_mute_plural">
         <item quantity="one">خاموش کریں</item>
@@ -542,6 +551,15 @@
 
     <!-- ConversationTypingView -->
     <string name="ConversationTypingView__plus_d">+%1$d</string>
+
+    <!-- Title for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__relink_your_devices">اپنی ڈیوائسز کو دوبارہ لنک کریں</string>
+    <!-- Description for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
+    <string name="RelinkDevicesReminderFragment__the_devices_you_added_were_unlinked">جب آپ کی ڈیوائس غیر رجسٹر شدہ تھی اس وقت آپ کی جانب سے شامل کردہ ڈیوائسز غیر لنک کردہ ہو گئی تھیں۔ کوئی بھی ڈیوائسز دوبارہ لنک کرنے کے لیے سیٹنگز میں جائیں۔</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to navigate to the Devices page in the settings. -->
+    <string name="RelinkDevicesReminderFragment__open_settings">سیٹنگز کھولیں</string>
+    <!-- Button label for the re-link devices bottom sheet reminder to dismiss the pop up. -->
+    <string name="RelinkDevicesReminderFragment__later">بعد میں</string>
 
     <!-- CreateGroupActivity -->
     <string name="CreateGroupActivity__select_members">ممبران کو منتخب کریں</string>
@@ -1167,8 +1185,8 @@
     <string name="Megaphones_new_group">نیا گروپ</string>
     <string name="Megaphones_invite_friends">دوستوں کو مدعو کریں</string>
     <string name="Megaphones_use_sms">ایس ایم ایس کا استعمال کریں</string>
-    <string name="Megaphones_appearance">ظہور ہونا</string>
-    <string name="Megaphones_add_photo">تصویر لگاو</string>
+    <string name="Megaphones_chat_colors">چیٹ کے رنگ</string>
+    <string name="Megaphones_add_a_profile_photo">پروفائل فوٹو شامل کریں</string>
 
     <!-- Title of a bottom sheet to render messages that all quote a specific message -->
     <string name="MessageQuotesBottomSheet_replies">جوابات</string>
@@ -1726,19 +1744,17 @@
         <item quantity="other">%1$s،%2$s ، اور%3$d دیگر اس کال میں ہیں</item>
     </plurals>
 
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__flip">فلپ کریں</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__speaker">سپیکر</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__camera">کیمرہ</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__unmute">غیر خاموش کریں</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__mute">خاموش کریں</string>
-    <!-- Toggle label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
-    <string name="WebRtcCallView__ring">کال کریں</string>
-    <!-- Label with hyphenation. Translation can use soft hyphen - Unicode U+00AD -->
+    <!-- Toggle content description for toggling camera direction  -->
+    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <!-- Toggle content description for toggling audio output  -->
+    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <!-- Toggle content description for toggling camera state  -->
+    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <!-- Toggle content description for toggling mute state  -->
+    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <!-- Toggle content description for toggling group ring state  -->
+    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">کال ختم کریں</string>
 
     <!-- CallParticipantsListDialog -->
@@ -1990,9 +2006,9 @@
     <!-- Displayed in the notification when the user has opened a received gift -->
     <string name="ThreadRecord__you_redeemed_a_badge">آپ نے ایک بیج ریڈیم کیا ہے</string>
     <!-- Displayed in the conversation list when someone reacted to your story -->
-    <string name="ThreadRecord__reacted_s_to_your_story">آپ کی سٹوری پر %1$s ردعمل دیا</string>
+    <string name="ThreadRecord__reacted_s_to_your_story">آپ کی سٹوری پر %1$s ری ایکٹ کیا</string>
     <!-- Displayed in the conversation list when you reacted to someone\'s story -->
-    <string name="ThreadRecord__reacted_s_to_their_story">ان کی سٹوری پر %1$s ردعمل دیا</string>
+    <string name="ThreadRecord__reacted_s_to_their_story">ان کی سٹوری پر %1$s ری ایکٹ کیا</string>
     <!-- Displayed in the conversation list when your most recent message is a payment to or from the person the conversation is with -->
     <string name="ThreadRecord_payment">پیمنٹ</string>
     <!-- Displayed in the conversation list when your only message in a conversation is a scheduled send. -->
@@ -2116,6 +2132,10 @@
     <string name="MessageNotifier_most_recent_from_s">سب سے حالیہ کی طرف سے:%1$s</string>
     <string name="MessageNotifier_locked_message">پیغامات لاک ہیں</string>
     <string name="MessageNotifier_message_delivery_failed">پیغام کی فراہمی ناکام ہو گئی۔</string>
+    <!-- Shown in a notification when a story the user tries to send fails to be sent -->
+    <string name="MessageNotifier_story_delivery_failed">سٹوری بھیجنے میں ناکامی ہوئی</string>
+    <!-- Shown as notification title for when a notification about a story sent to a group story %1$s replaced with the group name -->
+    <string name="MessageNotifier_group_story_title">آپ کی طرف سے %1$s کے لیے</string>
     <string name="MessageNotifier_failed_to_deliver_message">پیغام بھیجنے میں ناکامی۔</string>
     <string name="MessageNotifier_error_delivering_message">پیغام کی فراہمی میں خرابی ہو رہی ہے۔</string>
     <string name="MessageNotifier_message_delivery_paused">پیغام کی فراہمی رک گئی۔</string>
@@ -2130,14 +2150,16 @@
     <string name="MessageNotifier_unsecured_sms">غیر محفوظ ایس ایم ایس</string>
     <string name="MessageNotifier_contact_message">%1$s%2$s</string>
     <string name="MessageNotifier_unknown_contact_message">رابطہ کریں</string>
-    <string name="MessageNotifier_reacted_s_to_s">اس پر رد عمل%1$s ظاہر کیا: \"%2$s\"۔</string>
-    <string name="MessageNotifier_reacted_s_to_your_video">آپ کی ویڈیو پر رد عمل %1$s ظاہر کیا</string>
-    <string name="MessageNotifier_reacted_s_to_your_image">آپ کی تصویر پر رد عمل%1$s ظاہر کیا</string>
-    <string name="MessageNotifier_reacted_s_to_your_gif">آپ کے GIF پر %1$s ردعمل دیا۔</string>
-    <string name="MessageNotifier_reacted_s_to_your_file">آپ کی فائل پر رد عمل%1$s ظاہر کیا</string>
-    <string name="MessageNotifier_reacted_s_to_your_audio">آپ کی آڈیو پر رد عمل %1$s ظاہر کیا</string>
-    <string name="MessageNotifier_reacted_s_to_your_view_once_media">ایک بار آپ کے ملاحظہ کرنے والے میڈیا پر ردعمل %1$s کا اظہار کیا۔</string>
-    <string name="MessageNotifier_reacted_s_to_your_sticker">آپ کی اسٹیکر پر رد عمل %1$s ظاہر کیا</string>
+    <string name="MessageNotifier_reacted_s_to_s">%1$s ری ایکٹ کیا: \"%2$s\" پر۔</string>
+    <string name="MessageNotifier_reacted_s_to_your_video">آپ کی ویڈیو پر %1$s ری ایکٹ کیا۔</string>
+    <string name="MessageNotifier_reacted_s_to_your_image">آپ کی تصویر پر %1$s ری ایکٹ کیا۔</string>
+    <string name="MessageNotifier_reacted_s_to_your_gif">آپ کے GIF پر %1$s ری ایکٹ کیا۔</string>
+    <string name="MessageNotifier_reacted_s_to_your_file">آپ کی فائل پر %1$s ری ایکٹ کیا۔</string>
+    <string name="MessageNotifier_reacted_s_to_your_audio">آپ کی آڈیو پر %1$s ری ایکٹ کیا۔</string>
+    <string name="MessageNotifier_reacted_s_to_your_view_once_media">آپ کے ایک وقتی دیکھے جانے والے میڈیا پر %1$s ری ایکٹ کیا۔</string>
+    <!-- Body of notification shown to user when someone they sent a payment to reacts to it. Placeholder is the emoji used in the reaction. -->
+    <string name="MessageNotifier_reacted_s_to_your_payment">آپ کی پیمنٹ پر %1$s ری ایکٹ کیا۔</string>
+    <string name="MessageNotifier_reacted_s_to_your_sticker">آپ کے اسٹیکر پر %1$s ری ایکٹ کیا۔</string>
     <string name="MessageNotifier_this_message_was_deleted">یہ پیغام حذف کردیا گیا تھا۔</string>
 
     <string name="TurnOffContactJoinedNotificationsActivity__turn_off_contact_joined_signal">رابطے میں شامل Signal اطلاعات بند کردیں؟ آپ انہیں Signal &amp; gt میں دوبارہ فعال کرسکتے ہیں۔ ترتیبات &amp; gt؛ اطلاعات۔</string>
@@ -2253,6 +2275,12 @@
     <!-- contact_selection_activity -->
     <string name="contact_selection_activity__invite_to_signal">Signal میں مدعو کریں</string>
     <string name="contact_selection_activity__new_group">نیا گروپ</string>
+    <!-- Row item title for refreshing contacts -->
+    <string name="contact_selection_activity__refresh_contacts">Refresh contacts</string>
+    <!-- Row item description for refreshing contacts -->
+    <string name="contact_selection_activity__missing_someone">Missing someone? Try refreshing</string>
+    <!-- Row header title for more section -->
+    <string name="contact_selection_activity__more">مزید</string>
 
     <!-- contact_filter_toolbar -->
     <string name="contact_filter_toolbar__clear_entered_text_description">داخل کیا گیا ٹیکسٹ صاف کریں</string>
@@ -2530,8 +2558,8 @@
 
     <!-- BadDecryptLearnMoreDialog -->
     <string name="BadDecryptLearnMoreDialog_delivery_issue">فراہمی کا مسئلہ</string>
-    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">کوئی پیغام ، اسٹیکر ، رد عمل ، یا پڑھی ہوئی رسید آپ کو %1$s سے نہیں پہنچا ہے۔ ہوسکتا ہے کہ انہوں نے یہ آپ کو براہ راست یا کسی گروپ میں بھیجنے کی کوشش کی ہو۔</string>
-    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">کوئی پیغام ، اسٹیکر ، رد عمل ، یا پڑھی ہوئی رسید آپ کو %1$s سے نہیں پہنچا سکتی ہے۔</string>
+    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">%1$s کی طرف سے کوئی میسج، اسٹیکر، ری ایکشن، یا میسج پڑھنے کا ثبوت آپ کو ڈیلیور نہیں کیا جا سکا۔ انہوں نے یہ آپ کو براہ راست، یا کسی گروپ میں بھیجنے کی کوشش کی ہو گی۔</string>
+    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">%1$s کی طرف سے کوئی میسج، اسٹیکر، ری ایکشن، یا میسج پڑھنے کا ثبوت آپ کو ڈیلیور نہیں کیا جا سکا۔</string>
 
     <!-- profile_create_activity -->
     <string name="CreateProfileActivity_first_name_required">پہلا نام (ضروری)</string>
@@ -3098,6 +3126,8 @@
     <!-- **************************************** -->
 
     <!-- contact_selection_list -->
+    <!-- Displayed in a row on the new call screen when searching by phone number. -->
+    <string name="contact_selection_list__new_call">New call to…</string>
     <string name="contact_selection_list__unknown_contact">کو نیا پیغام۔۔۔</string>
     <string name="contact_selection_list__unknown_contact_block">یوزر کو بلاک کریں</string>
     <string name="contact_selection_list__unknown_contact_add_to_group">گروپ میں شامل کریں</string>
@@ -3454,6 +3484,18 @@
     <string name="BackupUtil_unknown">نامعلوم</string>
     <string name="preferences_app_protection__see_my_phone_number">میرا فون نمبر دیکھیں</string>
     <string name="preferences_app_protection__find_me_by_phone_number">مجھے فون نمبر کے ذریعے تلاش کریں</string>
+    <!-- Phone number heading displayed as a screen title -->
+    <string name="preferences_app_protection__phone_number">فون نمبر</string>
+    <!-- Subtext below option to launch into phone number privacy settings screen -->
+    <string name="preferences_app_protection__choose_who_can_see">منتخب کریں کہ کون آپ کا فون نمبر دیکھ سکتا ہے اور کون اس کے ذریعے Signal پر آپ سے رابطہ کر سکتا ہے۔</string>
+    <!-- Section title above two radio buttons for enabling and disabling phone number display -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_see_my_number">میرا نمبر کون دیکھ سکتا ہے</string>
+    <!-- Subtext below radio buttons when who can see my number is set to nobody -->
+    <string name="PhoneNumberPrivacySettingsFragment__nobody_will_see">Signal پر کوئی بھی آپ کا فون نمبر نہیں دیکھ سکے گا</string>
+    <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
+    <string name="PhoneNumberPrivacySettingsFragment__who_can_find_me_by_number">کون مجھے میرے نمبر کے ذریعے تلاش کر سکتا ہے</string>
+    <!-- Subtext below radio buttons when who can see my number is set to everyone -->
+    <string name="PhoneNumberPrivacySettingsFragment__your_phone_number">آپ کا فون نمبر ان لوگوں اور گروپس کو نظر آئے گا جنہیں آپ میسج کرتے ہیں۔ جن لوگوں کے فون رابطوں میں آپ کا نمبر محفوظ ہے وہ بھی اسے Signal پر دیکھیں گے۔</string>
     <string name="PhoneNumberPrivacy_everyone">ہر ایک</string>
     <string name="PhoneNumberPrivacy_my_contacts">میرے رابطے</string>
     <string name="PhoneNumberPrivacy_nobody">کوئی نہیں</string>
@@ -3832,12 +3874,12 @@
     <!-- DeactivateWalletFragment -->
     <string name="DeactivateWalletFragment__deactivate_wallet">Wallet کو غیر فعال کریں</string>
     <string name="DeactivateWalletFragment__your_balance">آپ کا بیلنس</string>
-    <string name="DeactivateWalletFragment__its_recommended_that_you">یہ تجویز کی جاتی ہے کہ ادائیگی غیر فعال کرنے سے پہلے آپ اپنے فنڈز کو دوسرے بٹوے کے پتے پر منتقل کریں۔ اگر آپ ابھی اپنے فنڈز کی منتقلی نہ کرنا چاہتے ہیں تو ، اگر آپ ادائیگیوں کو دوبارہ متحرک کرتے ہیں تو وہ Signal سے منسلک آپ کے پرس میں رہیں گے۔</string>
+    <string name="DeactivateWalletFragment__its_recommended_that_you">یہ تجویز پیش کی جاتی ہے کہ پیمنٹس کو غیر فعال کرنے سے قبل آپ اپنے فنڈز کو کسی دوسرے والیٹ ایڈریس پر ٹرانسفر کریں۔ اگر آپ فی الحال اپنے فنڈز کو ٹرانسفر کرنے کا انتخاب نہیں کرنا چاہتے، تو آپ کی جانب سے پیمنٹس کو دوبارہ فعال کرنے کی صورت میں یہ Signal سے لنک کردہ آپ کے والیٹ میں موجود رہیں گے۔</string>
     <string name="DeactivateWalletFragment__transfer_remaining_balance">باقی بیلنس منتقل کریں</string>
     <string name="DeactivateWalletFragment__deactivate_without_transferring">منتقلی کے بغیر غیر فعال کریں</string>
     <string name="DeactivateWalletFragment__deactivate">غیر فعال کریں</string>
     <string name="DeactivateWalletFragment__deactivate_without_transferring_question">منتقلی کے بغیر غیر فعال کریں؟</string>
-    <string name="DeactivateWalletFragment__your_balance_will_remain">اگر آپ ادائیگیوں کو دوبارہ فعال کرنے کا انتخاب کرتے ہیں تو آپ کا بیلنس Signal سے منسلک آپ کے Wallet میں رہے گا۔</string>
+    <string name="DeactivateWalletFragment__your_balance_will_remain">اگر آپ پیمنٹس کو دوبارہ فعال کرنے کا انتخاب کرتے ہیں تو آپ کا بیلنس Signal سے لنک کردہ آپ کے والیٹ میں موجود رہے گا۔</string>
     <string name="DeactivateWalletFragment__error_deactivating_wallet">Wallet کو غیر فعال کرنے میں خرابی۔</string>
   <!-- Removed by excludeNonTranslatables <string name="DeactivateWalletFragment__learn_more__we_recommend_transferring_your_funds" translatable="false">https://support.signal.org/hc/articles/360057625692#payments_deactivate</string> -->
 
@@ -4154,7 +4196,7 @@
     <string name="Donate2022Q2Megaphone_not_now">ابھی نہیں</string>
 
     <!-- EditReactionsFragment -->
-    <string name="EditReactionsFragment__customize_reactions">رد عمل کو اپنی مرضی کے مطابق بنائیں</string>
+    <string name="EditReactionsFragment__customize_reactions">ری ایکشنز کو حسبِ ضرورت بنائیں</string>
     <string name="EditReactionsFragment__tap_to_replace_an_emoji">ایموجی کو تبدیل کرنے کے لئے ٹیپ کریں</string>
     <string name="EditReactionsFragment__reset">دوبارہ بحال کریں</string>
     <string name="EditReactionsFragment_save">محفوظ کریں</string>
@@ -4501,7 +4543,7 @@
     <string name="ExpiredBadgeBottomSheetDialogFragment__monthly_donation_cancelled">ماہانہ عطیہ منسوخ ہو گیا</string>
     <!-- Displayed in the bottom sheet when a boost badge expires -->
     <string name="ExpiredBadgeBottomSheetDialogFragment__your_boost_badge_has_expired_and">آپ کا بوسٹ بیج زائد المیعاد ہو گیا ہے اور آپ کی پروفائل پر مزید دکھائی نہیں دیتا۔</string>
-    <string name="ExpiredBadgeBottomSheetDialogFragment__you_can_reactivate">آپ ایک بار کے تعاون کے ساتھ آئندہ 30 دنوں کے لیے اپنا بوسٹ بیج دوبارہ فعال کر سکتے ہیں۔</string>
+    <string name="ExpiredBadgeBottomSheetDialogFragment__you_can_reactivate">آپ ایک وقتی تعاون کے ساتھ آئندہ 30 دنوں کے لیے اپنا بوسٹ بیج دوبارہ فعال کر سکتے ہیں۔</string>
     <!-- Displayed when we do not think the user is a subscriber when their boost expires -->
     <string name="ExpiredBadgeBottomSheetDialogFragment__you_can_keep">آپ Signal استعمال کرنا جاری رکھ سکتے ہیں لیکن اپنے لیے بنائی گئی ٹیکنالوجی کی سپورٹ کے لیے، ماہانہ عطیہ دینے کے ذریعے عطیہ دینے والا بننے کو زیر غور لائیں۔</string>
     <string name="ExpiredBadgeBottomSheetDialogFragment__become_a_sustainer">عطیہ گزار بنیں</string>
@@ -4513,7 +4555,7 @@
     <string name="ExpiredBadgeBottomSheetDialogFragment__your_recurring_monthly_donation_was_canceled">آپ کا ماہانہ متواتر عطیہ منسوخ ہو گیا تھا کیونکہ ہم آپ کی پیمنٹ پر عمل کاری نہیں کر سکے۔ آپ کا بیج آپ کی پروفائل پر مزید دکھائی نہیں دیتا۔</string>
     <!-- Copy displayed when badge expires after a payment failure and we have a displayable charge failure reason -->
     <string name="ExpiredBadgeBottomSheetDialogFragment__your_recurring_monthly_donation_was_canceled_s">آپ کا متواتر ماہانہ عطیہ منسوخ کر دیا گیا تھا۔ %1$s آپ کا %2$s بیج آپ کی پروفائل پر مزید دکھائی نہیں دیتا۔</string>
-    <string name="ExpiredBadgeBottomSheetDialogFragment__you_can">آپ Signal استعمال کرنا جاری رکھ سکتے ہیں لیکن ایپ کی سپورٹ اور اپنے بیج کو دوبارہ فعال کرنے کے لیے، ابھی تجدید کریں۔</string>
+    <string name="ExpiredBadgeBottomSheetDialogFragment__you_can">آپ Signal استعمال کرنا جاری رکھ سکتے ہیں مگر صرف ایپ کو سپورٹ کرنے اور اپنے بیج کو دوبارہ فعال کرنے کے لیے، ابھی تجدید کریں۔</string>
     <string name="ExpiredBadgeBottomSheetDialogFragment__renew_subscription">سبسکرپشن کی تجدید کریں</string>
     <!-- Button label to send user to Google Pay website -->
     <string name="ExpiredBadgeBottomSheetDialogFragment__go_to_google_pay">Google Pay پر جائیں</string>
@@ -4556,7 +4598,7 @@
     <string name="DonationsErrors__your_donation_could_not_be_sent">نیٹ ورک کی خرابی کے باعث آپ کا عطیہ بھیجا نہیں جا سکا۔ اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔</string>
 
     <!-- Gift message view title -->
-    <string name="GiftMessageView__donation_to_s">%1$s کو عطیہ</string>
+    <string name="GiftMessageView__donation_on_behalf_of_s">%1$s کی جانب سے عطیہ</string>
     <!-- Gift message view title for incoming donations -->
     <string name="GiftMessageView__s_donated_to_signal_on">%1$s نے آپ کی جانب سے Signal کو عطیہ کیا</string>
     <!-- Gift badge redeem action label -->
@@ -4795,6 +4837,8 @@
 
     <!-- Label for Chats tab in home app screen -->
     <string name="ConversationListTabs__chats">باتیں</string>
+    <!-- Label for Calls tab in home app screen -->
+    <string name="ConversationListTabs__calls">کالز</string>
     <!-- Label for Stories tab in home app screen -->
     <string name="ConversationListTabs__stories">سٹوریز</string>
     <!-- String for counts above 99 in conversation list tabs -->
@@ -4901,13 +4945,13 @@
     <!-- Displayed when no longer a group member -->
     <string name="StoryGroupReplyFragment__you_cant_reply">آپ اس سٹوری کا جواب نہیں دے سکتے کیونکہ آپ اس گروپ کے ممبر نہیں رہے۔</string>
     <!-- Displayed for each user that reacted to a story when viewing replies -->
-    <string name="StoryGroupReactionReplyItem__reacted_to_the_story">سٹوری پر ردعمل دیا</string>
+    <string name="StoryGroupReactionReplyItem__reacted_to_the_story">سٹوری پر ری ایکٹ کیا</string>
     <!-- Label for story views tab -->
     <string name="StoryViewsAndRepliesDialogFragment__views">ویوز</string>
     <!-- Label for story replies tab -->
     <string name="StoryViewsAndRepliesDialogFragment__replies">جوابات</string>
     <!-- Description of action for reaction button -->
-    <string name="StoryReplyComposer__react_to_this_story">اس سٹوری پر ردعمل دیں</string>
+    <string name="StoryReplyComposer__react_to_this_story">اس سٹوری پر ری ایکٹ کریں</string>
     <!-- Displayed when the user is replying privately to someone who replied to one of their stories -->
     <string name="StoryReplyComposer__replying_privately_to_s">%1$s کو نجی طور پر جواب دینا</string>
     <!-- Displayed when the user is replying privately to someone who replied to one of their stories -->
@@ -4953,11 +4997,11 @@
     <!-- My story privacy fine print about what the privacy settings are for -->
     <string name="MyStorySettingsFragment__choose_who_can_view_your_story">انتخاب کریں کہ کون آپ کی سٹوری دیکھ سکتا ہے۔ تبدیلیاں ان سٹوریز کو متاثر نہیں کریں گی جو آپ پہلے ہی بھیج چکے ہیں۔</string>
     <!-- Section header for options related to replies and reactions -->
-    <string name="MyStorySettingsFragment__replies_amp_reactions">جوابات &amp; ردعمل</string>
+    <string name="MyStorySettingsFragment__replies_amp_reactions">جوابات اور ری ایکشنز</string>
     <!-- Switchable option for allowing replies and reactions on your stories -->
-    <string name="MyStorySettingsFragment__allow_replies_amp_reactions">جوابات &amp;ردعمل کو اجازت دیں</string>
+    <string name="MyStorySettingsFragment__allow_replies_amp_reactions">جوابات اور ری ایکشنز کی اجازت دیں</string>
     <!-- Summary for switchable option allowing replies and reactions on your story -->
-    <string name="MyStorySettingsFragment__let_people_who_can_view_your_story_react_and_reply">اپنی سٹوری دیکھنے والے لوگوں کو ردعمل اور جواب دینے کی اجازت دیں</string>
+    <string name="MyStorySettingsFragment__let_people_who_can_view_your_story_react_and_reply">جو لوگ آپ کی سٹوری دیکھ سکتے ہیں انہیں اس پر ری ایکٹ کرنے اور جواب دینے کی اجازت دیں</string>
     <!-- Signal connections bolded text in the Signal Connections sheet -->
     <string name="SignalConnectionsBottomSheet___signal_connections">Signal کنکشنز</string>
     <!-- Displayed at the top of the signal connections sheet. Please remember to insert strong tag as required. -->
@@ -5105,11 +5149,11 @@
     <!-- Label for a button in a notification at the bottom of the chat list to turn off censorship circumvention -->
 
     <!-- Conversation Item label for when you react to someone else\'s story -->
-    <string name="ConversationItem__you_reacted_to_s_story">آپ نے %1$s کی سٹوری پر ردعمل دیا</string>
+    <string name="ConversationItem__you_reacted_to_s_story">آپ نے %1$s کی سٹوری پر ری ایکٹ کیا</string>
     <!-- Conversation Item label for reactions to your story -->
-    <string name="ConversationItem__reacted_to_your_story">آپ کی سٹوری پر ردعمل دیا</string>
+    <string name="ConversationItem__reacted_to_your_story">آپ کی سٹوری پر ری ایکٹ کیا</string>
     <!-- Conversation Item label for reactions to an unavailable story -->
-    <string name="ConversationItem__reacted_to_a_story">سٹوری پر ردعمل دیا</string>
+    <string name="ConversationItem__reacted_to_a_story">سٹوری پر ری ایکٹ کیا</string>
 
     <!-- endregion -->
     <!-- Content description for expand contacts chevron -->
@@ -5658,6 +5702,86 @@
     <string name="TimeDurationPickerDialog_positive_button">سیٹ کریں</string>
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, helper text indicating minimum allowable duration -->
     <string name="TimeDurationPickerDialog_minimum_duration_warning">اسکرین لاک کا اطلاق ہونے سے پہلے کم از کم وقت 1 منٹ ہے۔</string>
+
+    <!-- Call Log -->
+    <!-- Displayed below the user\'s name in row items on the call log. First placeholder is the call status, second is when it occurred -->
+    <string name="CallLogAdapter__s_dot_s">%1$s · %2$s</string>
+    <!-- Displayed for incoming calls -->
+    <string name="CallLogAdapter__incoming">Incoming</string>
+    <!-- Displayed for outgoing calls -->
+    <string name="CallLogAdapter__outgoing">Outgoing</string>
+    <!-- Displayed for missed calls -->
+    <string name="CallLogAdapter__missed">Missed</string>
+
+    <!-- Call Log context menu -->
+    <!-- Displayed as a context menu item to start a video call -->
+    <string name="CallContextMenu__video_call">ویڈیو کال</string>
+    <!-- Displayed as a context menu item to join an ongoing group call -->
+    <string name="CallContextMenu__join_call">کال میں شامل ہوں</string>
+    <!-- Displayed as a context menu item to return to active call -->
+    <string name="CallContextMenu__return_to_call">کال پر واپس جائیں</string>
+    <!-- Displayed as a context menu item to start an audio call -->
+    <string name="CallContextMenu__audio_call">آڈیو کال</string>
+    <!-- Displayed as a context menu item to go to chat -->
+    <string name="CallContextMenu__go_to_chat">چیٹ پر جائیں</string>
+    <!-- Displayed as a context menu item to see call info -->
+    <string name="CallContextMenu__info">معلومات</string>
+    <!-- Displayed as a context menu item to select multiple calls -->
+    <string name="CallContextMenu__select">منتخب کریں</string>
+    <!-- Displayed as a context menu item to delete this call -->
+    <string name="CallContextMenu__delete">حذف کریں</string>
+
+    <!-- Call Log Fragment -->
+    <!-- Action bar menu item to only display missed calls -->
+    <string name="CallLogFragment__filter_missed_calls">Filter missed calls</string>
+    <!-- Action bar menu item to clear missed call filter -->
+    <string name="CallLogFragment__clear_filter">فلٹر کو صاف کریں</string>
+    <!-- Action bar menu item to open settings -->
+    <string name="CallLogFragment__settings">ترتیبات</string>
+    <!-- Action bar menu item to open notification profile settings -->
+    <string name="CallLogFragment__notification_profile">اطلاعات کی پروفائل</string>
+    <!-- Call log new call content description -->
+    <string name="CallLogFragment__start_a_new_call">Start a new call</string>
+    <!-- Filter pull text when pulled -->
+    <string name="CallLogFragment__filtered_by_missed">Filtered by missed</string>
+    <!-- Bottom bar option to select all call entries -->
+    <string name="CallLogFragment__select_all">تمام منتخب کریں</string>
+    <!-- Bottom bar option to delete all selected call entries -->
+    <string name="CallLogFragment__delete">حذف کریں</string>
+    <!-- Title on multi-delete protection dialog (TODO - final terminology) -->
+  <!-- Removed by excludeNonTranslatables <plurals name="CallLogFragment__delete_d_calls" translatable="false">
+        <item quantity="one">Delete %1$d call?</item>
+        <item quantity="other">Delete %1$d calls?</item>
+    </plurals> -->
+    <!-- Positive action on multi-delete protection dialog -->
+    <string name="CallLogFragment__delete_for_me">میرے لئے حذف کریں</string>
+    <!-- Snackbar label after deleting call logs -->
+    <plurals name="CallLogFragment__d_calls_deleted">
+        <item quantity="one">%1$d call deleted</item>
+        <item quantity="other">%1$d calls deleted</item>
+    </plurals>
+    <!-- Undo action for deletion snackbar -->
+    <string name="CallLogFragment__undo">کالعدم کریں</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__no_calls">No calls.</string>
+    <!-- Shown during empty state -->
+    <string name="CallLogFragment__get_started_by_calling_a_friend">Get started by calling a friend.</string>
+
+    <!-- New call activity -->
+    <!-- Activity title in title bar -->
+    <string name="NewCallActivity__new_call">New call</string>
+
+    <!-- Call state update popups -->
+    <!-- Displayed when the user enables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_on">Ringing on</string>
+    <!-- Displayed when the user disables group call ringing -->
+    <string name="CallStateUpdatePopupWindow__ringing_off">Ringing off</string>
+    <!-- Displayed when the user cannot enable group call ringing -->
+    <string name="CallStateUpdatePopupWindow__group_is_too_large">Group is too large to ring the participants</string>
+    <!-- Displayed when the user turns on their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_on">Mic on</string>
+    <!-- Displayed when the user turns off their mic -->
+    <string name="CallStateUpdatePopupWindow__mic_off">Mic off</string>
 
     <!-- EOF -->
 </resources>

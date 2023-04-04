@@ -359,6 +359,11 @@
               android:windowSoftInputMode="stateAlwaysVisible"
               android:configChanges="touchscreen|keyboard|keyboardHidden|orientation|screenLayout|screenSize"/>
 
+    <activity android:name=".calls.new.NewCallActivity"
+            android:theme="@style/Theme.Signal.DayNight.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysVisible"
+            android:configChanges="touchscreen|keyboard|keyboardHidden|orientation|screenLayout|screenSize"/>
+
     <activity android:name=".PushContactSelectionActivity"
           android:label="@string/AndroidManifest__select_contacts"
           android:windowSoftInputMode="stateHidden"
@@ -438,6 +443,12 @@
         <activity android:name=".components.settings.conversation.ConversationSettingsActivity"
             android:configChanges="touchscreen|keyboard|keyboardHidden|screenLayout|screenSize"
             android:theme="@style/Signal.DayNight.ConversationSettings"
+            android:windowSoftInputMode="stateAlwaysHidden">
+        </activity>
+
+        <activity android:name=".components.settings.conversation.CallInfoActivity"
+            android:configChanges="touchscreen|keyboard|keyboardHidden|screenLayout|screenSize"
+            android:theme="@style/Signal.DayNight.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
 
@@ -602,12 +613,6 @@
             android:windowSoftInputMode="adjustResize"
             android:configChanges="touchscreen|keyboard|keyboardHidden|orientation|screenLayout|screenSize"/>
 
-    <activity android:name=".ClearAvatarPromptActivity"
-              android:theme="@style/Theme.AppCompat.Dialog.Alert"
-              android:icon="@drawable/clear_profile_avatar"
-              android:label="@string/AndroidManifest_remove_photo"
-              android:configChanges="touchscreen|keyboard|keyboardHidden|orientation|screenLayout|screenSize"/>
-
     <activity android:name=".contacts.TurnOffContactJoinedNotificationsActivity"
               android:theme="@style/Theme.AppCompat.Dialog.Alert" />
 
@@ -704,6 +709,7 @@
     <service android:enabled="true" android:name=".service.webrtc.WebRtcCallService" android:foregroundServiceType="camera|microphone"/>
     <service android:enabled="true" android:exported="false" android:name=".service.KeyCachingService"/>
     <service android:enabled="true" android:name=".messages.IncomingMessageObserver$ForegroundService"/>
+    <service android:enabled="true" android:name=".messages.IncomingMessageObserver$BackgroundService"/>
     <service android:name=".service.webrtc.AndroidCallConnectionService"
         android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE"
         android:exported="true">
