@@ -921,7 +921,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
             list.removeOnLayoutChangeListener(this);
             list.post(ConversationListFragment.this::onFirstRender);
           }
-          showMainContent();
         });
       }
     });
@@ -1008,6 +1007,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     if (getContext() != null) {
       ConversationFragment.prepare(getContext());
     }
+    showMainContent();
   }
 
   private void onConversationListChanged(@NonNull List<Conversation> conversations) {

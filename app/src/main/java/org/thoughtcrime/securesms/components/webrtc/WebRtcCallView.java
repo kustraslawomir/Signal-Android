@@ -136,6 +136,12 @@ public class WebRtcCallView extends ConstraintLayout {
   private int                           navBarBottomInset;
   private View                          fullScreenShade;
 
+  private TextView                      ringToggleLabel;
+  private TextView                      micToggleLabel;
+  private TextView                      hangupLabel;
+
+
+
   private WebRtcCallParticipantsPagerAdapter    pagerAdapter;
   private WebRtcCallParticipantsRecyclerAdapter recyclerAdapter;
   private PictureInPictureExpansionHelper       pictureInPictureExpansionHelper;
@@ -217,6 +223,10 @@ public class WebRtcCallView extends ConstraintLayout {
     statusBarGuideline            = findViewById(R.id.call_screen_status_bar_guideline);
     navigationBarGuideline        = findViewById(R.id.call_screen_navigation_bar_guideline);
     fullScreenShade               = findViewById(R.id.call_screen_full_shade);
+
+    ringToggleLabel               = findViewById(R.id.call_screen_audio_ring_toggle_label);
+    hangupLabel                   = findViewById(R.id.call_screen_end_call_label);
+    micToggleLabel                = findViewById(R.id.call_screen_audio_mic_toggle_label);
 
     View decline      = findViewById(R.id.call_screen_decline_call);
     View answerLabel  = findViewById(R.id.call_screen_answer_call_label);
@@ -390,7 +400,7 @@ public class WebRtcCallView extends ConstraintLayout {
     } else {
       label = getContext().getString(R.string.preferences_on);
     }
-    ringToggleLabel.setText(getContext().getString(R.string.WebRtcCallView__ring) + ":" + label);
+    ringToggleLabel.setText(getContext().getString(R.string.Pigeon_WebRtcCallView__ring) + ":" + label);
   }
 
   @Override
@@ -772,8 +782,6 @@ public class WebRtcCallView extends ConstraintLayout {
       incomingRingStatus.setVisibility(GONE);
 //      pigeonIncomingRingStatus.setVisibility(GONE);
     }
-
-    visibleViewSet.add(videoToggleLabel);
 
     if (webRtcControls.displayAudioToggle()) {
       visibleViewSet.add(audioToggle);

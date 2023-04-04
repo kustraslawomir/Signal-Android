@@ -221,40 +221,8 @@ public class MainActivity extends PassphraseRequiredActivity implements VoiceNot
     }
   }
 
-  private void updateTabVisibility() {
-    if (Stories.isFeatureEnabled() || FeatureFlags.callsTab()) {
-      findViewById(R.id.conversation_list_tabs).setVisibility(View.VISIBLE);
-      WindowUtil.setNavigationBarColor(this, ContextCompat.getColor(this, R.color.signal_colorSurface2));
-    } else {
-      findViewById(R.id.conversation_list_tabs).setVisibility(View.GONE);
-      WindowUtil.setNavigationBarColor(this, ContextCompat.getColor(this, R.color.signal_colorBackground));
-      conversationListTabsViewModel.onChatsSelected();
-    }
-  }
-
   public @NonNull MainNavigator getNavigator() {
     return navigator;
-  }
-
-  private void handleGroupLinkInIntent(Intent intent) {
-    Uri data = intent.getData();
-    if (data != null) {
-      CommunicationActions.handlePotentialGroupLinkUrl(this, data.toString());
-    }
-  }
-
-  private void handleProxyInIntent(Intent intent) {
-    Uri data = intent.getData();
-    if (data != null) {
-      CommunicationActions.handlePotentialProxyLinkUrl(this, data.toString());
-    }
-  }
-
-  private void handleSignalMeIntent(Intent intent) {
-    Uri data = intent.getData();
-    if (data != null) {
-      CommunicationActions.handlePotentialSignalMeUrl(this, data.toString());
-    }
   }
 
   public void onFirstRender() {
@@ -272,4 +240,5 @@ public class MainActivity extends PassphraseRequiredActivity implements VoiceNot
       view.setVisibility(View.GONE);
     }
   }
+
 }

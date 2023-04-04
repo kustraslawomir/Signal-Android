@@ -26,9 +26,8 @@ public final class SqlCipherDeletingErrorHandler implements DatabaseErrorHandler
     this.databaseName = databaseName;
   }
 
-  @Override
-  public void onCorruption(SQLiteDatabase db, String message) {
-    Log.e(TAG, "Database '" + databaseName + "' corrupted! Message: " + message + ". Going to try to run some diagnostics.");
+  public void onCorruption(SQLiteDatabase db) {
+    Log.e(TAG, "Database '" + databaseName + "' corrupted! Going to try to run some diagnostics.");
 
     Log.w(TAG, " ===== PRAGMA integrity_check =====");
     try (Cursor cursor = db.rawQuery("PRAGMA integrity_check", null)) {

@@ -87,15 +87,14 @@ public final class EnterPhoneNumberFragment extends LoggingFragment implements R
   public void onStart() {
     super.onStart();
     String sessionE164 = viewModel.getSessionE164();
-    if (sessionE164 != null && viewModel.getSessionId() != null) {
+    if (sessionE164 != null && viewModel.getSessionId() != null && viewModel.getCaptchaToken() == null) {
       checkIfSessionIsInProgressAndAdvance(sessionE164);
     }
   }
 
   private void checkIfSessionIsInProgressAndAdvance(@NonNull String sessionE164) {
     NavController  navController  = NavHostFragment.findNavController(this);
-    MccMncProducer mccMncProducer = new MccMncProducer(requireContext());
-    Disposable request = viewModel.validateSession(sessionE164, mccMncProducer.getMcc(), mccMncProducer.getMnc())
+    Disposable request = viewModel.validateSession(sessionE164)
                                   .observeOn(AndroidSchedulers.mainThread())
                                   .subscribe(processor -> {
                                     if (processor.hasResult() && processor.canSubmitProofImmediately()) {
@@ -112,6 +111,7 @@ public final class EnterPhoneNumberFragment extends LoggingFragment implements R
 
     disposables.add(request);
   }
+
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -382,35 +382,6 @@ public final class EnterPhoneNumberFragment extends LoggingFragment implements R
   @Override
   public void setCountry(int countryCode) {
     viewModel.onCountrySelected(null, countryCode);
-  }
-
-  @Override
-  public void onStart() {
-    super.onStart();
-    String sessionE164 = viewModel.getSessionE164();
-    if (sessionE164 != null && viewModel.getSessionId() != null && viewModel.getCaptchaToken() == null) {
-      checkIfSessionIsInProgressAndAdvance(sessionE164);
-    }
-  }
-
-  private void checkIfSessionIsInProgressAndAdvance(@NonNull String sessionE164) {
-    NavController  navController  = NavHostFragment.findNavController(this);
-    Disposable request = viewModel.validateSession(sessionE164)
-                                  .observeOn(AndroidSchedulers.mainThread())
-                                  .subscribe(processor -> {
-                                    if (processor.hasResult() && processor.canSubmitProofImmediately()) {
-                                      try {
-                                        viewModel.restorePhoneNumberStateFromE164(sessionE164);
-                                        SafeNavigation.safeNavigate(navController, EnterPhoneNumberFragmentDirections.actionEnterVerificationCode());
-                                      } catch (NumberParseException numberParseException) {
-                                        viewModel.resetSession();
-                                      }
-                                    } else {
-                                      viewModel.resetSession();
-                                    }
-                                  });
-
-    disposables.add(request);
   }
 
   private void handleNonNormalizedNumberError(@NonNull String originalNumber, @NonNull String normalizedNumber, @NonNull Mode mode) {
