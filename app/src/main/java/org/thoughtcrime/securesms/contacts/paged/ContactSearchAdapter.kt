@@ -404,11 +404,6 @@ open class ContactSearchAdapter(
           ContactSearchConfiguration.NewRowMode.ADD_TO_GROUP -> R.string.contact_selection_list__unknown_contact_add_to_group
         }
       )
-      name.setText(when (model.data.mode) {
-        ContactSearchConfiguration.NewRowMode.NEW_CONVERSATION -> R.string.contact_selection_list__unknown_contact
-        ContactSearchConfiguration.NewRowMode.BLOCK -> R.string.contact_selection_list__unknown_contact_block
-        ContactSearchConfiguration.NewRowMode.ADD_TO_GROUP -> R.string.contact_selection_list__unknown_contact_add_to_group
-      })
       itemView.focusOnLeft()
       number.text = model.data.query
 
