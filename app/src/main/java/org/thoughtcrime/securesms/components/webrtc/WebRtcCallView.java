@@ -400,7 +400,7 @@ public class WebRtcCallView extends ConstraintLayout {
     } else {
       label = getContext().getString(R.string.preferences_on);
     }
-    ringToggleLabel.setText(getContext().getString(R.string.WebRtcCallView__ring) + ":" + label);
+    ringToggleLabel.setText(getContext().getString(R.string.Pigeon_WebRtcCallView__ring) + ":" + label);
   }
 
   @Override

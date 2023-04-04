@@ -358,27 +358,6 @@ class PrivacySettingsFragment : DSLSettingsFragment(R.string.preferences__privac
         }
       )
 
-      if (FeatureFlags.phoneNumberPrivacy()) {
-        sectionHeaderPref(R.string.preferences_app_protection__who_can)
-
-        clickPref(
-          title = DSLSettingsText.from(R.string.preferences_app_protection__see_my_phone_number),
-          summary = DSLSettingsText.from(getWhoCanSeeMyPhoneNumberSummary(state.seeMyPhoneNumber)),
-          onClick = {
-            onSeeMyPhoneNumberClicked(state.seeMyPhoneNumber)
-          }
-        )
-
-        clickPref(
-          title = DSLSettingsText.from(R.string.preferences_app_protection__find_me_by_phone_number),
-          summary = DSLSettingsText.from(getWhoCanFindMeByPhoneNumberSummary(state.findMeByPhoneNumber)),
-          onClick = {
-            onFindMyPhoneNumberClicked(state.findMeByPhoneNumber)
-          }
-        )
-
-      }
-
       sectionHeaderPref(R.string.PrivacySettingsFragment__messaging)
 
       switchPref(

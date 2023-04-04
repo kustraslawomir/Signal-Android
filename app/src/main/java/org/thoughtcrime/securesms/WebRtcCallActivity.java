@@ -373,7 +373,7 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
     viewModel.getOrientationAndLandscapeEnabled().observe(this, pair -> ApplicationDependencies.getSignalCallManager().orientationChanged(pair.second, pair.first.getDegrees()));
     viewModel.getControlsRotation().observe(this, callScreen::rotateControls);
 
-    addOnPictureInPictureModeChangedListener(info ->
+    addOnPictureInPictureModeChangedListener(info -> {
       if (isSignalVersion()) {
       viewModel.setIsInPipMode(info.isInPictureInPictureMode());
       participantUpdateWindow.setEnabled(!info.isInPictureInPictureMode());

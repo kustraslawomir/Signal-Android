@@ -72,6 +72,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -168,6 +169,7 @@ import org.thoughtcrime.securesms.database.DraftTable.Draft;
 import org.thoughtcrime.securesms.database.DraftTable.Drafts;
 import org.thoughtcrime.securesms.database.GroupTable;
 import org.thoughtcrime.securesms.database.IdentityTable.VerifiedStatus;
+import org.thoughtcrime.securesms.database.MessageTable;
 import org.thoughtcrime.securesms.database.RecipientTable;
 import org.thoughtcrime.securesms.database.RecipientTable.RegisteredState;
 import org.thoughtcrime.securesms.database.SignalDatabase;
@@ -326,8 +328,12 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import kotlin.Unit;
+import pigeon.extensions.BuildExtensionsKt;
+import pigeon.permissions.PigeonRationaleDialog;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+import static org.webrtc.ContextUtils.getApplicationContext;
+import static pigeon.extensions.KotilinExtensionsKt.showWhenScrolledToBottom;
 
 /**
  * Fragment for displaying a message thread, as well as
@@ -416,6 +422,9 @@ public class ConversationParentFragment extends Fragment
   private   Stub<FrameLayout>            voiceNotePlayerViewStub;
   private   View                         navigationBarBackground;
 
+  private TextView       myRT;
+  private MaterialButton voice;
+
   private   AttachmentManager        attachmentManager;
   private   AudioRecorder            audioRecorder;
   private   RecordingSession         recordingSession;
@@ -456,6 +465,7 @@ public class ConversationParentFragment extends Fragment
   private Material3OnScrollHelper      material3OnScrollHelper;
   private InlineQueryResultsController inlineQueryResultsController;
   private OnBackPressedCallback        backPressedCallback;
+  private SendButtonListener           sendButtonListener;
 
   private LiveRecipient recipient;
   private long          threadId;
@@ -463,6 +473,9 @@ public class ConversationParentFragment extends Fragment
   private int           reactWithAnyEmojiStartPage = -1;
   private boolean       isSearchRequested          = false;
   private boolean       reshowScheduleMessagesBar  = false;
+
+  private int record_flag = 0;
+
 
   private final LifecycleDisposable disposables            = new LifecycleDisposable();
   private final Debouncer           optionsMenuDebouncer   = new Debouncer(50);
@@ -473,6 +486,17 @@ public class ConversationParentFragment extends Fragment
   private RecentEmojiPageModel recentEmojis;
 
   private ConversationOptionsMenu.Provider menuProvider;
+
+  private MaterialButton pigeonGroupCall;
+  private MaterialButton pigeonCall;
+  private MaterialButton pigeonSettings;
+  private MaterialButton secureSession;
+
+  private LinearLayoutCompat primaryLayout;
+  private LinearLayoutCompat extraLayout;
+  private MaterialButton     send2;
+
+  private Boolean extraScreenIsShowed = false;
 
   public static ConversationParentFragment create(Intent intent) {
     ConversationParentFragment fragment = new ConversationParentFragment();
@@ -1889,8 +1913,24 @@ public class ConversationParentFragment extends Fragment
     releaseChannelUnmute                = ViewUtil.findStubById(view, R.id.conversation_release_notes_unmute_stub);
     joinGroupCallButton                 = view.findViewById(R.id.conversation_group_call_join);
 
+    pigeonGroupCall = view.findViewById(R.id.conversation_group_call);
+    pigeonCall      = view.findViewById(R.id.conversation_call);
+    pigeonSettings  = view.findViewById(R.id.conversation_settings);
+    secureSession   = view.findViewById(R.id.secure_session);
+    voice           = view.findViewById(R.id.voice);
+    primaryLayout   = view.findViewById(R.id.prime_buttons);
+    extraLayout     = view.findViewById(R.id.extra_buttons);
+    send2           = view.findViewById(R.id.send_text_2);
+
+    myRT = view.findViewById(R.id.record_time);
+
     sendButton.setPopupContainer((ViewGroup) view);
     sendButton.setSnackbarContainer(view.findViewById(R.id.fragment_content));
+
+    pigeonGroupCall.setOnClickListener(v -> handleVideo(getRecipient()));
+    pigeonCall.setOnClickListener(v -> handleDial(getRecipient(), true));
+    secureSession.setOnClickListener(v -> handleResetSecureSession());
+    voice.setOnClickListener(v -> sendVoiceMessage());
 
     container.setIsBubble(isInBubble());
     container.addOnKeyboardShownListener(this);
@@ -1901,14 +1941,47 @@ public class ConversationParentFragment extends Fragment
     audioRecorder     = new AudioRecorder(requireContext(), inputPanel);
     typingTextWatcher = new ComposeTextWatcher();
 
-    SendButtonListener        sendButtonListener        = new SendButtonListener();
     ComposeKeyPressedListener composeKeyPressedListener = new ComposeKeyPressedListener();
-
+    sendButtonListener = new SendButtonListener();
     composeText.setOnEditorActionListener(sendButtonListener);
     composeText.setCursorPositionChangedListener(this);
     attachButton.setOnClickListener(new AttachButtonListener());
     attachButton.setOnLongClickListener(new AttachButtonLongClickListener());
     sendButton.setOnClickListener(sendButtonListener);
+    send2.setOnClickListener(v -> {
+      view.findViewById(R.id.send_text).performClick();
+      primaryLayout.setVisibility(View.VISIBLE);
+      extraLayout.setVisibility(View.GONE);
+      extraScreenIsShowed = false;
+      composeText.requestFocus();
+    });
+
+    view.findViewById(R.id.send_text).setOnKeyListener((v, keyCode, event) -> {
+      if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+        primaryLayout.setVisibility(View.GONE);
+        extraLayout.setVisibility(View.VISIBLE);
+        extraScreenIsShowed = false;
+        send2.requestFocus();
+        return true;
+      }
+      return false;
+    });
+
+    send2.setOnKeyListener((v, keyCode, event) -> {
+      if (keyCode == KeyEvent.KEYCODE_DPAD_UP && event.getAction() == KeyEvent.ACTION_UP) {
+        if (!extraScreenIsShowed) {
+          extraScreenIsShowed = true;
+          return false;
+        }
+        primaryLayout.setVisibility(View.VISIBLE);
+        extraLayout.setVisibility(View.GONE);
+        return true;
+      } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+        extraScreenIsShowed = false;
+      }
+      return false;
+    });
+
     sendButton.setScheduledSendListener(new SendButton.ScheduledSendListener() {
       @Override
       public void onSendScheduled() {
@@ -1955,7 +2028,20 @@ public class ConversationParentFragment extends Fragment
     composeText.setOnEditorActionListener(sendButtonListener);
     composeText.setOnClickListener(composeKeyPressedListener);
     composeText.setOnFocusChangeListener(composeKeyPressedListener);
+    view.findViewById(R.id.send_text).setOnClickListener(new OnClickListener() {
+      @Override public void onClick(View v) {
+        sendButtonListener.onClick(composeText);
+        composeText.requestFocus();
+      }
+    });
 
+    composeText.setOnEditorActionListener((v, actionId, event) -> {
+      if (actionId == EditorInfo.IME_ACTION_DONE) {
+        sendButtonListener.onClick(composeText);
+        return true;
+      }
+      return false;
+    });
     if (Camera.getNumberOfCameras() > 0) {
       quickCameraToggle.setVisibility(View.VISIBLE);
       quickCameraToggle.setOnClickListener(new QuickCameraToggleListener());
@@ -2018,6 +2104,62 @@ public class ConversationParentFragment extends Fragment
 
     return voiceNotePlayerView;
   }
+
+  private void handleResetSecureSession() {
+    String rationaleDialogMessage = getString(R.string.ConversationActivity_reset_secure_session_question) + getString(R.string.ConversationActivity_this_may_help_if_youre_having_encryption_problems);
+
+    android.app.AlertDialog dialog = PigeonRationaleDialog.createNonMsgDialog(
+        requireContext(),
+        rationaleDialogMessage,
+        R.string.ConversationActivity_reset,
+        android.R.string.cancel,
+        () -> {
+          if (isSingleConversation()) {
+            final Context context = getApplicationContext();
+
+            MessageTable database = SignalDatabase.messages();
+
+            OutgoingMessage endMessage = OutgoingMessage.endSessionMessage(getRecipient(), System.currentTimeMillis());
+
+            if (!recipient.get().isGroup()) {
+              ApplicationDependencies.getProtocolStore().aci().deleteAllSessions(recipient.get().requireServiceId().toString());
+
+              SecurityEvent.broadcastSecurityUpdateEvent(context);
+
+              Toast.makeText(context, R.string.conversation_secure_verified__menu_reset_secure_session, Toast.LENGTH_SHORT).show();
+
+//              long messageId = 0;
+//              try {
+//                messageId = database.insertMessageOutbox(endMessage,
+//                                                              threadId,
+//                                                              false,
+//                                                              null);
+//              } catch (MmsException e) {
+//                throw new RuntimeException(e);
+//              }
+//              database.markAsSent(messageId, true);
+//              SignalDatabase.threads().update(threadId, true);
+            }
+          }
+        },
+        null,
+        null);
+    dialog.show();
+  }
+
+  private void sendVoiceMessage() {
+    inputPanel.onRecordPressed();
+    myRT.setVisibility(View.VISIBLE);
+    voice.setText(getString(R.string.conversation__menu_voice_message_send));
+    voice.setOnClickListener(v -> stopVoiceMessage());
+  }
+
+  private void stopVoiceMessage() {
+    inputPanel.onRecordReleased();
+    voice.setText(getString(R.string.conversation__menu_voice_message));
+    voice.setOnClickListener(v -> sendVoiceMessage());
+  }
+
 
   private void updateWallpaper(@Nullable ChatWallpaper chatWallpaper) {
     Log.d(TAG, "Setting wallpaper.");
@@ -4347,5 +4489,10 @@ public class ConversationParentFragment extends Fragment
     default boolean isInBubble() {
       return false;
     }
+  }
+
+  public void onKeycodeCallPressed() {
+    sendButtonListener.onClick(composeText);
+    composeText.requestFocus();
   }
 }

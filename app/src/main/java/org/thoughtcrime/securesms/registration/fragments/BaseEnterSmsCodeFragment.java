@@ -236,6 +236,64 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
 
   }
 
+  @Override public void onDestroyView() {
+    super.onDestroyView();
+    requireContext().getContentResolver().unregisterContentObserver(pigeonSmsObserver);
+    pigeonSmsObserver = null;
+  }
+
+  protected void handleRateLimited() {
+    keyboard.displayFailure().addListener(new AssertedSuccessListener<Boolean>() {
+      @Override
+      public void onSuccess(Boolean r) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+
+        builder.setTitle(R.string.RegistrationActivity_too_many_attempts)
+               .setMessage(R.string.RegistrationActivity_you_have_made_too_many_attempts_please_try_again_later)
+               .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                 callMeCountDown.setVisibility(View.VISIBLE);
+                 resendSmsCountDown.setVisibility(View.VISIBLE);
+                 wrongNumber.setVisibility(View.VISIBLE);
+                 verificationCodeView.clear();
+                 keyboard.displayKeyboard();
+               })
+               .show();
+      }
+    });
+  }
+
+  private void initPigeonObserver(){
+    CodeHandler handler = new CodeHandler(this);
+    pigeonSmsObserver = new VerificationCodeObserver(requireContext(), handler, MSG_RECEIVED_CODE);
+    Uri uri = Uri.parse("content://sms");
+    requireContext().getContentResolver().registerContentObserver(uri, true, pigeonSmsObserver);
+  }
+
+  private void returnToPhoneEntryScreen() {
+    viewModel.resetSession();
+    Navigation.findNavController(requireView()).navigateUp();
+  }
+
+  private static class CodeHandler extends Handler {
+    private WeakReference<BaseEnterSmsCodeFragment> mRef;
+
+    CodeHandler(BaseEnterSmsCodeFragment fragment) {
+      mRef = new WeakReference<>(fragment);
+    }
+
+    @Override
+    public void handleMessage(Message msg) {
+      super.handleMessage(msg);
+      if (msg.what == MSG_RECEIVED_CODE) {
+        String code = (String) msg.obj;
+        EditText view = mRef.get().pigeonCodeView;
+        view.setText(code);
+        view.setSelection(code.length());
+      }
+    }
+  }
+
+
   private void setOnCodeFullyEnteredListener(VerificationCodeView verificationCodeView) {
     verificationCodeView.setOnCompleteListener(code -> {
 

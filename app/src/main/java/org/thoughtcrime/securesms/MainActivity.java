@@ -163,6 +163,14 @@ public class MainActivity extends PassphraseRequiredActivity implements VoiceNot
     }
   }
 
+  public void collapseHomePage() {
+    MainActivityListHostFragment fragment = (MainActivityListHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+    if (fragment != null) {
+      fragment.showSearchBar();
+      findViewById(R.id.homePageFragment).setVisibility(View.GONE);
+    }
+  }
+
   public void hideArchivedConversations() {
     MainActivityListHostFragment fragment = (MainActivityListHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
     if (fragment != null) {
