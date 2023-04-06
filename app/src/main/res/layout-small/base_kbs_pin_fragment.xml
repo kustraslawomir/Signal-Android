@@ -101,11 +101,10 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/edit_kbs_pin_keyboard_toggle"
+            style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@id/edit_kbs_pin_confirm"
             app:layout_constraintTop_toBottomOf="@id/edit_kbs_pin_input_label"
             app:layout_constraintVertical_bias="1.0"
@@ -115,8 +114,7 @@
             android:id="@+id/edit_kbs_pin_confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:textColor="@color/core_white"
+            android:layout_marginBottom="@dimen/pigeon_bottom_margin"
             app:circularProgressMaterialButton__label="@string/BaseKbsPinFragment__next"
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
