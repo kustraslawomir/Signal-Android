@@ -94,7 +94,6 @@ public class MainActivity extends PassphraseRequiredActivity implements VoiceNot
 
     conversationListTabsViewModel = new ViewModelProvider(this, factory).get(ConversationListTabsViewModel.class);
     updateTabVisibility();
-    findViewById(R.id.pre_loader_value).requestFocus();
   }
 
   @Override
