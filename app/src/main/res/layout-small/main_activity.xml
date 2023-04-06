@@ -38,16 +38,7 @@
         android:id="@+id/pre_loader"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black"
+        android:background="@drawable/mp02_splash_bg"
         android:descendantFocusability="blocksDescendants">
-
-        <TextView
-            android:id="@+id/pre_loader_value"
-            style="@style/Mp02.Signal.Text.SmallTextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/pigeon_app_name"
-            android:textColor="@color/white" />
     </FrameLayout>
 </FrameLayout>
