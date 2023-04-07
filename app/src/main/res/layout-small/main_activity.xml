@@ -17,6 +17,13 @@
             android:orientation="vertical">
 
             <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/conversation_list_tabs"
+                android:name="org.thoughtcrime.securesms.stories.tabs.ConversationListTabsFragment"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"/>
+
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/homePageFragment"
                 android:name="pigeon.fragments.HomePageFragment"
                 android:layout_width="match_parent"
