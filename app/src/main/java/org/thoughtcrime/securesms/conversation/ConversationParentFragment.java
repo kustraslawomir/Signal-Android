@@ -2432,6 +2432,18 @@ public class ConversationParentFragment extends Fragment
 
     recipient.observe(this, r -> {
       groupCallViewModel.onRecipientChange(r);
+      pigeonSettings.setVisibility(r.isGroup() ? View.VISIBLE : View.GONE);
+      pigeonGroupCall.setVisibility(r.isGroup() ? View.VISIBLE : View.GONE);
+      pigeonCall.setVisibility(!r.isGroup() ? View.VISIBLE : View.GONE);
+      secureSession.setVisibility(!r.isGroup() ? View.VISIBLE : View.GONE);
+      pigeonSettings.setOnClickListener(v -> {
+                                          if (r.isGroup()) {
+                                            handleManageGroup();
+                                          } else {
+                                            handleConversationSettings();
+                                          }
+                                        }
+      );
     });
 
     groupCallViewModel.hasActiveGroupCall().observe(getViewLifecycleOwner(), hasActiveCall -> {
