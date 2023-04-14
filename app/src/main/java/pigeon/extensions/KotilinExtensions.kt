@@ -19,9 +19,19 @@ import org.thoughtcrime.securesms.longmessage.TAG
 
 fun View.focusOnLeft() {
 
-  if (!isSignalVersion()) {
+  if (isPigeonVersion()) {
+    this.alpha = if (this.isEnabled){
+      1.0f
+    } else {
+      0.5f
+    }
     val focus = View.OnFocusChangeListener { _, hasFocus ->
       this.post {
+        this.alpha = if (this.isEnabled){
+          1.0f
+        } else {
+          0.5f
+        }
         val params = this.layoutParams as ViewGroup.MarginLayoutParams
 
         if (hasFocus) {

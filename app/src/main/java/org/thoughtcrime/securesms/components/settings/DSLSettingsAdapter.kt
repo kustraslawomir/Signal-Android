@@ -28,7 +28,7 @@ import org.thoughtcrime.securesms.util.adapter.mapping.MappingViewHolder
 import org.thoughtcrime.securesms.util.views.LearnMoreTextView
 import org.thoughtcrime.securesms.util.visible
 import pigeon.extensions.focusOnLeft
-import pigeon.extensions.isSignalVersion
+import pigeon.extensions.isPigeonVersion
 
 @Discouraged("The DSL API can be completely replaced by compose. See ComposeFragment or ComposeBottomSheetFragment for an alternative to this API")
 class DSLSettingsAdapter : MappingAdapter() {
@@ -59,10 +59,12 @@ abstract class PreferenceViewHolder<T : PreferenceModel<T>>(itemView: View) : Ma
 
   @CallSuper
   override fun bind(model: T) {
-    itemView.focusOnLeft()
-
     listOf(itemView, titleView, summaryView).forEach {
       it.isEnabled = model.isEnabled
+    }
+
+    if (isPigeonVersion()){
+      itemView.focusOnLeft()
     }
 
     val icon = model.icon?.resolve(context)
@@ -112,6 +114,13 @@ class LearnMoreTextPreferenceViewHolder(itemView: View) : PreferenceViewHolder<L
 class ClickPreferenceViewHolder(itemView: View) : PreferenceViewHolder<ClickPreference>(itemView) {
   override fun bind(model: ClickPreference) {
     super.bind(model)
+    if (isPigeonVersion()){
+      itemView.alpha = if (model.isEnabled){
+        1.0f
+      } else {
+        0.5f
+      }
+    }
     itemView.setOnClickListener { model.onClick() }
     itemView.setOnLongClickListener { model.onLongClick?.invoke() ?: false }
   }
@@ -213,7 +222,7 @@ class SwitchPreferenceViewHolder(itemView: View) : PreferenceViewHolder<SwitchPr
 
   override fun bind(model: SwitchPreference) {
     super.bind(model)
-    if (!isSignalVersion()) {
+    if (isPigeonVersion()) {
       onChangeTextListener(model, model.isChecked)
       switchWidget.setOnCheckedChangeListener { _, isChecked ->
         onChangeTextListener(model, isChecked)
@@ -226,6 +235,14 @@ class SwitchPreferenceViewHolder(itemView: View) : PreferenceViewHolder<SwitchPr
     }
     switchWidget.isEnabled = model.isEnabled
     switchWidget.isChecked = model.isChecked
+
+    if (isPigeonVersion()){
+      itemView.alpha = if (model.isEnabled){
+        1.0f
+      } else {
+        0.5f
+      }
+    }
 
     itemView.setOnClickListener {
       model.onClick()

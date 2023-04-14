@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.view.isVisible
 import com.google.android.material.button.MaterialButton
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
@@ -37,6 +38,7 @@ import org.thoughtcrime.securesms.util.adapter.mapping.MappingViewHolder
 import org.thoughtcrime.securesms.util.adapter.mapping.PagingMappingAdapter
 import org.thoughtcrime.securesms.util.visible
 import pigeon.extensions.focusOnLeft
+import pigeon.extensions.isPigeonVersion
 
 /**
  * Default contact search adapter, using the models defined in `ContactSearchItems`
@@ -218,6 +220,9 @@ open class ContactSearchAdapter(
 
       if (model.story.recipient.isMyStory && !model.hasBeenNotified) {
         number.setText(R.string.ContactSearchItems__tap_to_choose_your_viewers)
+        if (isPigeonVersion()){
+          itemView.isVisible = false
+        }
       } else {
         number.text = when {
           model.story.recipient.isGroup -> context.resources.getQuantityString(R.plurals.ContactSearchItems__group_story_d_viewers, count, count)

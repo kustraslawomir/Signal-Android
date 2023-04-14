@@ -87,7 +87,6 @@ public class CallParticipantsListDialog extends BottomSheetDialogFragment {
     return displayMetrics.heightPixels;
   }
 
-
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     setStyle(DialogFragment.STYLE_NORMAL, R.style.Theme_Signal_RoundedBottomSheet);
