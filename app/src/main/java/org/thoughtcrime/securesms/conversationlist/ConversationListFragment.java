@@ -1473,9 +1473,9 @@ public class ConversationListFragment extends MainFragment implements ActionMode
 
       if (isSignalVersion()) {
         if (conversation.getThreadRecord().isPinned()) {
-          items.add(new ActionItem(R.drawable.symbol_pin_slash_24, getResources().getQuantityString(R.plurals.ConversationListFragment_unpin_plural, 1), () -> handleUnpin(id)));
+          items.add(new ActionItem(R.drawable.symbol_pin_slash_24, getResources().getString(R.string.ConversationListFragment_unpin), () -> handleUnpin(id)));
         } else {
-          items.add(new ActionItem(R.drawable.symbol_pin_24, getResources().getQuantityString(R.plurals.ConversationListFragment_pin_plural, 1), () -> handlePin(Collections.singleton(conversation))));
+          items.add(new ActionItem(R.drawable.symbol_pin_24, getResources().getString(R.string.ConversationListFragment_pin), () -> handlePin(Collections.singleton(conversation))));
         }
       }
 
@@ -1592,9 +1592,9 @@ public class ConversationListFragment extends MainFragment implements ActionMode
 
     if (isSignalVersion()) {
       if (!isArchived() && hasUnpinned && canPin) {
-        items.add(new ActionItem(R.drawable.symbol_pin_24, getResources().getQuantityString(R.plurals.ConversationListFragment_pin_plural, count), () -> handlePin(viewModel.currentSelectedConversations())));
+        items.add(new ActionItem(R.drawable.symbol_pin_24, getResources().getString(R.string.ConversationListFragment_pin), () -> handlePin(viewModel.currentSelectedConversations())));
       } else if (!isArchived() && !hasUnpinned) {
-        items.add(new ActionItem(R.drawable.symbol_pin_slash_24, getResources().getQuantityString(R.plurals.ConversationListFragment_unpin_plural, count), () -> handleUnpin(selectionIds)));
+        items.add(new ActionItem(R.drawable.symbol_pin_slash_24, getResources().getString(R.string.ConversationListFragment_unpin), () -> handleUnpin(selectionIds)));
       }
     }
 
