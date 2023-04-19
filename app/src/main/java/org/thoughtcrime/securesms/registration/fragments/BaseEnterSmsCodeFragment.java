@@ -196,16 +196,16 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
 
       }
 
-      @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (s.length() == 6) {
+      @Override public void onTextChanged(CharSequence code, int start, int before, int count) {
+        if (code.length() == 6) {
           callMeCountDown.setVisibility(View.INVISIBLE);
           resendSmsCountDown.setVisibility(View.INVISIBLE);
           wrongNumber.setVisibility(View.INVISIBLE);
           keyboard.displayProgress();
 
-          Disposable verify = viewModel.verifyCodeWithoutRegistrationLock(s.toString())
+          Disposable verify = viewModel.verifyCodeWithoutRegistrationLock(code.toString())
                                        .observeOn(AndroidSchedulers.mainThread())
-                                       .subscribe(processor -> {
+                                       .subscribe((VerifyResponseProcessor processor) -> {
                                          if (!processor.hasResult()) {
                                            Log.w(TAG, "post verify: ", processor.getError());
                                          }
