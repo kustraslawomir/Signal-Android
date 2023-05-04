@@ -9,4 +9,9 @@
     <color name="blue_A800_focus">#68A9EA</color>
     <color name="blue_A800_normal">#8068A9EA</color>
     <color name="grey">#9D9D9D</color>
+    <color name="mp02Background">#ff000e00</color>
+    <color name="mp02PopUpBackground">#ff343434</color>
+    <color name="mp02FocusedItem">#ffffff</color>
+    <color name="mp02UnfocusedItem">#80ffffff</color>
+    <color name="mp02UnfocusedGreyItem">#20ffffff</color>
 </resources>

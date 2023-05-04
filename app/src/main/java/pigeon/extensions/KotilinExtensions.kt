@@ -1,33 +1,55 @@
 package pigeon.extensions
 
 import android.animation.ValueAnimator
+import android.graphics.Rect
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.EditText
-import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import org.signal.glide.Log
-import org.thoughtcrime.securesms.MainActivity
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.longmessage.TAG
+import pigeon.animation.CenterLayoutManager
+import pigeon.animation.MyDecoration
 
+fun RecyclerView.test() {
+  layoutManager = CenterLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
+  val snapHelper = LinearSnapHelper()
+  snapHelper.attachToRecyclerView(this)
+  onFlingListener = snapHelper
+  addItemDecoration(MyDecoration())
+}
+
+private fun setTextSwitcher(hasFocus: Boolean, view: View) {
+  when (hasFocus) {
+    false -> {
+      view.animation = (AnimationUtils.loadAnimation(view.context, R.anim.upandvisible))
+      view.animation = (AnimationUtils.loadAnimation(view.context, R.anim.upandgone))
+    }
+   true -> {
+      view.animation = (AnimationUtils.loadAnimation(view.context, R.anim.downandvisible))
+      view.animation = (AnimationUtils.loadAnimation(view.context, R.anim.downandgone))
+    }
+  }
+}
 
 fun View.focusOnLeft() {
 
   if (isPigeonVersion()) {
-    this.alpha = if (this.isEnabled){
+    this.alpha = if (this.isEnabled) {
       1.0f
     } else {
       0.5f
     }
     val focus = View.OnFocusChangeListener { _, hasFocus ->
       this.post {
-        this.alpha = if (this.isEnabled){
+
+        this.alpha = if (this.isEnabled) {
           1.0f
         } else {
           0.5f
@@ -46,9 +68,11 @@ fun View.focusOnLeft() {
         this.getAllChildren().forEach {
           if (it.tag != "header") {
             (it as? TextView)?.setupTextSize(hasFocus)
+            setTextSwitcher(hasFocus, it)
           }
           it.setupEllipsize(hasFocus)
         }
+
       }
     }
     this.onFocusChangeListener = focus

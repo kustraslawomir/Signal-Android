@@ -203,6 +203,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import kotlin.Unit;
+import pigeon.extensions.KotilinExtensionsKt;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -390,6 +391,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     list.setLayoutManager(new LinearLayoutManager(requireActivity()));
     list.setItemAnimator(itemAnimator);
     list.addItemDecoration(archiveDecoration);
+    KotilinExtensionsKt.test(list);
     CachedInflater.from(list.getContext()).cacheUntilLimit(R.layout.conversation_list_item_view, list, 10);
 
     snapToTopDataObserver = new SnapToTopDataObserver(list);
