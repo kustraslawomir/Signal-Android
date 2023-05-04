@@ -3661,6 +3661,7 @@ public class ConversationParentFragment extends Fragment
   @Override
   public void bindScrollHelper(@NonNull RecyclerView recyclerView) {
     material3OnScrollHelper.attach(recyclerView);
+    showWhenScrolledToBottom(recyclerView, inputPanel);
   }
 
   @Override
