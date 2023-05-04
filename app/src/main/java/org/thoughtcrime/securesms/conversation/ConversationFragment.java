@@ -2208,6 +2208,35 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     if (requestCode == CODE_ADD_EDIT_CONTACT && getContext() != null) {
       ApplicationDependencies.getJobManager().add(new DirectoryRefreshJob(false));
     }
+
+    Log.w("PIGEON", ""+requestCode +" | "+ resultCode);
+    if (selectedConversationMessage == null || requestCode != HANDLE_SUBMENU) {
+
+      return;
+    }
+
+
+    if (resultCode == HANDLE_REPLY_MESSAGE) {
+      handleReplyMessage(selectedConversationMessage);
+    } else if (resultCode == HANDLE_FORWARD) {
+      handleForwardMessageParts(selectedConversationMessage.getMultiselectCollection().toSet());
+    } else if (resultCode == HANDLE_TAKE_BACK_MESSAGE) {
+      handleDeleteMessagesAsPigeonApplication(selectedConversationMessage.getMultiselectCollection().toSet());
+    } else if (resultCode == HANDLE_REACT) {
+      //todo
+    }
+  }
+
+  private void handleDeleteMessagesAsPigeonApplication(final Set<MultiselectPart> multiselectParts) {
+    Set<MessageRecord> messageRecords = Stream.of(multiselectParts).map(MultiselectPart::getMessageRecord).collect(Collectors.toSet());
+    Runnable deleteForEveryone = () -> {
+      SignalExecutors.BOUNDED.execute(() -> {
+        for (MessageRecord message : messageRecords) {
+          MessageSender.sendRemoteDelete(message.getId());
+        }
+      });
+    };
+    deleteForEveryone.run();
   }
 
   private void handleEnterMultiSelect(@NonNull ConversationMessage conversationMessage) {
