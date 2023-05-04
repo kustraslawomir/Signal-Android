@@ -558,6 +558,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/pigeon_start_margin"
+                android:nextFocusDown="@id/call_screen_start_call_start_call"
                 android:text="@string/WebRtcCallView__start_call"
                 android:textAllCaps="false" />
 
