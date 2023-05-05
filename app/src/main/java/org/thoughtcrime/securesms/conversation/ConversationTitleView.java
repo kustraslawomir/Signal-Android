@@ -30,6 +30,8 @@ import org.thoughtcrime.securesms.util.DrawableUtil;
 import org.thoughtcrime.securesms.util.ExpirationUtil;
 import org.thoughtcrime.securesms.util.ViewUtil;
 
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
+
 public class ConversationTitleView extends ConstraintLayout {
 
   private static final String STATE_ROOT = "root";
@@ -139,7 +141,7 @@ public class ConversationTitleView extends ConstraintLayout {
       endDrawable = DrawableUtil.tint(endDrawable, ContextCompat.getColor(getContext(), R.color.signal_inverse_transparent_80));
     }
 
-    if (recipient != null && recipient.showVerified()) {
+    if (recipient != null && recipient.showVerified() && isSignalVersion()) {
       endDrawable = ContextUtil.requireDrawable(getContext(), R.drawable.ic_official_24);
     }
 

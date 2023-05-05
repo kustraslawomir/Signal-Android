@@ -23,6 +23,8 @@ import org.thoughtcrime.securesms.util.ViewUtil;
 import java.util.Iterator;
 import java.util.Objects;
 
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
+
 public class FromTextView extends SimpleEmojiTextView {
 
   private static final String TAG = Log.tag(FromTextView.class);
@@ -60,7 +62,7 @@ public class FromTextView extends SimpleEmojiTextView {
       builder.append(suffix);
     }
 
-    if (recipient.showVerified()) {
+    if (recipient.showVerified() && isSignalVersion()) {
       Drawable official = ContextUtil.requireDrawable(getContext(), R.drawable.ic_official_20);
       official.setBounds(0, 0, ViewUtil.dpToPx(20), ViewUtil.dpToPx(20));
 

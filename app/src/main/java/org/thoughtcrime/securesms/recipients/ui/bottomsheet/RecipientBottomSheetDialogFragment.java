@@ -58,6 +58,8 @@ import java.util.Objects;
 
 import kotlin.Unit;
 
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
+
 /**
  * A bottom sheet that shows some simple recipient details, as well as some actions (like calling,
  * adding to contacts, etc).
@@ -218,7 +220,7 @@ public final class RecipientBottomSheetDialogFragment extends BottomSheetDialogF
         Drawable systemContact = DrawableUtil.tint(ContextUtil.requireDrawable(requireContext(), R.drawable.ic_profile_circle_outline_16),
                                                    ContextCompat.getColor(requireContext(), R.color.signal_text_primary));
         SpanUtil.appendCenteredImageSpan(nameBuilder, systemContact, 16, 16);
-      } else if (recipient.showVerified()) {
+      } else if (recipient.showVerified() && isSignalVersion()) {
         SpanUtil.appendCenteredImageSpan(nameBuilder, ContextUtil.requireDrawable(requireContext(), R.drawable.ic_official_28), 28, 28);
       }
       fullName.setText(nameBuilder);
