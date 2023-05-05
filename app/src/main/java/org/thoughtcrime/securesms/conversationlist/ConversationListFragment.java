@@ -203,6 +203,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import kotlin.Unit;
+import pigeon.extensions.KotilinExtensionsKt;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -1135,7 +1136,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
 
   private void handleMarkAllRead() {
     Context context = requireContext();
-
+    KotilinExtensionsKt.cancelNotifications(context);
     SignalExecutors.BOUNDED.execute(() -> {
       List<MarkedMessageInfo> messageIds = SignalDatabase.threads().setAllThreadsRead();
 

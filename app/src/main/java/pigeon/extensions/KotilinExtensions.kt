@@ -1,12 +1,15 @@
 package pigeon.extensions
 
 import android.animation.ValueAnimator
+import android.app.NotificationManager
+import android.content.Context
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,14 +23,14 @@ import org.thoughtcrime.securesms.longmessage.TAG
 fun View.focusOnLeft() {
 
   if (isPigeonVersion()) {
-    this.alpha = if (this.isEnabled){
+    this.alpha = if (this.isEnabled) {
       1.0f
     } else {
       0.5f
     }
     val focus = View.OnFocusChangeListener { _, hasFocus ->
       this.post {
-        this.alpha = if (this.isEnabled){
+        this.alpha = if (this.isEnabled) {
           1.0f
         } else {
           0.5f
@@ -204,4 +207,10 @@ fun View.focusColor(vararg childs: TextView) {
     }
     this.onFocusChangeListener = focus
   }
+}
+
+fun Context.cancelNotifications() {
+  NotificationManagerCompat.from(this).cancelAll()
+  val notificationManager = (this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
+  notificationManager.cancelAll()
 }

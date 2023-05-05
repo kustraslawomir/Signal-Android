@@ -21,6 +21,7 @@ import org.thoughtcrime.securesms.messages.IncomingMessageObserver
 import org.thoughtcrime.securesms.notifications.MarkReadReceiver
 import org.thoughtcrime.securesms.permissions.Permissions
 import pigeon.base.PigeonBaseFragment
+import pigeon.extensions.cancelNotifications
 import pigeon.extensions.focusOnLeft
 
 
@@ -80,9 +81,7 @@ class HomePageFragment : PigeonBaseFragment<PigeonFragmentHomePageBinding>() {
 
   private fun handleMarkAllRead() {
     val context = requireContext()
-    NotificationManagerCompat.from(context).cancelAll()
-    val notificationManager = (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
-    notificationManager.cancelAll()
+    context.cancelNotifications()
     SignalExecutors.BOUNDED.execute {
       val messageIds = threads.setAllThreadsRead()
       ApplicationDependencies.getMessageNotifier().updateNotification(context)
