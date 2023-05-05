@@ -3661,6 +3661,7 @@ public class ConversationParentFragment extends Fragment
   @Override
   public void bindScrollHelper(@NonNull RecyclerView recyclerView) {
     material3OnScrollHelper.attach(recyclerView);
+    showWhenScrolledToBottom(recyclerView, inputPanel);
   }
 
   @Override
@@ -4506,6 +4507,18 @@ public class ConversationParentFragment extends Fragment
   }
 
   public void onKeycodeCallPressed() {
+    String rawText = composeText.getTextTrimmed().toString();
+    if (rawText.length() < 1 && !attachmentManager.isAttachmentPresent()) {
+      if (pigeonGroupCall.getVisibility() == View.VISIBLE) {
+        handleVideo(getRecipient());
+        return;
+      }
+      if (pigeonCall.getVisibility() == View.VISIBLE) {
+        handleDial(getRecipient(), true);
+        return;
+      }
+    }
+
     sendButtonListener.onClick(composeText);
     composeText.requestFocus();
   }
