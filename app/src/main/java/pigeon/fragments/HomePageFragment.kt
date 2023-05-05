@@ -1,12 +1,13 @@
 package pigeon.fragments
 
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import org.greenrobot.eventbus.EventBus
+import androidx.core.app.NotificationManagerCompat
 import org.signal.core.util.concurrent.SignalExecutors
 import org.thoughtcrime.securesms.MainActivity
 import org.thoughtcrime.securesms.MainNavigator.REQUEST_CONFIG_CHANGES
@@ -16,10 +17,12 @@ import org.thoughtcrime.securesms.database.SignalDatabase.Companion.threads
 import org.thoughtcrime.securesms.databinding.PigeonFragmentHomePageBinding
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
 import org.thoughtcrime.securesms.groups.ui.creategroup.CreateGroupActivity
+import org.thoughtcrime.securesms.messages.IncomingMessageObserver
 import org.thoughtcrime.securesms.notifications.MarkReadReceiver
 import org.thoughtcrime.securesms.permissions.Permissions
 import pigeon.base.PigeonBaseFragment
 import pigeon.extensions.focusOnLeft
+
 
 class HomePageFragment : PigeonBaseFragment<PigeonFragmentHomePageBinding>() {
 
@@ -77,6 +80,9 @@ class HomePageFragment : PigeonBaseFragment<PigeonFragmentHomePageBinding>() {
 
   private fun handleMarkAllRead() {
     val context = requireContext()
+    NotificationManagerCompat.from(context).cancelAll()
+    val notificationManager = (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
+    notificationManager.cancelAll()
     SignalExecutors.BOUNDED.execute {
       val messageIds = threads.setAllThreadsRead()
       ApplicationDependencies.getMessageNotifier().updateNotification(context)

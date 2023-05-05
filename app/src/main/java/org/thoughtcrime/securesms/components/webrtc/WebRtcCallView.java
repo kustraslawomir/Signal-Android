@@ -268,6 +268,8 @@ public class WebRtcCallView extends ConstraintLayout {
     focusOnLeft(errorButton);
     focusOnLeft(pigeonVolumeToggle);
 
+    startCall.requestFocus();
+    
     setAudioLabelName(audioToggle.getOutputMode());
 
     audioToggle.setOnAudioOutputChangedListener(outputMode -> {
