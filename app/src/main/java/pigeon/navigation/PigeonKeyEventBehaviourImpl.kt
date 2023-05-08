@@ -30,6 +30,7 @@ class PigeonKeyEventBehaviourImpl : KeyEventBehaviour {
         val conversationParentFragment = fragmentManager.fragments.find { it is ConversationParentFragment }
         if (conversationParentFragment != null && conversationParentFragment is ConversationParentFragment && event.action == KeyEvent.ACTION_UP) {
           conversationParentFragment.onKeycodeCallPressed()
+
           return
         }
       }

@@ -42,6 +42,7 @@ import android.provider.Browser;
 import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
@@ -57,6 +58,7 @@ import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -4483,6 +4485,27 @@ public class ConversationParentFragment extends Fragment
     }
   }
 
+  public void onKeycodeCallPressed() {
+    composeText.clearFocus();
+    Log.d(TAG, "input type: "+composeText.getInputType());
+    String rawText = composeText.getTextTrimmed().toString();
+    if (rawText.length() < 1 && !attachmentManager.isAttachmentPresent()) {
+      if (pigeonGroupCall.getVisibility() == View.VISIBLE) {
+        handleVideo(getRecipient());
+        return;
+      }
+      if (pigeonCall.getVisibility() == View.VISIBLE) {
+        handleDial(getRecipient(), true);
+        return;
+      }
+    }
+
+    composeText.setInputType(InputType.TYPE_CLASS_TEXT);
+    sendButtonListener.onClick(composeText);
+    composeText.requestFocus();
+
+  }
+
   public interface Callback {
     long getShareDataTimestamp();
 
@@ -4504,22 +4527,5 @@ public class ConversationParentFragment extends Fragment
     default boolean isInBubble() {
       return false;
     }
-  }
-
-  public void onKeycodeCallPressed() {
-    String rawText = composeText.getTextTrimmed().toString();
-    if (rawText.length() < 1 && !attachmentManager.isAttachmentPresent()) {
-      if (pigeonGroupCall.getVisibility() == View.VISIBLE) {
-        handleVideo(getRecipient());
-        return;
-      }
-      if (pigeonCall.getVisibility() == View.VISIBLE) {
-        handleDial(getRecipient(), true);
-        return;
-      }
-    }
-
-    sendButtonListener.onClick(composeText);
-    composeText.requestFocus();
   }
 }
