@@ -4500,8 +4500,8 @@ public class ConversationParentFragment extends Fragment
       }
     }
 
-    composeText.setInputType(InputType.TYPE_CLASS_TEXT);
     sendButtonListener.onClick(composeText);
+    composeText.setInputType(InputType.TYPE_CLASS_TEXT);
     composeText.requestFocus();
 
   }
