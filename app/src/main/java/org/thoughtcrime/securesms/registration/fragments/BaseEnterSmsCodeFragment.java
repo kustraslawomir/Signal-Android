@@ -121,19 +121,24 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
       setPigeonOnCodeFullyEnteredListener();
       pigeonOptionButton.setOnClickListener(
           v -> {
-            ArrayList<ActionCountDownButton> list = new ArrayList<>();
-            if (callMeCountDown.getVisibility() == View.VISIBLE) {
-              list.add(callMeCountDown);
-            }
-            if (resendSmsCountDown.getVisibility() == View.VISIBLE) {
-              list.add(resendSmsCountDown);
-            }
+            boolean isNext = (boolean) v.getTag();
+            if (isNext) {
+              handleVerificationCode(pigeonCodeView.getText().toString());
+            } else {
+              ArrayList<ActionCountDownButton> list = new ArrayList<>();
+              if (callMeCountDown.getVisibility() == View.VISIBLE) {
+                list.add(callMeCountDown);
+              }
+              if (resendSmsCountDown.getVisibility() == View.VISIBLE) {
+                list.add(resendSmsCountDown);
+              }
 
-            if (list.isEmpty()) {
-              Toast.makeText(requireContext(), getString(R.string.no_options_available), Toast.LENGTH_SHORT).show();
-              return;
+              if (list.isEmpty()) {
+                Toast.makeText(requireContext(), getString(R.string.no_options_available), Toast.LENGTH_SHORT).show();
+                return;
+              }
+              dialog.showWithButtons(getParentFragmentManager(), list);
             }
-            dialog.showWithButtons(getParentFragmentManager(), list);
           }
       );
     }
@@ -180,6 +185,34 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
     });
   }
 
+  private void handleVerificationCode(String code) {
+    keyboard.displayProgress();
+    Disposable verify = viewModel.verifyCodeWithoutRegistrationLock(code)
+                                 .observeOn(AndroidSchedulers.mainThread())
+                                 .subscribe((VerifyResponseProcessor processor) -> {
+                                   if (!processor.hasResult()) {
+                                     Log.w(TAG, "post verify: ", processor.getError());
+                                   }
+                                   if (processor.hasResult()) {
+                                     handleSuccessfulVerify();
+                                   } else if (processor.rateLimit()) {
+                                     handleRateLimited();
+                                   } else if (processor.registrationLock() && !processor.isKbsLocked()) {
+                                     LockedException lockedException = processor.getLockedException();
+                                     handleRegistrationLock(lockedException.getTimeRemaining());
+                                   } else if (processor.isKbsLocked()) {
+                                     handleKbsAccountLocked();
+                                   } else if (processor.authorizationFailed()) {
+                                     handleIncorrectCodeError();
+                                   } else {
+                                     Log.w(TAG, "Unable to verify code", processor.getError());
+                                     handleGeneralError();
+                                   }
+                                 });
+
+    disposables.add(verify);
+  }
+
   protected abstract ViewModel getViewModel();
 
   protected abstract void handleSuccessfulVerify();
@@ -201,32 +234,12 @@ public abstract class BaseEnterSmsCodeFragment<ViewModel extends BaseRegistratio
           callMeCountDown.setVisibility(View.INVISIBLE);
           resendSmsCountDown.setVisibility(View.INVISIBLE);
           wrongNumber.setVisibility(View.INVISIBLE);
-          keyboard.displayProgress();
-
-          Disposable verify = viewModel.verifyCodeWithoutRegistrationLock(code.toString())
-                                       .observeOn(AndroidSchedulers.mainThread())
-                                       .subscribe((VerifyResponseProcessor processor) -> {
-                                         if (!processor.hasResult()) {
-                                           Log.w(TAG, "post verify: ", processor.getError());
-                                         }
-                                         if (processor.hasResult()) {
-                                           handleSuccessfulVerify();
-                                         } else if (processor.rateLimit()) {
-                                           handleRateLimited();
-                                         } else if (processor.registrationLock() && !processor.isKbsLocked()) {
-                                           LockedException lockedException = processor.getLockedException();
-                                           handleRegistrationLock(lockedException.getTimeRemaining());
-                                         } else if (processor.isKbsLocked()) {
-                                           handleKbsAccountLocked();
-                                         } else if (processor.authorizationFailed()) {
-                                           handleIncorrectCodeError();
-                                         } else {
-                                           Log.w(TAG, "Unable to verify code", processor.getError());
-                                           handleGeneralError();
-                                         }
-                                       });
-
-          disposables.add(verify);
+          pigeonOptionButton.setTag(true);
+          pigeonOptionButton.setText(getString(R.string.RegistrationActivity_next));
+          pigeonOptionButton.requestFocus();
+        } else {
+          pigeonOptionButton.setText(getString(R.string.Pigeon_Options));
+          pigeonOptionButton.setTag(false);
         }
       }
 

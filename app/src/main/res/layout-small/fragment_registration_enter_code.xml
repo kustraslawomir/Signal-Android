@@ -173,6 +173,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/pigeon_bottom_margin"
                 android:text="@string/Pigeon.Options"
+                android:tag="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
