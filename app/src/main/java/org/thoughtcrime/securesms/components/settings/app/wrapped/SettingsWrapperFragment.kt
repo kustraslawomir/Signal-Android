@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import org.thoughtcrime.securesms.R
+import pigeon.extensions.focusOnLeft
 import pigeon.extensions.isSignalVersion
 
 /**
@@ -44,6 +45,10 @@ abstract class SettingsWrapperFragment : Fragment(R.layout.settings_wrapper_frag
 
   fun setTitle(@StringRes titleId: Int) {
     toolbar.setTitle(titleId)
+  }
+
+  fun setFocusable() {
+    toolbar.focusOnLeft()
   }
 
   private fun onBackPressed() {

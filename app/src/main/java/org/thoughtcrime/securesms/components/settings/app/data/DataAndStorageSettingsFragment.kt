@@ -13,6 +13,7 @@ import org.thoughtcrime.securesms.util.Util
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingAdapter
 import org.thoughtcrime.securesms.util.navigation.safeNavigate
 import org.thoughtcrime.securesms.webrtc.CallBandwidthMode
+import pigeon.extensions.isSignalVersion
 import kotlin.math.abs
 
 class DataAndStorageSettingsFragment : DSLSettingsFragment(R.string.preferences__data_and_storage) {
@@ -44,13 +45,15 @@ class DataAndStorageSettingsFragment : DSLSettingsFragment(R.string.preferences_
 
   fun getConfiguration(state: DataAndStorageSettingsState): DSLConfiguration {
     return configure {
-      clickPref(
-        title = DSLSettingsText.from(R.string.preferences_data_and_storage__manage_storage),
-        summary = DSLSettingsText.from(Util.getPrettyFileSize(state.totalStorageUse)),
-        onClick = {
-          Navigation.findNavController(requireView()).safeNavigate(R.id.action_dataAndStorageSettingsFragment_to_storagePreferenceFragment)
-        }
-      )
+      if (isSignalVersion()) {
+        clickPref(
+          title = DSLSettingsText.from(R.string.preferences_data_and_storage__manage_storage),
+          summary = DSLSettingsText.from(Util.getPrettyFileSize(state.totalStorageUse)),
+          onClick = {
+            Navigation.findNavController(requireView()).safeNavigate(R.id.action_dataAndStorageSettingsFragment_to_storagePreferenceFragment)
+          }
+        )
+      }
 
       dividerPref()
 
@@ -120,15 +123,17 @@ class DataAndStorageSettingsFragment : DSLSettingsFragment(R.string.preferences_
 
       dividerPref()
 
-      sectionHeaderPref(R.string.preferences_proxy)
+      if (isSignalVersion()) {
+        sectionHeaderPref(R.string.preferences_proxy)
 
-      clickPref(
-        title = DSLSettingsText.from(R.string.preferences_use_proxy),
-        summary = DSLSettingsText.from(if (state.isProxyEnabled) R.string.preferences_on else R.string.preferences_off),
-        onClick = {
-          Navigation.findNavController(requireView()).safeNavigate(R.id.action_dataAndStorageSettingsFragment_to_editProxyFragment)
-        }
-      )
+        clickPref(
+          title = DSLSettingsText.from(R.string.preferences_use_proxy),
+          summary = DSLSettingsText.from(if (state.isProxyEnabled) R.string.preferences_on else R.string.preferences_off),
+          onClick = {
+            Navigation.findNavController(requireView()).safeNavigate(R.id.action_dataAndStorageSettingsFragment_to_editProxyFragment)
+          }
+        )
+      }
     }
   }
 }

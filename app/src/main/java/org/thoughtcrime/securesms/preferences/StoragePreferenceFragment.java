@@ -41,6 +41,8 @@ import org.thoughtcrime.securesms.util.adapter.mapping.MappingModelList;
 
 import java.text.NumberFormat;
 
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
+
 public class StoragePreferenceFragment extends ListSummaryPreferenceFragment {
 
   private Preference keepMessages;
@@ -78,7 +80,11 @@ public class StoragePreferenceFragment extends ListSummaryPreferenceFragment {
 
   @Override
   public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
-    addPreferencesFromResource(R.xml.preferences_storage);
+    if (isSignalVersion()) {
+      addPreferencesFromResource(R.xml.preferences_storage);
+    } else {
+      addPreferencesFromResource(R.xml.pigeon_preferences_storage);
+    }
   }
 
   @Override
@@ -105,6 +111,7 @@ public class StoragePreferenceFragment extends ListSummaryPreferenceFragment {
   private void updateToolbarTitle(@StringRes int title) {
     if (getParentFragment() instanceof SettingsWrapperFragment) {
       ((SettingsWrapperFragment) getParentFragment()).setTitle(title);
+      ((SettingsWrapperFragment) getParentFragment()).setFocusable();
     }
   }
 
