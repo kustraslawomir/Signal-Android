@@ -26,6 +26,8 @@ import org.thoughtcrime.securesms.recipients.RecipientId;
 import java.util.concurrent.TimeUnit;
 
 import static android.content.Intent.FLAG_ACTIVITY_NO_ANIMATION;
+import static pigeon.extensions.BuildExtensionsKt.isPigeonVersion;
+import static pigeon.extensions.KotilinExtensionsKt.focusOnLeft;
 
 public class CalleeMustAcceptMessageRequestActivity extends BaseActivity {
 
@@ -36,7 +38,7 @@ public class CalleeMustAcceptMessageRequestActivity extends BaseActivity {
   private AvatarImageView avatar;
   private View            okay;
 
-  private final Handler  handler   = new Handler(Looper.getMainLooper());
+  private final Handler  handler  = new Handler(Looper.getMainLooper());
   private final Runnable finisher = this::finish;
 
   public static Intent createIntent(@NonNull Context context, @NonNull RecipientId recipientId) {
@@ -54,7 +56,11 @@ public class CalleeMustAcceptMessageRequestActivity extends BaseActivity {
 
     boolean callingFixedToPortrait = getResources().getConfiguration().densityDpi < 480;
     if (callingFixedToPortrait) {
-      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+      if (isPigeonVersion()) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+      } else {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+      }
     }
 
     description = findViewById(R.id.description);
@@ -63,6 +69,8 @@ public class CalleeMustAcceptMessageRequestActivity extends BaseActivity {
 
     avatar.setFallbackPhotoProvider(new FallbackPhotoProvider());
     okay.setOnClickListener(v -> finish());
+
+    focusOnLeft(okay);
 
     RecipientId                                     recipientId = getIntent().getParcelableExtra(RECIPIENT_ID_EXTRA);
     CalleeMustAcceptMessageRequestViewModel.Factory factory     = new CalleeMustAcceptMessageRequestViewModel.Factory(recipientId);

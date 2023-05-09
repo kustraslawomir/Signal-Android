@@ -29,6 +29,8 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Rational;
+import android.view.KeyEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -777,6 +779,17 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
     }
 
     MessageSender.onMessageSent();
+  }
+
+  @Override public boolean onKeyUp(int keyCode, KeyEvent event) {
+    if (keyCode == KeyEvent.KEYCODE_CALL && event.getAction() == KeyEvent.ACTION_UP) {
+      callScreen.onKeyReceived(keyCode, event.getAction());
+      return true;
+    }  else if (keyCode == KeyEvent.KEYCODE_ENDCALL && event.getAction() == KeyEvent.ACTION_UP) {
+      callScreen.onKeyReceived(keyCode, event.getAction());
+      return true;
+    }
+    return super.onKeyUp(keyCode, event);
   }
 
   private final class ControlsListener implements WebRtcCallView.ControlsListener {

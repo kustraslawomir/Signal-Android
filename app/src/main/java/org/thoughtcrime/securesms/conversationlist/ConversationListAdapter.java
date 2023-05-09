@@ -1,5 +1,6 @@
 package org.thoughtcrime.securesms.conversationlist;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,6 +83,16 @@ class ConversationListAdapter extends ListAdapter<Conversation, RecyclerView.Vie
     } else if (viewType == TYPE_THREAD) {
       ConversationViewHolder holder = new ConversationViewHolder(CachedInflater.from(parent.getContext())
                                                                                .inflate(R.layout.conversation_list_item_view, parent, false));
+
+      // Pigeon code
+      holder.itemView.setOnKeyListener((view, keyCode, event) -> {
+        if (keyCode == KeyEvent.KEYCODE_CALL && event.getAction() == KeyEvent.ACTION_UP) {
+          Conversation           conversation = Objects.requireNonNull(getItem(holder.getBindingAdapterPosition()));
+          onConversationClickListener.onCallClick(conversation);
+          return true;
+        }
+        return false;
+      });
 
       holder.itemView.setOnClickListener(v -> {
         int position = holder.getAdapterPosition();
@@ -278,5 +289,7 @@ class ConversationListAdapter extends ListAdapter<Conversation, RecyclerView.Vie
     void onConversationClick(@NonNull Conversation conversation);
     boolean onConversationLongClick(@NonNull Conversation conversation, @NonNull View view);
     void onShowArchiveClick();
+    void onCallClick(@NonNull Conversation conversation);
+
   }
 }

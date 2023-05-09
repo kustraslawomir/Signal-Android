@@ -170,6 +170,7 @@ import org.thoughtcrime.securesms.util.AppForegroundObserver;
 import org.thoughtcrime.securesms.util.AppStartup;
 import org.thoughtcrime.securesms.util.BottomSheetUtil;
 import org.thoughtcrime.securesms.util.CachedInflater;
+import org.thoughtcrime.securesms.util.CommunicationActions;
 import org.thoughtcrime.securesms.util.ConversationUtil;
 import org.thoughtcrime.securesms.util.FeatureFlags;
 import org.thoughtcrime.securesms.util.LifecycleDisposable;
@@ -736,6 +737,15 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     if (viewModel.currentSelectedConversations().isEmpty()) {
       NavHostFragment.findNavController(this)
                      .navigate(ConversationListFragmentDirections.actionConversationListFragmentToConversationListArchiveFragment());
+    }
+  }
+
+  @Override public void onCallClick(@NonNull Conversation conversation) {
+    Recipient recipient = conversation.getThreadRecord().getRecipient();
+    if (recipient.isGroup()){
+      CommunicationActions.startVideoCall(this, recipient);
+    } else  {
+      CommunicationActions.startVoiceCall(this, recipient);
     }
   }
 
