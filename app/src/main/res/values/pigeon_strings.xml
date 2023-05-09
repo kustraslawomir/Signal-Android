@@ -131,5 +131,8 @@ Updated May 25, 2018\n
     <string name="PIN_screen_lock_timeout">To use the function, set a pin code in the PUNKT settings and turn on screen lock</string>
 
     <string name="Pigeon_GroupLinkBottomSheet_share_via_signal">Share via Pigeon</string>
+    <string name="Pigeon_Storage">Storage</string>
+    <string name="Pigeon_preferences_only_use_a_proxy_if">Only use a proxy if you\'re not able to connect to Pigeon on mobile data or Wi-Fi.</string>
+
 
 </resources>
