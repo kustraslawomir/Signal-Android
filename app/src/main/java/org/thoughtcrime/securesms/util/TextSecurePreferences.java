@@ -291,6 +291,27 @@ public class TextSecurePreferences {
     return backupProtos;
   }
 
+  private static void setStringSetPreference(Context context, String key, Set<String> values) {
+    final SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
+    prefs.edit().putStringSet(key, values).apply();
+  }
+
+  private static void setMediaDownloadAllowed(Context context, String key, Set<String> values) {
+    setStringSetPreference(context, key, values);
+  }
+
+  public static void setWifiMediaDownloadAllowed(Context context, Set<String> values) {
+    setMediaDownloadAllowed(context, MEDIA_DOWNLOAD_WIFI_PREF, values);
+  }
+
+  public static void setMobileMediaDownloadAllowed(Context context, Set<String> values) {
+    setMediaDownloadAllowed(context, MEDIA_DOWNLOAD_MOBILE_PREF, values);
+  }
+
+  public static void setRoamingMediaDownloadAllowed(Context context, Set<String> values) {
+    setMediaDownloadAllowed(context, MEDIA_DOWNLOAD_ROAMING_PREF, values);
+  }
+
   public static void onPostBackupRestore(@NonNull Context context) {
     if (NotificationChannels.supported()) {
       NotificationChannels.getInstance().updateMessageVibrate(SignalStore.settings().isMessageVibrateEnabled());

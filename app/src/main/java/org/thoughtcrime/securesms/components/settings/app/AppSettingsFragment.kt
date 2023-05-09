@@ -82,16 +82,23 @@ class AppSettingsFragment : DSLSettingsFragment(R.string.text_secure_normal__men
       )
 
       clickPref(
-        title = DSLSettingsText.from(R.string.Pigeon_Storage),
+        title = DSLSettingsText.from(R.string.preferences_chats__chats),
+        onClick = {
+          findNavController().safeNavigate(R.id.action_appSettingsFragment_to_chatsSettingsFragment)
+        }
+      )
+
+      clickPref(
+        title = DSLSettingsText.from(R.string.Pigeon_Attachment),
         onClick = {
           findNavController().safeNavigate(R.id.action_appSettingsFragment_to_dataAndStorageSettingsFragment)
         }
       )
 
       clickPref(
-        title = DSLSettingsText.from(R.string.preferences_chats__chats),
+        title = DSLSettingsText.from(R.string.Pigeon_Storage),
         onClick = {
-          findNavController().safeNavigate(R.id.action_appSettingsFragment_to_chatsSettingsFragment)
+          findNavController().safeNavigate(R.id.action_dataAndStorageSettingsFragment_to_storagePreferenceFragment)
         }
       )
 
