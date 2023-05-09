@@ -7,6 +7,7 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
@@ -46,6 +47,7 @@ import org.thoughtcrime.securesms.components.AccessibleToggleButton;
 import org.thoughtcrime.securesms.components.AvatarImageView;
 import org.thoughtcrime.securesms.contacts.avatars.ContactPhoto;
 import org.thoughtcrime.securesms.contacts.avatars.ProfileContactPhoto;
+import org.thoughtcrime.securesms.conversationlist.model.Conversation;
 import org.thoughtcrime.securesms.events.CallParticipant;
 import org.thoughtcrime.securesms.events.WebRtcViewModel;
 import org.thoughtcrime.securesms.mediasend.SimpleAnimationListener;
@@ -65,6 +67,7 @@ import org.whispersystems.signalservice.api.messages.calls.HangupMessage;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static org.thoughtcrime.securesms.components.webrtc.WebRtcAudioOutput.HANDSET;
@@ -167,6 +170,7 @@ public class WebRtcCallView extends ConstraintLayout {
     inflate(context, R.layout.webrtc_call_view, this);
   }
 
+
   @SuppressWarnings("CodeBlock2Expr")
   @Override
   protected void onFinishInflate() {
@@ -268,8 +272,6 @@ public class WebRtcCallView extends ConstraintLayout {
     focusOnLeft(errorButton);
     focusOnLeft(pigeonVolumeToggle);
 
-    startCall.requestFocus();
-    
     setAudioLabelName(audioToggle.getOutputMode());
 
     audioToggle.setOnAudioOutputChangedListener(outputMode -> {
@@ -358,6 +360,20 @@ public class WebRtcCallView extends ConstraintLayout {
     smallHeaderConstraints = new ConstraintSet();
     smallHeaderConstraints.clone(getContext(), R.layout.webrtc_call_view_header_small);
 
+  }
+
+  public void onKeyReceived(int keyCode, int event){
+    View answerLabel  = findViewById(R.id.call_screen_answer_call_label);
+    View declineLabel = findViewById(R.id.call_screen_decline_call_label);
+    if (keyCode == KeyEvent.KEYCODE_CALL && event == KeyEvent.ACTION_UP && answerLabel.getVisibility() == VISIBLE) {
+      answerLabel.performClick();
+    } else if (keyCode == KeyEvent.KEYCODE_CALL && event == KeyEvent.ACTION_UP && startCall.getVisibility() == VISIBLE) {
+      startCall.performClick();
+    } else if (keyCode == KeyEvent.KEYCODE_ENDCALL && event == KeyEvent.ACTION_UP && declineLabel.getVisibility() == VISIBLE) {
+      declineLabel.performClick();
+    } else if (keyCode == KeyEvent.KEYCODE_ENDCALL && event == KeyEvent.ACTION_UP && hangupLabel.getVisibility() == VISIBLE) {
+      hangupLabel.performClick();
+    }
   }
 
   private void setAudioLabelName(WebRtcAudioOutput outputMode) {
@@ -607,6 +623,7 @@ public class WebRtcCallView extends ConstraintLayout {
 
     if (recipient.isGroup()) {
       foldParticipantCountWrapper.setOnClickListener(unused -> showParticipantsList());
+      startCall.requestFocus();
     }
 
     recipientName.setText(recipient.getDisplayName(getContext()));
@@ -616,6 +633,7 @@ public class WebRtcCallView extends ConstraintLayout {
     }
     try {
       String number = PhoneNumberFormatter.prettyPrint(recipient.requireE164());
+      hangupLabel.requestFocus();
       pigeonPhone.setText(number);
     } catch (Exception exception){
       exception.printStackTrace();

@@ -87,7 +87,7 @@ class ConversationListAdapter extends ListAdapter<Conversation, RecyclerView.Vie
       // Pigeon code
       holder.itemView.setOnKeyListener((view, keyCode, event) -> {
         if (keyCode == KeyEvent.KEYCODE_CALL && event.getAction() == KeyEvent.ACTION_UP) {
-          Conversation           conversation = Objects.requireNonNull(getItem(holder.getAdapterPosition()));
+          Conversation           conversation = Objects.requireNonNull(getItem(holder.getBindingAdapterPosition()));
           onConversationClickListener.onCallClick(conversation);
           return true;
         }
