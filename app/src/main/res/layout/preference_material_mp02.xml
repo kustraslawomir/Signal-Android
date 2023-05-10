@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/listview_background_selector"
+    android:background="@color/transparent"
     android:clipToPadding="false"
     android:focusable="true"
-    android:descendantFocusability="blocksDescendants"
+    android:layout_marginStart="@dimen/pigeon_start_margin"
     android:clickable="true"
+    android:descendantFocusability="blocksDescendants"
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
@@ -35,21 +36,16 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@android:id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:focusable="true"
-            android:clickable="true"
             android:ellipsize="marquee"
             android:singleLine="true"
-            android:textColor="@color/mp02_common_text_button"
+            android:textColor="@color/white_not_focus"
             android:textSize="24sp" />
 
         <TextView

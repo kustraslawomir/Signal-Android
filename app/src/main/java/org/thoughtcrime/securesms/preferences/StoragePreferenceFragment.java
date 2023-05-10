@@ -111,7 +111,6 @@ public class StoragePreferenceFragment extends ListSummaryPreferenceFragment {
   private void updateToolbarTitle(@StringRes int title) {
     if (getParentFragment() instanceof SettingsWrapperFragment) {
       ((SettingsWrapperFragment) getParentFragment()).setTitle(title);
-      ((SettingsWrapperFragment) getParentFragment()).setFocusable();
     }
   }
 

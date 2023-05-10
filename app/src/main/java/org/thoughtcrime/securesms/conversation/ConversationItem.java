@@ -162,6 +162,7 @@ import kotlin.jvm.functions.Function1;
 
 import static pigeon.extensions.BuildExtensionsKt.isPigeonVersion;
 import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
+import static pigeon.extensions.KotilinExtensionsKt.focusOnConversation;
 
 /**
  * A view that displays an individual conversation item within a conversation
@@ -170,7 +171,7 @@ import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
  * @author Moxie Marlinspike
  */
 
-public final class ConversationItem extends RelativeLayout implements BindableConversationItem,
+public final class  ConversationItem extends RelativeLayout implements BindableConversationItem,
                                                                       RecipientForeverObserver,
                                                                       OpenableGift
 {
@@ -343,6 +344,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
     setOnClickListener(new ClickListener(null));
 
+    focusOnConversation(this);
     bodyText.setOnLongClickListener(passthroughClickListener);
     bodyText.setOnClickListener(passthroughClickListener);
     bodyText.enableSpoilerFiltering();

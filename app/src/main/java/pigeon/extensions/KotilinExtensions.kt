@@ -7,18 +7,40 @@ import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import org.signal.glide.Log
-import org.thoughtcrime.securesms.MainActivity
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.longmessage.TAG
 
+fun View.focusOnConversation() {
+
+  if (isPigeonVersion()) {
+    this.alpha = if (this.isEnabled) {
+      1.0f
+    } else {
+      0.5f
+    }
+    val focus = View.OnFocusChangeListener { _, hasFocus ->
+      this.post {
+        this.alpha = if (this.isEnabled) {
+          1.0f
+        } else {
+          0.5f
+        }
+
+        this.getAllChildren().forEach {
+          if (it.id == R.id.conversation_item_body) {
+            (it as? TextView)?.setupConversationStyle(hasFocus)
+          }
+        }
+      }
+    }
+    this.onFocusChangeListener = focus
+  }
+}
 
 fun View.focusOnLeft() {
 
@@ -88,6 +110,34 @@ fun View.getAllChildren(): List<View> {
     }
   }
   return result
+}
+
+fun TextView.setupConversationStyle(hasFocus: Boolean) {
+  val animationDuration: Long = 0
+
+  val animator = if (!hasFocus) {
+    ValueAnimator.ofFloat(24f, 16f)
+  } else {
+    ValueAnimator.ofFloat(16f, 24f)
+  }
+
+  animator.duration = animationDuration
+
+  animator.addUpdateListener { valueAnimator ->
+    val animatedValue = valueAnimator.animatedValue as Float
+    this.textSize = animatedValue
+  }
+
+  animator.start()
+
+  if (hasFocus){
+    this.maxLines = 3
+    this.setLineSpacing(-6f, 1f)
+  } else {
+    this.maxLines = 2
+    this.setLineSpacing(0f, 1f)
+  }
+
 }
 
 fun TextView.setupTextSize(hasFocus: Boolean) {

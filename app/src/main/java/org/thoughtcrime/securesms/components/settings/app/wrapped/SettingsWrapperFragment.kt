@@ -47,10 +47,6 @@ abstract class SettingsWrapperFragment : Fragment(R.layout.settings_wrapper_frag
     toolbar.setTitle(titleId)
   }
 
-  fun setFocusable() {
-    toolbar.focusOnLeft()
-  }
-
   private fun onBackPressed() {
     if (!childFragmentManager.popBackStackImmediate()) {
       requireActivity().onNavigateUp()
