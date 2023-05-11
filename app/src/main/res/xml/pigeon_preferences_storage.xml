@@ -29,11 +29,14 @@
 
         <pigeon.widget.MyPreference
             android:key="pref_storage_clear_message_history"
-            android:layout="@layout/preference_material_mp02"
+            android:layout="@layout/preference_material_mp02_end"
+            app:allowDividerBelow="true"
             android:title="@string/preferences__clear_message_history" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:layout="@layout/pigeon_preference_divider" />
+    <PreferenceCategory
+        app:isPreferenceVisible="false"
+        android:layout="@layout/pigeon_preference_divider" />
 
 </PreferenceScreen>
