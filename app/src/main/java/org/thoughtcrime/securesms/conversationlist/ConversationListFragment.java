@@ -478,6 +478,11 @@ public class ConversationListFragment extends MainFragment implements ActionMode
   public void onResume() {
     super.onResume();
 
+    //Add for MP02 Notification
+    Intent intent = new Intent();
+    intent.setAction("clear.notification.from.signal");
+    requireActivity().sendBroadcast(intent);
+
     updateReminders();
     EventBus.getDefault().register(this);
     itemAnimator.disable();

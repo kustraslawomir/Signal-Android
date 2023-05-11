@@ -3,6 +3,7 @@ package pigeon.extensions
 import android.animation.ValueAnimator
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
@@ -263,4 +264,7 @@ fun Context.cancelNotifications() {
   NotificationManagerCompat.from(this).cancelAll()
   val notificationManager = (this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
   notificationManager.cancelAll()
+  val intent = Intent()
+  intent.action = "clear.notification.from.signal"
+  sendBroadcast(intent)
 }
