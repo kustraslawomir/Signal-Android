@@ -327,6 +327,7 @@ public class WebRtcCallView extends ConstraintLayout {
       if (controlsListener != null) {
         startCall.setEnabled(false);
         controlsListener.onStartCall(videoToggle.isChecked());
+        hangupLabel.requestFocus();
       }
     });
 
@@ -785,6 +786,7 @@ public class WebRtcCallView extends ConstraintLayout {
       visibleViewSet.add(hangup);
       visibleViewSet.add(hangupLabel);
       visibleViewSet.add(footerGradient);
+      hangupLabel.requestFocus();
     }
 
     if (webRtcControls.displayMuteAudio()) {
