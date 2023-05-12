@@ -228,4 +228,6 @@
     <dimen name="pigeon_start_margin">30dp</dimen>
     <dimen name="pigeon_bottom_margin">10dp</dimen>
     <dimen name="pigeon_cursor_padding">6dp</dimen>
+    <dimen name="pigeon_thumbnails_size_width">100dp</dimen>
+
 </resources>
