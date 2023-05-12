@@ -9,8 +9,6 @@
     android:clipChildren="false"
     android:clipToPadding="false"
     android:focusable="true"
-    android:nextFocusLeft="@id/container"
-    android:nextFocusRight="@id/embedded_text_editor"
     android:orientation="horizontal"
     android:paddingEnd="@dimen/conversation_individual_right_gutter"
     tools:viewBindingIgnore="true">
