@@ -114,29 +114,36 @@ fun View.getAllChildren(): List<View> {
 }
 
 fun TextView.setupConversationStyle(hasFocus: Boolean) {
-  val animationDuration: Long = 0
+//  val animationDuration: Long = 0
+//
+//  val animator = if (!hasFocus) {
+//    ValueAnimator.ofFloat(24f, 16f)
+//  } else {
+//    ValueAnimator.ofFloat(16f, 24f)
+//  }
+//
+//  animator.duration = animationDuration
+//
+//  animator.addUpdateListener { valueAnimator ->
+//    val animatedValue = valueAnimator.animatedValue as Float
+//    this.textSize = animatedValue
+//  }
+//
+//  animator.removeUpdateListener {
+//    animator.cancel()
+//    this.textSize = 16f
+//  }
 
-  val animator = if (!hasFocus) {
-    ValueAnimator.ofFloat(24f, 16f)
-  } else {
-    ValueAnimator.ofFloat(16f, 24f)
-  }
+//  animator.start()
 
-  animator.duration = animationDuration
-
-  animator.addUpdateListener { valueAnimator ->
-    val animatedValue = valueAnimator.animatedValue as Float
-    this.textSize = animatedValue
-  }
-
-  animator.start()
-
-  if (hasFocus){
+  if (hasFocus) {
     this.maxLines = 3
     this.setLineSpacing(-6f, 1f)
+    this.textSize = 24f
   } else {
     this.maxLines = 2
     this.setLineSpacing(0f, 1f)
+    this.textSize = 16f
   }
 
 }

@@ -8,6 +8,8 @@
     android:background="@drawable/light_selectable_list_item_background"
     android:paddingStart="32dp"
     android:paddingEnd="32dp"
+    android:descendantFocusability="blocksDescendants"
+    android:nextFocusDown="@+id/embedded_text_editor"
     android:visibility="visible"
     tools:background="@color/black"
     tools:viewBindingIgnore="true">
