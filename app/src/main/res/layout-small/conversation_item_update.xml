@@ -5,7 +5,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:focusable="true"
-    android:background="@drawable/light_selectable_list_item_background"
     android:paddingStart="32dp"
     android:paddingEnd="32dp"
     android:descendantFocusability="blocksDescendants"
