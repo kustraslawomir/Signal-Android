@@ -22,26 +22,12 @@ import org.thoughtcrime.securesms.longmessage.TAG
 fun View.focusOnConversation() {
 
   if (isPigeonVersion()) {
-    this.alpha = if (this.isEnabled) {
-      1.0f
-    } else {
-      0.5f
-    }
     val focus = View.OnFocusChangeListener { _, hasFocus ->
-      this.post {
-        this.alpha = if (this.isEnabled) {
-          1.0f
-        } else {
-          0.5f
-        }
 
-        this.getAllChildren().forEach {
-          if (it.id == R.id.conversation_item_body) {
-            (it as? TextView)?.setupConversationStyle(hasFocus)
-          }
-        }
-      }
+      val item = this.getAllChildren().find { it.id == R.id.conversation_item_body }
+      (item as? TextView)?.setupConversationStyle(hasFocus)
     }
+
     this.onFocusChangeListener = focus
   }
 }
@@ -87,31 +73,38 @@ fun View.focusOnLeft() {
 fun RecyclerView.showWhenScrolledToBottom(inputPanel: InputPanel) {
   val inputText: ComposeText = inputPanel.findViewById(R.id.embedded_text_editor)
   this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+      super.onScrolled(recyclerView, dx, dy)
+      org.signal.core.util.logging.Log.w(TAG, "y: $dx $dy")
+      if (recyclerView.scrollY == 0) {
+        if (!inputPanel.isVisible) {
+          inputPanel.shouldBeVisibleIf(true)
+        }
+      } else {
+        inputPanel.shouldBeVisibleIf(inputText.hasFocus())
+      }
+    }
+
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
       super.onScrollStateChanged(recyclerView, newState)
       val position = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
       org.signal.core.util.logging.Log.w(TAG, "position: $position")
-      if (position == 0){
-        if (inputPanel.isVisible){
-
-        } else {
-          inputPanel.shouldBeVisibleIf(true)
-          recyclerView.post {
-            scrollToPosition(0)
-          }
-        }
-      } else {
+      if (position != 0) {
         inputPanel.shouldBeVisibleIf(inputText.hasFocus())
+      } else {
+        inputPanel.shouldBeVisibleIf(true)
       }
     }
   })
 }
 
 fun View.shouldBeVisibleIf(condition: Boolean) {
-  visibility = if (condition) {
-    View.VISIBLE
-  } else {
-    View.GONE
+  if (this.isVisible != hasFocus()) {
+    visibility = if (condition) {
+      View.VISIBLE
+    } else {
+      View.GONE
+    }
   }
 }
 
@@ -151,16 +144,17 @@ fun TextView.setupConversationStyle(hasFocus: Boolean) {
 
 //  animator.start()
 
-  if (hasFocus) {
-    this.maxLines = 3
-    this.setLineSpacing(-6f, 1f)
-    this.textSize = 24f
-  } else {
-    this.maxLines = 2
-    this.setLineSpacing(0f, 1f)
-    this.textSize = 16f
+  this.post {
+    if (hasFocus) {
+      maxLines = 3
+      setLineSpacing(-6f, 1f)
+      textSize = 24f
+    } else {
+      maxLines = 2
+      setLineSpacing(0f, 1f)
+      textSize = 16f
+    }
   }
-
 }
 
 fun TextView.setupTextSize(hasFocus: Boolean) {

@@ -9,8 +9,6 @@ import org.thoughtcrime.securesms.conversation.ConversationParentFragment
 import org.thoughtcrime.securesms.registration.fragments.CaptchaFragment
 
 class PigeonKeyEventBehaviourImpl : KeyEventBehaviour {
-
-  var onKeyUpLastClick: Long = 0
   override fun dispatchKeyEvent(event: KeyEvent, fragmentManager: FragmentManager) {
     val navFragment: Fragment = fragmentManager.findFragmentById(R.id.nav_host_fragment) ?: return
     Log.w(org.thoughtcrime.securesms.longmessage.TAG, "$event")
@@ -28,12 +26,6 @@ class PigeonKeyEventBehaviourImpl : KeyEventBehaviour {
 
   override fun dispatchConversationKeyEvent(event: KeyEvent, fragmentManager: FragmentManager) {
     when (event.keyCode) {
-      KeyEvent.KEYCODE_DPAD_UP -> {
-        if (System.currentTimeMillis() - onKeyUpLastClick < 500){
-          return
-        }
-        onKeyUpLastClick = System.currentTimeMillis()
-      }
       KeyEvent.KEYCODE_CALL -> {
         val conversationParentFragment = fragmentManager.fragments.find { it is ConversationParentFragment }
         if (conversationParentFragment != null && conversationParentFragment is ConversationParentFragment && event.action == KeyEvent.ACTION_UP) {

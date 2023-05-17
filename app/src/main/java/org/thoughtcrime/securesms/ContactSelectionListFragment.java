@@ -47,9 +47,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
-import com.annimon.stream.Collectors;
-import com.annimon.stream.Stream;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
@@ -88,14 +85,12 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
 import io.reactivex.rxjava3.disposables.Disposable;
 import kotlin.Unit;
-import pigeon.extensions.KotilinExtensionsKt;
 
 import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
 
@@ -286,10 +281,12 @@ public final class ContactSelectionListFragment extends LoggingFragment {
     boolean recyclerViewClipping  = arguments.getBoolean(RV_CLIP, intent.getBooleanExtra(RV_CLIP, true));
 
     if (recyclerViewPadBottom != -1) {
-      ViewUtil.setPaddingBottom(recyclerView, recyclerViewPadBottom);
+      if (isSignalVersion()) {
+        ViewUtil.setPaddingBottom(recyclerView, recyclerViewPadBottom);
+        recyclerView.setClipToPadding(recyclerViewClipping);
+      }
     }
 
-    recyclerView.setClipToPadding(recyclerViewClipping);
 
     boolean isRefreshable = arguments.getBoolean(REFRESHABLE, intent.getBooleanExtra(REFRESHABLE, true));
     swipeRefresh.setNestedScrollingEnabled(isRefreshable);
@@ -426,7 +423,7 @@ public final class ContactSelectionListFragment extends LoggingFragment {
   @Override
   public void onDestroyView() {
     super.onDestroyView();
-    constraintLayout = null;
+    constraintLayout  = null;
     onRefreshListener = null;
   }
 
@@ -483,16 +480,21 @@ public final class ContactSelectionListFragment extends LoggingFragment {
   private void initializeCursor() {
     recyclerView.addItemDecoration(new LetterHeaderDecoration(requireContext(), this::hideLetterHeaders));
     recyclerView.setAdapter(contactSearchMediator.getAdapter());
-    recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-      @Override
-      public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-        if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-          if (scrollCallback != null) {
-            scrollCallback.onBeginScroll();
+    if (isSignalVersion()) {
+      recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+          if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+            if (scrollCallback != null) {
+              scrollCallback.onBeginScroll();
+            }
           }
         }
-      }
-    });
+      });
+    }
+
+    //Pigeon Code
+//    recyclerView.getAdapter()
 
     if (onContactSelectedListener != null) {
       onContactSelectedListener.onSelectionChanged();
@@ -707,10 +709,10 @@ public final class ContactSelectionListFragment extends LoggingFragment {
                 Optional.ofNullable(selectedContact.getRecipientId()),
                 selectedContact.getNumber(),
                 allowed -> {
-              if (allowed) {
-                markContactSelected(selectedContact);
-              }
-            });
+                  if (allowed) {
+                    markContactSelected(selectedContact);
+                  }
+                });
           } else {
             markContactSelected(selectedContact);
           }

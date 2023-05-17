@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:focusable="false"
+    android:layout_gravity="center"
     android:clickable="false"
     android:textColor="@color/white"
     tools:text="@string/SearchFragment_no_results" />
