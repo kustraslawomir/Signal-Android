@@ -11,9 +11,12 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.thoughtcrime.securesms.R
+import org.thoughtcrime.securesms.components.ComposeText
+import org.thoughtcrime.securesms.components.InputPanel
 import org.thoughtcrime.securesms.longmessage.TAG
 
 fun View.focusOnConversation() {
@@ -81,13 +84,25 @@ fun View.focusOnLeft() {
   }
 }
 
-fun RecyclerView.showWhenScrolledToBottom(view: View) {
+fun RecyclerView.showWhenScrolledToBottom(inputPanel: InputPanel) {
+  val inputText: ComposeText = inputPanel.findViewById(R.id.embedded_text_editor)
   this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
       super.onScrollStateChanged(recyclerView, newState)
       val position = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
       org.signal.core.util.logging.Log.w(TAG, "position: $position")
-      view.shouldBeVisibleIf(position == 0)
+      if (position == 0){
+        if (inputPanel.isVisible){
+
+        } else {
+          inputPanel.shouldBeVisibleIf(true)
+          recyclerView.post {
+            scrollToPosition(0)
+          }
+        }
+      } else {
+        inputPanel.shouldBeVisibleIf(inputText.hasFocus())
+      }
     }
   })
 }
