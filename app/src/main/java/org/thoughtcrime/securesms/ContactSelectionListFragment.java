@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -138,6 +139,7 @@ public final class ContactSelectionListFragment extends LoggingFragment {
   private HeaderActionProvider            headerActionProvider;
   private TextView                        headerActionView;
   private ContactSearchMediator           contactSearchMediator;
+  private ProgressBar                     pigeonProgressBar;
 
   @Nullable private NewConversationCallback              newConversationCallback;
   @Nullable private NewCallCallback                      newCallCallback;
@@ -236,7 +238,7 @@ public final class ContactSelectionListFragment extends LoggingFragment {
                .execute();
   }
 
-  @Override
+  @SuppressLint("MissingInflatedId") @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.contact_selection_list_fragment, container, false);
 
@@ -251,6 +253,7 @@ public final class ContactSelectionListFragment extends LoggingFragment {
     chipRecycler            = view.findViewById(R.id.chipRecycler);
     constraintLayout        = view.findViewById(R.id.container);
     headerActionView        = view.findViewById(R.id.header_action);
+    pigeonProgressBar       = view.findViewById(R.id.pigeon_progress_bar);
 
     final LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
 
@@ -370,6 +373,7 @@ public final class ContactSelectionListFragment extends LoggingFragment {
                 if (onRefreshListener != null) {
                   setRefreshing(true);
                   onRefreshListener.onRefresh();
+                  pigeonProgressBar.setVisibility(View.VISIBLE);
                 }
               }
 
@@ -538,6 +542,7 @@ public final class ContactSelectionListFragment extends LoggingFragment {
   public void resetQueryFilter() {
     setQueryFilter(null);
     swipeRefresh.setRefreshing(false);
+    pigeonProgressBar.setVisibility(View.GONE);
   }
 
   public boolean hasQueryFilter() {
@@ -829,6 +834,7 @@ public final class ContactSelectionListFragment extends LoggingFragment {
 
   public void handleSwipe() {
     swipeRefresh.post(() -> {
+      pigeonProgressBar.setVisibility(View.VISIBLE);
       swipeRefresh.setRefreshing(true);
       ((ContactSelectionActivity) requireActivity()).onRefresh();
     });

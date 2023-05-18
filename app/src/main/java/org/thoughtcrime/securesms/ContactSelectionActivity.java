@@ -93,8 +93,9 @@ public abstract class ContactSelectionActivity extends PassphraseRequiredActivit
 
     refresh.setOnClickListener(v-> {
       contactsFragment = (ContactSelectionListFragment) getSupportFragmentManager().findFragmentById(R.id.contact_selection_list_fragment);
-      assert contactsFragment != null;
-      contactsFragment.handleSwipe();
+      if (contactsFragment != null) {
+        contactsFragment.handleSwipe();
+      }
     });
   }
 

@@ -3,19 +3,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
-    android:nextFocusDown="@id/container"
     style="@style/Mp02.Signal.Background"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:nextFocusDown="@id/container">
 
     <LinearLayout
         android:id="@+id/hideLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:focusable="false"
         android:clickable="false"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:focusable="false"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@android:id/empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
+                android:gravity="center|center_vertical"
+                android:text="@string/contact_selection_group_activity__finding_contacts"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:visibility="gone" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <LinearLayout
             android:id="@+id/show_contacts_container"
@@ -48,9 +72,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:gravity="center"
-                android:textColor="@color/white"
                 android:lineSpacingMultiplier="1.3"
                 android:text="@string/contact_selection_list_fragment__signal_needs_access_to_your_contacts_in_order_to_display_them"
+                android:textColor="@color/white"
                 android:textSize="15sp" />
 
         </LinearLayout>
@@ -109,46 +133,19 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:nextFocusUp="@id/recycler_view"
-        android:nextFocusDown="@id/recycler_view"
-        android:nestedScrollingEnabled="true"
-        tools:itemCount="22"
         android:listSelector="@drawable/listview_background_selector"
+        android:nestedScrollingEnabled="true"
         app:layout_constraintTop_toTopOf="parent"
+        tools:itemCount="22"
         tools:listitem="@layout/contact_search_item" />
-
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:focusable="false"
-        android:clickable="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <TextView
-            android:id="@android:id/empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="15dp"
-            android:textColor="@color/white"
-            android:visibility="gone"
-            android:gravity="center|center_vertical"
-            android:text="@string/contact_selection_group_activity__finding_contacts"
-            android:textSize="20sp"/>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <FrameLayout
         android:id="@+id/fast_scroller_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone"
-        android:focusable="false"
         android:clickable="false"
+        android:focusable="false"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -166,11 +163,11 @@
         android:id="@+id/header_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:focusable="false"
         android:clickable="false"
-        tools:visibility="visible"
-        app:layout_constraintTop_toTopOf="parent">
+        android:focusable="false"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/header_action"
@@ -184,5 +181,18 @@
             android:visibility="gone"
             tools:visibility="visible" />
     </FrameLayout>
+
+    <ProgressBar
+        android:id="@+id/pigeon_progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:indeterminateTint="@color/white"
+        android:progressTint="@color/white"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
