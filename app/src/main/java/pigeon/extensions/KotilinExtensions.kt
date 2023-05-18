@@ -75,8 +75,8 @@ fun RecyclerView.showWhenScrolledToBottom(inputPanel: InputPanel) {
   this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
       super.onScrolled(recyclerView, dx, dy)
-      org.signal.core.util.logging.Log.w(TAG, "y: $dx $dy")
-      if (recyclerView.scrollY == 0) {
+      val position = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+      if (position== 0) {
         if (!inputPanel.isVisible) {
           inputPanel.shouldBeVisibleIf(true)
         }
@@ -89,10 +89,10 @@ fun RecyclerView.showWhenScrolledToBottom(inputPanel: InputPanel) {
       super.onScrollStateChanged(recyclerView, newState)
       val position = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
       org.signal.core.util.logging.Log.w(TAG, "position: $position")
-      if (position != 0) {
-        inputPanel.shouldBeVisibleIf(inputText.hasFocus())
-      } else {
+      if (position == 0) {
         inputPanel.shouldBeVisibleIf(true)
+      } else {
+        inputPanel.shouldBeVisibleIf(inputText.hasFocus())
       }
     }
   })
