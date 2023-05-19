@@ -1,13 +1,12 @@
 package pigeon.fragments
 
-import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.NotificationManagerCompat
+import androidx.core.widget.NestedScrollView
 import org.signal.core.util.concurrent.SignalExecutors
 import org.thoughtcrime.securesms.MainActivity
 import org.thoughtcrime.securesms.MainNavigator.REQUEST_CONFIG_CHANGES
@@ -17,17 +16,17 @@ import org.thoughtcrime.securesms.database.SignalDatabase.Companion.threads
 import org.thoughtcrime.securesms.databinding.PigeonFragmentHomePageBinding
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
 import org.thoughtcrime.securesms.groups.ui.creategroup.CreateGroupActivity
-import org.thoughtcrime.securesms.messages.IncomingMessageObserver
 import org.thoughtcrime.securesms.notifications.MarkReadReceiver
 import org.thoughtcrime.securesms.permissions.Permissions
 import pigeon.base.PigeonBaseFragment
+import pigeon.components.CentreFocusScroller
 import pigeon.extensions.cancelNotifications
-import pigeon.extensions.focusOnLeft
 
 
 class HomePageFragment : PigeonBaseFragment<PigeonFragmentHomePageBinding>() {
 
   private lateinit var mainActivity: MainActivity
+  private lateinit var scroller: CentreFocusScroller
 
   override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
     Permissions.onRequestPermissionsResult(this, requestCode, permissions, grantResults)
@@ -45,24 +44,37 @@ class HomePageFragment : PigeonBaseFragment<PigeonFragmentHomePageBinding>() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
+    scroller = CentreFocusScroller(view.parent.parent.parent as NestedScrollView)
+
     binding?.run {
 
-      newMessageButton.focusOnLeft()
       newMessageButton.setOnClickListener { handleNewMessage() }
+      newMessageButton.setOnFocusChangeListener { v, b ->
+        scroller.onFocusChange(v, b)
+      }
 
-      markAllReadButton.focusOnLeft()
       markAllReadButton.setOnClickListener {
         handleMarkAllRead()
       }
-      settingsButton.focusOnLeft()
+      markAllReadButton.setOnFocusChangeListener { v, b ->
+        scroller.onFocusChange(v, b)
+      }
+
       settingsButton.setOnClickListener { handleAppSettings() }
+      settingsButton.setOnFocusChangeListener { v, b ->
+        scroller.onFocusChange(v, b)
+      }
 
-      newGroupButton.focusOnLeft()
       newGroupButton.setOnClickListener { goToGroupCreation() }
+      newGroupButton.setOnFocusChangeListener { v, b ->
+        scroller.onFocusChange(v, b)
+      }
 
-      searchButton.focusOnLeft()
       searchButton.setOnClickListener {
         mainActivity.collapseHomePage()
+      }
+      searchButton.setOnFocusChangeListener { v, b ->
+        scroller.onFocusChange(v, b)
       }
     }
   }

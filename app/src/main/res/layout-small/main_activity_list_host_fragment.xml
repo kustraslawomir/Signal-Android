@@ -26,6 +26,8 @@
         android:layout_height="2dp"
         android:layout_marginStart="@dimen/pigeon_start_margin"
         android:layout_marginEnd="@dimen/pigeon_start_margin"
+        android:layout_marginTop="@dimen/pigeon_small_margin"
+        android:layout_marginBottom="@dimen/pigeon_small_margin"
         android:alpha="0.5"
         android:background="@color/white" />
 

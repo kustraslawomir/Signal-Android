@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/sim_background"
+    style="@style/Mp02.Signal.Background"
     android:orientation="vertical"
-    android:padding="@dimen/pigeon_small_margin">
+    tools:context="pigeon.fragments.HomePageFragment">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="76dp"/>
 
     <TextView
         android:id="@+id/new_message_button"
@@ -12,7 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
-        android:layout_marginTop="@dimen/pigeon_small_margin"
         android:nextFocusDown="@id/new_group_button"
         android:nextFocusUp="@id/new_message_button"
         android:text="@string/Pigeon_HomePage_new_message" />
@@ -23,7 +27,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
-        android:layout_marginTop="@dimen/pigeon_small_margin"
         android:nextFocusDown="@id/mark_all_read_button"
         android:text="@string/Pigeon_HomePage_new_group" />
 
@@ -34,7 +37,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
-        android:layout_marginTop="@dimen/pigeon_small_margin"
         android:text="@string/Pigeon_HomePage_mark_all_read" />
 
     <TextView
@@ -44,7 +46,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
-        android:layout_marginTop="@dimen/pigeon_small_margin"
         android:text="@string/Pigeon_HomePage_settings" />
     <TextView
         android:id="@+id/search_button"
@@ -52,6 +53,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/pigeon_start_margin"
-        android:layout_marginTop="@dimen/pigeon_small_margin"
         android:text="@string/Pigeon_HomePage_search" />
 </LinearLayout>
