@@ -76,41 +76,17 @@ fun View.focusOnLeft() {
 }
 
 fun RecyclerView.showWhenScrolledToBottom(inputPanel: InputPanel) {
-  val inputText: ComposeText = inputPanel.findViewById(R.id.embedded_text_editor)
   this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
       super.onScrolled(recyclerView, dx, dy)
-      val position = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-      if (position== 0) {
-        if (!inputPanel.isVisible) {
-          inputPanel.shouldBeVisibleIf(true)
-        }
-      } else {
-        inputPanel.shouldBeVisibleIf(inputText.hasFocus())
-      }
+      inputPanel.isVisible = !canScrollVertically(1)
     }
 
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
       super.onScrollStateChanged(recyclerView, newState)
-      val position = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-      org.signal.core.util.logging.Log.w(TAG, "position: $position")
-      if (position == 0) {
-        inputPanel.shouldBeVisibleIf(true)
-      } else {
-        inputPanel.shouldBeVisibleIf(inputText.hasFocus())
-      }
+      inputPanel.isVisible = !canScrollVertically(1)
     }
   })
-}
-
-fun View.shouldBeVisibleIf(condition: Boolean) {
-  if (this.isVisible != hasFocus()) {
-    visibility = if (condition) {
-      View.VISIBLE
-    } else {
-      View.GONE
-    }
-  }
 }
 
 fun View.getAllChildren(): List<View> {
