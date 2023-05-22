@@ -101,14 +101,13 @@ public class EditProfileFragment extends LoggingFragment {
     initializeProfileName();
 
     if (isPigeonVersion()) {
-      if (binding.pigeonGivenName != null && binding.pigeonGivenNameWrapper != null) {
-        animateGroup(binding.pigeonGivenName, binding.pigeonGivenNameWrapper);
-      }
-      if (binding.pigeonFamilyName != null && binding.pigeonFamilyNameWrapper != null) {
-        animateGroup(binding.pigeonFamilyName, binding.pigeonFamilyNameWrapper);
-      }
       binding.finishButton.setupAnimation();
-      binding.pigeonFamilyName.requestFocus();
+      if (groupId == null){
+        binding.pigeonGivenNameWrapper.setTextSize(36f);
+        binding.pigeonGivenName.setTextSize(36f);
+      }
+      animateGroup(binding.pigeonGivenName, binding.pigeonGivenNameWrapper);
+      animateGroup(binding.pigeonFamilyName, binding.pigeonFamilyNameWrapper);
     }
 
     getParentFragmentManager().setFragmentResultListener(AvatarPickerFragment.REQUEST_KEY_SELECT_AVATAR, getViewLifecycleOwner(), (key, bundle) -> {

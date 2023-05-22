@@ -197,7 +197,7 @@ fun View.focusOnRight() {
 }
 
 fun EditText.animateGroup(parent: TextView) {
-  if (!isSignalVersion()) {
+  if (isPigeonVersion()) {
 
     val focus = View.OnFocusChangeListener { _, hasFocus ->
       this.post {
@@ -209,8 +209,8 @@ fun EditText.animateGroup(parent: TextView) {
           params.marginStart = 30
         }
 
-        this.layoutParams = params
-        this.requestLayout()
+        layoutParams = params
+        requestLayout()
       }
 
       parent.post {
@@ -222,19 +222,9 @@ fun EditText.animateGroup(parent: TextView) {
           params.marginStart = 30
         }
 
-        parent.layoutParams = params
-        parent.requestLayout()
+        layoutParams = params
+        requestLayout()
       }
-
-      if (this.tag != "header") {
-        (this as? TextView)?.setupTextSize(hasFocus)
-      }
-      this.setupEllipsize(hasFocus)
-
-      if (parent.tag != "header") {
-        (parent as? TextView)?.setupTextSize(hasFocus)
-      }
-      parent.setupEllipsize(hasFocus)
 
       val parentColor = if (hasFocus) {
         R.color.white_focus
@@ -242,8 +232,17 @@ fun EditText.animateGroup(parent: TextView) {
         R.color.white_not_focus
       }
 
-      parent.setTextColor(ContextCompat.getColor(this.context, parentColor))
-      this.setTextColor(ContextCompat.getColor(this.context, parentColor))
+      if (this.tag != "header") {
+        (this as? TextView)?.setupTextSize(hasFocus)
+      }
+      this.setupEllipsize(hasFocus)
+      (this as? TextView)?.setTextColor(ContextCompat.getColor(this.context, parentColor))
+
+      if (parent.tag != "header") {
+        (parent as? TextView)?.setupTextSize(hasFocus)
+      }
+      parent.setupEllipsize(hasFocus)
+      (parent as? TextView)?.setTextColor(ContextCompat.getColor(this.context, parentColor))
     }
     this.onFocusChangeListener = focus
   }
