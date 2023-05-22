@@ -276,6 +276,7 @@
                 android:layout_height="50dp"
                 android:defaultFocusHighlightEnabled="false"
                 android:gravity="center"
+                android:textColor="@color/mp02_common_text_button"
                 android:nextFocusUp="@id/embedded_text_editor"
                 android:nextFocusDown="@id/send_text"
                 android:paddingStart="25dp"

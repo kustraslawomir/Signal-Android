@@ -14,6 +14,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.components.ComposeText
 import org.thoughtcrime.securesms.components.InputPanel
@@ -26,6 +28,9 @@ fun View.focusOnConversation() {
 
       val item = this.getAllChildren().find { it.id == R.id.conversation_item_body }
       (item as? TextView)?.setupConversationStyle(hasFocus)
+//      if (hasFocus){
+//        this.requestFocus()
+//      }
     }
 
     this.onFocusChangeListener = focus
@@ -154,6 +159,8 @@ fun TextView.setupConversationStyle(hasFocus: Boolean) {
       setLineSpacing(0f, 1f)
       textSize = 16f
     }
+    this.clearAnimation()
+    this.clearFocus()
   }
 }
 
