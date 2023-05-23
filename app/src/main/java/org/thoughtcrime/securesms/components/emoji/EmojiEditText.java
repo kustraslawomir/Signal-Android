@@ -25,6 +25,8 @@ import org.thoughtcrime.securesms.util.Util;
 import java.util.HashSet;
 import java.util.Set;
 
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
+
 
 public class EmojiEditText extends AppCompatEditText {
 
@@ -47,7 +49,9 @@ public class EmojiEditText extends AppCompatEditText {
     a.recycle();
 
     if (!isInEditMode() && (forceCustom || !SignalStore.settings().isPreferSystemEmoji())) {
-      setFilters(appendEmojiFilter(this.getFilters(), jumboEmoji));
+      if (isSignalVersion()) {
+        setFilters(appendEmojiFilter(this.getFilters(), jumboEmoji));
+      }
       setEmojiCompatEnabled(false);
     }
 
