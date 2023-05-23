@@ -213,7 +213,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/pigeon_input_background_color"
+        android:background="@color/core_grey_95"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -279,7 +279,8 @@
                 android:textColor="@color/mp02_common_text_button"
                 android:nextFocusUp="@id/embedded_text_editor"
                 android:nextFocusDown="@id/send_text"
-                android:paddingStart="25dp"
+                android:paddingLeft="25dp"
+                android:paddingBottom="@dimen/pigeon_small_margin"
                 android:text="@string/conversation_activity__send"
                 android:textSize="25sp"
                 tools:ignore="UnusedAttribute" />
