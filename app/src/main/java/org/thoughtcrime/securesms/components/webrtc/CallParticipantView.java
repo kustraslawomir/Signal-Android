@@ -40,6 +40,9 @@ import org.webrtc.RendererCommon;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import static pigeon.extensions.BuildExtensionsKt.isPigeonVersion;
+import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
+
 /**
  * Encapsulates views needed to show a call participant including their
  * avatar in full screen or pip mode, and their video feed.
@@ -149,10 +152,14 @@ public class CallParticipantView extends ConstraintLayout {
 
       boolean hasContentToRender = (participant.isVideoEnabled() || participant.isScreenSharing()) && participant.isForwardingVideo();
 
+      if (isPigeonVersion()){
+        hasContentToRender = false;
+      }
+
       rendererFrame.setVisibility(hasContentToRender ? View.VISIBLE : View.INVISIBLE);
       renderer.setVisibility(hasContentToRender ? View.VISIBLE : View.INVISIBLE);
 
-      if (participant.isVideoEnabled()) {
+      if (participant.isVideoEnabled() && isSignalVersion()) {
         participant.getVideoSink().getLockableEglBase().performWithValidEglBase(eglBase -> {
           renderer.init(eglBase);
         });

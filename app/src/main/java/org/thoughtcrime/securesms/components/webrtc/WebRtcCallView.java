@@ -47,7 +47,6 @@ import org.thoughtcrime.securesms.components.AccessibleToggleButton;
 import org.thoughtcrime.securesms.components.AvatarImageView;
 import org.thoughtcrime.securesms.contacts.avatars.ContactPhoto;
 import org.thoughtcrime.securesms.contacts.avatars.ProfileContactPhoto;
-import org.thoughtcrime.securesms.conversationlist.model.Conversation;
 import org.thoughtcrime.securesms.events.CallParticipant;
 import org.thoughtcrime.securesms.events.WebRtcViewModel;
 import org.thoughtcrime.securesms.mediasend.SimpleAnimationListener;
@@ -67,7 +66,6 @@ import org.whispersystems.signalservice.api.messages.calls.HangupMessage;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 import static org.thoughtcrime.securesms.components.webrtc.WebRtcAudioOutput.HANDSET;
@@ -292,6 +290,12 @@ public class WebRtcCallView extends ConstraintLayout {
 
     micToggleLabel.setOnClickListener(v -> micToggle.performClick());
 
+    if (foldParticipantCountWrapper.getVisibility() == VISIBLE) {
+      micToggleLabel.setNextFocusDownId(foldParticipantCountWrapper.getId());
+    } else {
+      micToggleLabel.setNextFocusDownId(micToggleLabel.getId());
+    }
+
     ringToggle.setOnCheckedChangeListener((v, isOn) -> {
       setRingLabelName(isOn);
       runIfNonNull(controlsListener, listener -> listener.onRingGroupChanged(isOn, ringToggle.isActivated()));
@@ -363,7 +367,7 @@ public class WebRtcCallView extends ConstraintLayout {
 
   }
 
-  public void onKeyReceived(int keyCode, int event){
+  public void onKeyReceived(int keyCode, int event) {
     View answerLabel  = findViewById(R.id.call_screen_answer_call_label);
     View declineLabel = findViewById(R.id.call_screen_decline_call_label);
     if (keyCode == KeyEvent.KEYCODE_CALL && event == KeyEvent.ACTION_UP && answerLabel.getVisibility() == VISIBLE) {
@@ -636,7 +640,7 @@ public class WebRtcCallView extends ConstraintLayout {
       String number = PhoneNumberFormatter.prettyPrint(recipient.requireE164());
       hangupLabel.requestFocus();
       pigeonPhone.setText(number);
-    } catch (Exception exception){
+    } catch (Exception exception) {
       exception.printStackTrace();
     }
   }
@@ -701,6 +705,7 @@ public class WebRtcCallView extends ConstraintLayout {
 
     visibleViewSet.clear();
 
+    micToggleLabel.setNextFocusDownId(micToggleLabel.getId());
 
     if (webRtcControls.adjustForFold()) {
       showParticipantsGuideline.setGuidelineBegin(-1);
@@ -719,6 +724,7 @@ public class WebRtcCallView extends ConstraintLayout {
 
     if (webRtcControls.displayGroupMembersButton()) {
       visibleViewSet.add(foldParticipantCountWrapper);
+      micToggleLabel.setNextFocusDownId(foldParticipantCountWrapper.getId());
       foldParticipantCount.setClickable(webRtcControls.adjustForFold());
     }
 
