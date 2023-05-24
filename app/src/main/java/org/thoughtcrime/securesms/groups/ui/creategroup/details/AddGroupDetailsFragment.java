@@ -154,8 +154,8 @@ public class AddGroupDetailsFragment extends LoggingFragment {
       startActivityForResult(RecipientDisappearingMessagesActivity.forCreateGroup(requireContext(), viewModel.getDisappearingMessagesTimer().getValue()), REQUEST_DISAPPEARING_TIMER);
     });
 
-    name.requestFocus();
     animateGroup(name, header);
+    name.requestFocus();
     focusOnLeft(create);
 
     getParentFragmentManager().setFragmentResultListener(AvatarPickerFragment.REQUEST_KEY_SELECT_AVATAR,
