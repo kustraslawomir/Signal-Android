@@ -70,6 +70,7 @@ import java.util.Set;
 
 import static org.thoughtcrime.securesms.components.webrtc.WebRtcAudioOutput.HANDSET;
 import static org.thoughtcrime.securesms.components.webrtc.WebRtcAudioOutput.SPEAKER;
+import static pigeon.extensions.BuildExtensionsKt.isPigeonVersion;
 import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
 import static pigeon.extensions.KotilinExtensionsKt.focusOnLeft;
 
@@ -255,11 +256,13 @@ public class WebRtcCallView extends ConstraintLayout {
     incomingCallViews.add(footerGradient);
     incomingCallViews.add(incomingRingStatus);
 
-    adjustableMarginsSet.add(pigeonAudioToggleLabel);
-    adjustableMarginsSet.add(micToggle);
-    adjustableMarginsSet.add(cameraDirectionToggle);
-    adjustableMarginsSet.add(videoToggle);
-    adjustableMarginsSet.add(audioToggle);
+    if (isSignalVersion()) {
+      adjustableMarginsSet.add(pigeonAudioToggleLabel);
+      adjustableMarginsSet.add(micToggle);
+      adjustableMarginsSet.add(cameraDirectionToggle);
+      adjustableMarginsSet.add(videoToggle);
+      adjustableMarginsSet.add(audioToggle);
+    }
 
     focusOnLeft(pigeonAudioToggleLabel);
     focusOnLeft(micToggleLabel);
@@ -719,7 +722,6 @@ public class WebRtcCallView extends ConstraintLayout {
       callScreenTopFoldGuideline.setGuidelineEnd(0);
     }
 
-    visibleViewSet.add(pigeonVolumeToggle);
     visibleViewSet.add(incomingRingStatus);
 
     if (webRtcControls.displayGroupMembersButton()) {
@@ -758,6 +760,12 @@ public class WebRtcCallView extends ConstraintLayout {
       incomingRingStatus.setText(webRtcControls.displayAnswerWithoutVideo() ? R.string.WebRtcCallView__signal_video_call : R.string.WebRtcCallView__signal_call);
 
       answer.setImageDrawable(AppCompatResources.getDrawable(getContext(), R.drawable.webrtc_call_screen_answer));
+
+      if (isPigeonVersion()) {
+        incomingRingStatus.setText(R.string.Pigeon_WebRtcCallView__signal_call);
+        View answerLabel = findViewById(R.id.call_screen_answer_call_label);
+        answerLabel.requestFocus();
+      }
     }
 
     if (webRtcControls.displayAnswerWithoutVideo()) {
@@ -775,6 +783,8 @@ public class WebRtcCallView extends ConstraintLayout {
 
 
     if (webRtcControls.displayAudioToggle()) {
+      visibleViewSet.add(pigeonVolumeToggle);
+      visibleViewSet.add(pigeonVolumeToggle);
       visibleViewSet.add(audioToggle);
       visibleViewSet.add(pigeonAudioToggleLabel);
 
