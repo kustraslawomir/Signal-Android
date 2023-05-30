@@ -146,8 +146,6 @@ public class MessageRequestsBottomView extends ConstraintLayout {
         accept.setText(R.string.MessageRequestBottomView_accept);
         break;
     }
-
-    accept.requestFocus();
   }
 
   private void setActiveInactiveGroups(@NonNull Group activeGroup, @NonNull Group... inActiveGroups) {
