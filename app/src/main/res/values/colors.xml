@@ -63,7 +63,7 @@
     <color name="sim_background">#000e00</color>
     <color name="focused_text_color">#FFFFFFFF</color>
     <color name="normal_text_color">#80FFFFFF</color>
-    <color name="message_focused_text_color">#40FFFFFF</color>
+    <color name="message_focused_text_color">#80FFFFFF</color>
     <color name="message_normal_text_color">#80000000</color>
     <color name="text_primary">#81FFFFFF</color>
 </resources>
