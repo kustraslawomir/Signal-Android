@@ -384,7 +384,7 @@
             android:id="@+id/fold_show_participants_menu_counter_wrapper"
             android:layout_width="wrap_content"
             android:layout_height="56dp"
-            android:background="?attr/selectableItemBackground"
+            android:background="@drawable/light_selectable_list_item_background"
             android:descendantFocusability="blocksDescendants"
             android:gravity="center"
             android:minWidth="48dp"
@@ -460,23 +460,6 @@
             tools:visibility="gone" />
 
         <TextView
-            android:id="@+id/call_screen_end_call_label"
-            style="@style/Mp02.Signal.Text.CommonTextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/pigeon_start_margin"
-            android:clickable="true"
-            android:ellipsize="end"
-            android:focusable="true"
-            android:gravity="center_horizontal"
-            android:nextFocusDown="@id/call_screen_volume_toggle"
-            android:text="@string/WebRtcCallView__end_call"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pigeon_phone"
-            tools:visibility="gone" />
-
-        <TextView
             android:id="@+id/call_screen_decline_call_label"
             style="@style/Mp02.Signal.Text.CommonTextButton"
             android:layout_width="wrap_content"
@@ -547,6 +530,23 @@
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/call_screen_start_call_controls"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/call_screen_end_call_label"
+            style="@style/Mp02.Signal.Text.CommonTextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/pigeon_start_margin"
+            android:clickable="true"
+            android:ellipsize="end"
+            android:focusable="true"
+            android:gravity="center_horizontal"
+            android:nextFocusDown="@id/call_screen_volume_toggle"
+            android:text="@string/WebRtcCallView__end_call"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pigeon_phone"
             tools:visibility="gone" />
 
         <TextView
