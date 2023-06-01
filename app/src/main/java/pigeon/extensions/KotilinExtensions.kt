@@ -63,11 +63,21 @@ fun RecyclerView.showWhenScrolledToBottom(inputPanel: InputPanel) {
   this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
       super.onScrolled(recyclerView, dx, dy)
+      val position = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+      if (position== 0) {
+        inputPanel.isVisible = true
+        return
+      }
       inputPanel.isVisible = !canScrollVertically(1)
     }
 
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
       super.onScrollStateChanged(recyclerView, newState)
+      val position = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+      if (position== 0) {
+        inputPanel.isVisible = true
+        return
+      }
       inputPanel.isVisible = !canScrollVertically(1)
     }
   })
