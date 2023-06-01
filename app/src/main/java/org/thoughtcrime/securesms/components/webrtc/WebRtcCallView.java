@@ -159,6 +159,7 @@ public class WebRtcCallView extends ConstraintLayout {
   private CallParticipantsViewState lastState;
   private ContactPhoto              previousLocalAvatar;
 
+  private boolean isFirstPigeonSetupFocus = true;
   public WebRtcCallView(@NonNull Context context) {
     this(context, null);
   }
@@ -338,6 +339,10 @@ public class WebRtcCallView extends ConstraintLayout {
       }
     });
 
+    if (startCall.getVisibility() == VISIBLE) {
+      startCall.requestFocus();
+    }
+
     ColorMatrix greyScaleMatrix = new ColorMatrix();
     greyScaleMatrix.setSaturation(0);
     largeLocalRenderNoVideoAvatar.setAlpha(0.6f);
@@ -516,9 +521,12 @@ public class WebRtcCallView extends ConstraintLayout {
       String text = state.getParticipantCount()
                          .mapToObj(String::valueOf).orElse("\u2014");
       boolean enabled = state.getParticipantCount().isPresent();
-
+      String oldText = foldParticipantCount.getText().toString();
       foldParticipantCount.setText(text);
       foldParticipantCount.setEnabled(enabled);
+      if (!oldText.equals(text)){
+        hangupLabel.requestFocus();
+      }
     }
 
     pagerAdapter.submitList(pages);
@@ -631,7 +639,6 @@ public class WebRtcCallView extends ConstraintLayout {
 
     if (recipient.isGroup()) {
       foldParticipantCountWrapper.setOnClickListener(unused -> showParticipantsList());
-      startCall.requestFocus();
     }
 
     recipientName.setText(recipient.getDisplayName(getContext()));
@@ -801,8 +808,9 @@ public class WebRtcCallView extends ConstraintLayout {
     if (webRtcControls.displayEndCall()) {
       visibleViewSet.add(hangup);
       visibleViewSet.add(hangupLabel);
-      visibleViewSet.add(footerGradient);
-      hangupLabel.requestFocus();
+      if (isSignalVersion()) {
+        visibleViewSet.add(footerGradient);
+      }
     }
 
     if (webRtcControls.displayMuteAudio()) {
@@ -820,7 +828,7 @@ public class WebRtcCallView extends ConstraintLayout {
       updateButtonStateForLargeButtons();
     }
 
-    if (webRtcControls.displayRemoteVideoRecycler()) {
+    if (webRtcControls.displayRemoteVideoRecycler() && isSignalVersion()) {
       callParticipantsRecycler.setVisibility(View.VISIBLE);
     } else {
       callParticipantsRecycler.setVisibility(View.GONE);
@@ -1106,8 +1114,14 @@ public class WebRtcCallView extends ConstraintLayout {
       constraintSet.setVisibility(view.getId(), ConstraintSet.GONE);
     }
 
+    boolean isHangupRequest = false;
+
     for (View view : visibleViewSet) {
       constraintSet.setVisibility(view.getId(), ConstraintSet.VISIBLE);
+
+      if (view.getId() == hangupLabel.getId()) {
+        isHangupRequest = true;
+      }
 
       if (adjustableMarginsSet.contains(view)) {
         constraintSet.setMargin(view.getId(),
@@ -1115,6 +1129,7 @@ public class WebRtcCallView extends ConstraintLayout {
                                 ViewUtil.dpToPx(useSmallMargins ? SMALL_ONGOING_CALL_BUTTON_MARGIN_DP
                                                                 : LARGE_ONGOING_CALL_BUTTON_MARGIN_DP));
       }
+
     }
 
     adjustParticipantsRecycler(constraintSet);
@@ -1132,6 +1147,11 @@ public class WebRtcCallView extends ConstraintLayout {
     } else {
       largeHeaderConstraints.setVisibility(incomingRingStatus.getId(), visibleViewSet.contains(incomingRingStatus) ? View.VISIBLE : View.GONE);
       largeHeaderConstraints.applyTo(toolbar);
+    }
+
+    if (isHangupRequest && isFirstPigeonSetupFocus) {
+      isFirstPigeonSetupFocus = false;
+      hangupLabel.requestFocus();
     }
   }
 

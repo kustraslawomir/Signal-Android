@@ -44,6 +44,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import pigeon.extensions.BuildExtensionsKt;
+import pigeon.extensions.KotilinExtensionsKt;
+
 public class WebRtcCallViewModel extends ViewModel {
 
   private final MutableLiveData<Boolean>                      microphoneEnabled         = new MutableLiveData<>(true);
@@ -192,21 +195,23 @@ public class WebRtcCallViewModel extends ViewModel {
 
   @MainThread
   public void setIsViewingFocusedParticipant(@NonNull CallParticipantsState.SelectedPage page) {
-    if (page == CallParticipantsState.SelectedPage.FOCUSED) {
-      SignalStore.tooltips().markGroupCallSpeakerViewSeen();
-    }
+    if (BuildExtensionsKt.isSignalVersion()) {
+      if (page == CallParticipantsState.SelectedPage.FOCUSED) {
+        SignalStore.tooltips().markGroupCallSpeakerViewSeen();
+      }
 
-    CallParticipantsState state = participantsState.getValue();
-    if (showScreenShareTip &&
-        state.getFocusedParticipant().isScreenSharing() &&
-        state.isViewingFocusedParticipant() &&
-        page == CallParticipantsState.SelectedPage.GRID)
-    {
-      showScreenShareTip = false;
-      events.setValue(new Event.ShowSwipeToSpeakerHint());
-    }
+      CallParticipantsState state = participantsState.getValue();
+      if (showScreenShareTip &&
+          state.getFocusedParticipant().isScreenSharing() &&
+          state.isViewingFocusedParticipant() &&
+          page == CallParticipantsState.SelectedPage.GRID)
+      {
+        showScreenShareTip = false;
+        events.setValue(new Event.ShowSwipeToSpeakerHint());
+      }
 
-    participantsState.setValue(CallParticipantsState.update(participantsState.getValue(), page));
+      participantsState.setValue(CallParticipantsState.update(participantsState.getValue(), page));
+    }
   }
 
   public void onLocalPictureInPictureClicked() {
