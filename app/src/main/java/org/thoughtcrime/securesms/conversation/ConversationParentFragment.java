@@ -299,6 +299,7 @@ import org.thoughtcrime.securesms.util.SmsUtil;
 import org.thoughtcrime.securesms.util.SpanUtil;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.TextSecurePreferences.MediaKeyboardMode;
+import org.thoughtcrime.securesms.util.TopToastPopup;
 import org.thoughtcrime.securesms.util.Util;
 import org.thoughtcrime.securesms.util.ViewUtil;
 import org.thoughtcrime.securesms.util.WindowUtil;
@@ -4503,6 +4504,10 @@ public class ConversationParentFragment extends Fragment
     sendButtonListener.onClick(composeText);
     composeText.setInputType(InputType.TYPE_CLASS_TEXT);
     composeText.requestFocus();
+
+    inputPanel.postDelayed(() -> {
+      inputPanel.setVisibility(View.VISIBLE);
+    }, 500L);
 
   }
 
