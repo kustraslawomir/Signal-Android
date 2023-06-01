@@ -21,22 +21,6 @@ import org.thoughtcrime.securesms.components.ComposeText
 import org.thoughtcrime.securesms.components.InputPanel
 import org.thoughtcrime.securesms.longmessage.TAG
 
-fun View.focusOnConversation() {
-
-  if (isPigeonVersion()) {
-    val focus = View.OnFocusChangeListener { _, hasFocus ->
-
-      val item = this.getAllChildren().find { it.id == R.id.conversation_item_body }
-      (item as? TextView)?.setupConversationStyle(hasFocus)
-//      if (hasFocus){
-//        this.requestFocus()
-//      }
-    }
-
-    this.onFocusChangeListener = focus
-  }
-}
-
 fun View.focusOnLeft() {
 
   if (isPigeonVersion()) {

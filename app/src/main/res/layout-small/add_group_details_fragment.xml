@@ -1,39 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:viewBindingIgnore="true"
-    style="@style/Mp02.Signal.Background"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Mp02.Signal.Background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.thoughtcrime.securesms.groups.ui.creategroup.details.AddGroupDetailsFragment">
+    android:orientation="vertical"
+    tools:context="org.thoughtcrime.securesms.groups.ui.creategroup.details.AddGroupDetailsFragment"
+    tools:viewBindingIgnore="true">
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:descendantFocusability="blocksDescendants"
+        android:visibility="gone">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/signal_m3_toolbar_height"
-        android:minHeight="@dimen/signal_m3_toolbar_height"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/ic_arrow_left_24"
-        app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
-        tools:title="@string/AddGroupDetailsFragment__name_this_group" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/signal_m3_toolbar_height"
+            android:minHeight="@dimen/signal_m3_toolbar_height"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_arrow_left_24"
+            app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
+            tools:title="@string/AddGroupDetailsFragment__name_this_group" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/group_avatar"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginStart="@dimen/dsl_settings_gutter"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/tinted_circle"
-        app:backgroundTint="@color/signal_colorSurfaceVariant"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/group_avatar"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="@dimen/dsl_settings_gutter"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/tinted_circle"
+            app:backgroundTint="@color/signal_colorSurfaceVariant"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
         <LinearLayout
             android:id="@+id/group_disappearing_messages_row"
@@ -143,48 +145,47 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/header"
-        style="@style/Mp02.Signal.Text.CommonTextButton"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="@dimen/pigeon_start_margin"
         android:layout_marginTop="@dimen/pigeon_big_margin"
-        android:gravity="start"
-        android:tag="header"
-        android:focusable="false"
-        android:clickable="false"
-        android:text="@string/AddGroupDetailsFragment__group_name_required"
-        android:enabled="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical">
 
-    <org.thoughtcrime.securesms.components.emoji.EmojiEditText
-        android:id="@+id/name"
-        style="@style/Mp02.Signal.Text.CommonTextButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:textSize="24sp"
-        android:inputType="text"
-        android:maxLines="1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header" />
+        <TextView
+            android:id="@+id/header"
+            style="@style/Mp02.Signal.Text.CommonTextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/pigeon_start_margin"
+            android:clickable="false"
+            android:enabled="false"
+            android:focusable="false"
+            android:gravity="start"
+            android:text="@string/AddGroupDetailsFragment__group_name_required" />
+
+        <org.thoughtcrime.securesms.components.emoji.EmojiEditText
+            android:id="@+id/name"
+            style="@style/Mp02.Signal.Text.CommonTextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_marginStart="@dimen/pigeon_start_margin"
+            android:background="@null"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textSize="24sp" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <org.thoughtcrime.securesms.util.views.CircularProgressMaterialButton
         android:id="@+id/create"
         style="@style/Mp02.Signal.Text.MaterialTextButtonFocusable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAllCaps="false"
-        android:layout_marginTop="5dp"
         android:layout_marginStart="@dimen/pigeon_start_margin"
-        app:circularProgressMaterialButton__label="@string/AddGroupDetailsFragment__create_group"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name" />
+        android:layout_marginTop="5dp"
+        android:textAllCaps="false"
+        app:circularProgressMaterialButton__label="@string/AddGroupDetailsFragment__create_group" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

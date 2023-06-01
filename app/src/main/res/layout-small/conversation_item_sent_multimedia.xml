@@ -5,6 +5,7 @@
     android:id="@+id/conversation_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/light_selectable_list_item_background"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:focusable="true"
