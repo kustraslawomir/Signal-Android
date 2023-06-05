@@ -4303,6 +4303,7 @@ public class ConversationParentFragment extends Fragment
   @Override
   public void onForwardClicked() {
     inputPanel.clearQuote();
+    composeText.requestFocus();
   }
 
   @Override
