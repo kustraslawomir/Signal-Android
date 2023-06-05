@@ -58,7 +58,6 @@ import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -299,7 +298,6 @@ import org.thoughtcrime.securesms.util.SmsUtil;
 import org.thoughtcrime.securesms.util.SpanUtil;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.TextSecurePreferences.MediaKeyboardMode;
-import org.thoughtcrime.securesms.util.TopToastPopup;
 import org.thoughtcrime.securesms.util.Util;
 import org.thoughtcrime.securesms.util.ViewUtil;
 import org.thoughtcrime.securesms.util.WindowUtil;
@@ -332,7 +330,6 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import kotlin.Unit;
-import pigeon.extensions.BuildExtensionsKt;
 import pigeon.permissions.PigeonRationaleDialog;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
@@ -344,7 +341,6 @@ import static pigeon.extensions.KotilinExtensionsKt.showWhenScrolledToBottom;
  * composing/sending a new message into that thread.
  *
  * @author Moxie Marlinspike
- *
  */
 @SuppressLint("StaticFieldLeak")
 public class ConversationParentFragment extends Fragment
@@ -396,12 +392,12 @@ public class ConversationParentFragment extends Fragment
   private static final int TAKE_PHOTO          = 7;
   private static final int ADD_CONTACT         = 8;
   private static final int PICK_LOCATION       = 9;
-  public static  final int PICK_GIF            = 10;
+  public static final  int PICK_GIF            = 10;
   private static final int SMS_DEFAULT         = 11;
   private static final int MEDIA_SENDER        = 12;
 
-  private static final int     REQUEST_CODE_PIN_SHORTCUT = 902;
-  private static final String  ACTION_PINNED_SHORTCUT    = "action_pinned_shortcut";
+  private static final int    REQUEST_CODE_PIN_SHORTCUT = 902;
+  private static final String ACTION_PINNED_SHORTCUT    = "action_pinned_shortcut";
 
   private   GlideRequests                glideRequests;
   protected ComposeText                  composeText;
@@ -689,7 +685,7 @@ public class ConversationParentFragment extends Fragment
     }
 
     if (reactionDelegate.isShowing()) {
-     reactionDelegate.hide();
+      reactionDelegate.hide();
     }
 
     if (inlineQueryResultsController != null) {
@@ -699,8 +695,8 @@ public class ConversationParentFragment extends Fragment
 
   @Override
   public void onDestroy() {
-    if (securityUpdateReceiver != null)  requireActivity().unregisterReceiver(securityUpdateReceiver);
-    if (pinnedShortcutReceiver != null)  requireActivity().unregisterReceiver(pinnedShortcutReceiver);
+    if (securityUpdateReceiver != null) requireActivity().unregisterReceiver(securityUpdateReceiver);
+    if (pinnedShortcutReceiver != null) requireActivity().unregisterReceiver(pinnedShortcutReceiver);
     super.onDestroy();
   }
 
@@ -723,118 +719,121 @@ public class ConversationParentFragment extends Fragment
     }
 
     switch (reqCode) {
-    case PICK_DOCUMENT:
-      setMedia(data.getData(), MediaType.DOCUMENT);
-      break;
-    case PICK_AUDIO:
-      setMedia(data.getData(), MediaType.AUDIO);
-      break;
-    case PICK_CONTACT:
-      if (viewModel.isPushAvailable() && !isSmsForced()) {
-        openContactShareEditor(data.getData());
-      } else {
-        addAttachmentContactInfo(data.getData());
-      }
-      break;
-    case GET_CONTACT_DETAILS:
-      sendSharedContact(data.getParcelableArrayListExtra(ContactShareEditActivity.KEY_CONTACTS));
-      break;
-    case GROUP_EDIT:
-      Recipient recipientSnapshot = recipient.get();
-
-      onRecipientChanged(recipientSnapshot);
-      titleView.setTitle(glideRequests, recipientSnapshot);
-      NotificationChannels.getInstance().updateContactChannelName(recipientSnapshot);
-      setBlockedUserState(recipientSnapshot, viewModel.getConversationStateSnapshot().getSecurityInfo());
-      invalidateOptionsMenu();
-      break;
-    case TAKE_PHOTO:
-      handleImageFromDeviceCameraApp();
-      break;
-    case ADD_CONTACT:
-      SimpleTask.run(() -> {
-        try {
-          ContactDiscovery.refresh(requireContext(), recipient.get(), false);
-        } catch (IOException e) {
-          Log.w(TAG, "Failed to refresh user after adding to contacts.");
-        }
-        return null;
-      }, nothing -> onRecipientChanged(recipient.get()));
-      break;
-    case PICK_LOCATION:
-      SignalPlace place = new SignalPlace(PlacePickerActivity.addressFromData(data));
-      attachmentManager.setLocation(place, getCurrentMediaConstraints());
-      draftViewModel.setLocationDraft(place);
-      break;
-    case SMS_DEFAULT:
-      viewModel.updateSecurityInfo();
-      break;
-    case PICK_GIF:
-    case MEDIA_SENDER:
-      MediaSendActivityResult result = MediaSendActivityResult.fromData(data);
-
-      if (!Objects.equals(result.getRecipientId(), recipient.getId())) {
-        Log.w(TAG, "Result's recipientId did not match ours! Result: " + result.getRecipientId() + ", Activity: " + recipient.getId());
-        Toast.makeText(requireContext(), R.string.ConversationActivity_error_sending_media, Toast.LENGTH_SHORT).show();
-        return;
-      }
-
-      sendButton.setSendType(result.getMessageSendType());
-
-      if (result.isPushPreUpload()) {
-        sendMediaMessage(result);
-        return;
-      }
-
-      long          expiresIn  = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
-      boolean       initiating = threadId == -1;
-      QuoteModel    quote      = result.isViewOnce() ? null : inputPanel.getQuote().orElse(null);
-      SlideDeck     slideDeck  = new SlideDeck();
-      List<Mention> mentions   = new ArrayList<>(result.getMentions());
-      BodyRangeList bodyRanges = result.getBodyRanges();
-
-      for (Media mediaItem : result.getNonUploadedMedia()) {
-        if (MediaUtil.isVideoType(mediaItem.getMimeType())) {
-          slideDeck.addSlide(new VideoSlide(requireContext(), mediaItem.getUri(), mediaItem.getSize(), mediaItem.isVideoGif(), mediaItem.getWidth(), mediaItem.getHeight(), mediaItem.getCaption().orElse(null), mediaItem.getTransformProperties().orElse(null)));
-        } else if (MediaUtil.isGif(mediaItem.getMimeType())) {
-          slideDeck.addSlide(new GifSlide(requireContext(), mediaItem.getUri(), mediaItem.getSize(), mediaItem.getWidth(), mediaItem.getHeight(), mediaItem.isBorderless(), mediaItem.getCaption().orElse(null)));
-        } else if (MediaUtil.isImageType(mediaItem.getMimeType())) {
-          slideDeck.addSlide(new ImageSlide(requireContext(), mediaItem.getUri(), mediaItem.getMimeType(), mediaItem.getSize(), mediaItem.getWidth(), mediaItem.getHeight(), mediaItem.isBorderless(), mediaItem.getCaption().orElse(null), null, mediaItem.getTransformProperties().orElse(null)));
+      case PICK_DOCUMENT:
+        setMedia(data.getData(), MediaType.DOCUMENT);
+        break;
+      case PICK_AUDIO:
+        setMedia(data.getData(), MediaType.AUDIO);
+        break;
+      case PICK_CONTACT:
+        if (viewModel.isPushAvailable() && !isSmsForced()) {
+          openContactShareEditor(data.getData());
         } else {
-          Log.w(TAG, "Asked to send an unexpected mimeType: '" + mediaItem.getMimeType() + "'. Skipping.");
+          addAttachmentContactInfo(data.getData());
         }
-      }
+        break;
+      case GET_CONTACT_DETAILS:
+        sendSharedContact(data.getParcelableArrayListExtra(ContactShareEditActivity.KEY_CONTACTS));
+        break;
+      case GROUP_EDIT:
+        Recipient recipientSnapshot = recipient.get();
 
-      final Context context = requireContext().getApplicationContext();
+        onRecipientChanged(recipientSnapshot);
+        titleView.setTitle(glideRequests, recipientSnapshot);
+        NotificationChannels.getInstance().updateContactChannelName(recipientSnapshot);
+        setBlockedUserState(recipientSnapshot, viewModel.getConversationStateSnapshot().getSecurityInfo());
+        invalidateOptionsMenu();
+        break;
+      case TAKE_PHOTO:
+        handleImageFromDeviceCameraApp();
+        break;
+      case ADD_CONTACT:
+        SimpleTask.run(() -> {
+          try {
+            ContactDiscovery.refresh(requireContext(), recipient.get(), false);
+          } catch (IOException e) {
+            Log.w(TAG, "Failed to refresh user after adding to contacts.");
+          }
+          return null;
+        }, nothing -> onRecipientChanged(recipient.get()));
+        break;
+      case PICK_LOCATION:
+        SignalPlace place = new SignalPlace(PlacePickerActivity.addressFromData(data));
+        attachmentManager.setLocation(place, getCurrentMediaConstraints());
+        draftViewModel.setLocationDraft(place);
+        break;
+      case SMS_DEFAULT:
+        viewModel.updateSecurityInfo();
+        break;
+      case PICK_GIF:
+      case MEDIA_SENDER:
+        MediaSendActivityResult result = MediaSendActivityResult.fromData(data);
 
-      sendMediaMessage(result.getRecipientId(),
-                       result.getMessageSendType(),
-                       result.getBody(),
-                       slideDeck,
-                       quote,
-                       Collections.emptyList(),
-                       Collections.emptyList(),
-                       mentions,
-                       bodyRanges,
-                       expiresIn,
-                       result.isViewOnce(),
-                       initiating,
-                       true,
-                       null,
-                       result.getScheduledTime()).addListener(new AssertedSuccessListener<Void>() {
-        @Override
-        public void onSuccess(Void result) {
-          AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
-            Stream.of(slideDeck.getSlides())
-                  .map(Slide::getUri)
-                  .withoutNulls()
-                  .filter(BlobProvider::isAuthority)
-                  .forEach(uri -> BlobProvider.getInstance().delete(context, uri));
-          });
+        if (!Objects.equals(result.getRecipientId(), recipient.getId())) {
+          Log.w(TAG, "Result's recipientId did not match ours! Result: " + result.getRecipientId() + ", Activity: " + recipient.getId());
+          Toast.makeText(requireContext(), R.string.ConversationActivity_error_sending_media, Toast.LENGTH_SHORT).show();
+          return;
         }
-      });
 
-      break;
+        sendButton.setSendType(result.getMessageSendType());
+
+        if (result.isPushPreUpload()) {
+          sendMediaMessage(result);
+          return;
+        }
+
+        long expiresIn = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
+        boolean initiating = threadId == -1;
+        QuoteModel quote = result.isViewOnce() ? null : inputPanel.getQuote().orElse(null);
+        SlideDeck slideDeck = new SlideDeck();
+        List<Mention> mentions = new ArrayList<>(result.getMentions());
+        BodyRangeList bodyRanges = result.getBodyRanges();
+
+        for (Media mediaItem : result.getNonUploadedMedia()) {
+          if (MediaUtil.isVideoType(mediaItem.getMimeType())) {
+            slideDeck.addSlide(new VideoSlide(requireContext(), mediaItem.getUri(), mediaItem.getSize(), mediaItem.isVideoGif(), mediaItem.getWidth(), mediaItem.getHeight(), mediaItem.getCaption().orElse(null), mediaItem
+                .getTransformProperties().orElse(null)));
+          } else if (MediaUtil.isGif(mediaItem.getMimeType())) {
+            slideDeck.addSlide(new GifSlide(requireContext(), mediaItem.getUri(), mediaItem.getSize(), mediaItem.getWidth(), mediaItem.getHeight(), mediaItem.isBorderless(), mediaItem.getCaption().orElse(null)));
+          } else if (MediaUtil.isImageType(mediaItem.getMimeType())) {
+            slideDeck.addSlide(new ImageSlide(requireContext(), mediaItem.getUri(), mediaItem.getMimeType(), mediaItem.getSize(), mediaItem.getWidth(), mediaItem.getHeight(), mediaItem.isBorderless(), mediaItem.getCaption()
+                                                                                                                                                                                                                  .orElse(null), null, mediaItem
+                                                  .getTransformProperties().orElse(null)));
+          } else {
+            Log.w(TAG, "Asked to send an unexpected mimeType: '" + mediaItem.getMimeType() + "'. Skipping.");
+          }
+        }
+
+        final Context context = requireContext().getApplicationContext();
+
+        sendMediaMessage(result.getRecipientId(),
+                         result.getMessageSendType(),
+                         result.getBody(),
+                         slideDeck,
+                         quote,
+                         Collections.emptyList(),
+                         Collections.emptyList(),
+                         mentions,
+                         bodyRanges,
+                         expiresIn,
+                         result.isViewOnce(),
+                         initiating,
+                         true,
+                         null,
+                         result.getScheduledTime()).addListener(new AssertedSuccessListener<Void>() {
+          @Override
+          public void onSuccess(Void result) {
+            AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
+              Stream.of(slideDeck.getSlides())
+                    .map(Slide::getUri)
+                    .withoutNulls()
+                    .filter(BlobProvider::isAuthority)
+                    .forEach(uri -> BlobProvider.getInstance().delete(context, uri));
+            });
+          }
+        });
+
+        break;
     }
   }
 
@@ -942,7 +941,7 @@ public class ConversationParentFragment extends Fragment
   public void onOptionsMenuCreated(@NonNull Menu menu) {
     searchViewItem = menu.findItem(R.id.menu_search);
 
-    SearchView                     searchView    = (SearchView) searchViewItem.getActionView();
+    SearchView searchView = (SearchView) searchViewItem.getActionView();
     SearchView.OnQueryTextListener queryListener = new SearchView.OnQueryTextListener() {
       @Override
       public boolean onQueryTextSubmit(String query) {
@@ -1119,10 +1118,10 @@ public class ConversationParentFragment extends Fragment
 
   private void handleStoryRingClick() {
     startActivity(StoryViewerActivity.createIntent(
-                  requireContext(),
-                  new StoryViewerArgs.Builder(recipient.getId(), recipient.get().shouldHideStory())
-                                     .isFromQuote(true)
-                                     .build()));
+        requireContext(),
+        new StoryViewerArgs.Builder(recipient.getId(), recipient.get().shouldHideStory())
+            .isFromQuote(true)
+            .build()));
   }
 
   @Override
@@ -1202,7 +1201,7 @@ public class ConversationParentFragment extends Fragment
   public void handleAddShortcut() {
     Log.i(TAG, "Creating home screen shortcut for recipient " + recipient.get().getId());
 
-    final Context context = requireContext().getApplicationContext();
+    final Context   context   = requireContext().getApplicationContext();
     final Recipient recipient = this.recipient.get();
 
     if (pinnedShortcutReceiver == null) {
@@ -1257,16 +1256,16 @@ public class ConversationParentFragment extends Fragment
                                           @NonNull Recipient recipient)
   {
     IconCompat icon = IconCompat.createWithAdaptiveBitmap(bitmap);
-    String     name = recipient.isSelf() ? context.getString(R.string.note_to_self)
-                                                  : recipient.getDisplayName(context);
+    String name = recipient.isSelf() ? context.getString(R.string.note_to_self)
+                                     : recipient.getDisplayName(context);
 
     ShortcutInfoCompat shortcutInfoCompat = new ShortcutInfoCompat.Builder(context, recipient.getId().serialize() + '-' + System.currentTimeMillis())
-                                                                  .setShortLabel(name)
-                                                                  .setIcon(icon)
-                                                                  .setIntent(ShortcutLauncherActivity.createIntent(context, recipient.getId()))
-                                                                  .build();
+        .setShortLabel(name)
+        .setIcon(icon)
+        .setIntent(ShortcutLauncherActivity.createIntent(context, recipient.getId()))
+        .build();
 
-    Intent callbackIntent                = new Intent(ACTION_PINNED_SHORTCUT);
+    Intent        callbackIntent         = new Intent(ACTION_PINNED_SHORTCUT);
     PendingIntent shortcutPinnedCallback = PendingIntent.getBroadcast(context, REQUEST_CODE_PIN_SHORTCUT, callbackIntent, PendingIntentFlags.mutable());
 
     ShortcutManagerCompat.requestPinShortcut(context, shortcutInfoCompat, shortcutPinnedCallback.getIntentSender());
@@ -1331,9 +1330,9 @@ public class ConversationParentFragment extends Fragment
 
     if (recipient.isPushV2Group() && groupCallViewModel.hasActiveGroupCall().getValue() == Boolean.FALSE && groupViewModel.isNonAdminInAnnouncementGroup()) {
       new MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.ConversationActivity_cant_start_group_call)
-                                          .setMessage(R.string.ConversationActivity_only_admins_of_this_group_can_start_a_call)
-                                          .setPositiveButton(android.R.string.ok, (d, w) -> d.dismiss())
-                                          .show();
+                                                      .setMessage(R.string.ConversationActivity_only_admins_of_this_group_can_start_a_call)
+                                                      .setPositiveButton(android.R.string.ok, (d, w) -> d.dismiss())
+                                                      .show();
     } else {
       CommunicationActions.startVideoCall(this, recipient);
     }
@@ -1398,9 +1397,9 @@ public class ConversationParentFragment extends Fragment
     PaymentsValues paymentsValues = SignalStore.paymentsValues();
 
     if (paymentsValues.getPaymentsAvailability().isSendAllowed() &&
-        !recipient.get().isSelf()                                &&
-        !recipient.get().isGroup()                               &&
-        recipient.get().isRegistered()                           &&
+        !recipient.get().isSelf() &&
+        !recipient.get().isGroup() &&
+        recipient.get().isRegistered() &&
         !recipient.get().isForceSmsSelection())
     {
       attachmentKeyboardStub.get().filterAttachmentKeyboardButtons(null);
@@ -1435,12 +1434,12 @@ public class ConversationParentFragment extends Fragment
     Log.d(TAG, "onMessageResentAfterSafetyNumberChange");
     initializeIdentityRecords().addListener(new AssertedSuccessListener<Boolean>() {
       @Override
-      public void onSuccess(Boolean result) { }
+      public void onSuccess(Boolean result) {}
     });
   }
 
   @Override
-  public void onCanceled() { }
+  public void onCanceled() {}
 
   private void handleSecurityChange(@NonNull ConversationSecurityInfo conversationSecurityInfo) {
     Log.i(TAG, "handleSecurityChange(" + conversationSecurityInfo + ")");
@@ -1566,24 +1565,24 @@ public class ConversationParentFragment extends Fragment
       } else {
         switch (selfMembership.getMemberLevel()) {
           case NOT_A_MEMBER:
-            leftGroup        = true;
-            canSendMessages  = false;
+            leftGroup = true;
+            canSendMessages = false;
             canCancelRequest = false;
             break;
           case PENDING_MEMBER:
-            leftGroup        = false;
-            canSendMessages  = false;
+            leftGroup = false;
+            canSendMessages = false;
             canCancelRequest = false;
             break;
           case REQUESTING_MEMBER:
-            leftGroup        = false;
-            canSendMessages  = false;
+            leftGroup = false;
+            canSendMessages = false;
             canCancelRequest = true;
             break;
           case FULL_MEMBER:
           case ADMINISTRATOR:
-            leftGroup        = false;
-            canSendMessages  = true;
+            leftGroup = false;
+            canSendMessages = true;
             canCancelRequest = false;
             break;
           default:
@@ -1655,9 +1654,9 @@ public class ConversationParentFragment extends Fragment
             return;
           }
 
-          AtomicInteger                      draftsRemaining = new AtomicInteger(drafts.size());
-          AtomicBoolean                      success         = new AtomicBoolean(false);
-          ListenableFuture.Listener<Boolean> listener        = new AssertedSuccessListener<Boolean>() {
+          AtomicInteger draftsRemaining = new AtomicInteger(drafts.size());
+          AtomicBoolean success         = new AtomicBoolean(false);
+          ListenableFuture.Listener<Boolean> listener = new AssertedSuccessListener<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
               success.compareAndSet(false, result);
@@ -1753,11 +1752,12 @@ public class ConversationParentFragment extends Fragment
     } else if (ServiceOutageReminder.isEligible(context)) {
       ApplicationDependencies.getJobManager().add(new ServiceOutageDetectionJob());
       reminderView.get().showReminder(new ServiceOutageReminder(context));
-    } else if (SignalStore.account().isRegistered()                 &&
+    } else if (SignalStore.account().isRegistered() &&
                TextSecurePreferences.isShowInviteReminders(context) &&
-               !viewModel.isPushAvailable()                         &&
-               inviteReminder.isPresent()                           &&
-               !recipient.get().isGroup()) {
+               !viewModel.isPushAvailable() &&
+               inviteReminder.isPresent() &&
+               !recipient.get().isGroup())
+    {
       reminderView.get().setOnActionClickListener(this::handleReminderAction);
       reminderView.get().setOnDismissListener(() -> inviteReminderModel.dismissReminder());
       reminderView.get().showReminder(inviteReminder.get());
@@ -1836,7 +1836,7 @@ public class ConversationParentFragment extends Fragment
           recipients = Collections.singletonList(params[0]);
         }
 
-        long               startTime          =  System.currentTimeMillis();
+        long               startTime          = System.currentTimeMillis();
         IdentityRecordList identityRecordList = ApplicationDependencies.getProtocolStore().aci().identities().getIdentityRecords(recipients);
 
         Log.i(TAG, String.format(Locale.US, "Loaded %d identities in %d ms", recipients.size(), System.currentTimeMillis() - startTime));
@@ -1980,6 +1980,7 @@ public class ConversationParentFragment extends Fragment
         }
         primaryLayout.setVisibility(View.VISIBLE);
         extraLayout.setVisibility(View.GONE);
+        composeText.requestFocus();
         return true;
       } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
         extraScreenIsShowed = false;
@@ -2002,8 +2003,8 @@ public class ConversationParentFragment extends Fragment
 
       @Override
       public boolean canSchedule() {
-                                   return !(inputPanel.isRecordingInLockedMode() || draftViewModel.getVoiceNoteDraft() != null);
-                                                                                                                                }
+        return !(inputPanel.isRecordingInLockedMode() || draftViewModel.getVoiceNoteDraft() != null);
+      }
     });
     sendButton.setEnabled(true);
     sendButton.addOnSelectionChangedListener((newMessageSendType, manuallySelected) -> {
@@ -2084,6 +2085,47 @@ public class ConversationParentFragment extends Fragment
         return new ColorSet(getInactiveToolbarColor(wallpaper.getDrawable() != null));
       }
     };
+
+    composeText.setOnKeyListener(new OnKeyListener() {
+      @Override
+      public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+          if (attachmentManager.isAttachmentPresent()) {
+            attachmentManager.cleanup();
+          }
+          return false;
+        }
+        int index = composeText.getSelectionStart();
+        if (KeyEvent.ACTION_DOWN == event.getAction()) {
+          switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_UP:
+              if (index == 0) {
+                fragment.getRecyclerList().requestFocus();
+                if (event.getRepeatCount() > 0) break;
+                return true;
+              } else if (index > 0) {
+                index--;
+                composeText.setSelection(index);
+                break;
+              }
+              break;
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+              if (index == composeText.getText().toString().length()) {
+                view.findViewById(R.id.send_text).requestFocus();
+                if (event.getRepeatCount() > 0) break;
+              } else if (index < composeText.getText().toString().length()) {
+                index++;
+                composeText.setSelection(index);
+                break;
+              }
+              break;
+            default:
+              return false;
+          }
+        }
+        return true;
+      }
+    });
   }
 
   private void updateSendButtonColor(MessageSendType newMessageSendType) {
@@ -2305,7 +2347,7 @@ public class ConversationParentFragment extends Fragment
     StickerSearchRepository repository = new StickerSearchRepository(requireContext());
 
     stickerViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) new ConversationStickerViewModel.Factory(requireActivity().getApplication(), repository))
-                                         .get(ConversationStickerViewModel.class);
+        .get(ConversationStickerViewModel.class);
 
     stickerViewModel.getStickerResults().observe(getViewLifecycleOwner(), stickers -> {
       if (stickers == null) return;
@@ -2647,7 +2689,7 @@ public class ConversationParentFragment extends Fragment
     initializeIdentityRecords();
   }
 
-  @Subscribe(threadMode =  ThreadMode.MAIN, sticky = true)
+  @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
   public void onStickerPackInstalled(final StickerPackInstallEvent event) {
     if (!TextSecurePreferences.hasSeenStickerIntroTooltip(requireContext())) return;
 
@@ -2717,15 +2759,15 @@ public class ConversationParentFragment extends Fragment
 
   private void addAttachmentContactInfo(Uri contactUri) {
     ContactAccessor contactDataList = ContactAccessor.getInstance();
-    ContactData contactData = contactDataList.getContactData(requireContext(), contactUri);
+    ContactData     contactData     = contactDataList.getContactData(requireContext(), contactUri);
 
-    if      (contactData.numbers.size() == 1) composeText.append(contactData.numbers.get(0).number);
-    else if (contactData.numbers.size() > 1)  selectContactInfo(contactData);
+    if (contactData.numbers.size() == 1) composeText.append(contactData.numbers.get(0).number);
+    else if (contactData.numbers.size() > 1) selectContactInfo(contactData);
   }
 
   private void sendSharedContact(List<Contact> contacts) {
-    long       expiresIn      = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
-    boolean    initiating     = threadId == -1;
+    long    expiresIn  = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
+    boolean initiating = threadId == -1;
 
     sendMediaMessage(recipient.getId(), sendButton.getSelectedSendType(), "", attachmentManager.buildSlideDeck(), null, contacts, Collections.emptyList(), Collections.emptyList(), null, expiresIn, false, initiating, false, null);
   }
@@ -2814,9 +2856,9 @@ public class ConversationParentFragment extends Fragment
   }
 
   private void calculateCharactersRemaining() {
-    String          messageBody     = composeText.getTextTrimmed().toString();
-    MessageSendType sendType        = sendButton.getSelectedSendType();
-    CharacterState  characterState  = sendType.calculateCharacters(messageBody);
+    String          messageBody    = composeText.getTextTrimmed().toString();
+    MessageSendType sendType       = sendButton.getSelectedSendType();
+    CharacterState  characterState = sendType.calculateCharacters(messageBody);
 
     if (characterState.charactersRemaining <= 15 || characterState.messagesSpent > 1) {
       charactersLeft.setText(String.format(Locale.getDefault(),
@@ -2971,19 +3013,19 @@ public class ConversationParentFragment extends Fragment
         throw new RecipientFormattingException("Badly formatted");
       }
 
-      String          message        = getMessage();
-      MessageSendType sendType       = sendButton.getSelectedSendType();
-      long            expiresIn      = TimeUnit.SECONDS.toMillis(recipient.getExpiresInSeconds());
-      boolean         initiating     = threadId == -1;
-      boolean         needsSplit     = !sendType.usesSmsTransport() && message.length() > sendType.calculateCharacters(message).maxPrimaryMessageSize;
-      boolean         isMediaMessage = attachmentManager.isAttachmentPresent() ||
-                                       recipient.isGroup()                     ||
-                                       recipient.getEmail().isPresent()        ||
-                                       inputPanel.getQuote().isPresent()       ||
-                                       composeText.hasMentions()               ||
-                                       composeText.hasStyling()                ||
-                                       linkPreviewViewModel.hasLinkPreview()   ||
-                                       needsSplit;
+      String          message    = getMessage();
+      MessageSendType sendType   = sendButton.getSelectedSendType();
+      long            expiresIn  = TimeUnit.SECONDS.toMillis(recipient.getExpiresInSeconds());
+      boolean         initiating = threadId == -1;
+      boolean         needsSplit = !sendType.usesSmsTransport() && message.length() > sendType.calculateCharacters(message).maxPrimaryMessageSize;
+      boolean isMediaMessage = attachmentManager.isAttachmentPresent() ||
+                               recipient.isGroup() ||
+                               recipient.getEmail().isPresent() ||
+                               inputPanel.getQuote().isPresent() ||
+                               composeText.hasMentions() ||
+                               composeText.hasStyling() ||
+                               linkPreviewViewModel.hasLinkPreview() ||
+                               needsSplit;
 
       Log.i(TAG, "[sendMessage] recipient: " + recipient.getId() + ", threadId: " + threadId + ",  sendType: " + (sendType.usesSignalTransport() ? "signal" : "sms") + ", isManual: " + sendButton.isManualSelection());
 
@@ -3019,33 +3061,33 @@ public class ConversationParentFragment extends Fragment
       return;
     }
 
-    long            thread    = this.threadId;
-    long            expiresIn = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
-    QuoteModel      quote     = result.isViewOnce() ? null : inputPanel.getQuote().orElse(null);
-    List<Mention>   mentions  = new ArrayList<>(result.getMentions());
-    OutgoingMessage message   = new OutgoingMessage(recipient.get(),
-                                                    result.getBody(),
-                                                    Collections.emptyList(),
-                                                    System.currentTimeMillis(),
-                                                    -1,
-                                                    expiresIn,
-                                                    result.isViewOnce(),
-                                                    distributionType,
-                                                    result.getStoryType(),
-                                                    null,
-                                                    false,
-                                                    quote,
-                                                    Collections.emptyList(),
-                                                    Collections.emptyList(),
-                                                    mentions,
-                                                    Collections.emptySet(),
-                                                    Collections.emptySet(),
-                                                    null,
-                                                    true,
-                                                    result.getBodyRanges(),
-                                                    -1);
+    long          thread    = this.threadId;
+    long          expiresIn = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
+    QuoteModel    quote     = result.isViewOnce() ? null : inputPanel.getQuote().orElse(null);
+    List<Mention> mentions  = new ArrayList<>(result.getMentions());
+    OutgoingMessage message = new OutgoingMessage(recipient.get(),
+                                                  result.getBody(),
+                                                  Collections.emptyList(),
+                                                  System.currentTimeMillis(),
+                                                  -1,
+                                                  expiresIn,
+                                                  result.isViewOnce(),
+                                                  distributionType,
+                                                  result.getStoryType(),
+                                                  null,
+                                                  false,
+                                                  quote,
+                                                  Collections.emptyList(),
+                                                  Collections.emptyList(),
+                                                  mentions,
+                                                  Collections.emptySet(),
+                                                  Collections.emptySet(),
+                                                  null,
+                                                  true,
+                                                  result.getBodyRanges(),
+                                                  -1);
 
-    final Context         context      = requireContext().getApplicationContext();
+    final Context context = requireContext().getApplicationContext();
 
     ApplicationDependencies.getTypingStatusSender().onTypingStopped(thread);
 
@@ -3257,10 +3299,10 @@ public class ConversationParentFragment extends Fragment
 
   private void showDefaultSmsPrompt() {
     new MaterialAlertDialogBuilder(requireContext())
-                   .setMessage(R.string.ConversationActivity_signal_cannot_sent_sms_mms_messages_because_it_is_not_your_default_sms_app)
-                   .setNegativeButton(R.string.ConversationActivity_no, (dialog, which) -> dialog.dismiss())
-                   .setPositiveButton(R.string.ConversationActivity_yes, (dialog, which) -> handleMakeDefaultSms())
-                   .show();
+        .setMessage(R.string.ConversationActivity_signal_cannot_sent_sms_mms_messages_because_it_is_not_your_default_sms_app)
+        .setNegativeButton(R.string.ConversationActivity_no, (dialog, which) -> dialog.dismiss())
+        .setPositiveButton(R.string.ConversationActivity_yes, (dialog, which) -> handleMakeDefaultSms())
+        .show();
   }
 
   private void showExpiredDialog() {
@@ -3524,8 +3566,8 @@ public class ConversationParentFragment extends Fragment
     sendSticker(new StickerLocator(stickerRecord.getPackId(), stickerRecord.getPackKey(), stickerRecord.getStickerId(), stickerRecord.getEmoji()), stickerRecord.getContentType(), stickerRecord.getUri(), stickerRecord.getSize(), clearCompose);
 
     SignalExecutors.BOUNDED.execute(() ->
-     SignalDatabase.stickers()
-                    .updateStickerLastUsedTime(stickerRecord.getRowId(), System.currentTimeMillis())
+                                        SignalDatabase.stickers()
+                                                      .updateStickerLastUsedTime(stickerRecord.getRowId(), System.currentTimeMillis())
     );
   }
 
@@ -3537,11 +3579,11 @@ public class ConversationParentFragment extends Fragment
       return;
     }
 
-    long            expiresIn      = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
-    boolean         initiating     = threadId == -1;
-    MessageSendType sendType       = sendButton.getSelectedSendType();
-    SlideDeck       slideDeck      = new SlideDeck();
-    Slide           stickerSlide   = new StickerSlide(requireContext(), uri, size, stickerLocator, contentType);
+    long            expiresIn    = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
+    boolean         initiating   = threadId == -1;
+    MessageSendType sendType     = sendButton.getSelectedSendType();
+    SlideDeck       slideDeck    = new SlideDeck();
+    Slide           stickerSlide = new StickerSlide(requireContext(), uri, size, stickerLocator, contentType);
 
     slideDeck.addSlide(stickerSlide);
 
@@ -3709,7 +3751,7 @@ public class ConversationParentFragment extends Fragment
   }
 
   @Override
-  public @NonNull  ConversationViewModel getViewModel() {
+  public @NonNull ConversationViewModel getViewModel() {
     return viewModel;
   }
 
@@ -3737,8 +3779,8 @@ public class ConversationParentFragment extends Fragment
 
   private class RecordingSession implements SingleObserver<VoiceNoteDraft>, Disposable {
 
-    private boolean saveDraft  = true;
-    private boolean shouldSend = false;
+    private boolean    saveDraft  = true;
+    private boolean    shouldSend = false;
     private Disposable disposable = Disposable.empty();
 
     RecordingSession(Single<VoiceNoteDraft> observable) {
@@ -3876,7 +3918,7 @@ public class ConversationParentFragment extends Fragment
     }
 
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count,int after) {
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
       beforeLength = composeText.getTextTrimmed().length();
     }
 
@@ -3892,7 +3934,7 @@ public class ConversationParentFragment extends Fragment
     }
 
     @Override
-    public void onTextChanged(CharSequence s, int start, int before,int count) {}
+    public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
@@ -4132,13 +4174,13 @@ public class ConversationParentFragment extends Fragment
     }
 
     SimpleTask.run(() -> {
-          //noinspection CodeBlock2Expr
-          return SignalDatabase.messages().checkMessageExists(reactionDelegate.getMessageRecord());
-        }, messageExists -> {
-          if (!messageExists) {
-            reactionDelegate.hide();
-          }
-        });
+      //noinspection CodeBlock2Expr
+      return SignalDatabase.messages().checkMessageExists(reactionDelegate.getMessageRecord());
+    }, messageExists -> {
+      if (!messageExists) {
+        reactionDelegate.hide();
+      }
+    });
   }
 
   @Override
@@ -4259,7 +4301,7 @@ public class ConversationParentFragment extends Fragment
   }
 
   @Override
-  public void onForwardClicked()  {
+  public void onForwardClicked() {
     inputPanel.clearQuote();
   }
 
@@ -4283,7 +4325,7 @@ public class ConversationParentFragment extends Fragment
     }
 
     AlertDialog.Builder builder = new MaterialAlertDialogBuilder(requireContext())
-                                                 .setNeutralButton(R.string.ConversationActivity_cancel, (d, w) -> d.dismiss());
+        .setNeutralButton(R.string.ConversationActivity_cancel, (d, w) -> d.dismiss());
 
     if (recipient.isGroup() && recipient.isBlocked()) {
       builder.setTitle(R.string.ConversationActivity_delete_conversation);
@@ -4344,9 +4386,9 @@ public class ConversationParentFragment extends Fragment
       return;
     }
 
-    long       expiresIn      = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
-    boolean    initiating     = threadId == -1;
-    SlideDeck  slideDeck      = new SlideDeck();
+    long      expiresIn  = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
+    boolean   initiating = threadId == -1;
+    SlideDeck slideDeck  = new SlideDeck();
 
     if (MediaUtil.isGif(contentType)) {
       slideDeck.addSlide(new GifSlide(requireContext(), uri, 0, details.width, details.height, details.hasTransparency, null));
@@ -4397,7 +4439,7 @@ public class ConversationParentFragment extends Fragment
       } else {
         String[] unverifiedNames = new String[unverifiedIdentities.size()];
 
-        for (int i=0;i<unverifiedIdentities.size();i++) {
+        for (int i = 0; i < unverifiedIdentities.size(); i++) {
           unverifiedNames[i] = Recipient.resolved(unverifiedIdentities.get(i).getRecipientId()).getDisplayName(requireContext());
         }
 
@@ -4440,14 +4482,14 @@ public class ConversationParentFragment extends Fragment
                                          .withStartingPosition((int) messagePositionInThread)
                                          .build());
       } else {
-        fragment.jumpToMessage(senderId, messageTimestamp, () -> { });
+        fragment.jumpToMessage(senderId, messageTimestamp, () -> {});
       }
     }
   }
 
   private void presentMessageRequestState(@Nullable MessageRequestViewModel.MessageData messageData) {
     if (!Util.isEmpty(viewModel.getArgs().getDraftText()) ||
-        viewModel.getArgs().getMedia() != null            ||
+        viewModel.getArgs().getMedia() != null ||
         viewModel.getArgs().getStickerLocator() != null)
     {
       Log.d(TAG, "[presentMessageRequestState] Have extra, so ignoring provided state.");
@@ -4488,7 +4530,7 @@ public class ConversationParentFragment extends Fragment
 
   public void onKeycodeCallPressed() {
     composeText.clearFocus();
-    Log.d(TAG, "input type: "+composeText.getInputType());
+    Log.d(TAG, "input type: " + composeText.getInputType());
     String rawText = composeText.getTextTrimmed().toString();
     if (rawText.length() < 1 && !attachmentManager.isAttachmentPresent()) {
       if (pigeonGroupCall.getVisibility() == View.VISIBLE) {

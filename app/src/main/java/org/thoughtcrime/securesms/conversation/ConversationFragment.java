@@ -24,7 +24,6 @@ import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -221,7 +220,6 @@ import static org.thoughtcrime.securesms.pigeon.activity.ConversationSubMenuActi
 import static org.thoughtcrime.securesms.pigeon.activity.ConversationSubMenuActivity.HANDLE_SUBMENU;
 import static org.thoughtcrime.securesms.pigeon.activity.ConversationSubMenuActivity.HANDLE_TAKE_BACK_MESSAGE;
 import static pigeon.extensions.BuildExtensionsKt.isPigeonVersion;
-import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
 
 @SuppressLint("StaticFieldLeak")
 public class ConversationFragment extends LoggingFragment implements MultiselectForwardBottomSheet.Callback, ConversationBottomSheetCallback {
@@ -1463,6 +1461,10 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
   @Override
   public @NonNull ItemClickListener getConversationAdapterListener() {
     return selectionClickListener;
+  }
+
+  public RecyclerView getRecyclerList(){
+    return list;
   }
 
   @Override
