@@ -313,8 +313,8 @@ public class WebRtcCallView extends ConstraintLayout {
 
     micToggleLabel.setOnClickListener(v -> micToggle.performClick());
 
-    if (collapsedToolbar.getVisibility() == VISIBLE) {
-      micToggleLabel.setNextFocusDownId(collapsedToolbar.getId());
+    if (headerToolbar.getVisibility() == VISIBLE) {
+      micToggleLabel.setNextFocusDownId(headerToolbar.getId());
     } else {
       micToggleLabel.setNextFocusDownId(micToggleLabel.getId());
     }
@@ -778,7 +778,7 @@ public class WebRtcCallView extends ConstraintLayout {
     if (webRtcControls.displayStartCallControls()) {
       visibleViewSet.add(footerGradient);
       visibleViewSet.add(startCallControls);
-      micToggleLabel.setNextFocusDownId(collapsedToolbar.getId());
+      micToggleLabel.setNextFocusDownId(headerToolbar.getId());
 
       startCall.setText(webRtcControls.getStartCallButtonText());
       startCall.setEnabled(webRtcControls.isStartCallEnabled());

@@ -15,6 +15,17 @@
         android:orientation="vertical"
         android:visibility="gone">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/webrtc_call_view_toolbar_text"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/signal_m3_toolbar_height"
+            android:minHeight="@dimen/signal_m3_toolbar_height"
+            android:visibility="gone"
+            app:menu="@menu/webrtc_toolbar_menu"
+            app:navigationIcon="@drawable/ic_arrow_left_24"
+            app:subtitleTextAppearance="@style/Signal.Text.BodyMedium"
+            app:titleTextAppearance="@style/Signal.Text.TitleMedium" />
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/fold_top_guideline"
             android:layout_width="0dp"
@@ -382,24 +393,18 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/webrtc_call_view_toolbar_no_text"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/signal_m3_toolbar_height"
-            android:minHeight="@dimen/signal_m3_toolbar_height"
-            app:layout_constraintTop_toTopOf="@id/call_screen_status_bar_guideline"
-            app:menu="@menu/webrtc_toolbar_menu"
-            app:navigationIcon="@drawable/ic_arrow_left_24" />
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/webrtc_call_view_toolbar_text"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/signal_m3_toolbar_height"
-            android:minHeight="@dimen/signal_m3_toolbar_height"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="@id/call_screen_status_bar_guideline"
-            app:menu="@menu/webrtc_toolbar_menu"
-            app:navigationIcon="@drawable/ic_arrow_left_24"
-            app:subtitleTextAppearance="@style/Signal.Text.BodyMedium"
-            app:titleTextAppearance="@style/Signal.Text.TitleMedium" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:clickable="true"
+            android:focusableInTouchMode="true"
+            android:descendantFocusability="blocksDescendants"
+            android:background="@drawable/light_selectable_list_item_background"
+            android:nextFocusUp="@id/call_screen_audio_mic_toggle_label"
+            android:nextFocusDown="@id/webrtc_call_view_toolbar_no_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:menu="@menu/webrtc_toolbar_menu" />
 
         <include
             layout="@layout/webrtc_call_view_header_large"
