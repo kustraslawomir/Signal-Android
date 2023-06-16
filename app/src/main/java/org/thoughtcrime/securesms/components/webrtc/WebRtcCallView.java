@@ -165,6 +165,7 @@ public class WebRtcCallView extends ConstraintLayout {
   private ContactPhoto              previousLocalAvatar;
 
   private boolean isFirstPigeonSetupFocus = true;
+
   public WebRtcCallView(@NonNull Context context) {
     this(context, null);
   }
@@ -226,9 +227,9 @@ public class WebRtcCallView extends ConstraintLayout {
     collapsedToolbar              = findViewById(R.id.webrtc_call_view_toolbar_text);
     headerToolbar                 = findViewById(R.id.webrtc_call_view_toolbar_no_text);
 
-    View      decline                = findViewById(R.id.call_screen_decline_call);
-    View      answerLabel            = findViewById(R.id.call_screen_answer_call_label);
-    View      declineLabel           = findViewById(R.id.call_screen_decline_call_label);
+    View decline      = findViewById(R.id.call_screen_decline_call);
+    View answerLabel  = findViewById(R.id.call_screen_answer_call_label);
+    View declineLabel = findViewById(R.id.call_screen_decline_call_label);
 
     pigeonVolumeToggle.setOnClickListener(v -> runIfNonNull(controlsListener, ControlsListener::onVolumePressed));
 
@@ -280,7 +281,7 @@ public class WebRtcCallView extends ConstraintLayout {
     focusOnLeft(errorButton);
     focusOnLeft(pigeonVolumeToggle);
 
-    setAudioLabelName(audioToggle.getOutputMode());
+    setAudioLabelName(audioToggle.getPigeonOutput());
 
     audioToggle.setOnAudioOutputChangedListener(webRtcAudioDevice -> {
       runIfNonNull(controlsListener, listener ->
@@ -293,13 +294,10 @@ public class WebRtcCallView extends ConstraintLayout {
             Log.e(TAG, "Attempted to change audio output to null device ID.");
           }
         } else {
+          setAudioLabelName(webRtcAudioDevice.getWebRtcAudioOutput());
           listener.onAudioOutputChanged(webRtcAudioDevice.getWebRtcAudioOutput());
         }
       });
-
-    audioToggle.setOnAudioOutputChangedListener(outputMode -> {
-      setAudioLabelName(outputMode);
-      runIfNonNull(controlsListener, listener -> listener.onAudioOutputChanged(outputMode));
     });
 
     pigeonAudioToggleLabel.setOnClickListener(v -> audioToggle.performClick());
@@ -315,8 +313,8 @@ public class WebRtcCallView extends ConstraintLayout {
 
     micToggleLabel.setOnClickListener(v -> micToggle.performClick());
 
-    if (foldParticipantCountWrapper.getVisibility() == VISIBLE) {
-      micToggleLabel.setNextFocusDownId(foldParticipantCountWrapper.getId());
+    if (collapsedToolbar.getVisibility() == VISIBLE) {
+      micToggleLabel.setNextFocusDownId(collapsedToolbar.getId());
     } else {
       micToggleLabel.setNextFocusDownId(micToggleLabel.getId());
     }
@@ -417,12 +415,6 @@ public class WebRtcCallView extends ConstraintLayout {
     rotatableControls.add(decline);
     rotatableControls.add(smallLocalAudioIndicator);
     rotatableControls.add(ringToggle);
-
-    largeHeaderConstraints = new ConstraintSet();
-    largeHeaderConstraints.clone(getContext(), R.layout.webrtc_call_view_header_large);
-
-    smallHeaderConstraints = new ConstraintSet();
-    smallHeaderConstraints.clone(getContext(), R.layout.webrtc_call_view_header_small);
 
   }
 
@@ -781,12 +773,12 @@ public class WebRtcCallView extends ConstraintLayout {
       callScreenTopFoldGuideline.setGuidelineEnd(0);
     }
 
-      visibleViewSet.add(incomingRingStatus);
+    visibleViewSet.add(incomingRingStatus);
 
-      if (webRtcControls.displayStartCallControls()) {
+    if (webRtcControls.displayStartCallControls()) {
       visibleViewSet.add(footerGradient);
       visibleViewSet.add(startCallControls);
-      micToggleLabel.setNextFocusDownId(foldParticipantCountWrapper.getId());
+      micToggleLabel.setNextFocusDownId(collapsedToolbar.getId());
 
       startCall.setText(webRtcControls.getStartCallButtonText());
       startCall.setEnabled(webRtcControls.isStartCallEnabled());
@@ -1091,22 +1083,22 @@ public class WebRtcCallView extends ConstraintLayout {
   }
 
   private void layoutParticipants() {
-      if (isSignalVersion()) {
-        int desiredMargin = ViewUtil.dpToPx(withControlsHeight(pagerBottomMarginDp));
-        if (ViewKt.getMarginBottom(callParticipantsPager) == desiredMargin) {
-          return;
-        }
-
-        Transition transition = new AutoTransition().setDuration(TRANSITION_DURATION_MILLIS);
-
-        TransitionManager.beginDelayedTransition(participantsParent, transition);
-
-        ConstraintSet constraintSet = new ConstraintSet();
-        constraintSet.clone(participantsParent);
-
-        constraintSet.setMargin(R.id.call_screen_participants_pager, ConstraintSet.BOTTOM, desiredMargin);
-        constraintSet.applyTo(participantsParent);
+    if (isSignalVersion()) {
+      int desiredMargin = ViewUtil.dpToPx(withControlsHeight(pagerBottomMarginDp));
+      if (ViewKt.getMarginBottom(callParticipantsPager) == desiredMargin) {
+        return;
       }
+
+      Transition transition = new AutoTransition().setDuration(TRANSITION_DURATION_MILLIS);
+
+      TransitionManager.beginDelayedTransition(participantsParent, transition);
+
+      ConstraintSet constraintSet = new ConstraintSet();
+      constraintSet.clone(participantsParent);
+
+      constraintSet.setMargin(R.id.call_screen_participants_pager, ConstraintSet.BOTTOM, desiredMargin);
+      constraintSet.applyTo(participantsParent);
+    }
   }
 
   private void fadeControls(int visibility) {
@@ -1267,24 +1259,42 @@ public class WebRtcCallView extends ConstraintLayout {
     void onVolumePressed();
 
     void onStartCall(boolean isVideoCall);
+
     void onCancelStartCall();
+
     void onControlsFadeOut();
+
     void showSystemUI();
+
     void hideSystemUI();
+
     void onAudioOutputChanged(@NonNull WebRtcAudioOutput audioOutput);
+
     @RequiresApi(31)
     void onAudioOutputChanged31(@NonNull Integer audioOutputAddress);
+
     void onVideoChanged(boolean isVideoEnabled);
+
     void onMicChanged(boolean isMicEnabled);
+
     void onCameraDirectionChanged();
+
     void onEndCallPressed();
+
     void onDenyCallPressed();
+
     void onAcceptCallWithVoiceOnlyPressed();
+
     void onAcceptCallPressed();
+
     void onPageChanged(@NonNull CallParticipantsState.SelectedPage page);
+
     void onLocalPictureInPictureClicked();
+
     void onRingGroupChanged(boolean ringGroup, boolean ringingAllowed);
+
     void onCallInfoClicked();
+
     void onNavigateUpClicked();
   }
 }

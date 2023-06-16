@@ -1944,8 +1944,8 @@ public class ConversationParentFragment extends Fragment
     sendButton.setPopupContainer((ViewGroup) view);
     sendButton.setSnackbarContainer(view.findViewById(R.id.fragment_content));
 
-    pigeonGroupCall.setOnClickListener(v -> handleVideo(getRecipient()));
-    pigeonCall.setOnClickListener(v -> handleDial(getRecipient(), true));
+    pigeonGroupCall.setOnClickListener(v -> handleVideo());
+    pigeonCall.setOnClickListener(v -> handleDial(true));
     secureSession.setOnClickListener(v -> handleResetSecureSession());
     voice.setOnClickListener(v -> sendVoiceMessage());
 
@@ -2175,7 +2175,7 @@ public class ConversationParentFragment extends Fragment
         R.string.ConversationActivity_reset,
         android.R.string.cancel,
         () -> {
-          if (isSingleConversation()) {
+          if (getRecipient() != null && !getRecipient().isGroup()) {
             final Context context = getApplicationContext();
 
             MessageTable database = SignalDatabase.messages();
@@ -4681,11 +4681,11 @@ public class ConversationParentFragment extends Fragment
     String rawText = composeText.getTextTrimmed().toString();
     if (rawText.length() < 1 && !attachmentManager.isAttachmentPresent()) {
       if (pigeonGroupCall.getVisibility() == View.VISIBLE) {
-        handleVideo(getRecipient());
+        handleVideo();
         return;
       }
       if (pigeonCall.getVisibility() == View.VISIBLE) {
-        handleDial(getRecipient(), true);
+        handleDial(true);
         return;
       }
     }

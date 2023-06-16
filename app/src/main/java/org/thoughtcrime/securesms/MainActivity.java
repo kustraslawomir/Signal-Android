@@ -194,7 +194,7 @@ public class MainActivity extends PassphraseRequiredActivity implements VoiceNot
   private void updateTabVisibility() {
     if (isSignalVersion()) {
       findViewById(R.id.conversation_list_tabs).setVisibility(View.VISIBLE);
-      WindowUtil.setNavigationBarColor(this, Contex
+      WindowUtil.setNavigationBarColor(this, ContextCompat.getColor(this, R.color.signal_colorSurface2));
     }
   }
 

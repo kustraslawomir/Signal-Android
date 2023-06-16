@@ -135,6 +135,7 @@ import org.thoughtcrime.securesms.groups.ui.managegroup.dialogs.GroupDescription
 import org.thoughtcrime.securesms.groups.ui.migration.GroupsV1MigrationInfoBottomSheetDialogFragment;
 import org.thoughtcrime.securesms.groups.v2.GroupBlockJoinRequestResult;
 import org.thoughtcrime.securesms.groups.v2.GroupDescriptionUtil;
+import org.thoughtcrime.securesms.jobs.DirectoryRefreshJob;
 import org.thoughtcrime.securesms.jobs.MultiDeviceViewOnceOpenJob;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.linkpreview.LinkPreview;
@@ -2151,16 +2152,11 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
 
-    if (requestCode == CODE_ADD_EDIT_CONTACT && getContext() != null) {
-      ApplicationDependencies.getJobManager().add(new DirectoryRefreshJob(false));
-    }
-
     Log.w("PIGEON", ""+requestCode +" | "+ resultCode);
     if (selectedConversationMessage == null || requestCode != HANDLE_SUBMENU) {
 
       return;
     }
-
 
     if (resultCode == HANDLE_REPLY_MESSAGE) {
       handleReplyMessage(selectedConversationMessage);

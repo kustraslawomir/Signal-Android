@@ -30,7 +30,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Rational;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -99,7 +98,6 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import pigeon.activity.WebRtcCallVolumeActivity;
 
 import static org.thoughtcrime.securesms.components.sensors.Orientation.PORTRAIT_BOTTOM_EDGE;
-import static pigeon.extensions.BuildExtensionsKt.isPigeonVersion;
 import static pigeon.extensions.BuildExtensionsKt.isSignalVersion;
 
 public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChangeDialog.Callback {

@@ -451,7 +451,7 @@ android {
 dependencies {
     implementation libs.androidx.fragment.ktx
     lintChecks project(':lintchecks')
-    implementation files("libs/ringrtc-android-2.25.0.aar")
+    implementation files("libs/ringrtc-android-2.27.0.aar")
 
     coreLibraryDesugaring libs.android.tools.desugar
 
@@ -525,12 +525,6 @@ dependencies {
 
     implementation(libs.mobilecoin) {
         exclude group: 'com.google.protobuf'
-    }
-
-    implementation(libs.signal.argon2) {
-        artifact {
-            type = "aar"
-        }
     }
 
 //    implementation libs.signal.ringrtc

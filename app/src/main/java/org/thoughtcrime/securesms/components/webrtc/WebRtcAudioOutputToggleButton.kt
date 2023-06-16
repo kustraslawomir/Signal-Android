@@ -58,6 +58,10 @@ class WebRtcAudioOutputToggleButton @JvmOverloads constructor(context: Context, 
     }
   }
 
+  fun getPigeonOutput(): WebRtcAudioOutput {
+    return outputState.getCurrentOutput()
+  }
+
   init {
     super.setOnClickListener(
       if (Build.VERSION.SDK_INT >= 31) {
