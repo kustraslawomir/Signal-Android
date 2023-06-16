@@ -313,12 +313,6 @@ public class WebRtcCallView extends ConstraintLayout {
 
     micToggleLabel.setOnClickListener(v -> micToggle.performClick());
 
-    if (headerToolbar.getVisibility() == VISIBLE) {
-      micToggleLabel.setNextFocusDownId(headerToolbar.getId());
-    } else {
-      micToggleLabel.setNextFocusDownId(micToggleLabel.getId());
-    }
-
     ringToggle.setOnCheckedChangeListener((v, isOn) -> {
       setRingLabelName(isOn);
       runIfNonNull(controlsListener, listener -> listener.onRingGroupChanged(isOn, ringToggle.isActivated()));
@@ -759,8 +753,6 @@ public class WebRtcCallView extends ConstraintLayout {
 
     visibleViewSet.clear();
 
-    micToggleLabel.setNextFocusDownId(micToggleLabel.getId());
-
     if (webRtcControls.adjustForFold()) {
       showParticipantsGuideline.setGuidelineBegin(-1);
       showParticipantsGuideline.setGuidelineEnd(webRtcControls.getFold());
@@ -778,7 +770,6 @@ public class WebRtcCallView extends ConstraintLayout {
     if (webRtcControls.displayStartCallControls()) {
       visibleViewSet.add(footerGradient);
       visibleViewSet.add(startCallControls);
-      micToggleLabel.setNextFocusDownId(headerToolbar.getId());
 
       startCall.setText(webRtcControls.getStartCallButtonText());
       startCall.setEnabled(webRtcControls.isStartCallEnabled());
@@ -1191,6 +1182,10 @@ public class WebRtcCallView extends ConstraintLayout {
         largeHeader.setEnabled(true);
         largeHeader.setAlpha(1);
       }
+    }
+    if (isHangupRequest && isFirstPigeonSetupFocus) {
+      isFirstPigeonSetupFocus = false;
+      hangupLabel.requestFocus();
     }
   }
 
