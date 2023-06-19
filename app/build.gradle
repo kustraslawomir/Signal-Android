@@ -433,7 +433,8 @@ android {
 
                 if (postFix >= postFixSize) throw new AssertionError("postFix is too large")
 
-                output.versionCodeOverride = canonicalVersionCode * postFixSize + postFix
+//                output.versionCodeOverride = canonicalVersionCode * postFixSize + postFix
+                output.versionCodeOverride = pigeonVersionCode
             }
         }
     }
