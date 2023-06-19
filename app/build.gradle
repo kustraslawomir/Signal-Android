@@ -46,8 +46,9 @@ ktlint {
     version = "0.47.1"
 }
 
+def pigeonVersionCode = 127514
 def canonicalVersionCode = 1272
-def canonicalVersionName = "Pigeon 2.0.0004 upon Signal 6.22.8"
+def canonicalVersionName = "Pigeon 2.0.0005 upon Signal 6.22.8"
 
 def postFixSize = 100
 def abiPostFix = ['universal'   : 15,
@@ -163,7 +164,8 @@ android {
     }
 
     defaultConfig {
-        versionCode canonicalVersionCode * postFixSize
+        versionCode pigeonVersionCode
+//        versionCode canonicalVersionCode * postFixSize
         versionName canonicalVersionName
 
         minSdkVersion signalMinSdkVersion
