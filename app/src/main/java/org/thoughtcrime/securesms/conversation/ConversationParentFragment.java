@@ -1958,7 +1958,7 @@ public class ConversationParentFragment extends Fragment
     audioRecorder     = new AudioRecorder(requireContext(), inputPanel);
     typingTextWatcher = new ComposeTextWatcher();
 
-    SendButtonListener        sendButtonListener        = new SendButtonListener();
+    sendButtonListener        = new SendButtonListener();
     ComposeKeyPressedListener composeKeyPressedListener = new ComposeKeyPressedListener();
 
     composeText.setOnEditorActionListener(sendButtonListener);
